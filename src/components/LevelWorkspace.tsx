@@ -93,14 +93,14 @@ export function LevelWorkspace({ slug }: Props) {
             </div>
           </div>
 
-          {slug === 'i' && <LevelLockBanner level="i" checked={completions} />}
-          {slug === 'a' && <LevelLockBanner level="a" checked={completions} />}
+          {locked && section === 'ov' && slug === 'i' && (
+            <LevelLockBanner level="i" checked={completions} />
+          )}
+          {locked && section === 'ov' && slug === 'a' && (
+            <LevelLockBanner level="a" checked={completions} />
+          )}
 
-          {locked ? (
-            <p className="text-center py-12 text-[var(--gray-500)]">
-              Completa las horas del nivel anterior para desbloquear.
-            </p>
-          ) : (
+          {locked && section === 'ov' ? null : (
             <>
               {section === 'ov' && (
                 <div className="sec-content active">
@@ -141,7 +141,15 @@ export function LevelWorkspace({ slug }: Props) {
               )}
 
               {section !== 'ov' && (
-                <LevelSectionContent level={slug} section={section} />
+                <>
+                  {locked && (
+                    <p className="text-xs text-[var(--gray-500)] mb-4">
+                      Estás explorando el contenido de referencia. Para completar las partes
+                      verificadas, primero desbloquea este nivel.
+                    </p>
+                  )}
+                  <LevelSectionContent level={slug} section={section} />
+                </>
               )}
             </>
           )}

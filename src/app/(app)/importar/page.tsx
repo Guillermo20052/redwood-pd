@@ -1,17 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useProgressContext } from '@/components/Providers';
 
 export default function ImportarPage() {
   const { reload } = useProgressContext();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState('');
+  const [errorDetail, setErrorDetail] = useState('');
   const [unmapped, setUnmapped] = useState<string[]>([]);
+
+  const resetFileInput = () => {
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
 
   const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setStatus('Importando...');
+    setErrorDetail('');
     setUnmapped([]);
     try {
       const text = await file.text();
@@ -35,24 +42,30 @@ export default function ImportarPage() {
         setUnmapped(data.unmapped ?? []);
         reload();
       } else {
-        const err = await res.json();
-        importLocal(payload);
-        setStatus(err.error || 'Importado en modo local');
-        reload();
+        let message = `Error ${res.status}`;
+        try {
+          const err = (await res.json()) as { error?: string };
+          if (err.error) message = err.error;
+        } catch {
+          /* non-JSON error body */
+        }
+        setStatus('No se pudo importar el progreso. Intenta de nuevo o avisa al administrador.');
+        setErrorDetail(message);
       }
-    } catch {
-      setStatus('Archivo JSON inválido');
+    } catch (err) {
+      setStatus('No se pudo importar el progreso. Intenta de nuevo o avisa al administrador.');
+      setErrorDetail(
+        err instanceof SyntaxError ? 'Archivo JSON inválido' : String(err)
+      );
     }
+    resetFileInput();
   };
 
-  const importLocal = (payload: { pd?: string; ref?: string }) => {
-    if (payload.pd) {
-      const state = JSON.parse(payload.pd);
-      localStorage.setItem('redwood_pd_local_v2', JSON.stringify({ checked: state, profile: {} }));
-    }
-    if (payload.ref) {
-      localStorage.setItem('redwood_ref_local', payload.ref);
-    }
+  const retry = () => {
+    setStatus('');
+    setErrorDetail('');
+    setUnmapped([]);
+    fileInputRef.current?.click();
   };
 
   return (
@@ -66,7 +79,13 @@ export default function ImportarPage() {
         </p>
       </div>
       <label className="block rounded-xl border-2 border-dashed border-[var(--gray-300)] bg-white p-10 text-center cursor-pointer transition hover:border-[var(--red)] hover:bg-[var(--red-pale)]">
-        <input type="file" accept=".json" className="hidden" onChange={onFile} />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".json"
+          className="hidden"
+          onChange={onFile}
+        />
         <span className="text-4xl block mb-3">📤</span>
         <span className="font-condensed text-base font-bold text-[var(--gray-900)]">
           Seleccionar archivo .json
@@ -75,7 +94,23 @@ export default function ImportarPage() {
           Arrastra aquí o haz clic para buscar
         </span>
       </label>
-      {status && <p className="text-sm font-semibold text-center">{status}</p>}
+      {status && (
+        <div className="text-center space-y-2">
+          <p className="text-sm font-semibold">{status}</p>
+          {errorDetail && (
+            <p className="text-xs text-[var(--gray-500)]">{errorDetail}</p>
+          )}
+          {errorDetail && (
+            <button
+              type="button"
+              onClick={retry}
+              className="text-sm font-semibold text-[var(--red)] hover:underline"
+            >
+              Reintentar
+            </button>
+          )}
+        </div>
+      )}
       {unmapped.length > 0 && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
           <p className="font-bold mb-1">

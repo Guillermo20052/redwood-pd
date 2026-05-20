@@ -14,7 +14,8 @@ export function SessionsSection({ level }: Props) {
     return (
       <div className="sec-content active">
         <p className="text-sm text-[var(--gray-600)]">
-          Plan de sesiones no disponible. Usa la lista de verificación para avanzar.
+          El plan de sesiones para este nivel aún no está disponible. Usa la Ruta verificada en
+          Visión General para avanzar.
         </p>
       </div>
     );

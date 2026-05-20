@@ -3,6 +3,8 @@ import meta from '../../content/meta.json';
 
 export type PathStage = 'video' | 'task' | 'reflection';
 
+export type TaskInputType = 'text' | 'screenshot' | 'document';
+
 export type PathItem = {
   order: number;
   itemKey: string;
@@ -25,6 +27,8 @@ export type PathItem = {
   collaborative?: boolean;
   taskPrompt?: string;
   taskRubric?: string;
+  /** How teachers submit task evidence. Defaults to "text" when omitted. */
+  inputType?: TaskInputType;
   reflectionPrompt?: string;
 };
 

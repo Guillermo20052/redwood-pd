@@ -93,7 +93,11 @@ export function useProgress() {
   const verifyTask = useCallback(
     async (
       itemKey: string,
-      evidenceText: string,
+      payload: {
+        evidenceText?: string;
+        fileUrl?: string;
+        inputType?: 'text' | 'screenshot' | 'document';
+      },
       partner?: { user_id: string | null; name: string } | null
     ) => {
       const res = await fetch('/api/verify/task', {
@@ -101,7 +105,9 @@ export function useProgress() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           itemKey,
-          evidenceText,
+          evidenceText: payload.evidenceText ?? '',
+          fileUrl: payload.fileUrl,
+          inputType: payload.inputType ?? 'text',
           ...(partner ? { partner } : {}),
         }),
       });

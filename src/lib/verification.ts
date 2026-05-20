@@ -1,4 +1,10 @@
-import { curriculumPath, getPreviousItem, getPathItem, verificationConfig } from './curriculum-path';
+import {
+  curriculumPath,
+  getPreviousItem,
+  getPathItem,
+  verificationConfig,
+  type TaskInputType,
+} from './curriculum-path';
 import { hoursMap, metaConfig } from './content';
 import type { CompletionRow } from './local-db';
 
@@ -120,6 +126,11 @@ export type TaskPartner = {
   name: string;
 };
 
+export type TaskSubmissionMeta = {
+  inputType?: TaskInputType;
+  fileUrl?: string | null;
+};
+
 /**
  * Verify a task submission.
  *
@@ -138,18 +149,23 @@ export function verifyTask(
   itemKey: string,
   evidenceText: string,
   gradeResult?: TaskGradeResult,
-  partner?: TaskPartner | null
+  partner?: TaskPartner | null,
+  meta?: TaskSubmissionMeta
 ): CompletionMap {
   const check = canVerifyItem(completions, itemKey);
   if (!check.ok) throw new VerificationError(check.reason ?? 'No verificable', 400);
   const item = getPathItem(itemKey);
   if (item?.type !== 'task') throw new VerificationError('No es una tarea', 400);
+  const inputType = meta?.inputType ?? item.inputType ?? 'text';
   const trimmed = evidenceText.trim();
-  if (trimmed.length < verificationConfig.taskEvidenceMinChars) {
+  if (inputType === 'text' && trimmed.length < verificationConfig.taskEvidenceMinChars) {
     throw new VerificationError(
       `La evidencia debe tener al menos ${verificationConfig.taskEvidenceMinChars} caracteres`,
       400
     );
+  }
+  if ((inputType === 'screenshot' || inputType === 'document') && !meta?.fileUrl) {
+    throw new VerificationError('Debes subir un archivo para esta tarea.', 400);
   }
   if (gradeResult && gradeResult.score < 85) {
     // Caller should branch on score before invoking verifyTask, but guard here too.
@@ -163,11 +179,18 @@ export function verifyTask(
           partner_name: partner.name.trim(),
         }
       : {};
+  const evidenceStored =
+    inputType === 'text'
+      ? trimmed
+      : meta?.fileUrl ?? trimmed;
+
   next[itemKey] = {
     item_key: itemKey,
     status: 'verified',
     verified_at: new Date().toISOString(),
-    evidence_text: trimmed,
+    evidence_text: evidenceStored,
+    task_input_type: inputType,
+    task_file_url: meta?.fileUrl ?? null,
     ...(gradeResult
       ? { task_score: gradeResult.score, task_feedback: gradeResult.feedback }
       : {}),

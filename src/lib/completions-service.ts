@@ -37,6 +37,13 @@ export async function loadCompletions(userId: string): Promise<CompletionMap> {
     // schemas simply return undefined here.
     partner_user_id: typeof r.partner_user_id === 'string' ? r.partner_user_id : undefined,
     partner_name: typeof r.partner_name === 'string' ? r.partner_name : undefined,
+    task_input_type:
+      r.task_input_type === 'text' ||
+      r.task_input_type === 'screenshot' ||
+      r.task_input_type === 'document'
+        ? r.task_input_type
+        : undefined,
+    task_file_url: typeof r.task_file_url === 'string' ? r.task_file_url : undefined,
   }));
   return buildInitialCompletions(rows);
 }
@@ -62,6 +69,8 @@ export async function saveCompletions(userId: string, completions: CompletionMap
     task_feedback: r.task_feedback || null,
     partner_user_id: r.partner_user_id || null,
     partner_name: r.partner_name || null,
+    task_input_type: r.task_input_type || null,
+    task_file_url: r.task_file_url || null,
     updated_at: now,
   }));
 
@@ -128,6 +137,8 @@ function isMissingColumnError(error: { code?: string; message?: string }): boole
     msg.includes('task_feedback') ||
     msg.includes('partner_user_id') ||
     msg.includes('partner_name') ||
+    msg.includes('task_input_type') ||
+    msg.includes('task_file_url') ||
     (msg.includes('column') && msg.includes('not found')) ||
     (msg.includes('column') && msg.includes('does not exist'))
   );

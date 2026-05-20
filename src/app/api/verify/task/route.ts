@@ -1,30 +1,45 @@
 import { NextResponse } from 'next/server';
 import { getSessionUserId, loadCompletions, saveCompletions } from '@/lib/completions-service';
 import { canVerifyItem, verifyTask, VerificationError } from '@/lib/verification';
-import { getPathItem, verificationConfig } from '@/lib/curriculum-path';
-import { gradeTask, TASK_PASSING_SCORE } from '@/lib/ai-grader';
+import { getPathItem, verificationConfig, type TaskInputType } from '@/lib/curriculum-path';
+import { gradeTaskSubmission, TASK_PASSING_SCORE } from '@/lib/ai-grader';
+import { fileUrlToPath } from '@/lib/upload-storage';
+import fs from 'fs';
 
 type PartnerInput = {
   user_id?: string | null;
   name?: string;
 };
 
+function isTaskInputType(v: unknown): v is TaskInputType {
+  return v === 'text' || v === 'screenshot' || v === 'document';
+}
+
+function fileUrlBelongsToUser(fileUrl: string, userId: string): boolean {
+  const safeUser = userId.replace(/[^a-zA-Z0-9._-]/g, '_');
+  return fileUrl.startsWith(`/api/uploads/${safeUser}/`);
+}
+
 export async function POST(request: Request) {
   const session = await getSessionUserId();
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  let body: { itemKey?: string; evidenceText?: string; partner?: PartnerInput | null };
+  let body: {
+    itemKey?: string;
+    evidenceText?: string;
+    fileUrl?: string;
+    inputType?: string;
+    partner?: PartnerInput | null;
+  };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: 'JSON inválido' }, { status: 400 });
   }
-  const { itemKey, evidenceText, partner } = body;
+
+  const { itemKey, evidenceText, fileUrl, inputType: bodyInputType, partner } = body;
   if (!itemKey || typeof itemKey !== 'string') {
     return NextResponse.json({ error: 'itemKey es requerido' }, { status: 400 });
-  }
-  if (typeof evidenceText !== 'string') {
-    return NextResponse.json({ error: 'evidenceText es requerido' }, { status: 400 });
   }
 
   const item = getPathItem(itemKey);
@@ -35,6 +50,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Este item no es una tarea' }, { status: 400 });
   }
 
+  const inputType: TaskInputType = isTaskInputType(bodyInputType)
+    ? bodyInputType
+    : item.inputType ?? 'text';
+
   const current = await loadCompletions(session.userId);
   const gate = canVerifyItem(current, itemKey);
   if (!gate.ok) {
@@ -44,27 +63,40 @@ export async function POST(request: Request) {
     );
   }
 
-  const trimmed = evidenceText.trim();
-  if (trimmed.length < verificationConfig.taskEvidenceMinChars) {
-    return NextResponse.json(
-      {
-        error: `La tarea debe tener al menos ${verificationConfig.taskEvidenceMinChars} caracteres.`,
-      },
-      { status: 400 }
-    );
+  const trimmed = typeof evidenceText === 'string' ? evidenceText.trim() : '';
+
+  if (inputType === 'text') {
+    if (trimmed.length < verificationConfig.taskEvidenceMinChars) {
+      return NextResponse.json(
+        {
+          error: `La tarea debe tener al menos ${verificationConfig.taskEvidenceMinChars} caracteres.`,
+        },
+        { status: 400 }
+      );
+    }
+  } else {
+    if (!fileUrl || typeof fileUrl !== 'string') {
+      return NextResponse.json({ error: 'Debes subir un archivo para esta tarea.' }, { status: 400 });
+    }
+    if (!fileUrlBelongsToUser(fileUrl, session.userId)) {
+      return NextResponse.json({ error: 'Archivo no válido para tu cuenta.' }, { status: 400 });
+    }
+    const filePath = fileUrlToPath(fileUrl);
+    if (!filePath || !fs.existsSync(filePath)) {
+      return NextResponse.json(
+        { error: 'No se encontró el archivo subido. Vuelve a subirlo.' },
+        { status: 400 }
+      );
+    }
   }
 
-  // Per-part rubric is required for AI grading. If the curriculum entry is
-  // missing it, surface a clear server-config error instead of silently passing.
-  if (!item.taskRubric) {
+  if (!item.taskRubric && inputType === 'text') {
     return NextResponse.json(
       { error: 'Esta tarea no tiene rúbrica configurada. Avisa al administrador.' },
       { status: 500 }
     );
   }
 
-  // Collaborative tasks require a declared partner. The UI enforces this too,
-  // but the server is the source of truth so direct API calls can't bypass.
   const collaborative = item.collaborative ?? false;
   const partnerName = (partner?.name ?? '').trim();
   const partnerUserId =
@@ -78,16 +110,24 @@ export async function POST(request: Request) {
     );
   }
 
+  const filePath =
+    inputType !== 'text' && fileUrl ? fileUrlToPath(fileUrl) ?? undefined : undefined;
+
   let grade;
   try {
-    grade = await gradeTask({
+    grade = await gradeTaskSubmission({
+      inputType,
       taskPrompt: item.taskPrompt ?? item.label,
       taskRubric: item.taskRubric,
       evidenceText: trimmed,
+      fileUrl: fileUrl ?? undefined,
+      filePath,
       partTitle: item.partTitle ?? item.label,
       level: item.level,
       collaborative,
       partnerName: collaborative ? partnerName : undefined,
+      toolName: item.primaryTools?.[0],
+      taskGoal: item.partTitle ?? item.label,
     });
   } catch (e) {
     const message = (e as Error).message || 'Error al evaluar la tarea.';
@@ -95,7 +135,6 @@ export async function POST(request: Request) {
   }
 
   if (grade.score < TASK_PASSING_SCORE) {
-    // Valid request, valid grading, just below the bar. Don't mutate state.
     return NextResponse.json({
       ok: false,
       score: grade.score,
@@ -110,7 +149,8 @@ export async function POST(request: Request) {
       itemKey,
       trimmed,
       { score: grade.score, feedback: grade.feedback },
-      collaborative ? { user_id: partnerUserId, name: partnerName } : null
+      collaborative ? { user_id: partnerUserId, name: partnerName } : null,
+      { inputType, fileUrl: fileUrl ?? null }
     );
     await saveCompletions(session.userId, updated);
     return NextResponse.json({

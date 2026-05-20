@@ -57,6 +57,10 @@ export type CompletionRow = {
   task_score?: number;
   /** AI grading feedback (2–3 sentences) for the most recent passing task submission. */
   task_feedback?: string;
+  /** How the teacher submitted this task (text, screenshot, or document). */
+  task_input_type?: 'text' | 'screenshot' | 'document';
+  /** Public URL path returned by /api/upload for file-based submissions. */
+  task_file_url?: string | null;
   /**
    * Collaborative pairing (Prompt #6). Only meaningful for completions of
    * `collaborative: true` task items (b-p4, i-p4, a-p3, a-p5). Both fields

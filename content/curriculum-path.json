@@ -35,7 +35,8 @@
       ],
       "collaborative": false,
       "taskPrompt": "Ten una conversación de 10 minutos con ChatGPT y otra con Claude sobre un tema de tu materia. Guarda ambas conversaciones (copia el texto o toma capturas) y descríbelas brevemente: ¿qué diferencias notaste entre ambas herramientas?",
-      "taskRubric": "1) La docente describe ambas conversaciones con suficiente detalle para entender qué preguntó y qué respondió cada IA. 2) Identifica al menos una diferencia concreta entre ChatGPT y Claude (estilo, profundidad, formato, errores). 3) Conecta lo que vivió con su materia. 4) Hay evidencia real de uso, no solo descripción genérica."
+      "taskRubric": "1) La docente describe ambas conversaciones con suficiente detalle para entender qué preguntó y qué respondió cada IA. 2) Identifica al menos una diferencia concreta entre ChatGPT y Claude (estilo, profundidad, formato, errores). 3) Conecta lo que vivió con su materia. 4) Hay evidencia real de uso, no solo descripción genérica.",
+      "inputType": "text"
     },
     {
       "order": 2,
@@ -94,7 +95,8 @@
       ],
       "collaborative": false,
       "taskPrompt": "Escribe 3 prompts sobre la misma meta docente (por ejemplo, 'explicar el ciclo del agua a alumnas de secundaria'): uno malo, uno aceptable y uno excelente. Compara las respuestas y documenta qué hizo la diferencia.",
-      "taskRubric": "1) Presenta los 3 prompts (malo, aceptable, excelente) sobre la misma meta docente. 2) Muestra o describe las respuestas que generó cada uno. 3) Explica qué cambió entre los prompts y por qué el excelente funcionó mejor. 4) La meta docente es real y relevante para su materia."
+      "taskRubric": "1) Presenta los 3 prompts (malo, aceptable, excelente) sobre la misma meta docente. 2) Muestra o describe las respuestas que generó cada uno. 3) Explica qué cambió entre los prompts y por qué el excelente funcionó mejor. 4) La meta docente es real y relevante para su materia.",
+      "inputType": "text"
     },
     {
       "order": 5,
@@ -155,7 +157,8 @@
       ],
       "collaborative": false,
       "taskPrompt": "Redacta con IA un correo a un padre de familia sobre una alumna con bajo desempeño. Después edítalo a tu voz personal. Guarda ambas versiones.",
-      "taskRubric": "1) Incluye una versión del correo generada por IA y una versión final editada por la docente. 2) El correo trata sobre una alumna real con bajo desempeño (contexto plausible). 3) Es evidente qué editó la docente y por qué. 4) El tono final es apropiado para padres de familia."
+      "taskRubric": "1) Incluye una versión del correo generada por IA y una versión final editada por la docente. 2) El correo trata sobre una alumna real con bajo desempeño (contexto plausible). 3) Es evidente qué editó la docente y por qué. 4) El tono final es apropiado para padres de familia.",
+      "inputType": "text"
     },
     {
       "order": 8,
@@ -216,7 +219,8 @@
       ],
       "collaborative": true,
       "taskPrompt": "Empareja con otra docente desde la pestaña de Comunidad. Cada una elige una herramienta distinta y corre el MISMO prompt. Comparen resultados y documenten cuál sirvió mejor para qué tipo de tarea. Escribe el nombre completo de tu compañera al inicio del texto.",
-      "taskRubric": "1) Incluye el nombre completo de la compañera al inicio del texto. 2) Especifica qué herramienta usó cada una. 3) Compara los resultados con observaciones concretas, no genéricas. 4) Concluye con cuál sirvió mejor para qué tipo de tarea."
+      "taskRubric": "1) Incluye el nombre completo de la compañera al inicio del texto. 2) Especifica qué herramienta usó cada una. 3) Compara los resultados con observaciones concretas, no genéricas. 4) Concluye con cuál sirvió mejor para qué tipo de tarea.",
+      "inputType": "text"
     },
     {
       "order": 11,
@@ -275,7 +279,8 @@
       ],
       "collaborative": false,
       "taskPrompt": "Pídele a un chatbot información específica de tu materia (fechas, datos, citas). Verifica con Perplexity o una fuente confiable. Encuentra al menos una alucinación o error y documéntalo.",
-      "taskRubric": "1) Documenta una pregunta específica de la materia de la docente. 2) Muestra la respuesta de la IA y la verificación contra una fuente confiable o Perplexity. 3) Identifica al menos una alucinación o error concreto. 4) Explica qué aprendió sobre los límites de la IA."
+      "taskRubric": "1) Documenta una pregunta específica de la materia de la docente. 2) Muestra la respuesta de la IA y la verificación contra una fuente confiable o Perplexity. 3) Identifica al menos una alucinación o error concreto. 4) Explica qué aprendió sobre los límites de la IA.",
+      "inputType": "text"
     },
     {
       "order": 14,
@@ -333,7 +338,8 @@
       ],
       "collaborative": false,
       "taskPrompt": "Genera un plan de clase completo para una clase real que darás esta semana o la próxima. Incluye objetivos, secuencia de actividades y evaluación. Edítalo a tu contexto.",
-      "taskRubric": "1) Incluye un plan de clase completo con objetivos, secuencia de actividades y evaluación. 2) Es para una clase real que dará la docente, con grupo y unidad identificados. 3) Muestra ediciones o adaptaciones al contexto del Liceo Redwood. 4) El nivel de detalle permite ejecutar la clase tal cual."
+      "taskRubric": "1) Incluye un plan de clase completo con objetivos, secuencia de actividades y evaluación. 2) Es para una clase real que dará la docente, con grupo y unidad identificados. 3) Muestra ediciones o adaptaciones al contexto del Liceo Redwood. 4) El nivel de detalle permite ejecutar la clase tal cual.",
+      "inputType": "text"
     },
     {
       "order": 17,
@@ -393,7 +399,8 @@
       ],
       "collaborative": false,
       "taskPrompt": "Construye una presentación de diapositivas para una lección que vas a dar este mes usando una herramienta con IA. Guarda el archivo o link.",
-      "taskRubric": "1) Incluye link o descripción del archivo final de presentación. 2) Indica qué herramienta usó (Canva, PowerPoint Copilot, Google Slides + Gemini, Gamma). 3) La presentación es para una lección real del mes en curso. 4) Comenta qué tan utilizable quedó sin ediciones manuales adicionales."
+      "taskRubric": "1) Incluye link o descripción del archivo final de presentación. 2) Indica qué herramienta usó (Canva, PowerPoint Copilot, Google Slides + Gemini, Gamma). 3) La presentación es para una lección real del mes en curso. 4) Comenta qué tan utilizable quedó sin ediciones manuales adicionales.",
+      "inputType": "text"
     },
     {
       "order": 20,
@@ -452,7 +459,8 @@
       ],
       "collaborative": false,
       "taskPrompt": "Toma una lectura de tu materia y adáptala a 3 niveles de lectura distintos (apoyo, en nivel, extensión). Documenta las 3 versiones.",
-      "taskRubric": "1) Incluye o describe las 3 versiones del texto (apoyo, en nivel, extensión). 2) Las diferencias entre niveles son evidentes y pedagógicamente válidas. 3) Conecta cada versión con un tipo de alumna específica de su grupo. 4) Identifica qué herramienta usó (Diffit, Claude, ChatGPT)."
+      "taskRubric": "1) Incluye o describe las 3 versiones del texto (apoyo, en nivel, extensión). 2) Las diferencias entre niveles son evidentes y pedagógicamente válidas. 3) Conecta cada versión con un tipo de alumna específica de su grupo. 4) Identifica qué herramienta usó (Diffit, Claude, ChatGPT).",
+      "inputType": "text"
     },
     {
       "order": 23,
@@ -510,7 +518,8 @@
       ],
       "collaborative": true,
       "taskPrompt": "Empareja con una docente de una materia distinta a la tuya. Co-diseñen una rúbrica IB para una tarea transferible (por ejemplo, una investigación). Escribe el nombre completo de tu compañera al inicio del texto.",
-      "taskRubric": "1) Incluye el nombre completo de la compañera al inicio del texto. 2) Las dos materias son distintas. 3) Presenta la rúbrica IB co-diseñada con criterios claros y descriptores. 4) Explica qué decisiones de diseño tomaron juntas y por qué."
+      "taskRubric": "1) Incluye el nombre completo de la compañera al inicio del texto. 2) Las dos materias son distintas. 3) Presenta la rúbrica IB co-diseñada con criterios claros y descriptores. 4) Explica qué decisiones de diseño tomaron juntas y por qué.",
+      "inputType": "text"
     },
     {
       "order": 26,
@@ -568,7 +577,8 @@
       ],
       "collaborative": false,
       "taskPrompt": "Toma una muestra real de trabajo estudiantil (anonimizada). Usa IA para generar retroalimentación formativa. Compárala con la que tú escribirías y documenta diferencias.",
-      "taskRubric": "1) Incluye la retroalimentación generada por IA sobre una muestra real anonimizada de trabajo estudiantil. 2) Incluye o describe la retroalimentación que la docente habría escrito ella sola. 3) Compara ambas con observaciones específicas. 4) Reflexiona sobre qué confiaría delegar y qué no."
+      "taskRubric": "1) Incluye la retroalimentación generada por IA sobre una muestra real anonimizada de trabajo estudiantil. 2) Incluye o describe la retroalimentación que la docente habría escrito ella sola. 3) Compara ambas con observaciones específicas. 4) Reflexiona sobre qué confiaría delegar y qué no.",
+      "inputType": "text"
     },
     {
       "order": 29,
@@ -626,7 +636,8 @@
       ],
       "collaborative": false,
       "taskPrompt": "Diseña una lección donde tus alumnas usen IA éticamente como compañera de pensamiento, con reglas explícitas de citación y entrega. Documenta la lección completa.",
-      "taskRubric": "1) La lección está documentada completa: objetivos, instrucciones para las alumnas, herramienta de IA específica, reglas de citación y entrega. 2) Las alumnas usan IA como apoyo de pensamiento, no como sustituto. 3) Las reglas de citación son explícitas y aplicables. 4) Identifica al menos un riesgo y cómo lo mitiga."
+      "taskRubric": "1) La lección está documentada completa: objetivos, instrucciones para las alumnas, herramienta de IA específica, reglas de citación y entrega. 2) Las alumnas usan IA como apoyo de pensamiento, no como sustituto. 3) Las reglas de citación son explícitas y aplicables. 4) Identifica al menos un riesgo y cómo lo mitiga.",
+      "inputType": "text"
     },
     {
       "order": 32,
@@ -684,7 +695,8 @@
       ],
       "collaborative": false,
       "taskPrompt": "Convierte las lecturas de una unidad en (a) una guía de estudio generada con NotebookLM y (b) un resumen en audio narrado por IA. Comparte los archivos o links.",
-      "taskRubric": "1) Incluye link o descripción de la guía de estudio generada con NotebookLM. 2) Incluye link o descripción del audio narrado generado. 3) Ambos son sobre la misma unidad real que enseña la docente. 4) Comenta el impacto esperado en el acceso de alumnas con distintos perfiles."
+      "taskRubric": "1) Incluye link o descripción de la guía de estudio generada con NotebookLM. 2) Incluye link o descripción del audio narrado generado. 3) Ambos son sobre la misma unidad real que enseña la docente. 4) Comenta el impacto esperado en el acceso de alumnas con distintos perfiles.",
+      "inputType": "text"
     },
     {
       "order": 35,
@@ -738,7 +750,8 @@
       ],
       "collaborative": true,
       "taskPrompt": "Empareja con una docente de otra materia. Diseñen juntas un proyecto de 2 materias donde la IA sea el puente. Documenten el plan completo. Escribe el nombre completo de tu compañera al inicio del texto.",
-      "taskRubric": "1) Incluye el nombre completo de la compañera al inicio del texto. 2) Las dos materias son distintas y el rol de cada una en el proyecto es claro. 3) La IA es genuinamente el puente entre las dos materias, no un adorno. 4) Incluye una entrega final esperada por las alumnas y cómo se evaluará."
+      "taskRubric": "1) Incluye el nombre completo de la compañera al inicio del texto. 2) Las dos materias son distintas y el rol de cada una en el proyecto es claro. 3) La IA es genuinamente el puente entre las dos materias, no un adorno. 4) Incluye una entrega final esperada por las alumnas y cómo se evaluará.",
+      "inputType": "text"
     },
     {
       "order": 38,
@@ -792,7 +805,8 @@
       ],
       "collaborative": false,
       "taskPrompt": "Toma una evaluación que ya usas. Rediséñala para que NO se pueda resolver pegando la consigna en ChatGPT. Justifica los cambios.",
-      "taskRubric": "1) Presenta la evaluación original y la rediseñada. 2) Explica concretamente por qué la nueva versión no se puede resolver pegando la consigna en ChatGPT. 3) Identifica qué habilidades evalúa ahora que antes no podía ver. 4) La nueva versión sigue siendo evaluable en tiempo realista."
+      "taskRubric": "1) Presenta la evaluación original y la rediseñada. 2) Explica concretamente por qué la nueva versión no se puede resolver pegando la consigna en ChatGPT. 3) Identifica qué habilidades evalúa ahora que antes no podía ver. 4) La nueva versión sigue siendo evaluable en tiempo realista.",
+      "inputType": "text"
     },
     {
       "order": 41,
@@ -845,7 +859,8 @@
       ],
       "collaborative": true,
       "taskPrompt": "Escribe un plan de '¿Cómo voy a usar IA en mi práctica este semestre?' (1–2 páginas). Empareja con otra docente y reviénse los planes mutuamente. Entrega tu plan final con los comentarios incorporados. Escribe el nombre de tu revisora al inicio del texto.",
-      "taskRubric": "1) Incluye el nombre de la revisora al inicio del texto. 2) El plan es personal, concreto y específico al contexto del Liceo Redwood. 3) Incluye al menos 3 compromisos accionables para el semestre con tiempos y herramientas. 4) Muestra incorporación de comentarios de la revisora (no es un borrador sin revisar)."
+      "taskRubric": "1) Incluye el nombre de la revisora al inicio del texto. 2) El plan es personal, concreto y específico al contexto del Liceo Redwood. 3) Incluye al menos 3 compromisos accionables para el semestre con tiempos y herramientas. 4) Muestra incorporación de comentarios de la revisora (no es un borrador sin revisar).",
+      "inputType": "text"
     },
     {
       "order": 44,

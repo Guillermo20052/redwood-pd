@@ -1,0 +1,795 @@
+{
+  "b": {
+    "modalities": [
+      {
+        "name": "1. Estudio Independiente",
+        "how": "La IA permite estaciones de aprendizaje a propio ritmo donde los alumnas acceden a tutores de IA alineados a su nivel actual, sin intervención docente. Los alumnas controlan ritmo, profundidad y dirección.",
+        "example": "Ejemplo: Los alumnas usan Claude como tutor personal en una estación mientras el docente trabaja con un grupo pequeño. Claude ajusta la profundidad de explicación según las preguntas de seguimiento del alumna."
+      },
+      {
+        "name": "2. Colaboración",
+        "how": "La IA genera tareas colaborativas, temas de debate y briefs de proyectos en equipo que requieren discusión genuina entre pares. La IA se convierte en quien propone el reto, no en quien da la respuesta.",
+        "example": "Ejemplo: El docente usa ChatGPT para generar un escenario de seminario socrático. Los alumnas debaten la pregunta; el resultado de la IA es el punto de partida, no la conclusión."
+      },
+      {
+        "name": "3. Crear y Producir",
+        "how": "Las herramientas de IA (Canva IA, Gamma) ayudan a los alumnas a prototipar rápidamente productos visuales, escritos y multimedia. Los docentes usan IA para andamiar el brief y los criterios de éxito.",
+        "example": "Ejemplo: Los alumnas usan Canva IA para crear una infografía sobre un tema IB. La IA genera el diseño inicial; los alumnas lo critican y rediseñan para mostrar comprensión más profunda."
+      },
+      {
+        "name": "4. Instrucción Directa",
+        "how": "La IA ayuda a los docentes a preparar y diferenciar el contenido de instrucción directa — guiones de diapositivas, introducciones de vocabulario, explicaciones de conceptos — para que la entrega sea más clara e inclusiva.",
+        "example": "Ejemplo: Antes de enseñar un concepto complejo, el docente pregunta a Claude: \"Explica [concepto] con 3 analogías adecuadas para alumnas IB de 16 años.\" Usa la mejor analogía en su apertura de clase."
+      },
+      {
+        "name": "5. Evaluación y Retroalimentación",
+        "how": "La IA acelera los ciclos de retroalimentación formativa. Los docentes generan bancos de comentarios, descriptores de rúbricas y preguntas de verificación rápida; los alumnas reciben retroalimentación más rápida y consistente.",
+        "example": "Ejemplo: Después de recopilar tickets de salida, el docente pega las respuestas en Claude: \"Aquí hay 20 respuestas de tickets de salida de alumnas. Identifica los 3 conceptos erróneos más comunes.\" El docente los aborda al día siguiente."
+      }
+    ],
+    "ib": [
+      {
+        "title": "Habilidades ATL Desarrolladas",
+        "items": [
+          "Comunicación: escritura y retroalimentación asistida por IA",
+          "Autogestión: iteración de prompts y reflexión",
+          "Investigación: uso de IA para localizar y sintetizar información",
+          "Pensamiento: evaluación crítica de resultados de IA"
+        ]
+      },
+      {
+        "title": "Criterios de Evaluación",
+        "items": [
+          "MYP Criterio A: Conocimiento — generación de rúbricas",
+          "MYP Criterio B: Investigación — marcos de indagación asistidos por IA",
+          "MYP Criterio C: Comunicación — andamiaje de retroalimentación",
+          "DP: generación de lista de verificación IA y guía de estructura"
+        ]
+      },
+      {
+        "title": "Aprendizaje por Indagación",
+        "items": [
+          "La IA genera preguntas de indagación de lo factual a lo conceptual",
+          "La IA andamia el ciclo: descubrir → investigar → reflexionar",
+          "La IA crea provocaciones y puntos de partida de casos",
+          "El docente revisa todos los resultados de IA antes del uso estudiantil"
+        ]
+      }
+    ],
+    "subjects": [
+      {
+        "icon": "📖",
+        "name": "Inglés IB (Lengua y Literatura)",
+        "applications": [
+          {
+            "title": "Generador de andamiaje para lectura cercana",
+            "prompt": "\"Crea una ficha de lectura cercana guiada para alumnas de IB Lengua y Literatura analizando [texto/poema]. Incluye anotaciones para recursos literarios, preguntas de contexto y una plantilla de tesis. Grado 11, estilo Paper 1.\""
+          },
+          {
+            "title": "Banco de comentarios de retroalimentación",
+            "prompt": "\"Genera 15 comentarios de retroalimentación formativa para ensayos de inglés IB, organizados por: análisis sólido, necesita desarrollo y problemas estructurales. Alinea a los criterios de evaluación del Paper 2.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "📐",
+        "name": "Matemáticas IB (AA/AI)",
+        "applications": [
+          {
+            "title": "Conjuntos de problemas con contexto real",
+            "prompt": "\"Crea 5 problemas de palabras IB Math AI SL sobre funciones exponenciales usando contextos del mundo real (finanzas, población, medicina). Incluye soluciones desarrolladas y términos de comando.\""
+          },
+          {
+            "title": "Sugerencias de temas para Exploración (IA)",
+            "prompt": "\"Sugiere 10 temas de exploración para la IA de Matemáticas IB relacionados con [interés del alumna]. Incluye: concepto matemático, conexión real, idea de fuente de datos y pregunta clave.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "📚",
+        "name": "Literatura IB",
+        "applications": [
+          {
+            "title": "Marco de análisis comparativo",
+            "prompt": "\"Crea un marco de análisis comparativo para Literatura IB para [Obra 1] y [Obra 2]. Enfócate en: conceptos literarios clave, voz narrativa, contexto y decisiones del autor. Incluye preguntas guía para cada sección. Alinea a criterios de ensayo HL.\""
+          },
+          {
+            "title": "Exploración de voz del personaje",
+            "prompt": "\"Simula la voz de [personaje] de [texto] respondiendo esta pregunta: [pregunta]. Usa lenguaje basado en evidencia del texto. Luego pídeme que evalúe si la voz es precisa.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🌍",
+        "name": "Historia IB",
+        "applications": [
+          {
+            "title": "Generador de práctica de análisis de fuentes",
+            "prompt": "\"Crea 3 preguntas de práctica de análisis de fuentes Paper 1 para Historia IB sobre [tema/evento]. Incluye descripción de fuente primaria, prompt OPVL y una pregunta de comparación. Alinea a términos de comando IB.\""
+          },
+          {
+            "title": "Andamiaje para estructura de ensayo",
+            "prompt": "\"Genera una plantilla de plan de ensayo para una pregunta del Paper 2 de Historia IB sobre [tema]. Incluye: marco de tesis, 3 esquemas de argumentos con sugerencias de evidencia y un marco de conclusión.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🧬",
+        "name": "Biología IB",
+        "applications": [
+          {
+            "title": "Guía de informe de laboratorio",
+            "prompt": "\"Crea una guía de informe de IA de laboratorio paso a paso para alumnas de Biología IB que investigan [pregunta de investigación]. Incluye: teoría de fondo, lista de materiales, andamiaje del método, plantilla de tabla de datos y preguntas de análisis.\""
+          },
+          {
+            "title": "Discusiones de estudios de caso éticos",
+            "prompt": "\"Crea un estudio de caso de discusión ética sobre [tema de biotecnología/genética/ecología] para Biología IB. Incluye: resumen factual, 4 preguntas éticas alineadas a NdC y prompts de discusión.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🔭",
+        "name": "Física IB",
+        "applications": [
+          {
+            "title": "Andamios de explicación conceptual",
+            "prompt": "\"Explica [concepto de física] a un alumna de 17 años de Física IB HL usando 3 analogías y una aplicación del mundo real. Luego proporciona 2 preguntas tipo examen con esquemas de puntuación.\""
+          },
+          {
+            "title": "Generador de tareas de análisis de datos",
+            "prompt": "\"Crea una tarea de análisis de datos de Física IB sobre [tema]. Incluye: tabla de resultados con datos realistas, instrucciones para graficar, preguntas de análisis de errores y criterios de evaluación.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "💼",
+        "name": "Gestión Empresarial IB",
+        "applications": [
+          {
+            "title": "Análisis de caso empresarial",
+            "prompt": "\"Crea un caso de estudio empresarial estructurado para IB Gestión Empresarial sobre [empresa/escenario]. Incluye: perfil de empresa, problema clave, análisis de partes interesadas, FODA y 3 preguntas de discusión alineadas a términos de comando HL y SL.\""
+          },
+          {
+            "title": "Escenario de toma de decisiones",
+            "prompt": "\"Genera un escenario realista de toma de decisiones en IB Gestión Empresarial sobre [problema de marketing/finanzas/RRHH]. Incluye datos cuantitativos, 2 opciones con argumentos justificados y un marco de recomendación.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🤔",
+        "name": "Teoría del Conocimiento (TOK)",
+        "applications": [
+          {
+            "title": "Generador de preguntas de conocimiento",
+            "prompt": "\"Genera 8 Preguntas de Conocimiento IB TOK relacionadas con [Área de Conocimiento: ciencias/artes/historia]. Formato: 'En qué medida...' / '¿Cómo sabemos...' / '¿Cuál es el papel de...' Incluye 2 situaciones de la vida real para cada una.\""
+          },
+          {
+            "title": "Lluvia de ideas para ensayo TOK",
+            "prompt": "\"Ayúdame a desarrollar un plan de ensayo TOK para el título: [pegar título]. Sugiere: tesis, 2 perspectivas por AOK, situaciones de la vida real, contrargumentos y una conclusión vinculante. NO escribas el ensayo.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🏛️",
+        "name": "Filosofía IB",
+        "applications": [
+          {
+            "title": "Generador de diálogo filosófico",
+            "prompt": "\"Crea un diálogo filosófico entre [Filósofo A] y [Filósofo B] sobre la pregunta: [pregunta]. Muestra cómo respondería cada pensador usando sus posiciones filosóficas reales. Incluye 3 puntos de desacuerdo genuino y una pregunta final para discusión estudiantil.\""
+          },
+          {
+            "title": "Análisis de dilemas éticos",
+            "prompt": "\"Presenta el dilema ético de [tema] desde 3 perspectivas filosóficas (utilitarismo, deontología, ética de la virtud). Para cada perspectiva: argumento principal, fortaleza clave y limitación. Formato para debate estudiantil IB.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🇮🇹",
+        "name": "Italiano IB (Lengua B)",
+        "applications": [
+          {
+            "title": "Texto auténtico y tarea de respuesta",
+            "prompt": "\"Crea un texto de comprensión lectora IB Lengua B Italiano SL sobre [tema del programa IB]. Incluye: 5 preguntas de comprensión, una tarea de vocabulario y un prompt de respuesta escrita. Nivel B2.\""
+          },
+          {
+            "title": "Preparación de actividad oral",
+            "prompt": "\"Diseña una actividad de práctica de oral individual de IB Lengua B Italiano sobre [tema]. Incluye descripción de estímulo visual, 4 preguntas de discusión y vocabulario objetivo. Alinea a criterios de evaluación oral individual IB.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🇩🇪",
+        "name": "Alemán IB (Lengua B)",
+        "applications": [
+          {
+            "title": "Comprensión lectora con contexto cultural",
+            "prompt": "\"Crea un texto de comprensión lectora IB Lengua B Alemán sobre [tema cultural/social alemán]. Incluye glosario de vocabulario, 5 preguntas de comprensión y una actividad de escritura creativa relacionada. Nivel B1–B2.\""
+          },
+          {
+            "title": "Generador de situaciones comunicativas",
+            "prompt": "\"Diseña 3 situaciones de juego de roles para practicar alemán IB en contextos de [viaje/trabajo/vida cotidiana]. Incluye vocabulario clave, frases útiles y criterios de evaluación oral alineados al IB.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🇫🇷",
+        "name": "Francés IB (Lengua B)",
+        "applications": [
+          {
+            "title": "Tarea de análisis de texto literario",
+            "prompt": "\"Crea una tarea de análisis de texto literario en francés para alumnas IB sobre [extracto/autor]. Incluye: preguntas de comprensión, análisis de recursos lingüísticos y una pregunta de respuesta personal. Alinea a criterios Paper 1 de Lengua B.\""
+          },
+          {
+            "title": "Práctica de oral individual",
+            "prompt": "\"Diseña una práctica de oral individual IB Francés Lengua B sobre [tema del programa]. Incluye estímulo visual descriptivo, 4 preguntas de discusión y lista de vocabulario objetivo. Alinea a criterios de evaluación oral IB.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "📚",
+        "name": "Religión (Humanismo Cristiano · Católica)",
+        "applications": [
+          {
+            "title": "Reflexión de texto bíblico y doctrina",
+            "prompt": "\"Crea una guía de reflexión para alumnas de bachillerato sobre [pasaje bíblico]. Incluye: contexto histórico y teológico, conexión con la doctrina católica y el carisma de la Humanismo Cristiano, 3 preguntas de reflexión personal y una aplicación práctica para la vida cotidiana. Tono: formativo y espiritual.\""
+          },
+          {
+            "title": "Debate ético desde perspectiva cristiana",
+            "prompt": "\"Diseña una actividad de debate para alumnas IB sobre [dilema ético contemporáneo] desde la perspectiva de la doctrina social de la Iglesia Católica. Incluye: posición de la Iglesia, argumentos filosóficos de apoyo, contraposiciones seculares y preguntas de discusión para el aula.\""
+          },
+          {
+            "title": "Conexión fe–razón en el contexto IB",
+            "prompt": "\"Crea una actividad TOK-Religion que conecte una pregunta de conocimiento IB con la perspectiva de la fe cristiana católica. Muestra cómo fe y razón no se contradicen. Incluye 3 ejemplos históricos de científicos o filósofos católicos que ilustren esta integración. Alinea al perfil del alumno IB.\""
+          }
+        ],
+        "highlight": true
+      },
+      {
+        "icon": "🎨",
+        "name": "Artes Visuales IB",
+        "applications": [
+          {
+            "title": "Generador de declaración de intención artística",
+            "prompt": "\"Crea una guía de andamiaje para que alumnas de IB Artes Visuales redacten su declaración de intención artística para [tipo de obra/estudio]. Incluye: estructura en 5 partes (concepto, proceso, referentes artísticos, técnicas, propósito), ejemplos de lenguaje artístico apropiado y criterios de éxito alineados al IB.\""
+          },
+          {
+            "title": "Banco de preguntas de análisis comparativo de obras",
+            "prompt": "\"Genera 10 preguntas de análisis comparativo para alumnas de IB Artes Visuales comparando [obra/artista 1] con [obra/artista 2]. Incluye: preguntas sobre forma, función, contexto cultural, técnica y significado. Alinea al formato de Comparative Study del IB.\""
+          }
+        ],
+        "highlight": false
+      }
+    ],
+    "skills": {
+      "introTag": "Nivel 1 · Consciente — Uso básico e intencional",
+      "intro": "La docente descubre cómo la IA puede mejorar la calidad de sus materiales y ahorrar tiempo. Las alumnas experimentan clases mejor preparadas, retroalimentación más específica y actividades más variadas.",
+      "blocks": [
+        {
+          "label": "👩‍🏫 Habilidades de la maestra",
+          "items": []
+        },
+        {
+          "label": "🎓 Habilidades que desarrollan las alumnas",
+          "items": []
+        }
+      ]
+    }
+  },
+  "i": {
+    "modalities": [
+      {
+        "name": "1. Aprendizaje Basado en Proyectos",
+        "how": "La IA genera briefs de proyectos, puntos de control de hitos y retroalimentación en cada etapa. Los alumnas usan IA como asistente de investigación y compañero de pensamiento dentro del ciclo de proyecto.",
+        "example": "Ejemplo: Alumnas del Proyecto Personal IB usan Claude para ayudar a definir su meta de producto, generar una agenda de reunión con mentor y evaluar su reflexión contra los criterios MYP."
+      },
+      {
+        "name": "2. Discusión y Debate",
+        "how": "La IA genera preguntas de seminario socrático, esquemas de argumentos opuestos y prompts de reflexión post-debate. Asegura que todos los alumnas puedan contribuir independientemente de su nivel de preparación.",
+        "example": "Ejemplo: El docente de TOK usa ChatGPT para generar una situación de la vida real con 4 afirmaciones de conocimiento en competencia. Los alumnas reciben su posición asignada la mañana de la clase."
+      },
+      {
+        "name": "3. Resolución de Problemas del Mundo Real",
+        "how": "La IA presenta escenarios del mundo real, proporciona acceso a datos y hace preguntas de seguimiento que impulsan a los alumnas hacia un análisis más profundo. El docente diseña el contexto; la IA facilita la indagación.",
+        "example": "Ejemplo: Alumnas de Negocios IB trabajan en un caso de startup generado con IA. Claude hace preguntas de seguimiento después de cada decisión del alumna, simulando una conversación real con un mentor empresarial."
+      },
+      {
+        "name": "4. Reflexión y Metacognición",
+        "how": "La IA genera prompts metacognitivos personalizados después de actividades de aprendizaje. Los alumnas describen lo que hicieron; la IA los desafía a pensar sobre el cómo y el porqué aprendieron.",
+        "example": "Ejemplo: Después de cada sesión de IA, los alumnas responden 3 preguntas generadas por IA: \"¿Qué decisión tomaste hoy?\", \"¿Qué harías diferente?\", \"¿Qué todavía no entiendes?\""
+      },
+      {
+        "name": "5. Investigación y Alfabetización Informacional",
+        "how": "La IA enseña evaluación crítica generando ejemplos de contenido no confiable, sesgado y bien fundamentado. Los alumnas comparan y desarrollan sus propios criterios de evaluación.",
+        "example": "Ejemplo: El docente de Historia usa IA para generar un relato plausible pero históricamente inexacto de un evento. Los alumnas lo verifican con fuentes primarias — construyendo habilidades de análisis de fuentes mediante errores de IA."
+      },
+      {
+        "name": "6. Actuación y Presentación",
+        "how": "La IA genera guías de preparación para evaluación oral, anticipa preguntas del examinador y proporciona retroalimentación estructurada de práctica en respuestas orales.",
+        "example": "Ejemplo: Alumnas de Lengua B IB practican su oral individual con Claude actuando como examinador de apoyo. Reciben retroalimentación sobre estructura, rango lingüístico y uso de referencia cultural."
+      },
+      {
+        "name": "7. Enseñanza entre Pares",
+        "how": "La IA crea escenarios de \"enseñanza de vuelta\" donde los alumnas explican conceptos a un personaje de IA que hace preguntas de seguimiento genuinas, exponiendo brechas de comprensión.",
+        "example": "Ejemplo: Alumnas de Biología IB explican el proceso de la meiosis a Claude, que \"juega el papel de un curioso alumna de 1ro de sec.\" Los alumnas deben simplificar y aclarar hasta que el concepto esté completamente explicado."
+      }
+    ],
+    "ib": [
+      {
+        "title": "Habilidades ATL Profundizadas",
+        "items": [
+          "Pensamiento Crítico: evaluación de resultados de IA por sesgo",
+          "Pensamiento Creativo: IA como compañera de ideación",
+          "Transferencia: estrategias de IA que fluyen entre materias",
+          "Colaboración: tareas de indagación grupal facilitadas por IA"
+        ]
+      },
+      {
+        "title": "Cobertura de Evaluación",
+        "items": [
+          "MYP: los 4 criterios abordados mediante tareas asistidas por IA",
+          "DP: apoyo de planificación de IA, orientación de estructura",
+          "TOK: IA como caso de estudio de AOK (conocimiento y tecnología)",
+          "CAS: prompts de reflexión de IA y documentación de evidencia"
+        ]
+      },
+      {
+        "title": "Aprendizaje por Indagación",
+        "items": [
+          "IA genera ciclos de indagación desde sintonizando hasta reflexión",
+          "IA diferencia la ruta de indagación por perfil de alumna",
+          "IA proporciona prompts socráticos durante la indagación sin dar respuestas",
+          "El docente mantiene el rol de diseñador de aprendizaje"
+        ]
+      }
+    ],
+    "subjects": [
+      {
+        "icon": "📖",
+        "name": "Inglés IB — Integración",
+        "applications": [
+          {
+            "title": "Andamiaje de indagación literaria",
+            "prompt": "\"Diseña una secuencia de indagación de 3 sesiones para [obra literaria] que lleve a los alumnas desde la comprensión literal hasta el análisis conceptual. Para cada sesión incluye: pregunta de indagación, actividad central con IA y conexión con el Perfil del Alumno IB.\""
+          },
+          {
+            "title": "Análisis de datos de clase (Paper 1/2)",
+            "prompt": "\"Aquí están los resultados de mi clase en el último Paper 2 [pegar datos]. Identifica patrones por criterio, sugiere actividades de enseñanza específicas para los 2 criterios más débiles y crea mini-lecciones de 15 minutos para abordarlos.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "📐",
+        "name": "Matemáticas IB — Integración",
+        "applications": [
+          {
+            "title": "Retroalimentación automatizada para exploración IA",
+            "prompt": "\"Aquí está el borrador de la sección [X] de la exploración de un alumna de IB Math [AA/AI]: [pegar texto]. Evalúa usando los criterios de la IA del IB. Indica: fortaleza principal, debilidad principal y una pregunta socrática que lleve al alumna a mejorar su análisis matemático.\""
+          },
+          {
+            "title": "Generador de problemas adaptativos",
+            "prompt": "\"Genera 3 problemas sobre [tema de Matemáticas IB] en 3 niveles: (1) con andamiaje guiado paso a paso, (2) estándar con pista, (3) sin ayuda y con extensión. Mantén el mismo contexto para los 3. Incluye soluciones completas.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "📚",
+        "name": "Literatura IB — Integración",
+        "applications": [
+          {
+            "title": "Simulador de oral individual IB",
+            "prompt": "\"Actúa como examinador IB de Literatura para el oral individual. El alumna presenta sobre [obra] y [elemento literario]. Haz 3 preguntas de seguimiento basadas en la presentación del alumna. Luego proporciona retroalimentación usando los criterios A, B, C, D del IB Literature oral.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🌍",
+        "name": "Historia IB — Integración",
+        "applications": [
+          {
+            "title": "Análisis historiográfico con IA",
+            "prompt": "\"Presenta 3 interpretaciones históricas en competencia (historiografía) de [evento/período]. Atribuye cada una a un historiador o colegio de pensamiento nombrada. Incluye: argumento clave, evidencia usada, limitaciones y una pregunta que desafíe cada interpretación. Formato para preparación de debate estudiantil.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🧬",
+        "name": "Biología IB — Integración",
+        "applications": [
+          {
+            "title": "Tutor socrático para diseño experimental IA",
+            "prompt": "\"Un alumna quiere investigar [tema] para su IA de Biología IB. Actúa como mentor de investigación: haz 5 preguntas socráticas para ayudarle a refinar su pregunta de investigación. NO sugieras la pregunta — ayúdale a encontrarla por sí mismo.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🔭",
+        "name": "Física IB — Integración",
+        "applications": [
+          {
+            "title": "Análisis de resultados de laboratorio IA",
+            "prompt": "\"Aquí están los resultados de laboratorio de un alumna de Física IB HL sobre [experimento]: [pegar datos]. Evalúa la calidad del análisis de errores, identifica debilidades metodológicas y sugiere mejoras para el informe de IA. Alinea a criterios IB Physics IA.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "💼",
+        "name": "Gestión Empresarial IB — Integración",
+        "applications": [
+          {
+            "title": "Simulador de decisión empresarial",
+            "prompt": "\"Actúa como consultor empresarial y presenta un problema real a alumnas de IB Business: [escenario]. Después de que el alumna proponga una solución, hazle 3 preguntas críticas de inversión. Evalúa su respuesta usando marcos IB BM (FODA, árbol de decisiones, análisis de stakeholders).\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🤔",
+        "name": "TOK — Integración",
+        "applications": [
+          {
+            "title": "IA como caso de estudio de AOK",
+            "prompt": "\"Actúa como un sistema de IA con datos de entrenamiento limitados. Responde esta pregunta de TOK desde esa perspectiva: '¿Cómo sabemos lo que sabemos?' Luego explica a los alumnas dónde es probable que tu respuesta esté sesgada, incompleta o culturalmente limitada.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🏛️",
+        "name": "Filosofía IB — Integración",
+        "applications": [
+          {
+            "title": "Simulador de diálogo filosófico Socrático",
+            "prompt": "\"Actúa como Sócrates y conduce un diálogo socrático con el alumna sobre [posición filosófica]. Haz solo preguntas — nunca afirmaciones. El objetivo es llevar al alumna a descubrir contradicciones en su pensamiento. Continúa el diálogo hasta que el alumna refine su posición al menos 3 veces.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🇮🇹",
+        "name": "Italiano IB — Integración",
+        "applications": [
+          {
+            "title": "Retroalimentación automatizada de escritura en italiano",
+            "prompt": "\"Aquí está un texto escrito por un alumna de IB Italiano Lengua B sobre [tema]: [pegar texto]. Evalúa usando los criterios de escritura del IB (lengua, mensaje, formato). Proporciona retroalimentación específica en español para que el alumna entienda y mejore, y señala 3 errores gramaticales clave con corrección.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🇩🇪",
+        "name": "Alemán IB — Integración",
+        "applications": [
+          {
+            "title": "Práctica oral adaptativa en alemán",
+            "prompt": "\"Actúa como examinador de IB Alemán Lengua B para el oral individual. El tema es [tema del programa]. Haz preguntas graduadas: comienza con preguntas descriptivas simples y aumenta gradualmente la complejidad. Adapta el nivel B1/B2 según las respuestas del alumna. Retroalimenta en español al final.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🇫🇷",
+        "name": "Francés IB — Integración",
+        "applications": [
+          {
+            "title": "Análisis de texto con apoyo diferenciado",
+            "prompt": "\"Aquí hay un texto de Francés IB Lengua B: [pegar texto]. Crea 3 versiones de preguntas de análisis: (1) versión con andamiaje (preguntas simples + glosario), (2) versión estándar, (3) versión de extensión con análisis estilístico. Todas alineadas a criterios Paper 1 del IB.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "📚",
+        "name": "Religión — Integración (Humanismo Cristiano)",
+        "applications": [
+          {
+            "title": "Ciclo de indagación fe–razón",
+            "prompt": "\"Diseña una unidad de indagación de 3 sesiones sobre [tema teológico/filosófico] que integre la perspectiva de la Humanismo Cristiano sobre la santificación del trabajo ordinario. Incluye: pregunta central de indagación, fuentes primarias (Camino, homilías de San Josemaría), conexión con el programa IB y una actividad de reflexión personal profunda.\""
+          },
+          {
+            "title": "Apoyo al discernimiento vocacional",
+            "prompt": "\"Crea un conjunto de 5 preguntas de reflexión profunda para alumnas de bachillerato sobre discernimiento vocacional desde la espiritualidad de la Humanismo Cristiano. Las preguntas deben integrar: virtudes humanas, santificación del trabajo, plan de vida espiritual y conexión con el Perfil del Alumno IB.\""
+          }
+        ],
+        "highlight": true
+      },
+      {
+        "icon": "🎨",
+        "name": "Artes Visuales IB — Integración",
+        "applications": [
+          {
+            "title": "Retroalimentación adaptativa para portafolio visual",
+            "prompt": "\"Aquí está la descripción del portafolio de proceso de un alumna de IB Artes Visuales para [obra]: [describir]. Evalúa usando los criterios IB de Proceso Artístico. Proporciona: fortaleza en desarrollo conceptual, área de mejora técnica y una pregunta socrática que lleve al alumna a profundizar su reflexión artística.\""
+          },
+          {
+            "title": "Generador de investigación de referentes artísticos",
+            "prompt": "\"Diseña una ruta de investigación de referentes artísticos para un alumna de IB Artes Visuales cuyo concepto central es [concepto]. Sugiere: 4 artistas de diferentes culturas y períodos, puntos de conexión conceptual específicos, preguntas de análisis por artista y cómo cada referente puede informar su práctica artística propia.\""
+          }
+        ],
+        "highlight": false
+      }
+    ],
+    "skills": {
+      "introTag": "Nivel 2 · Integración — Implementación en secuencias completas",
+      "intro": "La docente pasa de usar IA en tareas aisladas a integrarla dentro de secuencias de aprendizaje completas. Las alumnas experimentan clases más coherentes, actividades conectadas entre sí y una maestra que actúa como diseñadora de experiencias.",
+      "blocks": [
+        {
+          "label": "👩‍🏫 Habilidades de la maestra",
+          "items": []
+        },
+        {
+          "label": "🎓 Habilidades que desarrollan las alumnas",
+          "items": []
+        }
+      ]
+    }
+  },
+  "a": {
+    "modalities": [
+      {
+        "name": "1. Indagación Liderada por el Alumna",
+        "how": "La IA se convierte en compañera de investigación para investigaciones lideradas por el alumna. Los alumnas definen su pregunta de indagación; la IA proporciona recursos, preguntas de seguimiento y marcos estructurados — nunca la respuesta.",
+        "example": "Ejemplo: Alumnas de Monografía usan Perplexity IA + Claude: Perplexity encuentra fuentes, Claude ayuda a evaluar su relevancia y estructurar el argumento. El docente guía el proceso."
+      },
+      {
+        "name": "2. Servicio y Acción Comunitaria",
+        "how": "La IA ayuda a diseñar, documentar y reflexionar sobre actividades de servicio CAS. Los alumnas usan IA para investigar necesidades comunitarias, planear proyectos y generar evidencia para su portafolio.",
+        "example": "Ejemplo: Alumnas de CAS usan Claude para: (1) investigar las necesidades de su organización de servicio, (2) redactar una propuesta de proyecto, (3) generar preguntas de reflexión alineadas a los resultados de aprendizaje CAS."
+      },
+      {
+        "name": "3. Pensamiento Emprendedor e Innovación",
+        "how": "La IA actúa como mentor de startup y facilitador de pensamiento de diseño. Los alumnas presentan ideas a la IA, reciben retroalimentación crítica e iteran sobre sus conceptos antes de presentarlos a partes interesadas reales.",
+        "example": "Ejemplo: Alumnas de Negocios IB usan ChatGPT para simular un escenario Dragon's Den. Presentan su idea de negocio; la IA responde con preguntas a nivel de inversores y desafía sus suposiciones."
+      },
+      {
+        "name": "4. Actuación y Presentación",
+        "how": "La IA entrena habilidades de presentación oral: genera preguntas del examinador de práctica, proporciona retroalimentación sobre estructura y lenguaje, y simula respuestas de panel para evaluaciones orales del DP.",
+        "example": "Ejemplo: Alumnas de Literatura A practican su Oral Individual con Claude actuando como examinador IB. Claude usa los criterios reales del esquema de calificación de IB Literatura oral para dar retroalimentación."
+      },
+      {
+        "name": "5. Pensamiento Sistémico",
+        "how": "La IA genera mapas sistémicos, cadenas de causa y efecto y diagramas de bucles de retroalimentación para temas complejos. Los alumnas usan IA para identificar puntos de apalancamiento y consecuencias no intencionadas.",
+        "example": "Ejemplo: Alumnas de Sistemas Ambientales IB usan Claude para mapear las causas interconectadas de la deforestación. La IA genera un diagrama de sistemas que los alumnas critican, amplían y presentan."
+      },
+      {
+        "name": "6. Razonamiento Ético",
+        "how": "La IA presenta dilemas éticos, genera perspectivas de partes interesadas y desafía a los alumnas a justificar su razonamiento moral — apoyando directamente el desarrollo del Perfil del Alumno IB y TOK.",
+        "example": "Ejemplo: Docente de TOK diseña un debate de ética donde la IA expresa 4 posiciones filosóficas diferentes. Los alumnas deben defender cada posición antes de argumentar la propia — usando IA para entender perspectivas, no para reemplazar el pensamiento."
+      },
+      {
+        "name": "7. Aprendizaje Intercultural",
+        "how": "La IA proporciona acceso a perspectivas, textos y ejemplos de tradiciones no occidentales. Los docentes usan IA para contrarrestar activamente el sesgo cultural y enriquecer la exploración del contexto global en unidades IB.",
+        "example": "Ejemplo: Docente de Historia usa Claude para presentar 3 perspectivas históricas no occidentales sobre un tema típicamente enseñado desde una lente europea. Los alumnas comparan narrativas y evalúan cuya voz está ausente."
+      },
+      {
+        "name": "8. Tecnología y Habilidades del Futuro",
+        "how": "Los alumnas aprenden a usar IA como herramienta a nivel profesional — no solo para tareas escolares sino para escenarios del mundo real. La IA se convierte en una herramienta de preparación para la carrera dentro del currículo IB.",
+        "example": "Ejemplo: Los alumnas completan un \"Desafío de IA de Carrera Futura\" — usando herramientas de IA como lo harían en su campo profesional previsto (medicina, derecho, ingeniería, periodismo). El docente evalúa la calidad de la colaboración con IA, no solo el resultado."
+      }
+    ],
+    "ib": [
+      {
+        "title": "Dominio de Habilidades ATL",
+        "items": [
+          "Los 10 grupos de habilidades ATL incrustados en flujos de trabajo de IA",
+          "Transferencia: estrategias de IA fluyen libremente entre materias",
+          "Alfabetización Informacional: detección de sesgo IA como habilidad central",
+          "Autogestión: seguimiento de metas asistido por IA y reflexión"
+        ]
+      },
+      {
+        "title": "Cobertura Curricular Completa",
+        "items": [
+          "MYP: planificación completa de unidades con IA en cada etapa",
+          "DP: IA, Monografía, TOK, orales — todos tienen flujos de trabajo de apoyo IA",
+          "CAS: sistema de portafolio y documentación de reflexión con IA",
+          "Proyectos interdisciplinarios IB diseñados con facilitación de IA"
+        ]
+      },
+      {
+        "title": "Transformación de la Indagación",
+        "items": [
+          "Los alumnas impulsan la indagación; la IA facilita sin liderar",
+          "IA como caso de estudio en TOK — ¿qué sabe la IA? ¿Cómo?",
+          "La IA genera hipótesis rivales y explicaciones alternativas",
+          "Los resultados estudiantiles se evalúan independientemente de la asistencia de IA"
+        ]
+      }
+    ],
+    "subjects": [
+      {
+        "icon": "🤔",
+        "name": "TOK — Avanzado",
+        "applications": [
+          {
+            "title": "IA como AOK en TOK",
+            "prompt": "\"Actúa como un sistema de IA con datos de entrenamiento limitados. Responde esta pregunta de TOK desde esa perspectiva: '¿Cómo sabemos lo que sabemos?' Luego explica a los alumnas dónde es probable que tu respuesta esté sesgada, incompleta o culturalmente limitada.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "📐",
+        "name": "Matemáticas IB — Avanzado",
+        "applications": [
+          {
+            "title": "Investigación IA con datos reales",
+            "prompt": "\"Soy alumna de IB Math AA HL. Quiero explorar [tema matemático]. Actúa como mi supervisor de IA: hazme 5 preguntas guía para ayudarme a delimitar mi pregunta de investigación. Empuja mi pensamiento hacia mayor profundidad matemática y compromiso personal.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🧬",
+        "name": "Biología IB — Avanzado",
+        "applications": [
+          {
+            "title": "Generador de indagación NdC",
+            "prompt": "\"Genera 3 actividades de indagación de Naturaleza de las Ciencias para Biología IB sobre [tema]. Cada una debe: desafiar la certeza científica, incluir un ejemplo histórico de consenso científico cambiado y conectar con una controversia ética actual. Incluye preguntas de discusión.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🌍",
+        "name": "Historia IB — Avanzado",
+        "applications": [
+          {
+            "title": "Laboratorio historiográfico",
+            "prompt": "\"Presenta 3 interpretaciones históricas en competencia de [evento/período]. Para cada una: argumenta desde dentro de esa perspectiva historiográfica, luego identifica sus puntos ciegos. Los alumnas deben reconstruir el relato 'completo' sintetizando las 3.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🔭",
+        "name": "Física IB — Avanzado",
+        "applications": [
+          {
+            "title": "Diseño experimental avanzado con IA",
+            "prompt": "\"Actúa como un físico experto revisando una propuesta de IA de Física IB HL. El alumna propone: [descripción]. Haz 5 preguntas críticas sobre validez, variables de control, análisis de errores y extensión teórica. No corrijas directamente — guía al alumna a ver las debilidades.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "💼",
+        "name": "Gestión Empresarial IB — Avanzado",
+        "applications": [
+          {
+            "title": "Simulación de consultoría empresarial real",
+            "prompt": "\"Actúa como consultor McKinsey. Una empresa de [sector] en Monterrey enfrenta [problema real actual]. Presenta el problema con datos reales del mercado. Los alumnas deben: identificar el problema, aplicar al menos 2 herramientas IB BM, proponer 3 soluciones con análisis costo-beneficio y defender su recomendación.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "📖",
+        "name": "Inglés IB — Avanzado",
+        "applications": [
+          {
+            "title": "Generador de tareas Paper 1 adaptativas",
+            "prompt": "\"Crea 3 pasajes originales para práctica de Paper 1 de IB Lengua y Literatura sobre [tipo de texto: editorial/carta/discurso]. Cada uno debe: tener un propósito comunicativo claro, incluir recursos literarios identificables y ser apropiado para análisis de nivel HL/SL. Proporciona notas del examinador para cada pasaje.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "📚",
+        "name": "Literatura IB — Avanzado",
+        "applications": [
+          {
+            "title": "Ensayo colaborativo IA–alumna",
+            "prompt": "\"Actúa como co-escritor que SOLO hace preguntas. El alumna escribirá un ensayo sobre [obra/tema]. Tu rol: después de cada párrafo que el alumna escriba, haz UNA pregunta socrática que lo lleve a profundizar su análisis. Nunca sugieras qué escribir. Continúa por 6 rondas.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🏛️",
+        "name": "Filosofía IB — Avanzado",
+        "applications": [
+          {
+            "title": "Generador de argumentos filosóficos rivales",
+            "prompt": "\"Para la pregunta filosófica: [pregunta], genera los 4 argumentos más fuertes posibles, cada uno desde una tradición filosófica diferente (analítica, continental, oriental, latinoamericana). Para cada argumento: premisas, conclusión, un filósofo representativo y una objeción interna. Los alumnas deben identificar cuál es más convincente y por qué.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🇮🇹",
+        "name": "Italiano IB — Avanzado",
+        "applications": [
+          {
+            "title": "Debate interdisciplinario en italiano",
+            "prompt": "\"Diseña un debate de 30 minutos en italiano para alumnas IB avanzados sobre [tema de actualidad italiana/europea]. Incluye: artículo de lectura auténtica (con glosario), posiciones asignadas, estructura de debate formal y criterios de evaluación que integren fluidez, argumentación y uso de vocabulario académico en italiano.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🇩🇪",
+        "name": "Alemán IB — Avanzado",
+        "applications": [
+          {
+            "title": "Proyecto auténtico en lengua alemana",
+            "prompt": "\"Diseña un proyecto auténtico de 2 semanas para alumnas de IB Alemán Lengua B donde investiguen y presenten [tema de cultura/sociedad alemana] usando fuentes reales en alemán. Incluye: guía de investigación, producto comunicativo (podcast/reportaje/presentación), rúbrica de evaluación IB y reflexión metacognitiva en español.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "🇫🇷",
+        "name": "Francés IB — Avanzado",
+        "applications": [
+          {
+            "title": "Análisis cultural profundo en francés",
+            "prompt": "\"Diseña una unidad de aprendizaje cultural de 2 semanas para IB Francés HL sobre la Francofonía en África. Incluye: textos auténticos de múltiples países francoparlantes africanos, análisis de identidad lingüística y cultural, producción escrita y oral sobre impacto del colonialismo en la lengua, y conexión con contexto global IB.\""
+          }
+        ],
+        "highlight": false
+      },
+      {
+        "icon": "📚",
+        "name": "Religión — Avanzado (Humanismo Cristiano)",
+        "applications": [
+          {
+            "title": "Diseño curricular fe–ciencia–tecnología",
+            "prompt": "\"Diseña una unidad de 3 semanas para bachillerato sobre 'Fe, Ciencia e Inteligencia Artificial' desde la perspectiva de la Humanismo Cristiano. Incluye: cómo la visión cristiana del ser humano (alma, dignidad, libertad) se relaciona con la IA, textos del Magisterio sobre tecnología, conexión con el IB Learner Profile y una reflexión personal sobre el uso ético de la IA como alumna cristiano.\""
+          },
+          {
+            "title": "Proyecto de servicio con dimensión espiritual",
+            "prompt": "\"Diseña un proyecto de servicio CAS con profundidad espiritual para alumnas de bachillerato en el espíritu de la Humanismo Cristiano (santificación del trabajo ordinario). Incluye: necesidad comunitaria real en Monterrey, conexión con virtudes humanas específicas, plan de acción, reflexión espiritual integrada y evidencia para portafolio CAS-IB.\""
+          }
+        ],
+        "highlight": true
+      },
+      {
+        "icon": "🎨",
+        "name": "Artes Visuales IB — Avanzado",
+        "applications": [
+          {
+            "title": "Currículo de alfabetización visual con IA",
+            "prompt": "\"Diseña una unidad de indagación artística de 3 semanas para IB Artes Visuales HL sobre 'Arte e Inteligencia Artificial'. Incluye: cómo los artistas contemporáneos usan IA generativa como medio, análisis crítico del arte generado por IA (autoría, originalidad, ética), producción personal del alumna que dialogue con o cuestione la IA, y conexión con el Perfil del Alumno IB.\""
+          },
+          {
+            "title": "Sistema de retroalimentación para Exhibición IB",
+            "prompt": "\"Actúa como curador y crítico de arte. El alumna presentará [número] obras para su exhibición IB final. Su concepto central es [concepto] y su enfoque cultural es [cultura]. Evalúa: coherencia conceptual entre las obras, profundidad de exploración técnica, relevancia cultural y originalidad. Haz 5 preguntas socráticas que le ayuden a refinar la selección y presentación de sus obras para la exhibición.\""
+          }
+        ],
+        "highlight": false
+      }
+    ],
+    "skills": {
+      "introTag": "Nivel 3 · Transformación — Diseño e innovación institucional",
+      "intro": "La docente se convierte en arquitecta del aprendizaje y referente pedagógica del colegio. Las alumnas lo experimentan en clases con propósito explícito, desafíos genuinos y una maestra que construye el futuro educativo de Redwood High.",
+      "blocks": [
+        {
+          "label": "👩‍🏫 Habilidades de la maestra",
+          "items": []
+        },
+        {
+          "label": "🎓 Habilidades que desarrollan las alumnas",
+          "items": []
+        }
+      ]
+    }
+  }
+}

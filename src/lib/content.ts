@@ -4,6 +4,7 @@ import videosData from '../../content/videos.json';
 import levelsData from '../../content/levels.json';
 import reflectionData from '../../content/reflection.json';
 import toolsData from '../../content/tools.json';
+import sectionsToolsData from '../../content/sections-tools.json';
 import sessionsB from '../../content/sessions-b.json';
 import sessionsI from '../../content/sessions-i.json';
 import sessionsA from '../../content/sessions-a.json';
@@ -64,6 +65,19 @@ export const metaConfig = meta;
 export const levels = levelsData.levels as LevelMeta[];
 export const reflectionConfig = reflectionData as { levels: ReflectionLevelConfig[] };
 export const tools = toolsData.tools;
+
+export type SectionTool = {
+  name: string;
+  icon: string;
+  desc: string;
+  url: string;
+};
+
+/** Level-scoped tool grid from sections-tools.json (falls back to global tools). */
+export function getToolsByLevel(level: string): SectionTool[] {
+  const scoped = (sectionsToolsData as Record<string, SectionTool[]>)[level];
+  return scoped?.length ? scoped : (toolsData.tools as SectionTool[]);
+}
 
 const hoursMap = checklistData.hours as Record<string, number>;
 

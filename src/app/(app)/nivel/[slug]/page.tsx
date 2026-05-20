@@ -11,5 +11,5 @@ export default function NivelPage({ params }: { params: Promise<{ slug: string }
 
   if (!level) notFound();
 
-  return <LevelWorkspace slug={slug} />;
+  return <LevelWorkspace key={slug} slug={slug} />;
 }

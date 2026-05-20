@@ -2,13 +2,15 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { levels, tools } from '@/lib/content';
+import { levels } from '@/lib/content';
 import { useProgressContext } from './Providers';
 import { VerifiedPathSection } from './VerifiedPathSection';
 import { LevelLockBanner } from './LevelLockBanner';
-import { SessionsSection } from './SessionsSection';
-import { isLevelUnlocked, getLevelHours } from '@/lib/progress';
-import { getPathByLevel, getPartsByLevel } from '@/lib/curriculum-path';
+import { LevelSectionContent } from './LevelSectionContent';
+import { isLevelUnlocked, getLevelHours, getLevelProgressPercent } from '@/lib/progress';
+import { getPartsByLevel } from '@/lib/curriculum-path';
+
+const DEFAULT_SECTION = 'ov';
 
 const SECTIONS = [
   { id: 'ov', label: 'Visión General', icon: '🎯' },
@@ -18,7 +20,7 @@ const SECTIONS = [
   { id: 'ib', label: 'Alineación IB', icon: '📚' },
   { id: 'subj', label: 'Aplicaciones por Materia', icon: '🎨' },
   { id: 'hsk', label: 'Habilidades', icon: '🌟' },
-];
+] as const;
 
 const LEVEL_EYEBROW: Record<string, string> = {
   b: 'Nivel 1 · Fundamentos',
@@ -37,19 +39,16 @@ type Props = { slug: string };
 export function LevelWorkspace({ slug }: Props) {
   const level = levels.find((l) => l.slug === slug)!;
   const { completions, refreshCompletions } = useProgressContext();
-  const [section, setSection] = useState('ov');
+  const [section, setSection] = useState(DEFAULT_SECTION);
 
   const locked =
     (slug === 'i' || slug === 'a') && !isLevelUnlocked(completions, slug as 'i' | 'a');
   const heroClass = slug === 'b' ? 'lh-b' : slug === 'i' ? 'lh-i' : 'lh-a';
-  const pathItems = getPathByLevel(slug);
   const parts = getPartsByLevel(slug);
   const collabCount = parts.filter((p) => p.collaborative).length;
-  const verifiedCount = pathItems.filter(
-    (p) => completions[p.itemKey]?.status === 'verified'
-  ).length;
   const levelHours = getLevelHours(completions, slug as 'b' | 'i' | 'a');
-  const progressPct = Math.round((verifiedCount / Math.max(1, parts.length)) * 100);
+  const targetHours = level.totalHours ?? 10;
+  const progressPct = getLevelProgressPercent(completions, slug as 'b' | 'i' | 'a', targetHours);
 
   return (
     <div className="lvl-content active">
@@ -129,7 +128,7 @@ export function LevelWorkspace({ slug }: Props) {
                         Meta del nivel
                       </div>
                       <div className="goal-txt">
-                        Completa las 5 partes verificadas para sumar 10h acreditables.
+                        Completa las 5 partes verificadas para sumar {targetHours}h acreditables.
                       </div>
                     </div>
                   </div>
@@ -141,41 +140,8 @@ export function LevelWorkspace({ slug }: Props) {
                 </div>
               )}
 
-              {section === 'wk' && <SessionsSection level={slug} />}
-
-              {section === 'tools' && (
-                <div className="sec-content active">
-                  <div className="sec-hdr">
-                    <h2 className="sec-title">Herramientas IA</h2>
-                  </div>
-                  <div className="tools-grid">
-                    {tools.map((t) => (
-                      <a
-                        key={t.name}
-                        href={t.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="tool-crd no-underline"
-                      >
-                        <div className="tool-icon">{t.icon}</div>
-                        <div className="tool-name">{t.name}</div>
-                        <div className="tool-desc">{t.desc}</div>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {!['ov', 'tools', 'wk'].includes(section) && (
-                <div className="sec-content active">
-                  <p className="text-sm text-[var(--gray-600)]">
-                    El contenido detallado de esta sección está en el documento original de la
-                    ruta. Tu progreso verificado vive en <strong>Visión General</strong>.
-                  </p>
-                  <button type="button" className="dl-btn mt-4" onClick={() => setSection('ov')}>
-                    Ir a la ruta verificada
-                  </button>
-                </div>
+              {section !== 'ov' && (
+                <LevelSectionContent level={slug} section={section} />
               )}
             </>
           )}

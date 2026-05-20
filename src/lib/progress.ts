@@ -20,6 +20,17 @@ export function getLevelHours(completions: CompletionMap, level: 'b' | 'i' | 'a'
   return getLevelHoursVerified(completions, level);
 }
 
+/** Verified hours in this level as a percentage of the level target (capped at 100). */
+export function getLevelProgressPercent(
+  completions: CompletionMap,
+  level: 'b' | 'i' | 'a',
+  targetHours = 10
+): number {
+  const hours = getLevelHoursVerified(completions, level);
+  if (targetHours <= 0) return 0;
+  return Math.min(100, Math.round((hours / targetHours) * 100));
+}
+
 /** Legacy admin export: sum hours from boolean checklist map */
 export function sumHours(checked: Record<string, boolean>): number {
   let total = 0;

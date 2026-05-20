@@ -1,0 +1,134 @@
+{
+  "b": [
+    {
+      "name": "ChatGPT",
+      "icon": "🤖",
+      "desc": "Planificación, redacción de contenido",
+      "url": "https://chat.openai.com"
+    },
+    {
+      "name": "Claude",
+      "icon": "💬",
+      "desc": "Rúbricas, retroalimentación, documentos largos",
+      "url": "https://claude.ai"
+    },
+    {
+      "name": "Gemini",
+      "icon": "🌐",
+      "desc": "Integración Google, investigación",
+      "url": "https://gemini.google.com"
+    },
+    {
+      "name": "NotebookLM",
+      "icon": "📓",
+      "desc": "Fuentes propias, guías de estudio",
+      "url": "https://notebooklm.google.com"
+    },
+    {
+      "name": "MagicSchool.ai",
+      "icon": "🏫",
+      "desc": "Herramientas de IA específicas para educación",
+      "url": "https://www.magicschool.ai"
+    },
+    {
+      "name": "Diffit.me",
+      "icon": "📋",
+      "desc": "Nivelación de texto y diferenciación",
+      "url": "https://www.diffit.me"
+    },
+    {
+      "name": "Canva",
+      "icon": "🎨",
+      "desc": "Recursos visuales con IA",
+      "url": "https://www.canva.com"
+    }
+  ],
+  "i": [
+    {
+      "name": "ChatGPT",
+      "icon": "🤖",
+      "desc": "Planificación, redacción de contenido",
+      "url": "https://chat.openai.com"
+    },
+    {
+      "name": "Claude",
+      "icon": "💬",
+      "desc": "Rúbricas, retroalimentación, documentos largos",
+      "url": "https://claude.ai"
+    },
+    {
+      "name": "Gemini",
+      "icon": "🌐",
+      "desc": "Integración Google, investigación",
+      "url": "https://gemini.google.com"
+    },
+    {
+      "name": "NotebookLM",
+      "icon": "📓",
+      "desc": "Fuentes propias, guías de estudio",
+      "url": "https://notebooklm.google.com"
+    },
+    {
+      "name": "MagicSchool.ai",
+      "icon": "🏫",
+      "desc": "Herramientas de IA específicas para educación",
+      "url": "https://www.magicschool.ai"
+    },
+    {
+      "name": "Diffit.me",
+      "icon": "📋",
+      "desc": "Nivelación de texto y diferenciación",
+      "url": "https://www.diffit.me"
+    },
+    {
+      "name": "Canva",
+      "icon": "🎨",
+      "desc": "Recursos visuales con IA",
+      "url": "https://www.canva.com"
+    }
+  ],
+  "a": [
+    {
+      "name": "ChatGPT",
+      "icon": "🤖",
+      "desc": "Planificación, redacción de contenido",
+      "url": "https://chat.openai.com"
+    },
+    {
+      "name": "Claude",
+      "icon": "💬",
+      "desc": "Rúbricas, retroalimentación, documentos largos",
+      "url": "https://claude.ai"
+    },
+    {
+      "name": "Gemini",
+      "icon": "🌐",
+      "desc": "Integración Google, investigación",
+      "url": "https://gemini.google.com"
+    },
+    {
+      "name": "NotebookLM",
+      "icon": "📓",
+      "desc": "Fuentes propias, guías de estudio",
+      "url": "https://notebooklm.google.com"
+    },
+    {
+      "name": "MagicSchool.ai",
+      "icon": "🏫",
+      "desc": "Herramientas de IA específicas para educación",
+      "url": "https://www.magicschool.ai"
+    },
+    {
+      "name": "Diffit.me",
+      "icon": "📋",
+      "desc": "Nivelación de texto y diferenciación",
+      "url": "https://www.diffit.me"
+    },
+    {
+      "name": "Canva",
+      "icon": "🎨",
+      "desc": "Recursos visuales con IA",
+      "url": "https://www.canva.com"
+    }
+  ]
+}

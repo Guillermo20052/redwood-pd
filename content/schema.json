@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Redwood PD Content",
+  "properties": {
+    "meta": {
+      "type": "object"
+    },
+    "checklist": {
+      "type": "object"
+    },
+    "videos": {
+      "type": "object"
+    },
+    "levels": {
+      "type": "object"
+    },
+    "reflection": {
+      "type": "object"
+    },
+    "tools": {
+      "type": "object"
+    }
+  }
+}

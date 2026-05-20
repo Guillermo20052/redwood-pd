@@ -1,0 +1,94 @@
+{
+  "tools": [
+    {
+      "name": "ChatGPT",
+      "icon": "🤖",
+      "desc": "Planificación, redacción, ideación general",
+      "url": "https://chat.openai.com"
+    },
+    {
+      "name": "Claude",
+      "icon": "💬",
+      "desc": "Rúbricas, retroalimentación, documentos largos",
+      "url": "https://claude.ai"
+    },
+    {
+      "name": "Gemini",
+      "icon": "🌐",
+      "desc": "Integración Google Workspace, investigación",
+      "url": "https://gemini.google.com"
+    },
+    {
+      "name": "Copilot",
+      "icon": "🪟",
+      "desc": "IA dentro de Microsoft 365 y Outlook",
+      "url": "https://copilot.microsoft.com"
+    },
+    {
+      "name": "Perplexity",
+      "icon": "🔎",
+      "desc": "Búsqueda con citas para verificar datos",
+      "url": "https://www.perplexity.ai"
+    },
+    {
+      "name": "NotebookLM",
+      "icon": "📓",
+      "desc": "Guías de estudio y audio a partir de tus fuentes",
+      "url": "https://notebooklm.google.com"
+    },
+    {
+      "name": "MagicSchool AI",
+      "icon": "🏫",
+      "desc": "Herramientas de IA específicas para docentes",
+      "url": "https://www.magicschool.ai"
+    },
+    {
+      "name": "SchoolAI",
+      "icon": "🎓",
+      "desc": "Espacios IA monitoreados para alumnas",
+      "url": "https://schoolai.com"
+    },
+    {
+      "name": "Brisk Teaching",
+      "icon": "⚡",
+      "desc": "Extensión Chrome para retroalimentación y planeación",
+      "url": "https://briskteaching.com"
+    },
+    {
+      "name": "Diffit",
+      "icon": "📋",
+      "desc": "Nivelación de textos y diferenciación de lecturas",
+      "url": "https://www.diffit.me"
+    },
+    {
+      "name": "Canva",
+      "icon": "🎨",
+      "desc": "Magic Design y Magic Media para visuales",
+      "url": "https://www.canva.com"
+    },
+    {
+      "name": "Gamma",
+      "icon": "✨",
+      "desc": "Presentaciones generativas en minutos",
+      "url": "https://gamma.app"
+    },
+    {
+      "name": "PowerPoint Copilot",
+      "icon": "📊",
+      "desc": "Diapositivas con IA dentro de PowerPoint",
+      "url": "https://www.microsoft.com/microsoft-365/copilot"
+    },
+    {
+      "name": "ElevenLabs",
+      "icon": "🎙",
+      "desc": "Narraciones de audio realistas para tus materiales",
+      "url": "https://elevenlabs.io"
+    },
+    {
+      "name": "Khanmigo",
+      "icon": "🧮",
+      "desc": "Tutor IA de Khan Academy para estudiantes y docentes",
+      "url": "https://www.khanmigo.ai"
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "levels": [
+    {
+      "level": 1,
+      "slug": "b",
+      "name": "Nivel 1 · Fundamentos",
+      "questions": [
+        "¿Qué te sorprendió de conversar con la IA por primera vez con esta intención?",
+        "¿Qué reglas vas a llevarte para escribir mejores prompts?",
+        "¿Cómo vas a verificar lo que te diga la IA de ahora en adelante?"
+      ],
+      "parts": [
+        {
+          "partId": "b-p1",
+          "partTitle": "¿Qué es la IA y cómo hablarle?",
+          "prompt": "¿Qué te sorprendió de conversar con la IA por primera vez con esta intención? Escribe 2–3 oraciones."
+        },
+        {
+          "partId": "b-p2",
+          "partTitle": "Anatomía de un buen prompt",
+          "prompt": "¿Qué reglas vas a llevarte para escribir mejores prompts? 2–3 oraciones."
+        },
+        {
+          "partId": "b-p3",
+          "partTitle": "Tu asistente para correos y comunicación",
+          "prompt": "¿Qué partes del correo dejaste de la IA y cuáles cambiaste? ¿Por qué? 2–3 oraciones."
+        },
+        {
+          "partId": "b-p4",
+          "partTitle": "Compara herramientas con otra docente",
+          "prompt": "¿Qué aprendiste de tu compañera o de su herramienta que no habrías visto sola? 2–3 oraciones."
+        },
+        {
+          "partId": "b-p5",
+          "partTitle": "Alucinaciones, verificación y límites",
+          "prompt": "¿Cómo vas a verificar lo que te diga la IA de ahora en adelante? 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "slug": "i",
+      "name": "Nivel 2 · Integración",
+      "questions": [
+        "¿Qué hiciste tú que la IA no podía hacer al planear tu clase?",
+        "¿Qué quedarías dispuesta a automatizar de tu práctica y qué nunca delegarías?",
+        "¿En qué se parece y en qué se diferencia el trabajo IB entre las materias de tus compañeras?"
+      ],
+      "parts": [
+        {
+          "partId": "i-p1",
+          "partTitle": "Planeación de clase asistida por IA",
+          "prompt": "¿Qué hiciste tú que la IA no podía hacer? 2–3 oraciones."
+        },
+        {
+          "partId": "i-p2",
+          "partTitle": "Presentaciones en minutos",
+          "prompt": "¿Qué tan cerca quedó del nivel que tú habrías producido a mano? 2–3 oraciones."
+        },
+        {
+          "partId": "i-p3",
+          "partTitle": "Diferenciación: un texto, tres niveles",
+          "prompt": "¿Qué alumnas se beneficiarían más de esto y por qué? 2–3 oraciones."
+        },
+        {
+          "partId": "i-p4",
+          "partTitle": "Rúbricas alineadas al IB con otra docente",
+          "prompt": "¿En qué se parece y en qué se diferencia la rúbrica IB entre sus materias? 2–3 oraciones."
+        },
+        {
+          "partId": "i-p5",
+          "partTitle": "Retroalimentación más rápida",
+          "prompt": "¿Qué quedarías dispuesta a automatizar y qué nunca delegarías? 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "slug": "a",
+      "name": "Nivel 3 · Transformación",
+      "questions": [
+        "¿Qué riesgos pedagógicos identificas en el uso estudiantil de IA y cómo los mitigas?",
+        "¿Qué habilidades estás evaluando ahora que antes no podías ver?",
+        "¿Qué compromiso concreto adquieres con tu propia práctica para el próximo semestre?"
+      ],
+      "parts": [
+        {
+          "partId": "a-p1",
+          "partTitle": "IA como compañera de pensamiento del alumna",
+          "prompt": "¿Qué riesgos pedagógicos identificas y cómo los mitigas? 2–3 oraciones."
+        },
+        {
+          "partId": "a-p2",
+          "partTitle": "Materiales multimedia con IA",
+          "prompt": "¿Cómo cambia el acceso de tus alumnas cuando el material existe en varios formatos? 2–3 oraciones."
+        },
+        {
+          "partId": "a-p3",
+          "partTitle": "Proyecto interdisciplinario con IA",
+          "prompt": "¿Qué hace que un proyecto sea genuinamente interdisciplinario y no solo 'dos tareas juntas'? 2–3 oraciones."
+        },
+        {
+          "partId": "a-p4",
+          "partTitle": "Evaluación auténtica resistente a IA",
+          "prompt": "¿Qué habilidades estás evaluando ahora que antes no podías ver? 2–3 oraciones."
+        },
+        {
+          "partId": "a-p5",
+          "partTitle": "Tu plan de integración IA — Capstone",
+          "prompt": "¿Qué compromiso concreto adquieres con tu propia práctica? 2–3 oraciones."
+        }
+      ]
+    }
+  ]
+}

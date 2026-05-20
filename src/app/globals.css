@@ -1,26 +1,87 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --red: #b22234;
+  --red-dark: #8b1a28;
+  --red-light: #d4354a;
+  --red-pale: #f9ecee;
+  --gray-50: #fafaf9;
+  --gray-100: #f5f3f1;
+  --gray-200: #e8e4e1;
+  --gray-300: #ccc8c4;
+  --gray-500: #8b8480;
+  --gray-700: #4a4440;
+  --gray-900: #1e1916;
+  --gold: #c8972a;
+  --gold-light: #fdf5e4;
+  --teal: #1a7a6e;
+  --teal-light: #e4f5f2;
+  --navy: #1a2e4a;
+  --navy-light: #eaf0f8;
+  --green: #1e7a3e;
+  --green-light: #e4f5ea;
+  --purple-pale: #f2eef8;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-barlow), 'Barlow', system-ui, sans-serif;
+  background: #f0edea;
+  color: var(--gray-900);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.font-condensed {
+  font-family: var(--font-barlow-condensed), 'Barlow Condensed', system-ui, sans-serif;
+}
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.check-item label.done {
+  text-decoration: line-through;
+  color: var(--gray-500);
+}
+
+.check-item input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--red);
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.check-hrs {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold);
+  background: var(--gold-light);
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.level-hero {
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+.lh-b { background: linear-gradient(135deg, #1a2e4a, #2a4a70); }
+.lh-i { background: linear-gradient(135deg, #1a7a6e, #2aa090); }
+.lh-a { background: linear-gradient(135deg, var(--red-dark), var(--red-light)); }
+
+@media print {
+  .no-print { display: none !important; }
+  .diploma-print { box-shadow: none !important; }
 }

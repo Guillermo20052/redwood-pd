@@ -1,0 +1,868 @@
+{
+  "path": [
+    {
+      "order": 0,
+      "itemKey": "lvl-b-p1-video",
+      "partId": "b-p1",
+      "partNumber": 1,
+      "level": "b",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · ¿Qué es la IA y cómo hablarle?",
+      "partTitle": "¿Qué es la IA y cómo hablarle?",
+      "primaryTools": [
+        "ChatGPT",
+        "Claude"
+      ],
+      "collaborative": false,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 1,
+      "itemKey": "lvl-b-p1-task",
+      "partId": "b-p1",
+      "partNumber": 1,
+      "level": "b",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · ¿Qué es la IA y cómo hablarle?",
+      "partTitle": "¿Qué es la IA y cómo hablarle?",
+      "primaryTools": [
+        "ChatGPT",
+        "Claude"
+      ],
+      "collaborative": false,
+      "taskPrompt": "Ten una conversación de 10 minutos con ChatGPT y otra con Claude sobre un tema de tu materia. Guarda ambas conversaciones (copia el texto o toma capturas) y descríbelas brevemente: ¿qué diferencias notaste entre ambas herramientas?",
+      "taskRubric": "1) La docente describe ambas conversaciones con suficiente detalle para entender qué preguntó y qué respondió cada IA. 2) Identifica al menos una diferencia concreta entre ChatGPT y Claude (estilo, profundidad, formato, errores). 3) Conecta lo que vivió con su materia. 4) Hay evidencia real de uso, no solo descripción genérica."
+    },
+    {
+      "order": 2,
+      "itemKey": "lvl-b-p1-reflection",
+      "partId": "b-p1",
+      "partNumber": 1,
+      "level": "b",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · ¿Qué es la IA y cómo hablarle?",
+      "partTitle": "¿Qué es la IA y cómo hablarle?",
+      "primaryTools": [
+        "ChatGPT",
+        "Claude"
+      ],
+      "collaborative": false,
+      "reflectionPrompt": "¿Qué te sorprendió de conversar con la IA por primera vez con esta intención? Escribe 2–3 oraciones."
+    },
+    {
+      "order": 3,
+      "itemKey": "lvl-b-p2-video",
+      "partId": "b-p2",
+      "partNumber": 2,
+      "level": "b",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · Anatomía de un buen prompt",
+      "partTitle": "Anatomía de un buen prompt",
+      "primaryTools": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Copilot"
+      ],
+      "collaborative": false,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 4,
+      "itemKey": "lvl-b-p2-task",
+      "partId": "b-p2",
+      "partNumber": 2,
+      "level": "b",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · Anatomía de un buen prompt",
+      "partTitle": "Anatomía de un buen prompt",
+      "primaryTools": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Copilot"
+      ],
+      "collaborative": false,
+      "taskPrompt": "Escribe 3 prompts sobre la misma meta docente (por ejemplo, 'explicar el ciclo del agua a alumnas de secundaria'): uno malo, uno aceptable y uno excelente. Compara las respuestas y documenta qué hizo la diferencia.",
+      "taskRubric": "1) Presenta los 3 prompts (malo, aceptable, excelente) sobre la misma meta docente. 2) Muestra o describe las respuestas que generó cada uno. 3) Explica qué cambió entre los prompts y por qué el excelente funcionó mejor. 4) La meta docente es real y relevante para su materia."
+    },
+    {
+      "order": 5,
+      "itemKey": "lvl-b-p2-reflection",
+      "partId": "b-p2",
+      "partNumber": 2,
+      "level": "b",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · Anatomía de un buen prompt",
+      "partTitle": "Anatomía de un buen prompt",
+      "primaryTools": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Copilot"
+      ],
+      "collaborative": false,
+      "reflectionPrompt": "¿Qué reglas vas a llevarte para escribir mejores prompts? 2–3 oraciones."
+    },
+    {
+      "order": 6,
+      "itemKey": "lvl-b-p3-video",
+      "partId": "b-p3",
+      "partNumber": 3,
+      "level": "b",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · Tu asistente para correos y comunicación",
+      "partTitle": "Tu asistente para correos y comunicación",
+      "primaryTools": [
+        "Gmail + Gemini",
+        "Outlook + Copilot",
+        "ChatGPT",
+        "Claude"
+      ],
+      "collaborative": false,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 7,
+      "itemKey": "lvl-b-p3-task",
+      "partId": "b-p3",
+      "partNumber": 3,
+      "level": "b",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · Tu asistente para correos y comunicación",
+      "partTitle": "Tu asistente para correos y comunicación",
+      "primaryTools": [
+        "Gmail + Gemini",
+        "Outlook + Copilot",
+        "ChatGPT",
+        "Claude"
+      ],
+      "collaborative": false,
+      "taskPrompt": "Redacta con IA un correo a un padre de familia sobre una alumna con bajo desempeño. Después edítalo a tu voz personal. Guarda ambas versiones.",
+      "taskRubric": "1) Incluye una versión del correo generada por IA y una versión final editada por la docente. 2) El correo trata sobre una alumna real con bajo desempeño (contexto plausible). 3) Es evidente qué editó la docente y por qué. 4) El tono final es apropiado para padres de familia."
+    },
+    {
+      "order": 8,
+      "itemKey": "lvl-b-p3-reflection",
+      "partId": "b-p3",
+      "partNumber": 3,
+      "level": "b",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · Tu asistente para correos y comunicación",
+      "partTitle": "Tu asistente para correos y comunicación",
+      "primaryTools": [
+        "Gmail + Gemini",
+        "Outlook + Copilot",
+        "ChatGPT",
+        "Claude"
+      ],
+      "collaborative": false,
+      "reflectionPrompt": "¿Qué partes del correo dejaste de la IA y cuáles cambiaste? ¿Por qué? 2–3 oraciones."
+    },
+    {
+      "order": 9,
+      "itemKey": "lvl-b-p4-video",
+      "partId": "b-p4",
+      "partNumber": 4,
+      "level": "b",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · Compara herramientas con otra docente",
+      "partTitle": "Compara herramientas con otra docente",
+      "primaryTools": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Copilot"
+      ],
+      "collaborative": true,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 10,
+      "itemKey": "lvl-b-p4-task",
+      "partId": "b-p4",
+      "partNumber": 4,
+      "level": "b",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · Compara herramientas con otra docente",
+      "partTitle": "Compara herramientas con otra docente",
+      "primaryTools": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Copilot"
+      ],
+      "collaborative": true,
+      "taskPrompt": "Empareja con otra docente desde la pestaña de Comunidad. Cada una elige una herramienta distinta y corre el MISMO prompt. Comparen resultados y documenten cuál sirvió mejor para qué tipo de tarea. Escribe el nombre completo de tu compañera al inicio del texto.",
+      "taskRubric": "1) Incluye el nombre completo de la compañera al inicio del texto. 2) Especifica qué herramienta usó cada una. 3) Compara los resultados con observaciones concretas, no genéricas. 4) Concluye con cuál sirvió mejor para qué tipo de tarea."
+    },
+    {
+      "order": 11,
+      "itemKey": "lvl-b-p4-reflection",
+      "partId": "b-p4",
+      "partNumber": 4,
+      "level": "b",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · Compara herramientas con otra docente",
+      "partTitle": "Compara herramientas con otra docente",
+      "primaryTools": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Copilot"
+      ],
+      "collaborative": true,
+      "reflectionPrompt": "¿Qué aprendiste de tu compañera o de su herramienta que no habrías visto sola? 2–3 oraciones."
+    },
+    {
+      "order": 12,
+      "itemKey": "lvl-b-p5-video",
+      "partId": "b-p5",
+      "partNumber": 5,
+      "level": "b",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · Alucinaciones, verificación y límites",
+      "partTitle": "Alucinaciones, verificación y límites",
+      "primaryTools": [
+        "Perplexity",
+        "ChatGPT",
+        "Claude"
+      ],
+      "collaborative": false,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 13,
+      "itemKey": "lvl-b-p5-task",
+      "partId": "b-p5",
+      "partNumber": 5,
+      "level": "b",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · Alucinaciones, verificación y límites",
+      "partTitle": "Alucinaciones, verificación y límites",
+      "primaryTools": [
+        "Perplexity",
+        "ChatGPT",
+        "Claude"
+      ],
+      "collaborative": false,
+      "taskPrompt": "Pídele a un chatbot información específica de tu materia (fechas, datos, citas). Verifica con Perplexity o una fuente confiable. Encuentra al menos una alucinación o error y documéntalo.",
+      "taskRubric": "1) Documenta una pregunta específica de la materia de la docente. 2) Muestra la respuesta de la IA y la verificación contra una fuente confiable o Perplexity. 3) Identifica al menos una alucinación o error concreto. 4) Explica qué aprendió sobre los límites de la IA."
+    },
+    {
+      "order": 14,
+      "itemKey": "lvl-b-p5-reflection",
+      "partId": "b-p5",
+      "partNumber": 5,
+      "level": "b",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · Alucinaciones, verificación y límites",
+      "partTitle": "Alucinaciones, verificación y límites",
+      "primaryTools": [
+        "Perplexity",
+        "ChatGPT",
+        "Claude"
+      ],
+      "collaborative": false,
+      "reflectionPrompt": "¿Cómo vas a verificar lo que te diga la IA de ahora en adelante? 2–3 oraciones."
+    },
+    {
+      "order": 15,
+      "itemKey": "lvl-i-p1-video",
+      "partId": "i-p1",
+      "partNumber": 1,
+      "level": "i",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · Planeación de clase asistida por IA",
+      "partTitle": "Planeación de clase asistida por IA",
+      "primaryTools": [
+        "MagicSchool AI",
+        "ChatGPT",
+        "Claude"
+      ],
+      "collaborative": false,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 16,
+      "itemKey": "lvl-i-p1-task",
+      "partId": "i-p1",
+      "partNumber": 1,
+      "level": "i",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · Planeación de clase asistida por IA",
+      "partTitle": "Planeación de clase asistida por IA",
+      "primaryTools": [
+        "MagicSchool AI",
+        "ChatGPT",
+        "Claude"
+      ],
+      "collaborative": false,
+      "taskPrompt": "Genera un plan de clase completo para una clase real que darás esta semana o la próxima. Incluye objetivos, secuencia de actividades y evaluación. Edítalo a tu contexto.",
+      "taskRubric": "1) Incluye un plan de clase completo con objetivos, secuencia de actividades y evaluación. 2) Es para una clase real que dará la docente, con grupo y unidad identificados. 3) Muestra ediciones o adaptaciones al contexto del Liceo Redwood. 4) El nivel de detalle permite ejecutar la clase tal cual."
+    },
+    {
+      "order": 17,
+      "itemKey": "lvl-i-p1-reflection",
+      "partId": "i-p1",
+      "partNumber": 1,
+      "level": "i",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · Planeación de clase asistida por IA",
+      "partTitle": "Planeación de clase asistida por IA",
+      "primaryTools": [
+        "MagicSchool AI",
+        "ChatGPT",
+        "Claude"
+      ],
+      "collaborative": false,
+      "reflectionPrompt": "¿Qué hiciste tú que la IA no podía hacer? 2–3 oraciones."
+    },
+    {
+      "order": 18,
+      "itemKey": "lvl-i-p2-video",
+      "partId": "i-p2",
+      "partNumber": 2,
+      "level": "i",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · Presentaciones en minutos",
+      "partTitle": "Presentaciones en minutos",
+      "primaryTools": [
+        "Canva Magic Design",
+        "PowerPoint Copilot",
+        "Google Slides + Gemini",
+        "Gamma"
+      ],
+      "collaborative": false,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 19,
+      "itemKey": "lvl-i-p2-task",
+      "partId": "i-p2",
+      "partNumber": 2,
+      "level": "i",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · Presentaciones en minutos",
+      "partTitle": "Presentaciones en minutos",
+      "primaryTools": [
+        "Canva Magic Design",
+        "PowerPoint Copilot",
+        "Google Slides + Gemini",
+        "Gamma"
+      ],
+      "collaborative": false,
+      "taskPrompt": "Construye una presentación de diapositivas para una lección que vas a dar este mes usando una herramienta con IA. Guarda el archivo o link.",
+      "taskRubric": "1) Incluye link o descripción del archivo final de presentación. 2) Indica qué herramienta usó (Canva, PowerPoint Copilot, Google Slides + Gemini, Gamma). 3) La presentación es para una lección real del mes en curso. 4) Comenta qué tan utilizable quedó sin ediciones manuales adicionales."
+    },
+    {
+      "order": 20,
+      "itemKey": "lvl-i-p2-reflection",
+      "partId": "i-p2",
+      "partNumber": 2,
+      "level": "i",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · Presentaciones en minutos",
+      "partTitle": "Presentaciones en minutos",
+      "primaryTools": [
+        "Canva Magic Design",
+        "PowerPoint Copilot",
+        "Google Slides + Gemini",
+        "Gamma"
+      ],
+      "collaborative": false,
+      "reflectionPrompt": "¿Qué tan cerca quedó del nivel que tú habrías producido a mano? 2–3 oraciones."
+    },
+    {
+      "order": 21,
+      "itemKey": "lvl-i-p3-video",
+      "partId": "i-p3",
+      "partNumber": 3,
+      "level": "i",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · Diferenciación: un texto, tres niveles",
+      "partTitle": "Diferenciación: un texto, tres niveles",
+      "primaryTools": [
+        "Diffit",
+        "Claude",
+        "ChatGPT"
+      ],
+      "collaborative": false,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 22,
+      "itemKey": "lvl-i-p3-task",
+      "partId": "i-p3",
+      "partNumber": 3,
+      "level": "i",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · Diferenciación: un texto, tres niveles",
+      "partTitle": "Diferenciación: un texto, tres niveles",
+      "primaryTools": [
+        "Diffit",
+        "Claude",
+        "ChatGPT"
+      ],
+      "collaborative": false,
+      "taskPrompt": "Toma una lectura de tu materia y adáptala a 3 niveles de lectura distintos (apoyo, en nivel, extensión). Documenta las 3 versiones.",
+      "taskRubric": "1) Incluye o describe las 3 versiones del texto (apoyo, en nivel, extensión). 2) Las diferencias entre niveles son evidentes y pedagógicamente válidas. 3) Conecta cada versión con un tipo de alumna específica de su grupo. 4) Identifica qué herramienta usó (Diffit, Claude, ChatGPT)."
+    },
+    {
+      "order": 23,
+      "itemKey": "lvl-i-p3-reflection",
+      "partId": "i-p3",
+      "partNumber": 3,
+      "level": "i",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · Diferenciación: un texto, tres niveles",
+      "partTitle": "Diferenciación: un texto, tres niveles",
+      "primaryTools": [
+        "Diffit",
+        "Claude",
+        "ChatGPT"
+      ],
+      "collaborative": false,
+      "reflectionPrompt": "¿Qué alumnas se beneficiarían más de esto y por qué? 2–3 oraciones."
+    },
+    {
+      "order": 24,
+      "itemKey": "lvl-i-p4-video",
+      "partId": "i-p4",
+      "partNumber": 4,
+      "level": "i",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · Rúbricas alineadas al IB con otra docente",
+      "partTitle": "Rúbricas alineadas al IB con otra docente",
+      "primaryTools": [
+        "MagicSchool AI",
+        "Claude",
+        "ChatGPT"
+      ],
+      "collaborative": true,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 25,
+      "itemKey": "lvl-i-p4-task",
+      "partId": "i-p4",
+      "partNumber": 4,
+      "level": "i",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · Rúbricas alineadas al IB con otra docente",
+      "partTitle": "Rúbricas alineadas al IB con otra docente",
+      "primaryTools": [
+        "MagicSchool AI",
+        "Claude",
+        "ChatGPT"
+      ],
+      "collaborative": true,
+      "taskPrompt": "Empareja con una docente de una materia distinta a la tuya. Co-diseñen una rúbrica IB para una tarea transferible (por ejemplo, una investigación). Escribe el nombre completo de tu compañera al inicio del texto.",
+      "taskRubric": "1) Incluye el nombre completo de la compañera al inicio del texto. 2) Las dos materias son distintas. 3) Presenta la rúbrica IB co-diseñada con criterios claros y descriptores. 4) Explica qué decisiones de diseño tomaron juntas y por qué."
+    },
+    {
+      "order": 26,
+      "itemKey": "lvl-i-p4-reflection",
+      "partId": "i-p4",
+      "partNumber": 4,
+      "level": "i",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · Rúbricas alineadas al IB con otra docente",
+      "partTitle": "Rúbricas alineadas al IB con otra docente",
+      "primaryTools": [
+        "MagicSchool AI",
+        "Claude",
+        "ChatGPT"
+      ],
+      "collaborative": true,
+      "reflectionPrompt": "¿En qué se parece y en qué se diferencia la rúbrica IB entre sus materias? 2–3 oraciones."
+    },
+    {
+      "order": 27,
+      "itemKey": "lvl-i-p5-video",
+      "partId": "i-p5",
+      "partNumber": 5,
+      "level": "i",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · Retroalimentación más rápida",
+      "partTitle": "Retroalimentación más rápida",
+      "primaryTools": [
+        "Brisk Teaching",
+        "Claude",
+        "ChatGPT"
+      ],
+      "collaborative": false,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 28,
+      "itemKey": "lvl-i-p5-task",
+      "partId": "i-p5",
+      "partNumber": 5,
+      "level": "i",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · Retroalimentación más rápida",
+      "partTitle": "Retroalimentación más rápida",
+      "primaryTools": [
+        "Brisk Teaching",
+        "Claude",
+        "ChatGPT"
+      ],
+      "collaborative": false,
+      "taskPrompt": "Toma una muestra real de trabajo estudiantil (anonimizada). Usa IA para generar retroalimentación formativa. Compárala con la que tú escribirías y documenta diferencias.",
+      "taskRubric": "1) Incluye la retroalimentación generada por IA sobre una muestra real anonimizada de trabajo estudiantil. 2) Incluye o describe la retroalimentación que la docente habría escrito ella sola. 3) Compara ambas con observaciones específicas. 4) Reflexiona sobre qué confiaría delegar y qué no."
+    },
+    {
+      "order": 29,
+      "itemKey": "lvl-i-p5-reflection",
+      "partId": "i-p5",
+      "partNumber": 5,
+      "level": "i",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · Retroalimentación más rápida",
+      "partTitle": "Retroalimentación más rápida",
+      "primaryTools": [
+        "Brisk Teaching",
+        "Claude",
+        "ChatGPT"
+      ],
+      "collaborative": false,
+      "reflectionPrompt": "¿Qué quedarías dispuesta a automatizar y qué nunca delegarías? 2–3 oraciones."
+    },
+    {
+      "order": 30,
+      "itemKey": "lvl-a-p1-video",
+      "partId": "a-p1",
+      "partNumber": 1,
+      "level": "a",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · IA como compañera de pensamiento del alumna",
+      "partTitle": "IA como compañera de pensamiento del alumna",
+      "primaryTools": [
+        "SchoolAI",
+        "ChatGPT (custom GPT)",
+        "Claude"
+      ],
+      "collaborative": false,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 31,
+      "itemKey": "lvl-a-p1-task",
+      "partId": "a-p1",
+      "partNumber": 1,
+      "level": "a",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · IA como compañera de pensamiento del alumna",
+      "partTitle": "IA como compañera de pensamiento del alumna",
+      "primaryTools": [
+        "SchoolAI",
+        "ChatGPT (custom GPT)",
+        "Claude"
+      ],
+      "collaborative": false,
+      "taskPrompt": "Diseña una lección donde tus alumnas usen IA éticamente como compañera de pensamiento, con reglas explícitas de citación y entrega. Documenta la lección completa.",
+      "taskRubric": "1) La lección está documentada completa: objetivos, instrucciones para las alumnas, herramienta de IA específica, reglas de citación y entrega. 2) Las alumnas usan IA como apoyo de pensamiento, no como sustituto. 3) Las reglas de citación son explícitas y aplicables. 4) Identifica al menos un riesgo y cómo lo mitiga."
+    },
+    {
+      "order": 32,
+      "itemKey": "lvl-a-p1-reflection",
+      "partId": "a-p1",
+      "partNumber": 1,
+      "level": "a",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · IA como compañera de pensamiento del alumna",
+      "partTitle": "IA como compañera de pensamiento del alumna",
+      "primaryTools": [
+        "SchoolAI",
+        "ChatGPT (custom GPT)",
+        "Claude"
+      ],
+      "collaborative": false,
+      "reflectionPrompt": "¿Qué riesgos pedagógicos identificas y cómo los mitigas? 2–3 oraciones."
+    },
+    {
+      "order": 33,
+      "itemKey": "lvl-a-p2-video",
+      "partId": "a-p2",
+      "partNumber": 2,
+      "level": "a",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · Materiales multimedia con IA",
+      "partTitle": "Materiales multimedia con IA",
+      "primaryTools": [
+        "NotebookLM",
+        "ElevenLabs",
+        "Canva Magic Media"
+      ],
+      "collaborative": false,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 34,
+      "itemKey": "lvl-a-p2-task",
+      "partId": "a-p2",
+      "partNumber": 2,
+      "level": "a",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · Materiales multimedia con IA",
+      "partTitle": "Materiales multimedia con IA",
+      "primaryTools": [
+        "NotebookLM",
+        "ElevenLabs",
+        "Canva Magic Media"
+      ],
+      "collaborative": false,
+      "taskPrompt": "Convierte las lecturas de una unidad en (a) una guía de estudio generada con NotebookLM y (b) un resumen en audio narrado por IA. Comparte los archivos o links.",
+      "taskRubric": "1) Incluye link o descripción de la guía de estudio generada con NotebookLM. 2) Incluye link o descripción del audio narrado generado. 3) Ambos son sobre la misma unidad real que enseña la docente. 4) Comenta el impacto esperado en el acceso de alumnas con distintos perfiles."
+    },
+    {
+      "order": 35,
+      "itemKey": "lvl-a-p2-reflection",
+      "partId": "a-p2",
+      "partNumber": 2,
+      "level": "a",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · Materiales multimedia con IA",
+      "partTitle": "Materiales multimedia con IA",
+      "primaryTools": [
+        "NotebookLM",
+        "ElevenLabs",
+        "Canva Magic Media"
+      ],
+      "collaborative": false,
+      "reflectionPrompt": "¿Cómo cambia el acceso de tus alumnas cuando el material existe en varios formatos? 2–3 oraciones."
+    },
+    {
+      "order": 36,
+      "itemKey": "lvl-a-p3-video",
+      "partId": "a-p3",
+      "partNumber": 3,
+      "level": "a",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · Proyecto interdisciplinario con IA",
+      "partTitle": "Proyecto interdisciplinario con IA",
+      "primaryTools": [
+        "Multiple"
+      ],
+      "collaborative": true,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 37,
+      "itemKey": "lvl-a-p3-task",
+      "partId": "a-p3",
+      "partNumber": 3,
+      "level": "a",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · Proyecto interdisciplinario con IA",
+      "partTitle": "Proyecto interdisciplinario con IA",
+      "primaryTools": [
+        "Multiple"
+      ],
+      "collaborative": true,
+      "taskPrompt": "Empareja con una docente de otra materia. Diseñen juntas un proyecto de 2 materias donde la IA sea el puente. Documenten el plan completo. Escribe el nombre completo de tu compañera al inicio del texto.",
+      "taskRubric": "1) Incluye el nombre completo de la compañera al inicio del texto. 2) Las dos materias son distintas y el rol de cada una en el proyecto es claro. 3) La IA es genuinamente el puente entre las dos materias, no un adorno. 4) Incluye una entrega final esperada por las alumnas y cómo se evaluará."
+    },
+    {
+      "order": 38,
+      "itemKey": "lvl-a-p3-reflection",
+      "partId": "a-p3",
+      "partNumber": 3,
+      "level": "a",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · Proyecto interdisciplinario con IA",
+      "partTitle": "Proyecto interdisciplinario con IA",
+      "primaryTools": [
+        "Multiple"
+      ],
+      "collaborative": true,
+      "reflectionPrompt": "¿Qué hace que un proyecto sea genuinamente interdisciplinario y no solo 'dos tareas juntas'? 2–3 oraciones."
+    },
+    {
+      "order": 39,
+      "itemKey": "lvl-a-p4-video",
+      "partId": "a-p4",
+      "partNumber": 4,
+      "level": "a",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · Evaluación auténtica resistente a IA",
+      "partTitle": "Evaluación auténtica resistente a IA",
+      "primaryTools": [
+        "Diseño curricular",
+        "ChatGPT (para probar)"
+      ],
+      "collaborative": false,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 40,
+      "itemKey": "lvl-a-p4-task",
+      "partId": "a-p4",
+      "partNumber": 4,
+      "level": "a",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · Evaluación auténtica resistente a IA",
+      "partTitle": "Evaluación auténtica resistente a IA",
+      "primaryTools": [
+        "Diseño curricular",
+        "ChatGPT (para probar)"
+      ],
+      "collaborative": false,
+      "taskPrompt": "Toma una evaluación que ya usas. Rediséñala para que NO se pueda resolver pegando la consigna en ChatGPT. Justifica los cambios.",
+      "taskRubric": "1) Presenta la evaluación original y la rediseñada. 2) Explica concretamente por qué la nueva versión no se puede resolver pegando la consigna en ChatGPT. 3) Identifica qué habilidades evalúa ahora que antes no podía ver. 4) La nueva versión sigue siendo evaluable en tiempo realista."
+    },
+    {
+      "order": 41,
+      "itemKey": "lvl-a-p4-reflection",
+      "partId": "a-p4",
+      "partNumber": 4,
+      "level": "a",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · Evaluación auténtica resistente a IA",
+      "partTitle": "Evaluación auténtica resistente a IA",
+      "primaryTools": [
+        "Diseño curricular",
+        "ChatGPT (para probar)"
+      ],
+      "collaborative": false,
+      "reflectionPrompt": "¿Qué habilidades estás evaluando ahora que antes no podías ver? 2–3 oraciones."
+    },
+    {
+      "order": 42,
+      "itemKey": "lvl-a-p5-video",
+      "partId": "a-p5",
+      "partNumber": 5,
+      "level": "a",
+      "stage": "video",
+      "type": "video",
+      "hours": 0.6,
+      "label": "Video · Tu plan de integración IA — Capstone",
+      "partTitle": "Tu plan de integración IA — Capstone",
+      "primaryTools": [
+        "Síntesis"
+      ],
+      "collaborative": true,
+      "youtubeUrl": "https://www.youtube.com/watch?v=PLACEHOLDER"
+    },
+    {
+      "order": 43,
+      "itemKey": "lvl-a-p5-task",
+      "partId": "a-p5",
+      "partNumber": 5,
+      "level": "a",
+      "stage": "task",
+      "type": "task",
+      "hours": 1,
+      "label": "Tarea · Tu plan de integración IA — Capstone",
+      "partTitle": "Tu plan de integración IA — Capstone",
+      "primaryTools": [
+        "Síntesis"
+      ],
+      "collaborative": true,
+      "taskPrompt": "Escribe un plan de '¿Cómo voy a usar IA en mi práctica este semestre?' (1–2 páginas). Empareja con otra docente y reviénse los planes mutuamente. Entrega tu plan final con los comentarios incorporados. Escribe el nombre de tu revisora al inicio del texto.",
+      "taskRubric": "1) Incluye el nombre de la revisora al inicio del texto. 2) El plan es personal, concreto y específico al contexto del Liceo Redwood. 3) Incluye al menos 3 compromisos accionables para el semestre con tiempos y herramientas. 4) Muestra incorporación de comentarios de la revisora (no es un borrador sin revisar)."
+    },
+    {
+      "order": 44,
+      "itemKey": "lvl-a-p5-reflection",
+      "partId": "a-p5",
+      "partNumber": 5,
+      "level": "a",
+      "stage": "reflection",
+      "type": "reflection",
+      "hours": 0.4,
+      "label": "Reflexión · Tu plan de integración IA — Capstone",
+      "partTitle": "Tu plan de integración IA — Capstone",
+      "primaryTools": [
+        "Síntesis"
+      ],
+      "collaborative": true,
+      "reflectionPrompt": "¿Qué compromiso concreto adquieres con tu propia práctica? 2–3 oraciones."
+    }
+  ]
+}

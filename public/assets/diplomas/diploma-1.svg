@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Placeholder icon for Diploma 1 (Docente IA Consciente).
+  Theme: navy sapling  emerging two-leaf seedling.
+  Replace this file with the final asset; the path is referenced in
+  src/lib/diplomas.ts as iconPath.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80" role="img" aria-label="Diploma 1 · Sapling">
+  <circle cx="40" cy="40" r="38" fill="#EAF0F8" stroke="#1A2E4A" stroke-width="2"/>
+  <!-- soil mound -->
+  <ellipse cx="40" cy="62" rx="22" ry="4" fill="#1A2E4A" opacity="0.18"/>
+  <!-- stem -->
+  <path d="M40 60 C 40 52, 40 44, 40 36" stroke="#1A2E4A" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- left leaf -->
+  <path d="M40 44 C 30 44, 24 38, 22 30 C 32 30, 38 36, 40 44 Z" fill="#1A2E4A"/>
+  <!-- right leaf -->
+  <path d="M40 40 C 50 40, 56 34, 58 26 C 48 26, 42 32, 40 40 Z" fill="#1A2E4A" opacity="0.75"/>
+</svg>

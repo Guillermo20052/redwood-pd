@@ -1,0 +1,61 @@
+{
+  "title": "Redwood High · Ruta de Desarrollo Profesional con IA",
+  "school": "Redwood High School",
+  "location": "Monterrey, N.L., México",
+  "totalGoalHours": 20,
+  "programMaxHours": 30,
+  "minDiploma": 20,
+  "midDiploma": 24,
+  "maxDiploma": 30,
+  "programTotal": 30,
+  "hoursPerPart": 2.0,
+  "hourGoals": {
+    "min": 20,
+    "mid": 24,
+    "max": 30
+  },
+  "diplomaTiers": [
+    {
+      "tier": 1,
+      "hours": 20,
+      "name": "Docente IA Consciente"
+    },
+    {
+      "tier": 2,
+      "hours": 24,
+      "name": "Docente IA Innovadora"
+    },
+    {
+      "tier": 3,
+      "hours": 30,
+      "name": "Docente IA Transformadora"
+    }
+  ],
+  "levelLocks": {
+    "unlockLevel2Hours": 10,
+    "unlockLevel3Hours": 20,
+    "level2Prefix": "lvl-b",
+    "level3Prefixes": [
+      "lvl-b",
+      "lvl-i"
+    ]
+  },
+  "levelUnlocks": {
+    "i": {
+      "hoursRequired": 10,
+      "fromLevels": ["b"]
+    },
+    "a": {
+      "hoursRequired": 20,
+      "fromLevels": ["b", "i"]
+    }
+  },
+  "contentVersion": "2025-2026",
+  "updatedAt": "2026-05-20",
+  "verification": {
+    "videoWatchThreshold": 0.8,
+    "taskEvidenceMinChars": 120,
+    "reflectionMinChars": 80,
+    "sequentialPath": true
+  }
+}

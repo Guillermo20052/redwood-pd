@@ -1,0 +1,79 @@
+{
+  "weeks": [
+    {
+      "id": "s1",
+      "label": "Parte 1",
+      "title": "Parte 1 · ¿Qué es la IA y cómo hablarle?",
+      "objective": "Primer contacto con ChatGPT y Claude para construir confianza inicial conversando con la IA.",
+      "days": [
+        {
+          "name": "Parte 1",
+          "theme": "¿Qué es la IA y cómo hablarle?",
+          "objective": "Comparar dos chatbots conversando 10 minutos con cada uno sobre un tema de tu materia.",
+          "practiceTask": "Ten una conversación de 10 minutos con ChatGPT y otra con Claude sobre un tema de tu materia. Guarda ambas conversaciones (copia el texto o toma capturas) y descríbelas brevemente: ¿qué diferencias notaste entre ambas herramientas?",
+          "transferTask": "Reflexión: ¿Qué te sorprendió de conversar con la IA por primera vez con esta intención? Escribe 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "label": "Parte 2",
+      "title": "Parte 2 · Anatomía de un buen prompt",
+      "objective": "Comparar 3 versiones (mala, aceptable y excelente) del mismo prompt sobre una meta docente real.",
+      "days": [
+        {
+          "name": "Parte 2",
+          "theme": "Anatomía de un buen prompt",
+          "objective": "Comparar la calidad de las respuestas al variar la calidad del prompt.",
+          "practiceTask": "Escribe 3 prompts sobre la misma meta docente (por ejemplo, 'explicar el ciclo del agua a alumnas de secundaria'): uno malo, uno aceptable y uno excelente. Compara las respuestas y documenta qué hizo la diferencia.",
+          "transferTask": "Reflexión: ¿Qué reglas vas a llevarte para escribir mejores prompts? 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "label": "Parte 3",
+      "title": "Parte 3 · Tu asistente para correos y comunicación",
+      "objective": "Usar IA para redactar un correo sensible a un padre de familia y editarlo a tu voz personal.",
+      "days": [
+        {
+          "name": "Parte 3",
+          "theme": "Tu asistente para correos y comunicación",
+          "objective": "Generar y luego personalizar un correo real para una situación de bajo desempeño.",
+          "practiceTask": "Redacta con IA un correo a un padre de familia sobre una alumna con bajo desempeño. Después edítalo a tu voz personal. Guarda ambas versiones.",
+          "transferTask": "Reflexión: ¿Qué partes del correo dejaste de la IA y cuáles cambiaste? ¿Por qué? 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "label": "Parte 4",
+      "title": "Parte 4 · Compara herramientas con otra docente · COLABORATIVO",
+      "objective": "Trabajar en pareja desde la pestaña de Comunidad para comparar dos herramientas con el mismo prompt.",
+      "days": [
+        {
+          "name": "Parte 4",
+          "theme": "Compara herramientas con otra docente (colaborativo)",
+          "objective": "Probar el mismo prompt en herramientas distintas y discutir cuál sirve mejor para qué tipo de tarea.",
+          "practiceTask": "Empareja con otra docente desde la pestaña de Comunidad. Cada una elige una herramienta distinta y corre el MISMO prompt. Comparen resultados y documenten cuál sirvió mejor para qué tipo de tarea. Escribe el nombre completo de tu compañera al inicio del texto.",
+          "transferTask": "Reflexión: ¿Qué aprendiste de tu compañera o de su herramienta que no habrías visto sola? 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "label": "Parte 5",
+      "title": "Parte 5 · Alucinaciones, verificación y límites",
+      "objective": "Detectar al menos una alucinación pidiendo a un chatbot información específica de tu materia y verificándola.",
+      "days": [
+        {
+          "name": "Parte 5",
+          "theme": "Alucinaciones, verificación y límites",
+          "objective": "Comprobar con Perplexity o una fuente confiable la información que entrega un chatbot.",
+          "practiceTask": "Pídele a un chatbot información específica de tu materia (fechas, datos, citas). Verifica con Perplexity o una fuente confiable. Encuentra al menos una alucinación o error y documéntalo.",
+          "transferTask": "Reflexión: ¿Cómo vas a verificar lo que te diga la IA de ahora en adelante? 2–3 oraciones."
+        }
+      ]
+    }
+  ]
+}

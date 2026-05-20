@@ -1,0 +1,79 @@
+{
+  "weeks": [
+    {
+      "id": "s1",
+      "label": "Parte 1",
+      "title": "Parte 1 · IA como compañera de pensamiento del alumna",
+      "objective": "Diseñar una lección donde tus alumnas usen IA éticamente como compañera de pensamiento.",
+      "days": [
+        {
+          "name": "Parte 1",
+          "theme": "IA como compañera de pensamiento del alumna",
+          "objective": "Establecer reglas explícitas de citación y entrega para el uso estudiantil de IA.",
+          "practiceTask": "Diseña una lección donde tus alumnas usen IA éticamente como compañera de pensamiento, con reglas explícitas de citación y entrega. Documenta la lección completa.",
+          "transferTask": "Reflexión: ¿Qué riesgos pedagógicos identificas y cómo los mitigas? 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "label": "Parte 2",
+      "title": "Parte 2 · Materiales multimedia con IA",
+      "objective": "Convertir las lecturas de una unidad en una guía con NotebookLM y un audio narrado por IA.",
+      "days": [
+        {
+          "name": "Parte 2",
+          "theme": "Materiales multimedia con IA",
+          "objective": "Producir materiales multimodales (texto y audio) accesibles para tus alumnas.",
+          "practiceTask": "Convierte las lecturas de una unidad en (a) una guía de estudio generada con NotebookLM y (b) un resumen en audio narrado por IA. Comparte los archivos o links.",
+          "transferTask": "Reflexión: ¿Cómo cambia el acceso de tus alumnas cuando el material existe en varios formatos? 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "label": "Parte 3",
+      "title": "Parte 3 · Proyecto interdisciplinario con IA · COLABORATIVO",
+      "objective": "Co-diseñar un proyecto de 2 materias donde la IA sea el puente entre disciplinas.",
+      "days": [
+        {
+          "name": "Parte 3",
+          "theme": "Proyecto interdisciplinario con IA (colaborativo)",
+          "objective": "Diseñar un plan completo de proyecto interdisciplinario en pareja.",
+          "practiceTask": "Empareja con una docente de otra materia. Diseñen juntas un proyecto de 2 materias donde la IA sea el puente. Documenten el plan completo. Escribe el nombre completo de tu compañera al inicio del texto.",
+          "transferTask": "Reflexión: ¿Qué hace que un proyecto sea genuinamente interdisciplinario y no solo 'dos tareas juntas'? 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "label": "Parte 4",
+      "title": "Parte 4 · Evaluación auténtica resistente a IA",
+      "objective": "Rediseñar una evaluación tuya para que no se resuelva pegando la consigna en ChatGPT.",
+      "days": [
+        {
+          "name": "Parte 4",
+          "theme": "Evaluación auténtica resistente a IA",
+          "objective": "Justificar por escrito los cambios que aplicaste a la evaluación.",
+          "practiceTask": "Toma una evaluación que ya usas. Rediséñala para que NO se pueda resolver pegando la consigna en ChatGPT. Justifica los cambios.",
+          "transferTask": "Reflexión: ¿Qué habilidades estás evaluando ahora que antes no podías ver? 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "label": "Parte 5",
+      "title": "Parte 5 · Tu plan de integración IA — Capstone · COLABORATIVO",
+      "objective": "Escribir tu plan personal de integración de IA y revisarlo en pareja con otra docente.",
+      "days": [
+        {
+          "name": "Parte 5",
+          "theme": "Tu plan de integración IA — Capstone (colaborativo)",
+          "objective": "Síntesis del programa: '¿Cómo voy a usar IA en mi práctica este semestre?'",
+          "practiceTask": "Escribe un plan de '¿Cómo voy a usar IA en mi práctica este semestre?' (1–2 páginas). Empareja con otra docente y reviénse los planes mutuamente. Entrega tu plan final con los comentarios incorporados. Escribe el nombre de tu revisora al inicio del texto.",
+          "transferTask": "Reflexión: ¿Qué compromiso concreto adquieres con tu propia práctica? 2–3 oraciones."
+        }
+      ]
+    }
+  ]
+}

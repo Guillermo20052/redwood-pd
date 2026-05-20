@@ -1,0 +1,208 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import { useProgressContext } from './Providers';
+import { verificationConfig, type PathItem } from '@/lib/curriculum-path';
+import { PartnerPicker, type PartnerTeacher, type PartnerValue } from './PartnerPicker';
+
+type Props = {
+  item: PathItem;
+  collaborative?: boolean;
+  onVerified: () => void;
+};
+
+type GradeResult = {
+  score: number;
+  feedback: string;
+  passed: boolean;
+};
+
+type ApiTeacher = {
+  user_id?: string;
+  id?: string;
+  full_name?: string;
+  subject?: string;
+};
+
+export function PartStageTask({ item, collaborative, onVerified }: Props) {
+  const { verifyTask } = useProgressContext();
+  const [text, setText] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [lastResult, setLastResult] = useState<GradeResult | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [allTeachers, setAllTeachers] = useState<PartnerTeacher[]>([]);
+  const [currentUserId, setCurrentUserId] = useState<string>('local-dev-user');
+  const [partner, setPartner] = useState<PartnerValue | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const min = verificationConfig.taskEvidenceMinChars;
+  const len = text.trim().length;
+  const meetsLength = len >= min;
+  const partnerOk =
+    !collaborative || (partner !== null && partner.name.trim().length >= 3);
+  const meets = meetsLength && partnerOk;
+
+  useEffect(() => {
+    if (!collaborative) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/community/teachers');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (cancelled) return;
+        const mapped: PartnerTeacher[] = (data.teachers || []).map((t: ApiTeacher) => ({
+          user_id: t.user_id ?? t.id ?? '',
+          full_name: t.full_name ?? 'Docente',
+          subject: t.subject,
+        }));
+        setAllTeachers(mapped.filter((t) => t.user_id));
+        if (typeof data.currentUserId === 'string' && data.currentUserId) {
+          setCurrentUserId(data.currentUserId);
+        }
+      } catch {
+        /* manual entry still works */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [collaborative]);
+
+  const submit = async () => {
+    if (submitting || !meets) return;
+    setSubmitting(true);
+    setErrorMessage(null);
+    try {
+      const data = await verifyTask(
+        item.itemKey,
+        text,
+        collaborative && partner ? partner : null
+      );
+      const passed = data?.ok === true;
+      const score = typeof data?.score === 'number' ? data.score : null;
+      const feedback = typeof data?.feedback === 'string' ? data.feedback : '';
+
+      if (score !== null) {
+        setLastResult({ score, feedback, passed });
+      }
+
+      if (passed) {
+        setTimeout(() => onVerified(), 1200);
+      }
+    } catch (e) {
+      setErrorMessage((e as Error).message || 'No se pudo enviar la tarea.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const retry = () => {
+    setLastResult(null);
+    setErrorMessage(null);
+    setTimeout(() => {
+      textareaRef.current?.focus();
+      textareaRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 0);
+  };
+
+  const passed = lastResult?.passed === true;
+  const failed = lastResult && !lastResult.passed;
+
+  return (
+    <div className="space-y-3">
+      <p className="stage-label">Etapa 2 de 3 · Tarea con IA</p>
+
+      {collaborative && (
+        <PartnerPicker
+          onSelect={setPartner}
+          currentValue={partner}
+          allTeachers={allTeachers}
+          currentUserId={currentUserId}
+          partNumber={item.partNumber ?? 0}
+          partTitle={item.partTitle ?? item.label}
+          disabled={submitting || passed}
+        />
+      )}
+
+      {item.taskPrompt && (
+        <div className="stage-prompt-card stage-prompt-card--gold">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--gold)] mb-1">
+            Consigna
+          </p>
+          <p className="whitespace-pre-wrap">{item.taskPrompt}</p>
+        </div>
+      )}
+
+      <div>
+        <textarea
+          ref={textareaRef}
+          className="rw-textarea"
+          placeholder={`Describe qué hiciste, qué aprendiste y cómo lo aplicarás (mín. ${min} caracteres)…`}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          rows={6}
+          disabled={submitting || passed}
+        />
+        <p className={`char-counter ${meetsLength ? '' : 'warn'}`}>
+          {len} / {min} caracteres
+        </p>
+        {collaborative && !partnerOk && (
+          <p className="char-counter warn text-left">
+            Selecciona o escribe el nombre de tu compañera antes de enviar.
+          </p>
+        )}
+      </div>
+
+      <button
+        type="button"
+        className="btn-primary"
+        onClick={submit}
+        disabled={!meets || submitting || passed}
+      >
+        {submitting ? 'Evaluando con IA…' : passed ? 'Aprobada' : 'Enviar para evaluación'}
+      </button>
+
+      {lastResult && (
+        <div className={`score-panel ${passed ? 'score-panel--pass' : 'score-panel--fail'}`}>
+          <p className={`score-num ${passed ? 'score-num--pass' : 'score-num--fail'}`}>
+            {lastResult.score}
+            <span className="text-lg font-bold">/100</span>
+          </p>
+          <p className="text-sm font-bold text-[var(--gray-800)]">
+            {passed ? 'Aprobada' : 'No aprobada (mínimo 85)'}
+          </p>
+          {lastResult.feedback && (
+            <p className="mt-2 text-sm text-[var(--gray-700)] whitespace-pre-wrap">
+              {lastResult.feedback}
+            </p>
+          )}
+          {passed && (
+            <p className="mt-2 text-xs text-[var(--green)] italic">
+              Avanzando a la reflexión…
+            </p>
+          )}
+          {failed && (
+            <button type="button" className="btn-outline mt-3" onClick={retry}>
+              Reintenta
+            </button>
+          )}
+        </div>
+      )}
+
+      {errorMessage && (
+        <div className="score-panel score-panel--fail">
+          <p className="text-sm font-semibold text-[var(--red)]">{errorMessage}</p>
+          <button
+            type="button"
+            className="btn-outline mt-2"
+            onClick={submit}
+            disabled={submitting || !meets}
+          >
+            Reintentar
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}

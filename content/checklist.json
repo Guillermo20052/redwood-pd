@@ -1,0 +1,171 @@
+{
+  "items": [
+    {
+      "id": "b-p1",
+      "level": "b",
+      "label": "¿Qué es la IA y cómo hablarle?",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "b-p2",
+      "level": "b",
+      "label": "Anatomía de un buen prompt",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "b-p3",
+      "level": "b",
+      "label": "Tu asistente para correos y comunicación",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "b-p4",
+      "level": "b",
+      "label": "Compara herramientas con otra docente",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "b-p5",
+      "level": "b",
+      "label": "Alucinaciones, verificación y límites",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "i-p1",
+      "level": "i",
+      "label": "Planeación de clase asistida por IA",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "i-p2",
+      "level": "i",
+      "label": "Presentaciones en minutos",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "i-p3",
+      "level": "i",
+      "label": "Diferenciación: un texto, tres niveles",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "i-p4",
+      "level": "i",
+      "label": "Rúbricas alineadas al IB con otra docente",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "i-p5",
+      "level": "i",
+      "label": "Retroalimentación más rápida",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "a-p1",
+      "level": "a",
+      "label": "IA como compañera de pensamiento del alumna",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "a-p2",
+      "level": "a",
+      "label": "Materiales multimedia con IA",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "a-p3",
+      "level": "a",
+      "label": "Proyecto interdisciplinario con IA",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "a-p4",
+      "level": "a",
+      "label": "Evaluación auténtica resistente a IA",
+      "hours": 2,
+      "group": null
+    },
+    {
+      "id": "a-p5",
+      "level": "a",
+      "label": "Tu plan de integración IA — Capstone",
+      "hours": 2,
+      "group": null
+    }
+  ],
+  "hours": {
+    "b-p1": 2,
+    "b-p2": 2,
+    "b-p3": 2,
+    "b-p4": 2,
+    "b-p5": 2,
+    "i-p1": 2,
+    "i-p2": 2,
+    "i-p3": 2,
+    "i-p4": 2,
+    "i-p5": 2,
+    "a-p1": 2,
+    "a-p2": 2,
+    "a-p3": 2,
+    "a-p4": 2,
+    "a-p5": 2,
+    "lvl-b-p1-video": 0.6,
+    "lvl-b-p1-task": 1,
+    "lvl-b-p1-reflection": 0.4,
+    "lvl-b-p2-video": 0.6,
+    "lvl-b-p2-task": 1,
+    "lvl-b-p2-reflection": 0.4,
+    "lvl-b-p3-video": 0.6,
+    "lvl-b-p3-task": 1,
+    "lvl-b-p3-reflection": 0.4,
+    "lvl-b-p4-video": 0.6,
+    "lvl-b-p4-task": 1,
+    "lvl-b-p4-reflection": 0.4,
+    "lvl-b-p5-video": 0.6,
+    "lvl-b-p5-task": 1,
+    "lvl-b-p5-reflection": 0.4,
+    "lvl-i-p1-video": 0.6,
+    "lvl-i-p1-task": 1,
+    "lvl-i-p1-reflection": 0.4,
+    "lvl-i-p2-video": 0.6,
+    "lvl-i-p2-task": 1,
+    "lvl-i-p2-reflection": 0.4,
+    "lvl-i-p3-video": 0.6,
+    "lvl-i-p3-task": 1,
+    "lvl-i-p3-reflection": 0.4,
+    "lvl-i-p4-video": 0.6,
+    "lvl-i-p4-task": 1,
+    "lvl-i-p4-reflection": 0.4,
+    "lvl-i-p5-video": 0.6,
+    "lvl-i-p5-task": 1,
+    "lvl-i-p5-reflection": 0.4,
+    "lvl-a-p1-video": 0.6,
+    "lvl-a-p1-task": 1,
+    "lvl-a-p1-reflection": 0.4,
+    "lvl-a-p2-video": 0.6,
+    "lvl-a-p2-task": 1,
+    "lvl-a-p2-reflection": 0.4,
+    "lvl-a-p3-video": 0.6,
+    "lvl-a-p3-task": 1,
+    "lvl-a-p3-reflection": 0.4,
+    "lvl-a-p4-video": 0.6,
+    "lvl-a-p4-task": 1,
+    "lvl-a-p4-reflection": 0.4,
+    "lvl-a-p5-video": 0.6,
+    "lvl-a-p5-task": 1,
+    "lvl-a-p5-reflection": 0.4
+  }
+}

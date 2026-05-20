@@ -1,0 +1,79 @@
+{
+  "weeks": [
+    {
+      "id": "s1",
+      "label": "Parte 1",
+      "title": "Parte 1 · Planeación de clase asistida por IA",
+      "objective": "Generar un plan de clase real para esta semana usando IA y editarlo a tu contexto.",
+      "days": [
+        {
+          "name": "Parte 1",
+          "theme": "Planeación de clase asistida por IA",
+          "objective": "Construir un plan completo (objetivos, secuencia y evaluación) para una clase próxima.",
+          "practiceTask": "Genera un plan de clase completo para una clase real que darás esta semana o la próxima. Incluye objetivos, secuencia de actividades y evaluación. Edítalo a tu contexto.",
+          "transferTask": "Reflexión: ¿Qué hiciste tú que la IA no podía hacer? 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "label": "Parte 2",
+      "title": "Parte 2 · Presentaciones en minutos",
+      "objective": "Construir una presentación para una lección próxima usando una herramienta con IA.",
+      "days": [
+        {
+          "name": "Parte 2",
+          "theme": "Presentaciones en minutos",
+          "objective": "Producir una presentación lista para usar con una herramienta como Canva Magic Design, PowerPoint Copilot, Google Slides + Gemini o Gamma.",
+          "practiceTask": "Construye una presentación de diapositivas para una lección que vas a dar este mes usando una herramienta con IA. Guarda el archivo o link.",
+          "transferTask": "Reflexión: ¿Qué tan cerca quedó del nivel que tú habrías producido a mano? 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "label": "Parte 3",
+      "title": "Parte 3 · Diferenciación: un texto, tres niveles",
+      "objective": "Adaptar una lectura de tu materia a 3 niveles distintos: apoyo, en nivel y extensión.",
+      "days": [
+        {
+          "name": "Parte 3",
+          "theme": "Diferenciación: un texto, tres niveles",
+          "objective": "Documentar las 3 versiones diferenciadas para usarlas con tu grupo real.",
+          "practiceTask": "Toma una lectura de tu materia y adáptala a 3 niveles de lectura distintos (apoyo, en nivel, extensión). Documenta las 3 versiones.",
+          "transferTask": "Reflexión: ¿Qué alumnas se beneficiarían más de esto y por qué? 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "label": "Parte 4",
+      "title": "Parte 4 · Rúbricas alineadas al IB con otra docente · COLABORATIVO",
+      "objective": "Co-diseñar con una docente de otra materia una rúbrica IB para una tarea transferible.",
+      "days": [
+        {
+          "name": "Parte 4",
+          "theme": "Rúbricas alineadas al IB con otra docente (colaborativo)",
+          "objective": "Construir una rúbrica IB compartida entre dos materias distintas.",
+          "practiceTask": "Empareja con una docente de una materia distinta a la tuya. Co-diseñen una rúbrica IB para una tarea transferible (por ejemplo, una investigación). Escribe el nombre completo de tu compañera al inicio del texto.",
+          "transferTask": "Reflexión: ¿En qué se parece y en qué se diferencia la rúbrica IB entre sus materias? 2–3 oraciones."
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "label": "Parte 5",
+      "title": "Parte 5 · Retroalimentación más rápida",
+      "objective": "Generar retroalimentación formativa para una muestra real anonimizada y compararla con la tuya.",
+      "days": [
+        {
+          "name": "Parte 5",
+          "theme": "Retroalimentación más rápida",
+          "objective": "Identificar qué partes del feedback son delegables a IA y cuáles no.",
+          "practiceTask": "Toma una muestra real de trabajo estudiantil (anonimizada). Usa IA para generar retroalimentación formativa. Compárala con la que tú escribirías y documenta diferencias.",
+          "transferTask": "Reflexión: ¿Qué quedarías dispuesta a automatizar y qué nunca delegarías? 2–3 oraciones."
+        }
+      ]
+    }
+  ]
+}

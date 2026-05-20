@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Redwood High · PD con IA
 
-## Getting Started
+Aplicación web para la Ruta de Desarrollo Profesional con Inteligencia Artificial (Redwood High School).
 
-First, run the development server:
+## Datos y modos
+
+La aplicación tiene dos modos de operación:
+
+- **Modo local** (predeterminado): toda la data vive en `.data/local-db.json` — completions, perfiles, reflexiones, chat, diplomas. Es lo que ves cuando corres `npm run dev` sin variables de entorno de Supabase.
+- **Modo Supabase**: cuando `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` están configuradas, la app usa la base de datos remota.
+
+Ambos modos usan la misma tabla `item_completions` como única fuente de verdad para el progreso. El sistema legacy `progress_items` ya está deprecado y será removido por la migración `004_unified_progress.sql` la próxima vez que se conecte Supabase.
+
+## Estructura
+
+- `content/` — currículo en JSON (checklist, videos, niveles, herramientas)
+- `public/assets/` — logos extraídos del HTML legacy
+- `src/` — aplicación Next.js 16
+- `supabase/migrations/` — esquema Postgres + RLS
+- `scripts/extract-content.mjs` — extractor desde el HTML original
+
+## Desarrollo local
 
 ```bash
+cd redwood-pd
+cp .env.example .env.local
+# Añade NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Sin Supabase configurado, la app funciona en **modo local** (localStorage) desde `/dashboard`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Supabase
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Crea un proyecto en [supabase.com](https://supabase.com)
+2. Ejecuta `supabase/migrations/001_schema.sql` en el SQL Editor
+3. Habilita Email (magic link) en Authentication
+4. Para panel admin: `update profiles set role = 'admin' where email = 'tu@correo.com';`
 
-## Learn More
+## Migración desde el HTML legacy
 
-To learn more about Next.js, take a look at the following resources:
+1. Abre `Redwood_High_PD_IA_Docentes.html` en el navegador
+2. Clic en **Exportar progreso (.json)**
+3. En la app: **Importar** → sube el archivo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+node scripts/extract-content.mjs   # Regenerar content/ desde el HTML
+npm run build
+```
 
-## Deploy on Vercel
+## Rutas
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Ruta | Descripción |
+|------|-------------|
+| `/dashboard` | Inicio y resumen |
+| `/nivel/b`, `/nivel/i`, `/nivel/a` | Checklists por nivel |
+| `/logros` | Diplomas (20 / 24 / 30 h) |
+| `/etica` | Política y ética IA 2025–2026 |
+| `/reflexion` | Diario reflexivo |
+| `/importar` | Importar JSON legacy |
+| `/admin` | Cohorte y export CSV (rol admin) |
+| `/login` | Magic link |

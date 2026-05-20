@@ -1,0 +1,43 @@
+{
+  "levels": [
+    {
+      "slug": "b",
+      "id": "fundamentos",
+      "name": "Nivel 1 · Fundamentos",
+      "color": "#1A2E4A",
+      "heroClass": "lh-b",
+      "tagline": "Conciencia y primeros pasos con IA en el aula IB",
+      "sessions": 5,
+      "partCount": 5,
+      "totalHours": 10,
+      "hoursPerPart": 2.0,
+      "checklistHoursTarget": 10
+    },
+    {
+      "slug": "i",
+      "id": "integracion",
+      "name": "Nivel 2 · Integración",
+      "color": "#1A7A6E",
+      "heroClass": "lh-i",
+      "tagline": "Integrar IA en planeación, evaluación y diferenciación",
+      "sessions": 5,
+      "partCount": 5,
+      "totalHours": 10,
+      "hoursPerPart": 2.0,
+      "checklistHoursTarget": 10
+    },
+    {
+      "slug": "a",
+      "id": "transformacion",
+      "name": "Nivel 3 · Transformación",
+      "color": "#B22234",
+      "heroClass": "lh-a",
+      "tagline": "Flujos de trabajo avanzados y liderazgo con IA",
+      "sessions": 5,
+      "partCount": 5,
+      "totalHours": 10,
+      "hoursPerPart": 2.0,
+      "checklistHoursTarget": 10
+    }
+  ]
+}

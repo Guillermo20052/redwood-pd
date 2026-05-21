@@ -12,6 +12,9 @@ export const ALLOWED_MIME_TYPES = new Set([
   'application/pdf',
 ]);
 
+/** Name of the Supabase Storage bucket where teacher submissions live. */
+export const SUPABASE_BUCKET = 'uploads';
+
 export function sanitizeFilename(name: string): string {
   const base = path.basename(name).replace(/[^a-zA-Z0-9._-]/g, '_');
   return base.slice(0, 120) || 'archivo';
@@ -33,16 +36,41 @@ export function buildFileUrl(userId: string, storedName: string): string {
 }
 
 /**
- * Resolve a public file URL to an on-disk path. Returns null if the URL is
- * malformed or escapes the user's upload directory.
+ * Parse a `/api/uploads/<userId>/<filename>` URL into its parts. Returns null
+ * when the URL is malformed, has the wrong number of segments, or contains
+ * a path-traversal sequence.
  */
-export function fileUrlToPath(fileUrl: string): string | null {
-  const match = fileUrl.match(/^\/api\/uploads\/([^/]+)\/([^/]+)$/);
+export function parseUploadUrl(
+  fileUrl: string
+): { userId: string; filename: string } | null {
+  const match = fileUrl.match(/^\/api\/uploads\/([^/]+)\/([^/]+(?:\/[^/]+)*)$/);
   if (!match) return null;
   const [, userId, filename] = match;
   if (filename.includes('..')) return null;
-  const dir = getUploadDir(userId);
-  const full = path.join(dir, filename);
+  return { userId, filename };
+}
+
+/**
+ * Storage object path inside the "uploads" bucket. Convention is
+ * `<userId>/<filename>` so RLS policies on storage.objects can compare the
+ * first folder segment with auth.uid().
+ */
+export function fileUrlToStoragePath(fileUrl: string): string | null {
+  const parsed = parseUploadUrl(fileUrl);
+  if (!parsed) return null;
+  return `${parsed.userId}/${parsed.filename}`;
+}
+
+/**
+ * Resolve a public file URL to an on-disk path. Returns null if the URL is
+ * malformed or escapes the user's upload directory. Only meaningful in local
+ * mode — in Supabase mode the file lives in Storage, not on disk.
+ */
+export function fileUrlToPath(fileUrl: string): string | null {
+  const parsed = parseUploadUrl(fileUrl);
+  if (!parsed) return null;
+  const dir = getUploadDir(parsed.userId);
+  const full = path.join(dir, parsed.filename);
   const resolved = path.resolve(full);
   const resolvedDir = path.resolve(dir);
   if (!resolved.startsWith(resolvedDir + path.sep) && resolved !== resolvedDir) {
@@ -62,4 +90,12 @@ export function detectMediaType(
   if (inputType === 'document') return 'application/pdf';
   if (mimeType === 'image/png') return 'image/png';
   return 'image/jpeg';
+}
+
+/** Returns true when Supabase env vars are present (production storage mode). */
+export function isSupabaseStorageMode(): boolean {
+  return (
+    !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
 }

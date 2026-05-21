@@ -20,7 +20,7 @@ export async function GET() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('chat_messages')
-    .select('id, body, created_at, user_id, profiles(full_name)')
+    .select('id, body, created_at, user_id, profiles(full_name, role)')
     .order('created_at', { ascending: false })
     .limit(100);
 
@@ -30,7 +30,8 @@ export async function GET() {
     id: m.id,
     body: m.body,
     created_at: m.created_at,
-    author_name: (m.profiles as { full_name?: string })?.full_name || 'Docente',
+    author_name: (m.profiles as { full_name?: string; role?: string })?.full_name || 'Docente',
+    author_role: (m.profiles as { role?: string })?.role ?? 'teacher',
   }));
 
   return NextResponse.json({ messages: messages.reverse() });

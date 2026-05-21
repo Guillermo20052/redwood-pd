@@ -21,8 +21,9 @@ export async function GET() {
           subject: profile.subject,
           start_date: profile.start_date,
           email: profile.email || session.email,
+          role: (profile.role as 'teacher' | 'admin') ?? 'teacher',
         }
-      : { email: session.email },
+      : { email: session.email, role: 'teacher' as const },
   });
 }
 

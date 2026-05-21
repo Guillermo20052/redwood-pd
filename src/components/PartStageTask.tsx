@@ -49,13 +49,15 @@ function promptParagraphs(text: string): string[] {
 }
 
 export function PartStageTask({ item, collaborative, onVerified }: Props) {
-  const { verifyTask, completions } = useProgressContext();
+  const { verifyTask, completions, profile } = useProgressContext();
+  const isAdmin = profile.role === 'admin';
   const inputType: TaskInputType = item.inputType ?? 'text';
   const isFileTask = inputType === 'screenshot' || inputType === 'document';
 
   const [text, setText] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [adminSkipping, setAdminSkipping] = useState(false);
   const [lastResult, setLastResult] = useState<GradeResult | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [allTeachers, setAllTeachers] = useState<PartnerTeacher[]>([]);
@@ -163,6 +165,25 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
       setErrorMessage((e as Error).message || 'No se pudo enviar la tarea.');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleAdminSkip = async () => {
+    if (adminSkipping) return;
+    setAdminSkipping(true);
+    setErrorMessage(null);
+    try {
+      const res = await fetch('/api/verify/task', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itemKey: item.itemKey, adminSkip: true }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || 'Error al saltar');
+      onVerified();
+    } catch (e) {
+      setErrorMessage((e as Error).message);
+      setAdminSkipping(false);
     }
   };
 
@@ -312,6 +333,28 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
           >
             Reintentar
           </button>
+        </div>
+      )}
+
+      {isAdmin && !passed && (
+        <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-[var(--gray-200)]">
+          <button
+            type="button"
+            onClick={handleAdminSkip}
+            disabled={adminSkipping}
+            style={{
+              background: 'color-mix(in srgb, var(--gold) 20%, transparent)',
+              border: '1.5px solid var(--gold)',
+              color: 'var(--gold)',
+              fontWeight: 700,
+            }}
+            className="rounded-lg px-4 py-1.5 text-sm disabled:opacity-50"
+          >
+            {adminSkipping ? 'Saltando…' : 'Saltar tarea (admin)'}
+          </button>
+          <span className="text-[10px] text-[var(--gray-500)]">
+            Vista admin — no registra progreso ni llama al evaluador
+          </span>
         </div>
       )}
     </div>

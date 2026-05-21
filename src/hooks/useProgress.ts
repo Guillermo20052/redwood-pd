@@ -12,6 +12,7 @@ export function useProgress() {
     subject: '',
     start_date: '',
     email: '',
+    role: 'teacher' as 'teacher' | 'admin',
   });
   const [loading, setLoading] = useState(true);
 
@@ -28,6 +29,7 @@ export function useProgress() {
             subject: data.profile.subject || '',
             start_date: data.profile.start_date || '',
             email: data.profile.email || '',
+            role: (data.profile.role as 'teacher' | 'admin') || 'teacher',
           });
         }
       }
@@ -47,13 +49,15 @@ export function useProgress() {
     };
   }, [load]);
 
-  const updateProfile = async (patch: Partial<typeof profile>) => {
+  const updateProfile = async (patch: Partial<Omit<typeof profile, 'role'>>) => {
     const next = { ...profile, ...patch };
     setProfile(next);
+    const { role: _role, ...profilePatch } = next;
+    void _role;
     await fetch('/api/progress', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ profile: next }),
+      body: JSON.stringify({ profile: profilePatch }),
     });
   };
 

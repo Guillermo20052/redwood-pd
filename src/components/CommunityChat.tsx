@@ -9,6 +9,7 @@ export type ChatMessage = {
   author_name: string;
   /** When true, message was sent by the current user (if provided by API). */
   is_own?: boolean;
+  author_role?: 'teacher' | 'admin';
 };
 
 type Props = {
@@ -117,19 +118,32 @@ export function CommunityChat({
             m.is_own === true ||
             (currentUserName &&
               m.author_name.toLowerCase() === currentUserName.toLowerCase());
+          const isAdminMsg = m.author_role === 'admin';
           return (
             <div key={m.id} className={isOwn ? 'flex flex-col items-end' : ''}>
-              <div className="chat-meta">
-                {m.author_name} ·{' '}
+              <div className="chat-meta flex items-center gap-1.5 flex-wrap">
+                <span style={isAdminMsg ? { color: 'var(--red)', fontWeight: 700 } : undefined}>
+                  {m.author_name}
+                </span>
+                {isAdminMsg && (
+                  <span
+                    className="inline-block text-white text-[10px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider"
+                    style={{ background: 'var(--red)' }}
+                  >
+                    ADMIN
+                  </span>
+                )}
+                <span>·{' '}
                 {new Date(m.created_at).toLocaleString('es-MX', {
                   hour: '2-digit',
                   minute: '2-digit',
                   day: 'numeric',
                   month: 'short',
-                })}
+                })}</span>
               </div>
               <div
                 className={`chat-bubble ${isOwn ? 'chat-bubble--own' : 'chat-bubble--other'}`}
+                style={isAdminMsg && !isOwn ? { borderLeft: '4px solid var(--red)' } : undefined}
               >
                 {m.body}
               </div>

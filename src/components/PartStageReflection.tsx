@@ -10,10 +10,12 @@ type Props = {
 };
 
 export function PartStageReflection({ item, onVerified }: Props) {
-  const { verifyReflection } = useProgressContext();
+  const { verifyReflection, profile } = useProgressContext();
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [adminSkipping, setAdminSkipping] = useState(false);
   const [error, setError] = useState('');
+  const isAdmin = profile.role === 'admin';
 
   const min = verificationConfig.reflectionMinChars ?? 80;
   const len = text.trim().length;
@@ -29,6 +31,25 @@ export function PartStageReflection({ item, onVerified }: Props) {
     } catch (e) {
       setError((e as Error).message);
       setSubmitting(false);
+    }
+  };
+
+  const handleAdminSkip = async () => {
+    if (adminSkipping) return;
+    setAdminSkipping(true);
+    setError('');
+    try {
+      const res = await fetch('/api/verify/reflection', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itemKey: item.itemKey, adminSkip: true }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || 'Error al saltar');
+      onVerified();
+    } catch (e) {
+      setError((e as Error).message);
+      setAdminSkipping(false);
     }
   };
 
@@ -70,6 +91,28 @@ export function PartStageReflection({ item, onVerified }: Props) {
         </button>
         {error && <p className="text-xs text-[var(--red)]">{error}</p>}
       </div>
+
+      {isAdmin && (
+        <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-[var(--gray-200)]">
+          <button
+            type="button"
+            onClick={handleAdminSkip}
+            disabled={adminSkipping}
+            style={{
+              background: 'color-mix(in srgb, var(--gold) 20%, transparent)',
+              border: '1.5px solid var(--gold)',
+              color: 'var(--gold)',
+              fontWeight: 700,
+            }}
+            className="rounded-lg px-4 py-1.5 text-sm disabled:opacity-50"
+          >
+            {adminSkipping ? 'Saltando…' : 'Saltar reflexión (admin)'}
+          </button>
+          <span className="text-[10px] text-[var(--gray-500)]">
+            Vista admin — no registra progreso
+          </span>
+        </div>
+      )}
     </div>
   );
 }

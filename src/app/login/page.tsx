@@ -1,123 +1,175 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
+import { Suspense, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
 
-const hasSupabase =
-  typeof process.env.NEXT_PUBLIC_SUPABASE_URL === 'string' &&
-  !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
-  !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const hasSupabase = isSupabaseConfigured();
+
+function translateAuthError(message: string): string {
+  const m = message.toLowerCase();
+  if (m.includes('invalid login credentials')) return 'Correo o contraseña incorrectos.';
+  if (m.includes('email not confirmed')) return 'Tu correo aún no está confirmado.';
+  if (m.includes('user not found')) return 'No encontramos una cuenta con ese correo.';
+  if (m.includes('rate limit')) return 'Demasiados intentos. Espera un minuto y vuelve a intentar.';
+  return message;
+}
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
+  const search = useSearchParams();
+  const next = search.get('next') || '/dashboard';
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [mode, setMode] = useState<'password' | 'magic'>('password');
-  const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [info, setInfo] = useState('');
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setInfo('');
 
     if (!hasSupabase) {
-      window.location.href = '/dashboard';
+      window.location.href = next;
       return;
     }
 
-    const supabase = createClient();
+    setLoading(true);
+    try {
+      const supabase = createClient();
+      const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+      if (err) {
+        setError(translateAuthError(err.message));
+        setLoading(false);
+        return;
+      }
+      window.location.href = next;
+    } catch (err) {
+      setError((err as Error).message || 'No se pudo iniciar sesión.');
+      setLoading(false);
+    }
+  };
 
-    if (mode === 'magic') {
-      const { error: err } = await supabase.auth.signInWithOtp({
-        email,
-        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+  const resetPassword = async () => {
+    setError('');
+    setInfo('');
+    if (!email) {
+      setError('Escribe tu correo arriba para enviarte el enlace de recuperación.');
+      return;
+    }
+    if (!hasSupabase) {
+      setError('Supabase no está configurado en este entorno.');
+      return;
+    }
+    setLoading(true);
+    try {
+      const supabase = createClient();
+      const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
       });
-      if (err) setError(err.message);
-      else setSent(true);
-      return;
+      if (err) {
+        setError(translateAuthError(err.message));
+      } else {
+        setInfo('Te enviamos un correo con el enlace para restablecer tu contraseña.');
+      }
+    } finally {
+      setLoading(false);
     }
-
-    const { error: err } = await supabase.auth.signInWithPassword({ email, password });
-    if (err) setError(err.message);
-    else window.location.href = '/dashboard';
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f0edea] p-4">
-      <div className="login-card">
+      <div className="login-card w-full max-w-[440px]">
         <Image
           src="/assets/logo-header.png"
-          alt="Redwood High"
+          alt="Liceo Redwood"
           width={140}
           height={48}
           className="mx-auto mb-4 h-12 w-auto"
           priority
         />
-        <h1>Ruta de Desarrollo Profesional</h1>
+        <h1>Tu ruta de desarrollo profesional con IA</h1>
         <p className="text-sm text-center text-[var(--gray-500)] mb-6 mt-2">
-          Inicia sesión con tu cuenta de docente
+          Inicia sesión para continuar tu camino
         </p>
-        {sent ? (
-          <p className="text-sm text-center text-[var(--teal)] font-semibold">
-            Revisa tu correo para el enlace de acceso.
-          </p>
-        ) : (
-          <form onSubmit={signIn} className="space-y-4">
-            <label className="teacher-field block">
-              <span className="text-[10px] font-bold uppercase text-[var(--gray-500)]">
-                Correo electrónico
-              </span>
-              <input
-                type="email"
-                required
-                className="mt-1 w-full border border-[var(--gray-200)] rounded-lg px-3 py-2"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="docente@redwood.edu.mx"
-              />
-            </label>
-            {mode === 'password' && (
-              <label className="teacher-field block">
-                <span className="text-[10px] font-bold uppercase text-[var(--gray-500)]">
-                  Contraseña
-                </span>
-                <input
-                  type="password"
-                  required
-                  className="mt-1 w-full border border-[var(--gray-200)] rounded-lg px-3 py-2"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </label>
-            )}
-            {error && <p className="text-sm text-[var(--red)]">{error}</p>}
-            <button type="submit" className="btn-primary w-full">
-              {mode === 'password' ? 'Iniciar sesión' : 'Enviar enlace mágico'}
-            </button>
-            <button
-              type="button"
-              className="w-full text-xs text-[var(--gray-500)] underline"
-              onClick={() => setMode(mode === 'password' ? 'magic' : 'password')}
-            >
-              {mode === 'password' ? 'Usar enlace mágico por correo' : 'Usar correo y contraseña'}
-            </button>
-            <p className="text-xs text-center text-[var(--gray-500)]">
-              ¿No tienes cuenta?{' '}
-              <Link href="/signup" className="text-[var(--red)] font-semibold">
-                Regístrate
-              </Link>
+        <form onSubmit={signIn} className="space-y-4">
+          <label className="block">
+            <span className="text-[10px] font-bold uppercase text-[var(--gray-500)]">
+              Correo electrónico
+            </span>
+            <input
+              type="email"
+              required
+              autoComplete="email"
+              className="mt-1 w-full border border-[var(--gray-200)] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--red)]/30 focus:border-[var(--red)]"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="docente@redwood.edu.mx"
+              disabled={loading}
+            />
+          </label>
+          <label className="block">
+            <span className="text-[10px] font-bold uppercase text-[var(--gray-500)]">
+              Contraseña
+            </span>
+            <input
+              type="password"
+              required
+              autoComplete="current-password"
+              minLength={6}
+              className="mt-1 w-full border border-[var(--gray-200)] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--red)]/30 focus:border-[var(--red)]"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+            />
+          </label>
+          {error && (
+            <p className="text-sm text-[var(--red)] bg-[var(--red-pale)] border border-[var(--red)]/20 rounded-md px-3 py-2">
+              {error}
             </p>
-            {!hasSupabase && (
-              <p className="text-xs text-center text-[var(--gray-500)]">
-                Sin Supabase configurado,{' '}
-                <a href="/dashboard" className="text-[var(--red)] font-semibold">
-                  continuar en modo local
-                </a>
-              </p>
-            )}
-          </form>
-        )}
+          )}
+          {info && (
+            <p className="text-sm text-[var(--teal)] bg-[var(--teal-light)] border border-[var(--teal)]/20 rounded-md px-3 py-2">
+              {info}
+            </p>
+          )}
+          <button type="submit" className="btn-primary w-full" disabled={loading}>
+            {loading ? 'Cargando…' : 'Iniciar sesión'}
+          </button>
+          <button
+            type="button"
+            onClick={resetPassword}
+            disabled={loading}
+            className="w-full text-xs text-[var(--gray-500)] hover:text-[var(--red)] underline"
+          >
+            ¿Olvidaste tu contraseña?
+          </button>
+          <p className="text-xs text-center text-[var(--gray-500)] pt-2 border-t border-[var(--gray-200)]">
+            ¿No tienes cuenta?{' '}
+            <Link href="/signup" className="text-[var(--red)] font-semibold">
+              Regístrate
+            </Link>
+          </p>
+          {!hasSupabase && (
+            <p className="text-xs text-center text-[var(--gray-500)]">
+              Sin Supabase configurado,{' '}
+              <a href="/dashboard" className="text-[var(--red)] font-semibold">
+                continuar en modo local
+              </a>
+            </p>
+          )}
+        </form>
       </div>
     </div>
   );

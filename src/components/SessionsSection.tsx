@@ -23,15 +23,17 @@ function matchToolIcon(toolName: string): string {
   return found?.icon ?? '🔧';
 }
 
-function firstSentence(text: string | undefined, maxLen?: number): string {
+/** Truncate by character count; break at last space before limit when possible. */
+function truncatePreview(text: string | undefined, maxLen = 180): string {
   if (!text?.trim()) return '';
   const trimmed = text.trim();
-  const match = trimmed.match(/^[^.!?]+[.!?]?/);
-  let out = (match ? match[0] : trimmed).trim();
-  if (maxLen && out.length > maxLen) {
-    out = `${out.slice(0, maxLen).trim()}…`;
+  if (trimmed.length <= maxLen) return trimmed;
+  let cut = trimmed.slice(0, maxLen);
+  const lastSpace = cut.lastIndexOf(' ');
+  if (lastSpace > maxLen * 0.6) {
+    cut = cut.slice(0, lastSpace);
   }
-  return out;
+  return `${cut.trim()}…`;
 }
 
 function levelAccent(level: string): string {
@@ -48,8 +50,8 @@ function SessionPartCard({ part, level }: { part: PartGroup; level: string }) {
   const task = part.stages.task;
   const reflection = part.stages.reflection;
 
-  const videoSummary = firstSentence(video?.videoDescription);
-  const taskSummary = firstSentence(task?.taskPrompt, 150);
+  const videoSummary = truncatePreview(video?.videoDescription);
+  const taskSummary = truncatePreview(task?.taskPrompt);
 
   return (
     <article

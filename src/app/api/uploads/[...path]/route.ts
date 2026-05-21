@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { UPLOAD_ROOT } from '@/lib/upload-storage';
+import { getSessionUserId } from '@/lib/completions-service';
+import { createAdminClient } from '@/lib/supabase/admin';
+import {
+  SUPABASE_BUCKET,
+  UPLOAD_ROOT,
+  isSupabaseStorageMode,
+} from '@/lib/upload-storage';
+import { isLocalMode } from '@/lib/local-db';
 
 const MIME_BY_EXT: Record<string, string> = {
   '.png': 'image/png',
@@ -9,6 +16,8 @@ const MIME_BY_EXT: Record<string, string> = {
   '.jpeg': 'image/jpeg',
   '.pdf': 'application/pdf',
 };
+
+const SIGNED_URL_TTL_SECONDS = 60;
 
 type RouteContext = { params: Promise<{ path: string[] }> };
 
@@ -24,6 +33,41 @@ export async function GET(_request: Request, context: RouteContext) {
     return NextResponse.json({ error: 'Ruta inválida' }, { status: 400 });
   }
 
+  // ── Supabase Storage mode ────────────────────────────────────────────────
+  if (!isLocalMode() && isSupabaseStorageMode()) {
+    const session = await getSessionUserId();
+    if (!session) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    }
+    // Owner-only — admins fetching files for moderation will be handled
+    // separately if/when needed. Cheap and safe to gate at the route level.
+    if (session.userId !== userId) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
+    }
+
+    const admin = createAdminClient();
+    if (!admin) {
+      return NextResponse.json(
+        { error: 'Servidor mal configurado' },
+        { status: 500 }
+      );
+    }
+    const objectPath = `${userId}/${filename}`;
+    const { data, error } = await admin.storage
+      .from(SUPABASE_BUCKET)
+      .createSignedUrl(objectPath, SIGNED_URL_TTL_SECONDS);
+    if (error || !data?.signedUrl) {
+      return NextResponse.json(
+        { error: error?.message || 'No se encontró el archivo' },
+        { status: 404 }
+      );
+    }
+    // 302 redirect — the browser fetches the file directly from Storage with
+    // the short-lived signed URL, so no bytes flow through this route.
+    return NextResponse.redirect(data.signedUrl, 302);
+  }
+
+  // ── Local mode ───────────────────────────────────────────────────────────
   const safeUser = userId.replace(/[^a-zA-Z0-9._-]/g, '_');
   const dir = path.join(UPLOAD_ROOT, safeUser);
   const full = path.join(dir, filename);

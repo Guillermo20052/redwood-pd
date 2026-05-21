@@ -4,6 +4,7 @@ import { isLocalMode, localDb } from '@/lib/local-db';
 import { createClient } from '@/lib/supabase/server';
 import { sumVerifiedHours } from '@/lib/verification';
 import { getEarnedTiers, type DiplomaTier } from '@/lib/diplomas';
+import { isAdminUser } from '@/lib/auth-helpers';
 
 const TIERS = new Set<DiplomaTier>([1, 2, 3]);
 
@@ -55,6 +56,12 @@ export async function POST(request: Request) {
   const tier = body.tier as DiplomaTier;
   if (!TIERS.has(tier)) {
     return NextResponse.json({ error: 'tier debe ser 1, 2 o 3' }, { status: 400 });
+  }
+
+  // Admins never earn diplomas — they navigate for inspection only.
+  const adminCheck = await isAdminUser(session.userId);
+  if (adminCheck) {
+    return NextResponse.json({ ok: false, adminSkip: true });
   }
 
   // Server-side gate: don't trust the client's claim. Recompute hours.

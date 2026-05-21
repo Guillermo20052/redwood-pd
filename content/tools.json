@@ -73,10 +73,10 @@
       "url": "https://gamma.app"
     },
     {
-      "name": "PowerPoint Copilot",
-      "icon": "📊",
-      "desc": "Diapositivas con IA dentro de PowerPoint",
-      "url": "https://www.microsoft.com/microsoft-365/copilot"
+      "name": "Napkin AI",
+      "icon": "📐",
+      "desc": "Diagramas visuales desde texto plano",
+      "url": "https://napkin.ai"
     },
     {
       "name": "ElevenLabs",

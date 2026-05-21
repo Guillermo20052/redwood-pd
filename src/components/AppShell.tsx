@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { ProgressBanner } from './ProgressBanner';
+import { HelpChatbot } from './HelpChatbot';
 import { useProgressContext } from './Providers';
 import { createClient } from '@/lib/supabase/client';
 
@@ -128,6 +129,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <main className={isLevelPage ? 'flex-1' : 'flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full'}>
         {children}
       </main>
+
+      <HelpChatbot />
     </div>
   );
 }

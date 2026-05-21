@@ -1,7 +1,29 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-const publicPaths = ['/login', '/signup', '/auth/callback'];
+const PUBLIC_PATHS = ['/login', '/signup', '/auth/callback'];
+
+const PROTECTED_PREFIXES = [
+  '/dashboard',
+  '/nivel',
+  '/logros',
+  '/etica',
+  '/reflexion',
+  '/comunidad',
+  '/evaluacion',
+  '/admin',
+  '/importar',
+];
+
+function isPublicPath(pathname: string): boolean {
+  return PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'));
+}
+
+function isProtectedPath(pathname: string): boolean {
+  // "/" redirects to /dashboard, so treat it as protected.
+  if (pathname === '/') return true;
+  return PROTECTED_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + '/'));
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -9,8 +31,7 @@ export async function middleware(request: NextRequest) {
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
-    pathname.includes('.') ||
-    publicPaths.some((p) => pathname.startsWith(p))
+    pathname.includes('.')
   ) {
     return NextResponse.next();
   }
@@ -18,6 +39,7 @@ export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+  // Local mode: no auth gating at all.
   if (!supabaseUrl || !supabaseKey) {
     return NextResponse.next();
   }
@@ -42,9 +64,21 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  // Already authenticated → bounce away from /login and /signup.
+  if (user && (pathname === '/login' || pathname === '/signup')) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/dashboard';
+    url.search = '';
+    return NextResponse.redirect(url);
+  }
+
+  // Unauthenticated → only protected paths are gated. Marketing/public paths
+  // (login, signup, auth callback, anything we haven't explicitly listed) fall
+  // through.
+  if (!user && isProtectedPath(pathname) && !isPublicPath(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
+    url.searchParams.set('next', pathname);
     return NextResponse.redirect(url);
   }
 

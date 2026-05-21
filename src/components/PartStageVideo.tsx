@@ -12,10 +12,11 @@ type Props = {
 };
 
 export function PartStageVideo({ item, level, onVerified }: Props) {
-  const { verifyVideo } = useProgressContext();
+  const { verifyVideo, profile } = useProgressContext();
   const [skipping, setSkipping] = useState(false);
   const [skipError, setSkipError] = useState('');
 
+  const isAdmin = profile.role === 'admin';
   const allowSkip = level === 'b';
 
   const handleSkip = async () => {
@@ -24,6 +25,25 @@ export function PartStageVideo({ item, level, onVerified }: Props) {
     setSkipError('');
     try {
       await verifyVideo(item.itemKey, 1, true);
+      onVerified();
+    } catch (e) {
+      setSkipError((e as Error).message);
+      setSkipping(false);
+    }
+  };
+
+  const handleAdminSkip = async () => {
+    if (skipping) return;
+    setSkipping(true);
+    setSkipError('');
+    try {
+      const res = await fetch('/api/verify/video', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itemKey: item.itemKey, watchPct: 1, skipped: true, adminSkip: true }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || 'Error al saltar');
       onVerified();
     } catch (e) {
       setSkipError((e as Error).message);
@@ -53,7 +73,7 @@ export function PartStageVideo({ item, level, onVerified }: Props) {
         </p>
       ) : null}
 
-      {allowSkip && (
+      {allowSkip && !isAdmin && (
         <div className="flex flex-wrap items-center gap-3 pt-1">
           <button
             type="button"
@@ -65,6 +85,28 @@ export function PartStageVideo({ item, level, onVerified }: Props) {
           </button>
           <span className="text-[10px] text-[var(--gray-500)]">
             Solo disponible en Nivel 1
+          </span>
+        </div>
+      )}
+
+      {isAdmin && (
+        <div className="flex flex-wrap items-center gap-3 pt-1">
+          <button
+            type="button"
+            onClick={handleAdminSkip}
+            disabled={skipping}
+            style={{
+              background: 'color-mix(in srgb, var(--gold) 20%, transparent)',
+              border: '1.5px solid var(--gold)',
+              color: 'var(--gold)',
+              fontWeight: 700,
+            }}
+            className="rounded-lg px-4 py-1.5 text-sm disabled:opacity-50"
+          >
+            {skipping ? 'Saltando…' : 'Saltar video (admin)'}
+          </button>
+          <span className="text-[10px] text-[var(--gray-500)]">
+            Vista admin — no registra progreso
           </span>
         </div>
       )}

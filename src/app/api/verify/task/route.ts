@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSessionUserId, loadCompletions, saveCompletions } from '@/lib/completions-service';
 import { canVerifyItem, verifyTask, VerificationError } from '@/lib/verification';
+import { isAdminUser } from '@/lib/auth-helpers';
 import {
   getPathItem,
   getTaskRubricFields,
@@ -8,7 +9,13 @@ import {
   type TaskInputType,
 } from '@/lib/curriculum-path';
 import { gradeTaskSubmission } from '@/lib/ai-grader';
-import { fileUrlToPath } from '@/lib/upload-storage';
+import {
+  fileUrlToPath,
+  isSupabaseStorageMode,
+  parseUploadUrl,
+} from '@/lib/upload-storage';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { SUPABASE_BUCKET } from '@/lib/upload-storage';
 import fs from 'fs';
 
 type PartnerInput = {
@@ -25,6 +32,27 @@ function fileUrlBelongsToUser(fileUrl: string, userId: string): boolean {
   return fileUrl.startsWith(`/api/uploads/${safeUser}/`);
 }
 
+/**
+ * Confirm the uploaded file actually exists before we burn an LLM call grading
+ * it. In Supabase Storage mode we just probe with a HEAD-equivalent listing;
+ * in local mode we stat the file on disk.
+ */
+async function uploadedFileExists(fileUrl: string): Promise<boolean> {
+  if (isSupabaseStorageMode()) {
+    const parsed = parseUploadUrl(fileUrl);
+    if (!parsed) return false;
+    const admin = createAdminClient();
+    if (!admin) return false;
+    const { data, error } = await admin.storage
+      .from(SUPABASE_BUCKET)
+      .list(parsed.userId, { search: parsed.filename, limit: 1 });
+    if (error) return false;
+    return (data || []).some((obj) => obj.name === parsed.filename);
+  }
+  const localPath = fileUrlToPath(fileUrl);
+  return !!(localPath && fs.existsSync(localPath));
+}
+
 export async function POST(request: Request) {
   const session = await getSessionUserId();
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -35,11 +63,18 @@ export async function POST(request: Request) {
     fileUrl?: string;
     inputType?: string;
     partner?: PartnerInput | null;
+    adminSkip?: boolean;
   };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: 'JSON inválido' }, { status: 400 });
+  }
+
+  if (body.adminSkip) {
+    const admin = await isAdminUser(session.userId);
+    if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    return NextResponse.json({ ok: true, adminSkip: true });
   }
 
   const { itemKey, evidenceText, fileUrl, inputType: bodyInputType, partner } = body;
@@ -86,8 +121,8 @@ export async function POST(request: Request) {
     if (!fileUrlBelongsToUser(fileUrl, session.userId)) {
       return NextResponse.json({ error: 'Archivo no válido para tu cuenta.' }, { status: 400 });
     }
-    const filePath = fileUrlToPath(fileUrl);
-    if (!filePath || !fs.existsSync(filePath)) {
+    const existsCheck = await uploadedFileExists(fileUrl);
+    if (!existsCheck) {
       return NextResponse.json(
         { error: 'No se encontró el archivo subido. Vuelve a subirlo.' },
         { status: 400 }
@@ -115,8 +150,12 @@ export async function POST(request: Request) {
     );
   }
 
+  // filePath is only meaningful in local mode — in Supabase mode the grader
+  // downloads from Storage using fileUrl.
   const filePath =
-    inputType !== 'text' && fileUrl ? fileUrlToPath(fileUrl) ?? undefined : undefined;
+    inputType !== 'text' && fileUrl && !isSupabaseStorageMode()
+      ? fileUrlToPath(fileUrl) ?? undefined
+      : undefined;
 
   const rubricFields = getTaskRubricFields(item.taskRubric);
   const toolName = rubricFields.toolName ?? item.primaryTools?.[0];

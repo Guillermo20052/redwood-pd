@@ -2,7 +2,15 @@ import 'server-only';
 import fs from 'fs';
 import Anthropic from '@anthropic-ai/sdk';
 import type { TaskInputType } from './curriculum-path';
-import { detectMediaType, fileUrlToPath, readFileBase64 } from './upload-storage';
+import { createAdminClient } from './supabase/admin';
+import {
+  SUPABASE_BUCKET,
+  detectMediaType,
+  fileUrlToPath,
+  fileUrlToStoragePath,
+  isSupabaseStorageMode,
+  readFileBase64,
+} from './upload-storage';
 
 export type TaskGradeResult = {
   passed: boolean;
@@ -133,14 +141,52 @@ function extractPassFailJson(raw: string): { passed: boolean; feedback: string }
   throw new Error('passed');
 }
 
-function resolveFilePath(input: GradeTaskInput): string {
+type FileBytes = {
+  base64: string;
+  /** Best-effort source extension (".png" / ".pdf" / ".jpg") for media-type guessing. */
+  ext: string;
+};
+
+async function loadSubmissionBytes(input: GradeTaskInput): Promise<FileBytes> {
+  // Prefer an explicit on-disk path when the caller has one (local mode flow).
   if (input.filePath && fs.existsSync(input.filePath)) {
-    return input.filePath;
+    return {
+      base64: readFileBase64(input.filePath),
+      ext: input.filePath.toLowerCase(),
+    };
   }
+
   if (input.fileUrl) {
+    // Supabase Storage mode: download the object with the service-role client
+    // so we don't need a user session here.
+    if (isSupabaseStorageMode()) {
+      const storagePath = fileUrlToStoragePath(input.fileUrl);
+      if (storagePath) {
+        const admin = createAdminClient();
+        if (!admin) {
+          throw new Error('Servidor mal configurado: falta SUPABASE_SERVICE_ROLE_KEY.');
+        }
+        const { data, error } = await admin.storage
+          .from(SUPABASE_BUCKET)
+          .download(storagePath);
+        if (error || !data) {
+          throw new Error(
+            'No se encontró el archivo subido. Vuelve a subirlo e intenta de nuevo.'
+          );
+        }
+        const arrayBuf = await data.arrayBuffer();
+        const base64 = Buffer.from(arrayBuf).toString('base64');
+        return { base64, ext: storagePath.toLowerCase() };
+      }
+    }
+
+    // Local mode fallback: resolve to a file on disk.
     const resolved = fileUrlToPath(input.fileUrl);
-    if (resolved && fs.existsSync(resolved)) return resolved;
+    if (resolved && fs.existsSync(resolved)) {
+      return { base64: readFileBase64(resolved), ext: resolved.toLowerCase() };
+    }
   }
+
   throw new Error('No se encontró el archivo subido. Vuelve a subirlo e intenta de nuevo.');
 }
 
@@ -205,9 +251,7 @@ async function gradeFileSubmission(input: GradeTaskInput): Promise<TaskGradeResu
     throw new Error('Tipo de entrada de archivo inválido');
   }
 
-  const filePath = resolveFilePath(input);
-  const base64 = readFileBase64(filePath);
-  const ext = filePath.toLowerCase();
+  const { base64, ext } = await loadSubmissionBytes(input);
   const mimeGuess = ext.endsWith('.pdf')
     ? 'application/pdf'
     : ext.endsWith('.png')

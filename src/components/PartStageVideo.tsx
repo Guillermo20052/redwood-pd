@@ -12,7 +12,7 @@ type Props = {
 };
 
 export function PartStageVideo({ item, level, onVerified }: Props) {
-  const { verifyVideo, profile } = useProgressContext();
+  const { verifyVideo, markAdminSkipped, profile } = useProgressContext();
   const [skipping, setSkipping] = useState(false);
   const [skipError, setSkipError] = useState('');
 
@@ -44,6 +44,8 @@ export function PartStageVideo({ item, level, onVerified }: Props) {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error || 'Error al saltar');
+      // Advance stage via local state — no DB record written
+      markAdminSkipped(item.itemKey);
       onVerified();
     } catch (e) {
       setSkipError((e as Error).message);

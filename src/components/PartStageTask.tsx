@@ -49,7 +49,7 @@ function promptParagraphs(text: string): string[] {
 }
 
 export function PartStageTask({ item, collaborative, onVerified }: Props) {
-  const { verifyTask, completions, profile } = useProgressContext();
+  const { verifyTask, completions, markAdminSkipped, profile } = useProgressContext();
   const isAdmin = profile.role === 'admin';
   const inputType: TaskInputType = item.inputType ?? 'text';
   const isFileTask = inputType === 'screenshot' || inputType === 'document';
@@ -180,6 +180,8 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error || 'Error al saltar');
+      // Advance stage via local state — no DB record written
+      markAdminSkipped(item.itemKey);
       onVerified();
     } catch (e) {
       setErrorMessage((e as Error).message);

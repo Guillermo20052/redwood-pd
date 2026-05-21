@@ -33,6 +33,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const progress = useProgressContext();
+  const isAdmin = progress.profile.role === 'admin';
   const isLevelPage = pathname.startsWith('/nivel/');
   const [localMode, setLocalMode] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -84,7 +85,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               ☰
             </button>
-            {localMode && (
+            {IS_DEV && localMode && (
               <span className="header-badge text-[10px]">Modo local</span>
             )}
             {IS_DEV && <DevResetMenu />}
@@ -124,6 +125,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Link>
           );
         })}
+        {isAdmin && (
+          <Link
+            href="/maestras"
+            className={`level-tab no-underline ${pathname === '/maestras' || pathname.startsWith('/maestras') ? 'active' : ''}`}
+            aria-current={pathname === '/maestras' ? 'page' : undefined}
+            onClick={() => setMobileNavOpen(false)}
+            style={{ color: 'var(--gold)', fontWeight: 700 }}
+          >
+            <span className="dot" style={{ background: 'var(--gold)' }} />
+            Maestras
+          </Link>
+        )}
       </nav>
 
       <main className={isLevelPage ? 'flex-1' : 'flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full'}>
@@ -136,6 +149,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 }
 
 function DevResetMenu() {
+  if (!IS_DEV) return null;
   const { refreshCompletions } = useProgressContext();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);

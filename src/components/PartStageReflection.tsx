@@ -10,7 +10,7 @@ type Props = {
 };
 
 export function PartStageReflection({ item, onVerified }: Props) {
-  const { verifyReflection, profile } = useProgressContext();
+  const { verifyReflection, markAdminSkipped, profile } = useProgressContext();
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [adminSkipping, setAdminSkipping] = useState(false);
@@ -46,6 +46,8 @@ export function PartStageReflection({ item, onVerified }: Props) {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error || 'Error al saltar');
+      // Advance stage via local state — no DB record written
+      markAdminSkipped(item.itemKey);
       onVerified();
     } catch (e) {
       setError((e as Error).message);

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CompletionMap } from '@/lib/verification';
+import { curriculumPath } from '@/lib/curriculum-path';
 import { sumVerifiedHours, getDiplomaTier, progressPercent } from '@/lib/progress';
 import { getEarnedTiers, type DiplomaTier } from '@/lib/diplomas';
 
@@ -129,6 +130,36 @@ export function useProgress() {
     return applyVerifyResponse(res);
   }, [applyVerifyResponse]);
 
+  /**
+   * Admin-only: marks an item as verified in local memory only.
+   * Does NOT write to the database. Also unlocks the immediately-next
+   * item in the curriculum path so the stage UI advances without a
+   * server round-trip. Vanishes on page refresh — intentional.
+   */
+  const markAdminSkipped = useCallback((itemKey: string) => {
+    setCompletions((prev) => {
+      const updated = { ...prev };
+      updated[itemKey] = {
+        ...(prev[itemKey] ?? {}),
+        item_key: itemKey,
+        status: 'verified',
+        verified_at: new Date().toISOString(),
+      };
+      const idx = curriculumPath.findIndex((p) => p.itemKey === itemKey);
+      if (idx >= 0 && idx < curriculumPath.length - 1) {
+        const nextKey = curriculumPath[idx + 1].itemKey;
+        if (!updated[nextKey] || updated[nextKey].status === 'locked') {
+          updated[nextKey] = {
+            ...(updated[nextKey] ?? {}),
+            item_key: nextKey,
+            status: 'available',
+          };
+        }
+      }
+      return updated;
+    });
+  }, []);
+
   const totalHours = sumVerifiedHours(completions);
   const percent = progressPercent(totalHours);
   const diplomaTier = getDiplomaTier(totalHours);
@@ -186,6 +217,7 @@ export function useProgress() {
     verifyVideo,
     verifyTask,
     verifyReflection,
+    markAdminSkipped,
     totalHours,
     percent,
     diplomaTier,

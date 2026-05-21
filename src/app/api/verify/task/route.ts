@@ -1,8 +1,13 @@
 import { NextResponse } from 'next/server';
 import { getSessionUserId, loadCompletions, saveCompletions } from '@/lib/completions-service';
 import { canVerifyItem, verifyTask, VerificationError } from '@/lib/verification';
-import { getPathItem, verificationConfig, type TaskInputType } from '@/lib/curriculum-path';
-import { gradeTaskSubmission, TASK_PASSING_SCORE } from '@/lib/ai-grader';
+import {
+  getPathItem,
+  getTaskRubricFields,
+  verificationConfig,
+  type TaskInputType,
+} from '@/lib/curriculum-path';
+import { gradeTaskSubmission } from '@/lib/ai-grader';
 import { fileUrlToPath } from '@/lib/upload-storage';
 import fs from 'fs';
 
@@ -113,12 +118,19 @@ export async function POST(request: Request) {
   const filePath =
     inputType !== 'text' && fileUrl ? fileUrlToPath(fileUrl) ?? undefined : undefined;
 
+  const rubricFields = getTaskRubricFields(item.taskRubric);
+  const toolName = rubricFields.toolName ?? item.primaryTools?.[0];
+  const taskGoal =
+    rubricFields.taskGoal ?? item.partTitle?.trim() ?? item.label;
+  const taskRubricForGrader =
+    typeof item.taskRubric === 'string' ? item.taskRubric : undefined;
+
   let grade;
   try {
     grade = await gradeTaskSubmission({
       inputType,
       taskPrompt: item.taskPrompt ?? item.label,
-      taskRubric: item.taskRubric,
+      taskRubric: taskRubricForGrader,
       evidenceText: trimmed,
       fileUrl: fileUrl ?? undefined,
       filePath,
@@ -126,20 +138,20 @@ export async function POST(request: Request) {
       level: item.level,
       collaborative,
       partnerName: collaborative ? partnerName : undefined,
-      toolName: item.primaryTools?.[0],
-      taskGoal: item.partTitle ?? item.label,
+      toolName,
+      taskGoal,
     });
   } catch (e) {
     const message = (e as Error).message || 'Error al evaluar la tarea.';
     return NextResponse.json({ error: message }, { status: 500 });
   }
 
-  if (grade.score < TASK_PASSING_SCORE) {
+  if (!grade.passed) {
     return NextResponse.json({
       ok: false,
-      score: grade.score,
+      passed: false,
       feedback: grade.feedback,
-      passingScore: TASK_PASSING_SCORE,
+      ...(grade.characterCount != null ? { characterCount: grade.characterCount } : {}),
     });
   }
 
@@ -148,17 +160,16 @@ export async function POST(request: Request) {
       current,
       itemKey,
       trimmed,
-      { score: grade.score, feedback: grade.feedback },
+      { passed: true, feedback: grade.feedback },
       collaborative ? { user_id: partnerUserId, name: partnerName } : null,
       { inputType, fileUrl: fileUrl ?? null }
     );
     await saveCompletions(session.userId, updated);
     return NextResponse.json({
       ok: true,
-      completions: updated,
-      score: grade.score,
+      passed: true,
       feedback: grade.feedback,
-      passingScore: TASK_PASSING_SCORE,
+      completions: updated,
     });
   } catch (e) {
     const status = e instanceof VerificationError ? e.status : 400;

@@ -4,10 +4,10 @@ import Anthropic from '@anthropic-ai/sdk';
 import type { TaskInputType } from './curriculum-path';
 import { detectMediaType, fileUrlToPath, readFileBase64 } from './upload-storage';
 
-export type GradeResult = {
-  score: number;
-  feedback: string;
+export type TaskGradeResult = {
   passed: boolean;
+  feedback: string;
+  characterCount?: number;
 };
 
 export type GradeTaskInput = {
@@ -21,67 +21,78 @@ export type GradeTaskInput = {
   level: string;
   collaborative?: boolean;
   partnerName?: string;
-  /** Placeholder until per-task tool wiring (next prompt). */
   toolName?: string;
   taskGoal?: string;
 };
 
+export const TEXT_GRADE_MIN_CHARS = 400;
+
 const MODEL = 'claude-sonnet-4-5';
 const MAX_TOKENS = 600;
 const TEMPERATURE = 0.2;
-const PASSING_SCORE = 85;
 
 const SYSTEM_PROMPT =
-  'Eres un evaluador pedagógico experto del Liceo Redwood en Monterrey. ' +
-  'Evalúas tareas de un programa de desarrollo profesional para docentes sobre el uso de IA en sus clases. ' +
-  'Tu trabajo es leer la evidencia que entrega una docente y calificarla del 1 al 100 según la rúbrica provista. ' +
-  'Después de la calificación, escribes 2 o 3 oraciones de retroalimentación constructiva, en español, ' +
-  'dirigidas directamente a la docente con tono cálido pero honesto. No inventas elogios. ' +
-  'Si el trabajo es flojo, lo dices con respeto. Si es excelente, lo afirmas. ' +
-  'La docente puede reintentar sin límite, así que tu retroalimentación debe ayudarla a mejorar concretamente.';
+  'Eres el evaluador del programa Redwood PD para docentes de bachillerato IB en México. ' +
+  'Apruebas entregas con generosidad pedagógica cuando hay esfuerzo honesto y cumplen el mínimo razonable. ' +
+  'No eres examinador académico. Responde solo con JSON válido.';
 
-function buildTextUserPrompt(input: GradeTaskInput): string {
-  const declaredPartner = (input.partnerName ?? '').trim();
-  let collabLine = '';
+function buildGradingPrompt(input: GradeTaskInput, submissionContent: string): string {
+  const inputType = input.inputType ?? 'text';
+  const toolName = input.toolName ?? 'una herramienta de IA';
+  const taskGoal = input.taskGoal ?? input.taskPrompt;
+  const consigna = input.taskPrompt;
+
+  let collabBlock = '';
   if (input.collaborative) {
-    collabLine =
-      'TAREA COLABORATIVA: sí — la docente debió emparejarse con otra docente y debe incluir su nombre al inicio del texto.\n';
-    if (declaredPartner.length >= 3) {
-      collabLine +=
-        `COMPAÑERA DECLARADA: ${declaredPartner} — verifica que este nombre aparezca al inicio del texto entregado.\n`;
-    } else {
-      collabLine +=
-        'COMPAÑERA DECLARADA: (no declarada) — esta tarea es colaborativa pero la docente no declaró compañera. Penaliza fuerte.\n';
-    }
-    collabLine += '\n';
+    const partner = (input.partnerName ?? '').trim();
+    collabBlock =
+      '\nNOTA COLABORATIVA: Esta tarea es en pareja. Si el texto no menciona a la compañera declarada' +
+      (partner.length >= 3 ? ` (${partner})` : '') +
+      ' al inicio, puedes marcar passed=false solo si la consigna exige explícitamente el nombre y no aparece.\n';
   }
 
   return (
-    `NIVEL: ${input.level}\n` +
-    `PARTE: ${input.partTitle}\n` +
-    `${collabLine}` +
-    `CONSIGNA DE LA TAREA:\n${input.taskPrompt}\n\n` +
-    `RÚBRICA DE EVALUACIÓN:\n${input.taskRubric ?? '(sin rúbrica)'}\n\n` +
-    `EVIDENCIA ENTREGADA POR LA DOCENTE:\n"""\n${input.evidenceText ?? ''}\n"""\n\n` +
-    `Responde EXCLUSIVAMENTE con un objeto JSON válido en este formato exacto, sin texto adicional:\n` +
-    `{\n  "score": <número entero del 0 al 100>,\n  "feedback": "<2 o 3 oraciones en español>"\n}`
+    `Eres el evaluador del programa de desarrollo profesional "Redwood PD". Las docentes participantes son maestras de bachillerato IB en México, aprendiendo a usar herramientas de IA por primera vez. Tu trabajo es revisar entregas con generosidad pedagógica — apruebas si hay esfuerzo honesto y la entrega cumple el mínimo razonable. No eres examinador académico.
+
+CONTEXTO DE LA TAREA:
+- Herramienta enseñada: ${toolName}
+- Objetivo de la tarea: ${taskGoal}
+- Consigna: ${consigna}
+- Tipo de entrega: ${inputType}
+${collabBlock}
+CRITERIOS DE APROBACIÓN según tipo:
+
+Si inputType es "text":
+- PASA si la entrega tiene 400+ caracteres Y está claramente relacionada con la tarea
+- NO PASA si está vacía, muy corta (<400 chars), o claramente fuera de tema
+- NO juzgues calidad de escritura, profundidad de análisis, ni completitud — solo presencia de esfuerzo honesto y relevancia mínima
+
+Si inputType es "screenshot":
+- PASA si la imagen muestra evidencia razonable de uso de ${toolName} con propósito relacionado a la tarea
+- NO PASA si la imagen está en blanco, es claramente no relacionada, o muestra una herramienta diferente
+- NO juzgues calidad del prompt, calidad de la respuesta de la IA, ni completitud del trabajo
+
+Si inputType es "document":
+- PASA si el documento es real (no vacío, no corrupto), parece provenir de ${toolName} o ser consistente con lo que esa herramienta genera, y es aproximadamente relevante a la tarea
+- NO PASA si está vacío, dañado, claramente generado por otra herramienta no autorizada, o sin relación con la tarea
+- NO juzgues calidad pedagógica, alineación IB perfecta, ni nivel de detalle
+
+FORMATO DE RESPUESTA (JSON estricto):
+{
+  "passed": boolean,
+  "feedback": "string de 1-2 oraciones"
+}
+
+Reglas para el feedback:
+- Si passed=true: celebra el logro brevemente + UNA idea concreta de cómo llevar lo aprendido al aula. Tono cálido. Máximo 2 oraciones. Usa la forma femenina ("docente", "maestra", "alumna"). Termina con un emoji apropiado (💪, 🌟, ✨, 📚 — uno solo).
+- Si passed=false: explica con cariño qué falta para aprobar, en términos concretos y accionables. NO seas crítica de la calidad — solo del cumplimiento mínimo. Sugiere una acción específica para volver a intentar. Tono coach, no examinador. Termina con "Inténtalo otra vez, vas bien." o frase similar.
+
+LA ENTREGA DE LA DOCENTE:
+${submissionContent}`
   );
 }
 
-function buildFileGradingPrompt(input: GradeTaskInput): string {
-  const tool = input.toolName ?? 'una herramienta de IA';
-  const goal = input.taskGoal ?? input.taskPrompt;
-  return (
-    `Esta es una entrega de una docente que aprende a usar ${tool} para ${goal}. ` +
-    `Revisa el archivo adjunto y determina si muestra evidencia razonable de haber usado la herramienta ` +
-    `para el propósito descrito.\n\n` +
-    `CONSIGNA DE LA TAREA:\n${input.taskPrompt}\n\n` +
-    `Responde EXCLUSIVAMENTE con un objeto JSON válido, sin texto adicional:\n` +
-    `{\n  "passed": <true o false>,\n  "feedback": "<2 o 3 oraciones en español>"\n}`
-  );
-}
-
-function extractJson(raw: string): { score: number; feedback: string } {
+function extractPassFailJson(raw: string): { passed: boolean; feedback: string } {
   let text = raw.trim();
 
   const fenceMatch = text.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
@@ -96,9 +107,9 @@ function extractJson(raw: string): { score: number; feedback: string } {
   }
 
   const parsed = JSON.parse(text) as {
-    score?: unknown;
-    feedback?: unknown;
     passed?: unknown;
+    feedback?: unknown;
+    score?: unknown;
   };
   if (typeof parsed !== 'object' || parsed === null) {
     throw new Error('shape');
@@ -110,14 +121,16 @@ function extractJson(raw: string): { score: number; feedback: string } {
   }
 
   if (typeof parsed.passed === 'boolean') {
-    return { score: parsed.passed ? 100 : 0, feedback };
+    return { passed: parsed.passed, feedback };
   }
 
+  // Legacy score fallback during transition
   const score = Number(parsed.score);
-  if (!Number.isFinite(score) || !Number.isInteger(score) || score < 0 || score > 100) {
-    throw new Error('score');
+  if (Number.isFinite(score)) {
+    return { passed: score >= 85, feedback };
   }
-  return { score, feedback };
+
+  throw new Error('passed');
 }
 
 function resolveFilePath(input: GradeTaskInput): string {
@@ -131,7 +144,18 @@ function resolveFilePath(input: GradeTaskInput): string {
   throw new Error('No se encontró el archivo subido. Vuelve a subirlo e intenta de nuevo.');
 }
 
-async function gradeTextSubmission(input: GradeTaskInput): Promise<GradeResult> {
+function shortCircuitTooShort(charCount: number): TaskGradeResult {
+  return {
+    passed: false,
+    feedback: `Necesitas al menos ${TEXT_GRADE_MIN_CHARS} caracteres para mostrar tu reflexión. Llevas ${charCount}. Agrega más detalle sobre lo que aprendiste o probaste con la herramienta. Inténtalo otra vez, vas bien.`,
+    characterCount: charCount,
+  };
+}
+
+async function callClaude(
+  input: GradeTaskInput,
+  userContent: Anthropic.MessageCreateParams['messages'][0]['content']
+): Promise<TaskGradeResult> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     throw new Error('ANTHROPIC_API_KEY no está configurada. Agrega la clave en .env.local.');
@@ -143,18 +167,39 @@ async function gradeTextSubmission(input: GradeTaskInput): Promise<GradeResult> 
     max_tokens: MAX_TOKENS,
     temperature: TEMPERATURE,
     system: SYSTEM_PROMPT,
-    messages: [{ role: 'user', content: buildTextUserPrompt(input) }],
+    messages: [{ role: 'user', content: userContent }],
   });
 
-  return parseMessageResponse(message);
-}
-
-async function gradeFileSubmission(input: GradeTaskInput): Promise<GradeResult> {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    throw new Error('ANTHROPIC_API_KEY no está configurada. Agrega la clave en .env.local.');
+  const textBlock = message.content.find((block) => block.type === 'text');
+  if (!textBlock || textBlock.type !== 'text') {
+    throw new Error('No se pudo procesar la respuesta del evaluador. Intenta de nuevo.');
   }
 
+  try {
+    const parsed = extractPassFailJson(textBlock.text);
+    return { passed: parsed.passed, feedback: parsed.feedback };
+  } catch {
+    throw new Error('No se pudo procesar la respuesta del evaluador. Intenta de nuevo.');
+  }
+}
+
+async function gradeTextSubmission(input: GradeTaskInput): Promise<TaskGradeResult> {
+  const evidence = (input.evidenceText ?? '').trim();
+  const charCount = evidence.length;
+
+  if (charCount < TEXT_GRADE_MIN_CHARS) {
+    return shortCircuitTooShort(charCount);
+  }
+
+  const prompt = buildGradingPrompt(
+    { ...input, inputType: 'text' },
+    `"""\n${evidence}\n"""\n\n(Conteo de caracteres: ${charCount})`
+  );
+
+  return callClaude(input, prompt);
+}
+
+async function gradeFileSubmission(input: GradeTaskInput): Promise<TaskGradeResult> {
   const inputType = input.inputType;
   if (inputType !== 'screenshot' && inputType !== 'document') {
     throw new Error('Tipo de entrada de archivo inválido');
@@ -169,82 +214,40 @@ async function gradeFileSubmission(input: GradeTaskInput): Promise<GradeResult> 
       ? 'image/png'
       : 'image/jpeg';
   const mediaType = detectMediaType(mimeGuess, inputType);
+  const textPrompt = buildGradingPrompt(input, '[Archivo adjunto en este mensaje]');
 
-  const client = new Anthropic({ apiKey });
-  const textPrompt = buildFileGradingPrompt(input);
-
-  const message =
+  const userContent =
     inputType === 'document'
-      ? await client.messages.create({
-          model: MODEL,
-          max_tokens: MAX_TOKENS,
-          temperature: TEMPERATURE,
-          system: SYSTEM_PROMPT,
-          messages: [
-            {
-              role: 'user',
-              content: [
-                { type: 'text', text: textPrompt },
-                {
-                  type: 'document',
-                  source: {
-                    type: 'base64',
-                    media_type: 'application/pdf',
-                    data: base64,
-                  },
-                },
-              ],
+      ? [
+          { type: 'text' as const, text: textPrompt },
+          {
+            type: 'document' as const,
+            source: {
+              type: 'base64' as const,
+              media_type: 'application/pdf' as const,
+              data: base64,
             },
-          ],
-        })
-      : await client.messages.create({
-          model: MODEL,
-          max_tokens: MAX_TOKENS,
-          temperature: TEMPERATURE,
-          system: SYSTEM_PROMPT,
-          messages: [
-            {
-              role: 'user',
-              content: [
-                { type: 'text', text: textPrompt },
-                {
-                  type: 'image',
-                  source: {
-                    type: 'base64',
-                    media_type: mediaType === 'image/png' ? 'image/png' : 'image/jpeg',
-                    data: base64,
-                  },
-                },
-              ],
+          },
+        ]
+      : [
+          { type: 'text' as const, text: textPrompt },
+          {
+            type: 'image' as const,
+            source: {
+              type: 'base64' as const,
+              media_type: (mediaType === 'image/png' ? 'image/png' : 'image/jpeg') as
+                | 'image/png'
+                | 'image/jpeg',
+              data: base64,
             },
-          ],
-        });
+          },
+        ];
 
-  return parseMessageResponse(message);
-}
-
-function parseMessageResponse(message: Anthropic.Message): GradeResult {
-  const textBlock = message.content.find((block) => block.type === 'text');
-  if (!textBlock || textBlock.type !== 'text') {
-    throw new Error('No se pudo procesar la respuesta del evaluador. Intenta de nuevo.');
-  }
-
-  let parsed: { score: number; feedback: string };
-  try {
-    parsed = extractJson(textBlock.text);
-  } catch {
-    throw new Error('No se pudo procesar la respuesta del evaluador. Intenta de nuevo.');
-  }
-
-  return {
-    score: parsed.score,
-    feedback: parsed.feedback,
-    passed: parsed.score >= PASSING_SCORE,
-  };
+  return callClaude(input, userContent);
 }
 
 /** Grade a task submission (text, screenshot, or document). */
-export async function gradeTaskSubmission(input: GradeTaskInput): Promise<GradeResult> {
+export async function gradeTaskSubmission(input: GradeTaskInput): Promise<TaskGradeResult> {
   const inputType = input.inputType ?? 'text';
   if (inputType === 'screenshot' || inputType === 'document') {
     return gradeFileSubmission(input);
@@ -254,5 +257,3 @@ export async function gradeTaskSubmission(input: GradeTaskInput): Promise<GradeR
 
 /** @deprecated Use gradeTaskSubmission — kept for existing imports. */
 export const gradeTask = gradeTaskSubmission;
-
-export const TASK_PASSING_SCORE = PASSING_SCORE;

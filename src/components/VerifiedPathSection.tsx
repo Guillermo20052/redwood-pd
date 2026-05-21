@@ -2,6 +2,7 @@
 
 import { useCallback, useRef } from 'react';
 import { getPartsByLevel, verificationConfig } from '@/lib/curriculum-path';
+import { getVisibleParts, isPartComplete } from '@/lib/part-progress';
 import type { CompletionMap } from '@/lib/verification';
 import { PartCard } from './PartCard';
 
@@ -14,8 +15,63 @@ type Props = {
   filterType?: 'video' | 'task';
 };
 
+function NextPartTeaser({ partNumber }: { partNumber: number }) {
+  return (
+    <div
+      className="flex items-center gap-3 rounded-lg px-4 py-3"
+      style={{
+        minHeight: 80,
+        border: '1px solid rgba(201, 151, 42, 0.3)',
+        background: 'var(--gray-50)',
+      }}
+    >
+      <span aria-hidden className="text-xl opacity-60">
+        🔒
+      </span>
+      <div className="min-w-0">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--gray-500)]">
+          Próxima parte bloqueada
+        </p>
+        <p className="mt-0.5 text-sm text-[var(--gray-600)] leading-snug">
+          Completa todas las etapas de Parte {partNumber} para desbloquear la siguiente.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function LevelCompleteCelebration() {
+  return (
+    <div
+      className="rounded-lg px-5 py-4 text-center"
+      style={{
+        border: '1px solid #c5e6d0',
+        background: 'var(--green-light)',
+      }}
+    >
+      <div className="text-2xl" aria-hidden>
+        ✅
+      </div>
+      <p
+        className="mt-1 font-condensed text-lg font-extrabold"
+        style={{ color: 'var(--teal)' }}
+      >
+        ¡Completaste el Nivel!
+      </p>
+      <p className="mt-1 text-sm text-[var(--gray-700)] leading-relaxed">
+        Has terminado las 5 partes verificadas. Tu progreso del nivel está al 100%.
+      </p>
+    </div>
+  );
+}
+
 export function VerifiedPathSection({ level, completions }: Props) {
   const parts = getPartsByLevel(level);
+  const visibleParts = getVisibleParts(parts, completions);
+  const allComplete = parts.length > 0 && parts.every((p) => isPartComplete(p, completions));
+  const hasLockedNext = visibleParts.length < parts.length;
+  const lastVisible = visibleParts[visibleParts.length - 1];
+
   const cardRefs = useRef<Map<string, HTMLElement>>(new Map());
 
   const setRef = useCallback((partId: string) => {
@@ -54,7 +110,7 @@ export function VerifiedPathSection({ level, completions }: Props) {
       </p>
 
       <div className="space-y-3">
-        {parts.map((part) => (
+        {visibleParts.map((part) => (
           <PartCard
             key={part.partId}
             ref={setRef(part.partId)}
@@ -63,6 +119,12 @@ export function VerifiedPathSection({ level, completions }: Props) {
             onPartComplete={handlePartComplete}
           />
         ))}
+
+        {allComplete ? <LevelCompleteCelebration /> : null}
+
+        {!allComplete && hasLockedNext && lastVisible ? (
+          <NextPartTeaser partNumber={lastVisible.partNumber} />
+        ) : null}
       </div>
     </section>
   );

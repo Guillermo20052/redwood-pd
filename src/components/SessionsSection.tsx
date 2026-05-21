@@ -1,16 +1,136 @@
 'use client';
 
-import { useState } from 'react';
-import { getSessionsByLevel } from '@/lib/content';
+import { getPartsByLevel, type PartGroup } from '@/lib/curriculum-path';
+import toolsData from '../../content/tools.json';
 
 type Props = { level: string };
 
-export function SessionsSection({ level }: Props) {
-  const sessions = getSessionsByLevel(level);
-  const [weekIdx, setWeekIdx] = useState(0);
-  const [expanded, setExpanded] = useState<number | null>(null);
+const TOOL_ALIASES: Record<string, string> = {
+  magicschool: '🏫',
+  'napkin ai': '📐',
+  brisk: '⚡',
+};
 
-  if (!sessions?.weeks?.length) {
+function matchToolIcon(toolName: string): string {
+  const key = toolName.toLowerCase().trim();
+  for (const [alias, icon] of Object.entries(TOOL_ALIASES)) {
+    if (key.includes(alias)) return icon;
+  }
+  const found = toolsData.tools.find((t) => {
+    const n = t.name.toLowerCase();
+    return key.includes(n) || n.includes(key);
+  });
+  return found?.icon ?? '🔧';
+}
+
+function firstSentence(text: string | undefined, maxLen?: number): string {
+  if (!text?.trim()) return '';
+  const trimmed = text.trim();
+  const match = trimmed.match(/^[^.!?]+[.!?]?/);
+  let out = (match ? match[0] : trimmed).trim();
+  if (maxLen && out.length > maxLen) {
+    out = `${out.slice(0, maxLen).trim()}…`;
+  }
+  return out;
+}
+
+function levelAccent(level: string): string {
+  if (level === 'i') return 'var(--teal)';
+  if (level === 'a') return 'var(--red)';
+  return 'var(--navy)';
+}
+
+function SessionPartCard({ part, level }: { part: PartGroup; level: string }) {
+  const accent = levelAccent(level);
+  const tool = part.primaryTools[0] ?? 'IA';
+  const toolIcon = matchToolIcon(tool);
+  const video = part.stages.video;
+  const task = part.stages.task;
+  const reflection = part.stages.reflection;
+
+  const videoSummary = firstSentence(video?.videoDescription);
+  const taskSummary = firstSentence(task?.taskPrompt, 150);
+
+  return (
+    <article
+      className="session-part-card"
+      style={{
+        border: '1px solid var(--gray-200)',
+        borderLeft: `4px solid ${accent}`,
+        borderRadius: 10,
+        background: '#fff',
+        padding: '14px 16px',
+      }}
+    >
+      <header className="mb-2">
+        <p
+          className="font-condensed font-extrabold uppercase tracking-wide"
+          style={{ fontSize: 13, color: accent, lineHeight: 1.2 }}
+        >
+          Parte {part.partNumber} · {part.partTitle}
+        </p>
+        {part.partSubtitle?.trim() ? (
+          <p
+            className="mt-1 italic text-[var(--gray-600)]"
+            style={{ fontSize: 12, lineHeight: 1.4 }}
+          >
+            {part.partSubtitle.trim()}
+          </p>
+        ) : null}
+        <p className="mt-2 text-xs font-semibold" style={{ color: 'var(--gold)' }}>
+          {toolIcon} Herramienta: {tool}
+        </p>
+      </header>
+
+      <div
+        className="grid gap-2 text-[var(--gray-800)]"
+        style={{ fontSize: 12, lineHeight: 1.5 }}
+      >
+        {videoSummary ? (
+          <p>
+            <span className="font-bold text-[var(--gray-700)]">▶ Video (~36 min):</span>{' '}
+            {videoSummary}
+          </p>
+        ) : null}
+        {taskSummary ? (
+          <p>
+            <span className="font-bold text-[var(--gray-700)]">✎ Tarea (~60 min):</span>{' '}
+            {taskSummary}
+          </p>
+        ) : null}
+        {reflection?.reflectionPrompt ? (
+          <p>
+            <span className="font-bold text-[var(--gray-700)]">💭 Reflexión (~24 min):</span>{' '}
+            {reflection.reflectionPrompt}
+          </p>
+        ) : null}
+      </div>
+
+      <footer
+        className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--gray-100)] pt-2"
+      >
+        <span className="text-[11px] font-semibold text-[var(--gray-600)]">
+          Tiempo total estimado: 2 horas
+        </span>
+        <div className="flex items-center gap-1.5" aria-label="Video, tarea y reflexión">
+          {(['video', 'task', 'reflection'] as const).map((stage) => (
+            <span
+              key={stage}
+              className="inline-block h-2 w-2 rounded-full"
+              style={{ background: accent, opacity: 0.45 }}
+              title={stage === 'video' ? 'Video' : stage === 'task' ? 'Tarea' : 'Reflexión'}
+            />
+          ))}
+        </div>
+      </footer>
+    </article>
+  );
+}
+
+export function SessionsSection({ level }: Props) {
+  const parts = getPartsByLevel(level);
+
+  if (!parts.length) {
     return (
       <div className="sec-content active">
         <p className="text-sm text-[var(--gray-600)]">
@@ -21,72 +141,21 @@ export function SessionsSection({ level }: Props) {
     );
   }
 
-  const week = sessions.weeks[weekIdx];
-
   return (
     <div className="sec-content active">
       <div className="sec-hdr">
         <h2 className="sec-title">Plan de Sesiones</h2>
+        <span className="sec-pill">{parts.length} partes · vista de planeación</span>
       </div>
-      <div className="week-tabs">
-        {sessions.weeks.map((w, i) => (
-          <button
-            key={w.id}
-            type="button"
-            className={`wtab ${i === weekIdx ? 'active' : ''}`}
-            onClick={() => {
-              setWeekIdx(i);
-              setExpanded(null);
-            }}
-          >
-            {w.label}
-          </button>
-        ))}
-      </div>
-      {week.title && (
-        <div className="mb-3">
-          <div style={{ fontSize: 13, fontWeight: 700 }}>{week.title}</div>
-          {week.objective && (
-            <div style={{ fontSize: 11, color: 'var(--gray-500)', marginTop: 2 }}>{week.objective}</div>
-          )}
-        </div>
-      )}
-      <div className="days-grid">
-        {week.days.map((day, i) => (
-          <div
-            key={i}
-            className={`day-card ${expanded === i ? 'expanded' : ''}`}
-            onClick={() => setExpanded(expanded === i ? null : i)}
-            onKeyDown={(e) => e.key === 'Enter' && setExpanded(expanded === i ? null : i)}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="day-hdr">
-              <span className="day-name">{day.name}</span>
-              <span className="day-exp">{expanded === i ? '−' : '+'}</span>
-            </div>
-            <div className="day-theme">{day.theme}</div>
-            <div className="day-detail">
-              {day.objective && (
-                <div className="db">
-                  <div className="db-lbl">Objetivo del día</div>
-                  <div className="task-txt">{day.objective}</div>
-                </div>
-              )}
-              {day.practiceTask && (
-                <div className="task-box">
-                  <div className="task-lbl">Tarea de práctica</div>
-                  <div className="task-txt">{day.practiceTask}</div>
-                </div>
-              )}
-              {day.transferTask && (
-                <div className="task-box trf">
-                  <div className="task-lbl">Transferencia al aula</div>
-                  <div className="task-txt">{day.transferTask}</div>
-                </div>
-              )}
-            </div>
-          </div>
+
+      <p className="mb-4 text-sm text-[var(--gray-600)]" style={{ fontSize: 13, lineHeight: 1.55 }}>
+        Vista previa de las 5 partes del nivel: herramienta, video, tarea y reflexión. Aquí puedes
+        planificar tu semana sin esperar a desbloquear cada parte en la ruta verificada.
+      </p>
+
+      <div className="flex flex-col gap-3">
+        {parts.map((part) => (
+          <SessionPartCard key={part.partId} part={part} level={level} />
         ))}
       </div>
     </div>

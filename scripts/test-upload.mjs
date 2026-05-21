@@ -99,14 +99,12 @@ async function main() {
       evidenceText: TEXT_EVIDENCE,
       inputType: 'text',
     });
-    const pass =
-      res.ok &&
-      (data.ok === true || (typeof data.score === 'number' && data.score >= 85));
+    const pass = res.status === 200 && data.passed === true && data.ok === true;
     record(
       1,
       pass,
       pass
-        ? `ok=${data.ok}, score=${data.score ?? 'n/a'}`
+        ? `passed=${data.passed}, ok=${data.ok}`
         : `status=${res.status} ${JSON.stringify(data)}`
     );
   } catch (e) {
@@ -208,15 +206,15 @@ async function main() {
       inputType: 'screenshot',
     });
     const hasGrade =
-      (typeof data.score === 'number' || typeof data.ok === 'boolean') &&
+      typeof data.passed === 'boolean' &&
       typeof data.feedback === 'string' &&
       data.feedback.length > 0;
-    const gradeOk = res.status === 200 && hasGrade;
+    const gradeOk = res.status === 200 && hasGrade && data.passed === false;
     record(
       7,
       gradeOk,
       gradeOk
-        ? `ok=${data.ok}, score=${data.score ?? 'n/a'}, feedback=${data.feedback?.slice(0, 80)}...`
+        ? `passed=${data.passed}, feedback=${data.feedback?.slice(0, 80)}...`
         : `status=${res.status} ${JSON.stringify(data)}`
     );
   } catch (e) {
@@ -233,15 +231,15 @@ async function main() {
       inputType: 'document',
     });
     const hasGrade =
-      (typeof data.score === 'number' || typeof data.ok === 'boolean') &&
+      typeof data.passed === 'boolean' &&
       typeof data.feedback === 'string' &&
       data.feedback.length > 0;
-    const gradeOk = res.status === 200 && hasGrade;
+    const gradeOk = res.status === 200 && hasGrade && data.passed === false;
     record(
       8,
       gradeOk,
       gradeOk
-        ? `ok=${data.ok}, score=${data.score ?? 'n/a'}, feedback=${data.feedback?.slice(0, 80)}...`
+        ? `passed=${data.passed}, feedback=${data.feedback?.slice(0, 80)}...`
         : `status=${res.status} ${JSON.stringify(data)}`
     );
   } catch (e) {

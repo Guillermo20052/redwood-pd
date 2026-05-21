@@ -44,6 +44,15 @@ export function PartStageVideo({ item, level, onVerified }: Props) {
         />
       </div>
 
+      {item.videoDescription?.trim() ? (
+        <p
+          className="text-[var(--gray-600)] leading-relaxed"
+          style={{ fontSize: 14, lineHeight: 1.55 }}
+        >
+          {item.videoDescription.trim()}
+        </p>
+      ) : null}
+
       {allowSkip && (
         <div className="flex flex-wrap items-center gap-3 pt-1">
           <button

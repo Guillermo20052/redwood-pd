@@ -13,9 +13,8 @@ type Props = {
 };
 
 type GradeResult = {
-  score: number;
-  feedback: string;
   passed: boolean;
+  feedback: string;
 };
 
 type ApiTeacher = {
@@ -68,11 +67,10 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
   const alreadyVerified = row?.status === 'verified';
 
   useEffect(() => {
-    if (row?.task_score != null && row.task_feedback) {
+    if (row?.task_feedback) {
       setLastResult({
-        score: row.task_score,
+        passed: row.status === 'verified' || row.task_score === 100,
         feedback: row.task_feedback,
-        passed: row.status === 'verified' || row.task_score >= 85,
       });
     }
   }, [row?.task_score, row?.task_feedback, row?.status]);
@@ -150,12 +148,12 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
         },
         collaborative && partner ? partner : null
       );
-      const passed = data?.ok === true;
-      const score = typeof data?.score === 'number' ? data.score : null;
+
+      const passed = data?.passed === true || data?.ok === true;
       const feedback = typeof data?.feedback === 'string' ? data.feedback : '';
 
-      if (score !== null) {
-        setLastResult({ score, feedback, passed });
+      if (feedback || data?.passed != null || data?.ok != null) {
+        setLastResult({ passed, feedback });
       }
 
       if (passed) {
@@ -261,35 +259,51 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
       </button>
 
       {lastResult && (
-        <div className={`score-panel ${passed ? 'score-panel--pass' : 'score-panel--fail'}`}>
-          <p className={`score-num ${passed ? 'score-num--pass' : 'score-num--fail'}`}>
-            {lastResult.score}
-            <span className="text-lg font-bold">/100</span>
-          </p>
-          <p className="text-sm font-bold text-[var(--gray-800)]">
-            {passed ? 'Aprobada' : 'No aprobada (mínimo 85)'}
+        <div
+          className={`score-panel ${passed ? 'score-panel--pass' : ''}`}
+          style={
+            !passed
+              ? {
+                  background: 'var(--gold-light)',
+                  border: '1px solid var(--gold)',
+                }
+              : undefined
+          }
+        >
+          <p
+            className={`text-lg font-bold mb-2 ${
+              passed ? 'text-[var(--green)]' : 'text-[var(--gold)]'
+            }`}
+          >
+            {passed ? '¡Listo!' : 'Casi'}
           </p>
           {lastResult.feedback && (
-            <p className="mt-2 text-sm text-[var(--gray-700)] whitespace-pre-wrap">
+            <p className="text-base leading-relaxed text-[var(--gray-800)] whitespace-pre-wrap">
               {lastResult.feedback}
             </p>
           )}
           {passed && !alreadyVerified && (
-            <p className="mt-2 text-xs text-[var(--green)] italic">
-              Avanzando a la reflexión…
+            <p className="mt-3 text-sm font-semibold text-[var(--teal)]">
+              Continuar a Reflexión →
             </p>
           )}
           {failed && (
-            <button type="button" className="btn-outline mt-3" onClick={retry}>
-              Reintenta
+            <button type="button" className="btn-outline mt-4" onClick={retry}>
+              Reintentar
             </button>
           )}
         </div>
       )}
 
       {errorMessage && (
-        <div className="score-panel score-panel--fail">
-          <p className="text-sm font-semibold text-[var(--red)]">{errorMessage}</p>
+        <div
+          className="score-panel"
+          style={{
+            background: 'var(--gold-light)',
+            border: '1px solid var(--gold)',
+          }}
+        >
+          <p className="text-sm font-semibold text-[var(--gray-800)]">{errorMessage}</p>
           <button
             type="button"
             className="btn-outline mt-2"

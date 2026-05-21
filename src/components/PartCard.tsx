@@ -44,6 +44,28 @@ function StageDot({
   return <span aria-hidden className={cls} />;
 }
 
+function PartHeading({
+  title,
+  subtitle,
+  titleClassName = 'part-card-title',
+  locked = false,
+}: {
+  title: string;
+  subtitle?: string;
+  titleClassName?: string;
+  locked?: boolean;
+}) {
+  const sub = subtitle?.trim();
+  return (
+    <>
+      <h3 className={titleClassName}>{locked ? `🔒 ${title}` : title}</h3>
+      {sub ? (
+        <p className="text-sm text-[var(--gray-600)] mt-1 leading-snug font-normal">{sub}</p>
+      ) : null}
+    </>
+  );
+}
+
 export const PartCard = forwardRef<HTMLElement, Props>(function PartCard(
   { part, completions, onPartComplete },
   ref
@@ -100,7 +122,7 @@ export const PartCard = forwardRef<HTMLElement, Props>(function PartCard(
         <div className="part-card-header">
           <div className="min-w-0">
             <p className={`part-card-label lv-${level}`}>Parte {part.partNumber}</p>
-            <h3 className="part-card-title">🔒 {part.partTitle}</h3>
+            <PartHeading title={part.partTitle} subtitle={part.partSubtitle} locked />
           </div>
           <div className="part-stage-dots">
             <StageDot filled={false} level={level} />
@@ -139,7 +161,11 @@ export const PartCard = forwardRef<HTMLElement, Props>(function PartCard(
             </span>
             <div className="min-w-0">
               <p className={`part-card-label lv-${level}`}>Parte {part.partNumber}</p>
-              <h3 className="part-card-title done">{part.partTitle}</h3>
+              <PartHeading
+                title={part.partTitle}
+                subtitle={part.partSubtitle}
+                titleClassName="part-card-title done"
+              />
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -203,7 +229,7 @@ export const PartCard = forwardRef<HTMLElement, Props>(function PartCard(
             )}
             <span className="part-hours-pill">{part.totalHours.toFixed(1)}h</span>
           </div>
-          <h3 className="part-card-title">{part.partTitle}</h3>
+          <PartHeading title={part.partTitle} subtitle={part.partSubtitle} />
         </div>
         <div
           className="part-stage-dots"

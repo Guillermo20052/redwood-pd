@@ -113,7 +113,7 @@ export function verifyVideo(
 }
 
 export type TaskGradeResult = {
-  score: number;
+  passed: boolean;
   feedback: string;
 };
 
@@ -134,13 +134,13 @@ export type TaskSubmissionMeta = {
 /**
  * Verify a task submission.
  *
- * - `gradeResult` is the AI-grading outcome. When omitted, falls back to the
+ * - `gradeResult` is the AI pass/fail outcome. When omitted, falls back to the
  *   legacy length-only behavior for backward compatibility with any internal
  *   caller; the API route always supplies it.
- * - If `gradeResult.score >= 85`, the item is marked verified and the score +
+ * - If `gradeResult.passed`, the item is marked verified and task_score 100 +
  *   feedback are persisted on the completion row.
- * - If `gradeResult.score < 85`, this function does NOT mutate state. The
- *   caller (API route) should return the failure to the UI without saving.
+ * - If `!gradeResult.passed`, this function does NOT mutate state. The caller
+ *   (API route) should return the failure to the UI without saving.
  * - `partner` is persisted on the completion row when the item is
  *   collaborative. Overwrites any previous value on re-submission.
  */
@@ -167,9 +167,8 @@ export function verifyTask(
   if ((inputType === 'screenshot' || inputType === 'document') && !meta?.fileUrl) {
     throw new VerificationError('Debes subir un archivo para esta tarea.', 400);
   }
-  if (gradeResult && gradeResult.score < 85) {
-    // Caller should branch on score before invoking verifyTask, but guard here too.
-    throw new VerificationError('La tarea aún no alcanza el puntaje mínimo (85).', 400);
+  if (gradeResult && !gradeResult.passed) {
+    throw new VerificationError('La tarea aún no cumple los criterios mínimos.', 400);
   }
   const next = { ...completions };
   const partnerFields =
@@ -192,7 +191,7 @@ export function verifyTask(
     task_input_type: inputType,
     task_file_url: meta?.fileUrl ?? null,
     ...(gradeResult
-      ? { task_score: gradeResult.score, task_feedback: gradeResult.feedback }
+      ? { task_score: gradeResult.passed ? 100 : 0, task_feedback: gradeResult.feedback }
       : {}),
     ...partnerFields,
   };

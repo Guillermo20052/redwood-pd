@@ -1,6 +1,7 @@
 'use client';
 
 import { getToolsByLevel } from '@/lib/content';
+import { HABILIDADES_FALLBACK } from '@/lib/habilidades-fallback';
 import {
   getLevelAncillary,
   getModalitiesPill,
@@ -135,28 +136,43 @@ export function LevelSectionContent({ level, section }: Props) {
 
   if (section === 'hsk') {
     const { skills } = data;
+    const fallback = HABILIDADES_FALLBACK[level];
+    const blockBullets = (blockIndex: number): string[] => {
+      const block = skills.blocks[blockIndex];
+      if (block?.items?.length) {
+        return block.items.map((item) => item.name);
+      }
+      if (!fallback) return [];
+      return blockIndex === 0 ? fallback.teacher : fallback.students;
+    };
+
     return (
       <div className="sec-content active">
         <div className={`hsk-intro ${lvClass}`}>
           <div className="hsk-intro-tag">{skills.introTag}</div>
           <p>{skills.intro}</p>
         </div>
-        {skills.blocks.map((block) => (
-          <div key={block.label} className="hsk-block">
-            <div className="hsk-block-label">{block.label}</div>
-            <div className="hsk-list">
-              {block.items.map((item) => (
-                <div key={item.name} className="hsk-item">
-                  <div>
-                    <div className="hsk-item-name">{item.name}</div>
-                    <div className="hsk-item-how">{item.how}</div>
-                  </div>
-                  <span className={`hsk-atl ${item.atlClass}`}>{item.atlLabel}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+        <div
+          className="grid gap-3 mb-4"
+          style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}
+        >
+          {skills.blocks.map((block, blockIndex) => {
+            const bullets = blockBullets(blockIndex);
+            return (
+              <div key={block.label} className="ib-crd" style={{ marginBottom: 0 }}>
+                <div className="ib-ttl">{block.label}</div>
+                <ul className="ib-list">
+                  {bullets.map((text) => (
+                    <li key={text}>
+                      <span>→</span>
+                      {text}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }

@@ -5,6 +5,11 @@ export type PathStage = 'video' | 'task' | 'reflection';
 
 export type TaskInputType = 'text' | 'screenshot' | 'document';
 
+export type TaskRubric = {
+  toolName?: string;
+  taskGoal?: string;
+};
+
 export type PathItem = {
   order: number;
   itemKey: string;
@@ -23,10 +28,12 @@ export type PathItem = {
   partId?: string;
   partNumber?: number;
   partTitle?: string;
+  partSubtitle?: string;
+  videoDescription?: string;
   primaryTools?: string[];
   collaborative?: boolean;
   taskPrompt?: string;
-  taskRubric?: string;
+  taskRubric?: string | TaskRubric;
   /** How teachers submit task evidence. Defaults to "text" when omitted. */
   inputType?: TaskInputType;
   reflectionPrompt?: string;
@@ -57,6 +64,23 @@ export function getPathByLevel(level: string) {
   return curriculumPath.filter((p) => p.level === level);
 }
 
+/** Structured rubric fields when taskRubric is an object; empty for legacy string rubrics. */
+export function getTaskRubricFields(
+  rubric: PathItem['taskRubric'] | undefined
+): { toolName?: string; taskGoal?: string } {
+  if (!rubric || typeof rubric === 'string') return {};
+  return {
+    toolName:
+      typeof rubric.toolName === 'string' && rubric.toolName.trim()
+        ? rubric.toolName.trim()
+        : undefined,
+    taskGoal:
+      typeof rubric.taskGoal === 'string' && rubric.taskGoal.trim()
+        ? rubric.taskGoal.trim()
+        : undefined,
+  };
+}
+
 export type PartStages = {
   video?: PathItem;
   task?: PathItem;
@@ -67,6 +91,7 @@ export type PartGroup = {
   partId: string;
   partNumber: number;
   partTitle: string;
+  partSubtitle?: string;
   primaryTools: string[];
   collaborative: boolean;
   level: string;
@@ -108,6 +133,7 @@ export function getPartsByLevel(level: string): PartGroup[] {
       partId,
       partNumber: head.partNumber ?? 0,
       partTitle: head.partTitle ?? head.label,
+      partSubtitle: head.partSubtitle?.trim() || undefined,
       primaryTools: head.primaryTools ?? [],
       collaborative: head.collaborative ?? false,
       level: head.level,

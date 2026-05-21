@@ -47,10 +47,13 @@ export function HelpChatbot() {
     setLoading(true);
 
     try {
+      const currentPage =
+        typeof window !== 'undefined' ? window.location.pathname : '/';
+
       const res = await fetch('/api/help-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: trimmed, role: profile.role }),
+        body: JSON.stringify({ message: trimmed, currentPage }),
       });
       const data = await res.json().catch(() => ({}));
       const reply = res.ok

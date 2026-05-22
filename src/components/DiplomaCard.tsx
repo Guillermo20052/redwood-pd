@@ -1,12 +1,17 @@
 'use client';
 
-import Image from 'next/image';
 import { isDiplomaTierEarned, type Diploma } from '@/lib/diplomas';
 import {
   DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
   getDiploma1Progress,
 } from '@/lib/extras-gating';
 import type { CompletionMap } from '@/lib/verification';
+
+const DIPLOMA_BADGES: Record<1 | 2 | 3, string> = {
+  1: '/diplomas/diploma-1-bronze.png',
+  2: '/diplomas/diploma-2-silver.png',
+  3: '/diplomas/diploma-3-gold.png',
+};
 
 type Props = {
   diploma: Diploma;
@@ -16,29 +21,31 @@ type Props = {
 };
 
 export function DiplomaCard({ diploma, totalHours, completions, onOpen }: Props) {
-  const unlocked = isDiplomaTierEarned(diploma.tier, totalHours, completions);
+  const earned = isDiplomaTierEarned(diploma.tier, totalHours, completions);
   const hoursRemaining = Math.max(0, diploma.hoursRequired - totalHours);
   const d1 = diploma.tier === 1 ? getDiploma1Progress(totalHours, completions) : null;
   const previewClass =
     diploma.tier === 1 ? 'lp1' : diploma.tier === 2 ? 'lp2' : 'lp3';
+  const tier = diploma.tier;
 
   return (
     <div
-      className={`logro-card ${unlocked ? '' : 'opacity-60'}`}
+      className={`logro-card ${earned ? 'logro-card--earned' : ''}`}
       style={{ borderTop: `4px solid ${diploma.palette.borderColor}` }}
     >
       <div className={`logro-diploma-preview ${previewClass}`}>
-        <span className="logro-preview-label">Diploma {diploma.tier}</span>
-        <Image
-          src={diploma.iconPath}
-          alt=""
-          width={64}
-          height={64}
-          className={unlocked ? '' : 'grayscale opacity-70'}
-        />
+        <span className="logro-preview-label">Diploma {tier}</span>
+        <div className="diploma-badge-wrap">
+          <img
+            src={DIPLOMA_BADGES[tier]}
+            alt={`Insignia Diploma ${tier}`}
+            className={`diploma-badge ${earned ? 'diploma-badge-earned' : 'diploma-badge-locked'}`}
+            data-tier={tier}
+          />
+        </div>
       </div>
       <div className="logro-body">
-        <p className={`logro-level ${previewClass}-txt`}>Diploma {diploma.tier}</p>
+        <p className={`logro-level ${previewClass}-txt`}>Diploma {tier}</p>
         <h3 className="logro-title">{diploma.name}</h3>
         <div className="logro-req">
           <strong>{diploma.hoursRequired} horas</strong> verificadas
@@ -47,7 +54,7 @@ export function DiplomaCard({ diploma, totalHours, completions, onOpen }: Props)
           )}
         </div>
         <p className="logro-msg">{diploma.sublabel}</p>
-        {d1 && !unlocked && (
+        {d1 && !earned && (
           <p className="text-xs text-[var(--gray-600)] mt-2 leading-relaxed">
             {d1.hoursOk ? '20h ✓' : `${totalHours.toFixed(1)}h / 20h`} · Extras L1:{' '}
             {d1.extrasL1}/{DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL}
@@ -60,7 +67,7 @@ export function DiplomaCard({ diploma, totalHours, completions, onOpen }: Props)
           </p>
         )}
         <div className="logro-status">
-          {unlocked ? (
+          {earned ? (
             <>
               <span className="logro-unlocked">✓ Desbloqueado</span>
               <button

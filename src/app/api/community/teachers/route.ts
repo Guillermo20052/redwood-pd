@@ -52,7 +52,7 @@ function buildRow(
     levelName: levelNames[slug] || slug,
     progressPct,
     lastActivity,
-    diplomaTier: getDiplomaTier(totalHours),
+    diplomaTier: getDiplomaTier(totalHours, map),
     // back-compat aliases
     id: profile.id,
     hours: totalHours,

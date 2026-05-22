@@ -162,8 +162,8 @@ export function useProgress() {
 
   const totalHours = sumVerifiedHours(completions);
   const percent = progressPercent(totalHours);
-  const diplomaTier = getDiplomaTier(totalHours);
-  const earnedDiplomas: DiplomaTier[] = getEarnedTiers(totalHours);
+  const diplomaTier = getDiplomaTier(totalHours, completions);
+  const earnedDiplomas: DiplomaTier[] = getEarnedTiers(totalHours, completions);
 
   // Fire-and-forget: any time the earned-tiers set changes, ask the server to
   // record events for tiers not yet logged. Recording is idempotent server-side.

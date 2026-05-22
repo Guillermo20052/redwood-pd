@@ -6,6 +6,7 @@ const PUBLIC_PATHS = ['/login', '/signup', '/auth/callback'];
 const PROTECTED_PREFIXES = [
   '/dashboard',
   '/nivel',
+  '/tareas-extra',
   '/logros',
   '/etica',
   '/reflexion',

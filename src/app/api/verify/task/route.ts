@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getSessionUserId, loadCompletions, saveCompletions } from '@/lib/completions-service';
-import { canVerifyItem, verifyTask, VerificationError } from '@/lib/verification';
+import {
+  canVerifyItem,
+  verifyTask,
+  verifyExtraTask,
+  VerificationError,
+} from '@/lib/verification';
 import { isAdminUser } from '@/lib/auth-helpers';
 import {
   getPathItem,
@@ -8,6 +13,8 @@ import {
   verificationConfig,
   type TaskInputType,
 } from '@/lib/curriculum-path';
+import { getExtraTask, isExtraItemKey } from '@/lib/extra-tasks';
+import { isExtraTaskAvailable } from '@/lib/extras-gating';
 import { gradeTaskSubmission } from '@/lib/ai-grader';
 import {
   fileUrlToPath,
@@ -32,11 +39,6 @@ function fileUrlBelongsToUser(fileUrl: string, userId: string): boolean {
   return fileUrl.startsWith(`/api/uploads/${safeUser}/`);
 }
 
-/**
- * Confirm the uploaded file actually exists before we burn an LLM call grading
- * it. In Supabase Storage mode we just probe with a HEAD-equivalent listing;
- * in local mode we stat the file on disk.
- */
 async function uploadedFileExists(fileUrl: string): Promise<boolean> {
   if (isSupabaseStorageMode()) {
     const parsed = parseUploadUrl(fileUrl);
@@ -82,6 +84,111 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'itemKey es requerido' }, { status: 400 });
   }
 
+  const current = await loadCompletions(session.userId);
+  const trimmed = typeof evidenceText === 'string' ? evidenceText.trim() : '';
+
+  if (isExtraItemKey(itemKey)) {
+    const extra = getExtraTask(itemKey);
+    if (!extra) {
+      return NextResponse.json({ error: 'Tarea extra no encontrada' }, { status: 400 });
+    }
+    if (current[itemKey]?.status === 'verified') {
+      return NextResponse.json({ error: 'Ya verificado' }, { status: 400 });
+    }
+    if (!isExtraTaskAvailable(itemKey, current)) {
+      return NextResponse.json(
+        {
+          error:
+            'Completa las 5 partes obligatorias de este nivel para desbloquear las tareas extra.',
+        },
+        { status: 400 }
+      );
+    }
+
+    const inputType: TaskInputType = isTaskInputType(bodyInputType)
+      ? bodyInputType
+      : extra.inputType;
+
+    if (inputType === 'text') {
+      if (trimmed.length < verificationConfig.taskEvidenceMinChars) {
+        return NextResponse.json(
+          {
+            error: `La tarea debe tener al menos ${verificationConfig.taskEvidenceMinChars} caracteres.`,
+          },
+          { status: 400 }
+        );
+      }
+    } else {
+      if (!fileUrl || typeof fileUrl !== 'string') {
+        return NextResponse.json({ error: 'Debes subir un archivo para esta tarea.' }, { status: 400 });
+      }
+      if (!fileUrlBelongsToUser(fileUrl, session.userId)) {
+        return NextResponse.json({ error: 'Archivo no válido para tu cuenta.' }, { status: 400 });
+      }
+      const existsCheck = await uploadedFileExists(fileUrl);
+      if (!existsCheck) {
+        return NextResponse.json(
+          { error: 'No se encontró el archivo subido. Vuelve a subirlo.' },
+          { status: 400 }
+        );
+      }
+    }
+
+    const filePath =
+      inputType !== 'text' && fileUrl && !isSupabaseStorageMode()
+        ? fileUrlToPath(fileUrl) ?? undefined
+        : undefined;
+
+    let grade;
+    try {
+      grade = await gradeTaskSubmission({
+        inputType,
+        taskPrompt: extra.description,
+        taskRubric: extra.rubric,
+        evidenceText: trimmed,
+        fileUrl: fileUrl ?? undefined,
+        filePath,
+        partTitle: extra.title,
+        level: extra.level,
+        collaborative: false,
+        toolName: extra.tool,
+        taskGoal: extra.title,
+      });
+    } catch (e) {
+      const message = (e as Error).message || 'Error al evaluar la tarea.';
+      return NextResponse.json({ error: message }, { status: 500 });
+    }
+
+    if (!grade.passed) {
+      return NextResponse.json({
+        ok: false,
+        passed: false,
+        feedback: grade.feedback,
+        ...(grade.characterCount != null ? { characterCount: grade.characterCount } : {}),
+      });
+    }
+
+    try {
+      const updated = verifyExtraTask(
+        current,
+        itemKey,
+        trimmed,
+        { passed: true, feedback: grade.feedback },
+        { inputType, fileUrl: fileUrl ?? null }
+      );
+      await saveCompletions(session.userId, updated);
+      return NextResponse.json({
+        ok: true,
+        passed: true,
+        feedback: grade.feedback,
+        completions: updated,
+      });
+    } catch (e) {
+      const status = e instanceof VerificationError ? e.status : 400;
+      return NextResponse.json({ error: (e as Error).message }, { status });
+    }
+  }
+
   const item = getPathItem(itemKey);
   if (!item) {
     return NextResponse.json({ error: 'Item no encontrado' }, { status: 400 });
@@ -94,7 +201,6 @@ export async function POST(request: Request) {
     ? bodyInputType
     : item.inputType ?? 'text';
 
-  const current = await loadCompletions(session.userId);
   const gate = canVerifyItem(current, itemKey);
   if (!gate.ok) {
     return NextResponse.json(
@@ -102,8 +208,6 @@ export async function POST(request: Request) {
       { status: 400 }
     );
   }
-
-  const trimmed = typeof evidenceText === 'string' ? evidenceText.trim() : '';
 
   if (inputType === 'text') {
     if (trimmed.length < verificationConfig.taskEvidenceMinChars) {
@@ -150,8 +254,6 @@ export async function POST(request: Request) {
     );
   }
 
-  // filePath is only meaningful in local mode — in Supabase mode the grader
-  // downloads from Storage using fileUrl.
   const filePath =
     inputType !== 'text' && fileUrl && !isSupabaseStorageMode()
       ? fileUrlToPath(fileUrl) ?? undefined

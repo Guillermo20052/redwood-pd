@@ -1,0 +1,340 @@
+{
+  "extras": {
+    "b": [
+      {
+        "id": "extra-lvl-b-1",
+        "level": "b",
+        "number": 1,
+        "tool": "ChatGPT",
+        "title": "Genera 5 preguntas tipo IB para tu próxima evaluación",
+        "description": "Usa ChatGPT para generar 5 preguntas de evaluación tipo IB sobre el tema que estás enseñando esta semana (Biología, Historia, Matemáticas, etc.). Las preguntas deben mostrar distintos niveles de Bloom. Sube una captura donde se vean las 5 preguntas y el prompt que usaste.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 45,
+        "rubric": "La captura debe mostrar 5 preguntas claramente distintas, con variedad de niveles cognitivos, y el prompt original visible."
+      },
+      {
+        "id": "extra-lvl-b-2",
+        "level": "b",
+        "number": 2,
+        "tool": "ChatGPT",
+        "title": "Rediseña una actividad existente para hacerla más colaborativa",
+        "description": "Toma una actividad que ya usaste con tus alumnas y pídele a ChatGPT que te sugiera 3 formas de rediseñarla para que sea más colaborativa. Escribe qué actividad elegiste, qué propuso ChatGPT y cuál vas a probar (mínimo 400 caracteres).",
+        "inputType": "text",
+        "estimatedMinutes": 60,
+        "rubric": "Debe describir la actividad original, las 3 sugerencias de ChatGPT, y justificar cuál elegirá probar. Mínimo 400 caracteres."
+      },
+      {
+        "id": "extra-lvl-b-3",
+        "level": "b",
+        "number": 3,
+        "tool": "Claude",
+        "title": "Retroalimentación diferenciada en un ensayo de Lengua",
+        "description": "Sube un borrador de ensayo (o un párrafo modelo) a Claude y pídele retroalimentación para dos perfiles: alumna que domina la estructura y alumna que necesita apoyo en organización. Captura ambas respuestas de Claude.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 50,
+        "rubric": "La captura debe mostrar el mismo texto base y dos retroalimentaciones claramente diferenciadas según el perfil indicado."
+      },
+      {
+        "id": "extra-lvl-b-4",
+        "level": "b",
+        "number": 4,
+        "tool": "Claude",
+        "title": "Identifica las 3 preguntas con más errores en un examen",
+        "description": "Sube tu examen pasado (o una lista de preguntas con respuestas frecuentes) a Claude y pídele que identifique las 3 preguntas donde más alumnas fallaron y por qué. Describe qué subiste, qué respondió Claude y qué cambiarías en tu próxima evaluación.",
+        "inputType": "text",
+        "estimatedMinutes": 55,
+        "rubric": "Debe mencionar el material subido, las 3 preguntas o patrones identificados, y al menos un ajuste concreto a la práctica evaluativa. Mínimo 400 caracteres."
+      },
+      {
+        "id": "extra-lvl-b-5",
+        "level": "b",
+        "number": 5,
+        "tool": "Perplexity",
+        "title": "Investiga un tema IB con fuentes académicas citadas",
+        "description": "Elige un tema de tu unidad actual (p. ej. ecosistemas, Revolución Mexicana, funciones cuadráticas) y pídele a Perplexity un resumen con al menos 5 fuentes académicas citadas. Sube captura del resumen y de la lista de referencias.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 40,
+        "rubric": "Debe verse el tema investigado, un resumen sustantivo y referencias numeradas o enlaces a fuentes académicas."
+      },
+      {
+        "id": "extra-lvl-b-6",
+        "level": "b",
+        "number": 6,
+        "tool": "Perplexity",
+        "title": "Compara dos enfoques pedagógicos con evidencia",
+        "description": "Usa Perplexity para comparar dos enfoques sobre un tema de tu materia (p. ej. evaluación formativa vs sumativa, indagación guiada vs abierta). Exporta o guarda el resultado como PDF y súbelo.",
+        "inputType": "document",
+        "estimatedMinutes": 50,
+        "rubric": "El documento debe comparar dos enfoques con citas o referencias, aplicados a contexto escolar IB."
+      },
+      {
+        "id": "extra-lvl-b-7",
+        "level": "b",
+        "number": 7,
+        "tool": "MagicSchool",
+        "title": "Genera un plan de clase de 45 min con MagicSchool",
+        "description": "En MagicSchool, genera un plan de clase de 45 minutos para una materia que impartes (Artes, Ciencias, etc.) incluyendo objetivo, actividad de apertura, desarrollo y cierre. Sube captura del plan completo.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 45,
+        "rubric": "La captura debe mostrar objetivo, secuencia de actividades y tiempos o fases claras de una sesión de 45 min."
+      },
+      {
+        "id": "extra-lvl-b-8",
+        "level": "b",
+        "number": 8,
+        "tool": "MagicSchool",
+        "title": "Crea comunicación para padres de familia sobre un proyecto",
+        "description": "Usa MagicSchool para redactar un correo o mensaje para padres explicando un proyecto IB que tus alumnas están realizando. Sube el documento generado (PDF o captura exportada).",
+        "inputType": "document",
+        "estimatedMinutes": 40,
+        "rubric": "El mensaje debe ser claro para padres, mencionar el proyecto, fechas o expectativas, y tono profesional."
+      },
+      {
+        "id": "extra-lvl-b-9",
+        "level": "b",
+        "number": 9,
+        "tool": "Diffit",
+        "title": "Nivela una lectura de Historia para dos niveles",
+        "description": "Sube un artículo o capítulo corto de Historia a Diffit y genera versiones para nivel avanzado y nivel con apoyo. Captura las dos versiones o el panel de niveles de lectura.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 45,
+        "rubric": "Debe mostrarse el texto original y al menos dos versiones diferenciadas con cambios visibles en complejidad."
+      },
+      {
+        "id": "extra-lvl-b-10",
+        "level": "b",
+        "number": 10,
+        "tool": "Diffit",
+        "title": "Preguntas de comprensión para una lectura de Biología",
+        "description": "Usa Diffit con un texto de Biología (artículo, noticia científica o apartado del libro) y genera preguntas de comprensión. Describe el texto que usaste, las preguntas que generó Diffit y cómo las usarías en clase.",
+        "inputType": "text",
+        "estimatedMinutes": 50,
+        "rubric": "Debe identificar el texto, listar o describir preguntas generadas, y explicar uso en aula IB. Mínimo 400 caracteres."
+      }
+    ],
+    "i": [
+      {
+        "id": "extra-lvl-i-1",
+        "level": "i",
+        "number": 1,
+        "tool": "NotebookLM",
+        "title": "Crea un cuaderno con tus propias fuentes del trimestre",
+        "description": "Sube al menos 3 fuentes propias (PDFs de planeaciones, guías IB, artículos) a NotebookLM y genera un resumen ejecutivo del trimestre. Captura el cuaderno con fuentes listadas y el resumen.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 55,
+        "rubric": "Debe verse al menos 3 fuentes cargadas y un resumen coherente que las integre."
+      },
+      {
+        "id": "extra-lvl-i-2",
+        "level": "i",
+        "number": 2,
+        "tool": "NotebookLM",
+        "title": "Genera preguntas de estudio desde tu material de Matemáticas",
+        "description": "Carga material de Matemáticas (apuntes, ejercicios, guía) en NotebookLM y pídele preguntas de repaso para alumnas. Escribe qué fuentes subiste, 5 preguntas que generó y cómo las usarías antes de un examen.",
+        "inputType": "text",
+        "estimatedMinutes": 50,
+        "rubric": "Debe listar fuentes, al menos 5 preguntas de repaso y aplicación pedagógica. Mínimo 400 caracteres."
+      },
+      {
+        "id": "extra-lvl-i-3",
+        "level": "i",
+        "number": 3,
+        "tool": "Canva con IA",
+        "title": "Infografía visual para una unidad de Artes o Diseño",
+        "description": "Usa Canva con IA para crear una infografía que explique un concepto de tu unidad (técnicas, artistas, proceso creativo). Sube captura de la infografía terminada.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 50,
+        "rubric": "La infografía debe ser legible, con título, elementos visuales y texto breve que explique el concepto."
+      },
+      {
+        "id": "extra-lvl-i-4",
+        "level": "i",
+        "number": 4,
+        "tool": "Canva con IA",
+        "title": "Presentación para padres sobre evaluaciones IB",
+        "description": "Crea en Canva una presentación de 5-7 diapositivas para explicar a padres cómo funcionan las evaluaciones IB en tu materia. Exporta PDF y súbelo.",
+        "inputType": "document",
+        "estimatedMinutes": 55,
+        "rubric": "El PDF debe tener 5-7 diapositivas con contenido claro para audiencia de padres sobre evaluación IB."
+      },
+      {
+        "id": "extra-lvl-i-5",
+        "level": "i",
+        "number": 5,
+        "tool": "Gemini",
+        "title": "Organiza investigación en Google Drive con Gemini",
+        "description": "Usa Gemini en Workspace para resumir o organizar notas de una carpeta de Drive (planeaciones, investigación). Captura la conversación con Gemini y el resultado (resumen o tabla).",
+        "inputType": "screenshot",
+        "estimatedMinutes": 45,
+        "rubric": "Debe mostrarse interacción con Gemini y un output útil (resumen, lista, tabla) derivado de material escolar."
+      },
+      {
+        "id": "extra-lvl-i-6",
+        "level": "i",
+        "number": 6,
+        "tool": "Gemini",
+        "title": "Borrador de guía de estudio para examen parcial",
+        "description": "Con Gemini, genera una guía de estudio para un examen parcial de tu materia (Ciencias, Humanidades, etc.). Escribe el tema, los apartados de la guía y un tip que le darías a tus alumnas.",
+        "inputType": "text",
+        "estimatedMinutes": 50,
+        "rubric": "Debe incluir tema del examen, estructura de la guía con al menos 4 apartados, y consejo pedagógico. Mínimo 400 caracteres."
+      },
+      {
+        "id": "extra-lvl-i-7",
+        "level": "i",
+        "number": 7,
+        "tool": "Brisk Teaching",
+        "title": "Retroalimentación en lote sobre trabajos cortos",
+        "description": "Usa Brisk Teaching para dar retroalimentación sobre al menos 3 trabajos cortos o párrafos de alumnas (pueden ser anónimos). Captura el panel con comentarios generados.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 50,
+        "rubric": "Debe verse retroalimentación para al menos 3 piezas de trabajo con comentarios específicos, no genéricos."
+      },
+      {
+        "id": "extra-lvl-i-8",
+        "level": "i",
+        "number": 8,
+        "tool": "Brisk Teaching",
+        "title": "Rúbrica de retroalimentación para proyecto interdisciplinario",
+        "description": "Con Brisk, genera criterios de retroalimentación para un proyecto que cruza dos materias. Sube el documento o PDF con los criterios y ejemplos de comentarios.",
+        "inputType": "document",
+        "estimatedMinutes": 55,
+        "rubric": "El documento debe incluir criterios claros y ejemplos de comentarios aplicables a proyecto interdisciplinario IB."
+      },
+      {
+        "id": "extra-lvl-i-9",
+        "level": "i",
+        "number": 9,
+        "tool": "Gamma",
+        "title": "Presentación de indagación para clase de Ciencias",
+        "description": "Crea en Gamma una presentación de 6-8 diapositivas que guíe una indagación en Ciencias (hipótesis, método, datos, conclusión). Captura la presentación completa en vista previa.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 50,
+        "rubric": "La presentación debe seguir estructura de indagación científica con al menos 6 diapositivas coherentes."
+      },
+      {
+        "id": "extra-lvl-i-10",
+        "level": "i",
+        "number": 10,
+        "tool": "Gamma",
+        "title": "Pitch de unidad para colegas del departamento",
+        "description": "Usa Gamma para armar un pitch de 5 minutos sobre una unidad nueva que quieres implementar. Escribe objetivo de la unidad, estructura de la presentación y qué feedback pedirías a colegas.",
+        "inputType": "text",
+        "estimatedMinutes": 45,
+        "rubric": "Debe describir objetivo de unidad, secuencia del pitch y pregunta concreta para colegas. Mínimo 400 caracteres."
+      }
+    ],
+    "a": [
+      {
+        "id": "extra-lvl-a-1",
+        "level": "a",
+        "number": 1,
+        "tool": "Napkin AI",
+        "title": "Diagrama de flujo de un proceso histórico",
+        "description": "Usa Napkin AI para diagramar un proceso histórico que enseñas (causa-efecto, cadena de eventos). Sube captura del diagrama terminado con etiquetas legibles.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 45,
+        "rubric": "El diagrama debe mostrar secuencia o relaciones causa-efecto con al menos 5 nodos o pasos etiquetados."
+      },
+      {
+        "id": "extra-lvl-a-2",
+        "level": "a",
+        "number": 2,
+        "tool": "Napkin AI",
+        "title": "Mapa conceptual de un tema de Biología",
+        "description": "Crea con Napkin un mapa conceptual de un tema de Biología (célula, ecosistema, genética). Describe el tema, los conceptos principales del mapa y cómo lo usarías al inicio de la unidad.",
+        "inputType": "text",
+        "estimatedMinutes": 50,
+        "rubric": "Debe nombrar el tema, al menos 6 conceptos relacionados y uso didáctico en aula. Mínimo 400 caracteres."
+      },
+      {
+        "id": "extra-lvl-a-3",
+        "level": "a",
+        "number": 3,
+        "tool": "Copilot Web",
+        "title": "Tabla comparativa con datos de Excel en Copilot",
+        "description": "En Microsoft Copilot, sube o describe una tabla de datos (calificaciones, resultados de laboratorio) y pídele un análisis o gráfico sugerido. Captura la respuesta con la tabla o visualización.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 50,
+        "rubric": "Debe mostrarse datos tabulares y análisis o recomendación de visualización de Copilot."
+      },
+      {
+        "id": "extra-lvl-a-4",
+        "level": "a",
+        "number": 4,
+        "tool": "Copilot Web",
+        "title": "Borrador de informe para coordinación académica",
+        "description": "Usa Copilot para redactar un borrador de informe trimestral (logros, retos, plan). Exporta PDF y súbelo. Debe ser específico a tu materia o rol.",
+        "inputType": "document",
+        "estimatedMinutes": 55,
+        "rubric": "El informe debe tener secciones de logros, retos y plan con contenido específico, no plantilla vacía."
+      },
+      {
+        "id": "extra-lvl-a-5",
+        "level": "a",
+        "number": 5,
+        "tool": "SchoolAI",
+        "title": "Configura un space monitoreado para práctica guiada",
+        "description": "Crea un space en SchoolAI para que tus alumnas practiquen un tema con IA monitoreada (preguntas guiadas, límite de temas). Captura la configuración del space y el prompt de sistema.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 55,
+        "rubric": "Debe verse nombre del space, restricciones o monitoreo activo, y prompt o instrucciones para alumnas."
+      },
+      {
+        "id": "extra-lvl-a-6",
+        "level": "a",
+        "number": 6,
+        "tool": "SchoolAI",
+        "title": "Reflexión sobre límites éticos del space con alumnas",
+        "description": "Después de probar SchoolAI, escribe qué límites pondrías (temas prohibidos, duración, supervisión) y cómo explicarías el uso ético a tus alumnas de secundaria.",
+        "inputType": "text",
+        "estimatedMinutes": 45,
+        "rubric": "Debe listar al menos 3 límites concretos y un guion breve para alumnas sobre uso ético. Mínimo 400 caracteres."
+      },
+      {
+        "id": "extra-lvl-a-7",
+        "level": "a",
+        "number": 7,
+        "tool": "Khanmigo",
+        "title": "Sesión de tutoría Khanmigo en Matemáticas",
+        "description": "Realiza una sesión de tutoría en Khanmigo sobre un tema de Matemáticas (fracciones, álgebra, geometría). Captura la conversación donde Khanmigo guíe con preguntas, no solo dé la respuesta.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 45,
+        "rubric": "La captura debe mostrar interacción socrática: Khanmigo hace preguntas antes de revelar procedimiento o respuesta."
+      },
+      {
+        "id": "extra-lvl-a-8",
+        "level": "a",
+        "number": 8,
+        "tool": "Khanmigo",
+        "title": "Plan para usar Khanmigo en estudio independiente",
+        "description": "Diseña un plan de 2 semanas para que alumnas usen Khanmigo en estudio independiente de tu materia. Sube PDF con calendario, objetivos y reglas de uso.",
+        "inputType": "document",
+        "estimatedMinutes": 50,
+        "rubric": "El plan debe cubrir 2 semanas con objetivos, sesiones y reglas claras para alumnas."
+      },
+      {
+        "id": "extra-lvl-a-9",
+        "level": "a",
+        "number": 9,
+        "tool": "ElevenLabs",
+        "title": "Audio introductorio de unidad en dos idiomas",
+        "description": "Con ElevenLabs, genera un audio de 1-2 min que presente una unidad nueva (puede ser español o español + inglés para IB). Captura la interfaz con el script y el reproductor.",
+        "inputType": "screenshot",
+        "estimatedMinutes": 50,
+        "rubric": "Debe mostrarse script de la unidad y evidencia de audio generado (reproductor o duración)."
+      },
+      {
+        "id": "extra-lvl-a-10",
+        "level": "a",
+        "number": 10,
+        "tool": "ElevenLabs",
+        "title": "Podcast breve de repaso para alumnas",
+        "description": "Crea un podcast de 2-3 min con ElevenLabs repasando conceptos clave de tu unidad actual. Describe el tema, el guion que escribiste y cómo lo compartirías con alumnas.",
+        "inputType": "text",
+        "estimatedMinutes": 55,
+        "rubric": "Debe incluir tema, resumen del guion con puntos clave, y plan de distribución a alumnas. Mínimo 400 caracteres."
+      }
+    ]
+  }
+}

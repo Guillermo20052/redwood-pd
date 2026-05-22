@@ -160,7 +160,7 @@ function buildCohortRow(
   const earnedDiplomas =
     recordedTiers.length > 0
       ? Array.from(new Set(recordedTiers)).sort((a, b) => a - b)
-      : getEarnedTiers(totalHours);
+      : getEarnedTiers(totalHours, map);
   const pairings = buildPairings(rows);
   return {
     user_id: profile.id,

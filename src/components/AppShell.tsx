@@ -11,11 +11,12 @@ import { createClient } from '@/lib/supabase/client';
 
 const IS_DEV = process.env.NODE_ENV === 'development';
 
-const nav = [
+const nav: { href: string; label: string; dot: string; extra?: boolean }[] = [
   { href: '/dashboard', label: 'Inicio', dot: '' },
   { href: '/nivel/b', label: 'Nivel 1', dot: '#1A2E4A' },
   { href: '/nivel/i', label: 'Nivel 2', dot: '#1A7A6E' },
   { href: '/nivel/a', label: 'Nivel 3', dot: '#B22234' },
+  { href: '/tareas-extra', label: 'Tareas Extra', dot: 'var(--gold)', extra: true },
   { href: '/logros', label: 'Logros', dot: '' },
   { href: '/etica', label: 'Ética', dot: '' },
   { href: '/reflexion', label: 'Reflexión', dot: '' },
@@ -117,11 +118,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               className={`level-tab no-underline ${active ? 'active' : ''}`}
               aria-current={active ? 'page' : undefined}
               onClick={() => setMobileNavOpen(false)}
+              style={item.extra ? { color: 'var(--gold)' } : undefined}
             >
               {item.dot && (
                 <span className="dot" style={{ background: item.dot }} />
               )}
               {item.label}
+              {item.extra && (
+                <span
+                  className="ml-1 text-[9px] font-bold opacity-80"
+                  aria-hidden
+                >
+                  +
+                </span>
+              )}
             </Link>
           );
         })}

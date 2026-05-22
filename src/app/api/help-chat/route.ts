@@ -12,9 +12,32 @@ CONOCIMIENTO DEL PROGRAMA (siempre exacto)
 ESTRUCTURA: 3 niveles, 15 partes en total (5 por nivel), 30 horas acreditables.
 DIPLOMAS:
 
-Diploma 1 (META PRINCIPAL): 20h verificadas = completar Niveles 1 y 2
-Diploma 2: 24h verificadas
-Diploma 3: 30h verificadas = completar los 3 niveles
+Diploma 1 (META PRINCIPAL): 20h verificadas (Niveles 1 y 2 obligatorios completos) Y al menos 4 tareas extra del Nivel 1 Y al menos 4 tareas extra del Nivel 2
+Diploma 2: 24h verificadas (mismos requisitos de extras que Diploma 1)
+Diploma 3: 30h verificadas = completar los 3 niveles obligatorios (mismos requisitos de extras que Diploma 1; las extras del Nivel 3 no cuentan para ningún diploma)
+
+═══════════════════════════════════════════════════════════
+TAREAS EXTRA (importante)
+═══════════════════════════════════════════════════════════
+Además de las 15 partes obligatorias, hay 30 tareas extra (10 por nivel) que se desbloquean al completar cada nivel:
+
+Nivel 1: 10 tareas extra, una vez completes las 5 partes obligatorias del Nivel 1
+Nivel 2: 10 tareas extra, una vez completes las 5 partes obligatorias del Nivel 2
+Nivel 3: 10 tareas extra, una vez completes las 5 partes obligatorias del Nivel 3
+
+CRÍTICO para Diploma 1:
+
+Necesitas completar al menos 4 tareas extra del Nivel 1 Y al menos 4 del Nivel 2 (además de las 20h regulares)
+Las tareas extra del Nivel 3 son 100% OPCIONALES y no afectan ningún diploma
+
+Cada tarea extra:
+
+Es solo una tarea (no video, no reflexión separada)
+Usa una de las 5 herramientas del nivel correspondiente
+Sube tu trabajo (texto / captura / documento) y la IA te da feedback
+Está claramente etiquetada como "TAREA EXTRA · OPCIONAL"
+
+Para acceder: pestaña "TAREAS EXTRA" en la navegación arriba.
 
 NIVEL 1 · Fundamentos (10h, 5 partes):
 
@@ -67,6 +90,7 @@ TABS PRINCIPALES (arriba):
 
 INICIO: vista general del programa
 NIVEL 1, NIVEL 2, NIVEL 3: el contenido del curso
+TAREAS EXTRA: práctica adicional (10 por nivel, se desbloquean al terminar el nivel)
 LOGROS: diplomas obtenidos
 ÉTICA: principios de uso ético de IA
 REFLEXIÓN: reflexiones acumuladas
@@ -160,9 +184,11 @@ const ADMIN_SYSTEM_PROMPT = `Eres una asistente para el equipo coordinador del p
 Conoces la estructura del programa con exactitud:
 
 3 niveles (Fundamentos, Integración, Transformación), 5 partes cada uno, 30h en total
-Diploma 1 a las 20h (Niveles 1 y 2), Diploma 2 a las 24h, Diploma 3 a las 30h
-Cada parte: video + tarea (verificada por IA Claude) + reflexión (400 chars min)
-Partes se desbloquean secuencialmente
+Diploma 1: 20h (Niveles 1 y 2 obligatorios) + mínimo 4 tareas extra de Nivel 1 + 4 de Nivel 2
+Diploma 2: 24h (mismos extras), Diploma 3: 30h (mismos extras; extras Nivel 3 opcionales)
+30 tareas extra (10/nivel): solo tarea, sin video/reflexión; se desbloquean al completar el nivel
+Cada parte obligatoria: video + tarea (IA) + reflexión (400 chars min)
+Partes obligatorias se desbloquean secuencialmente
 
 Como admin puedes:
 

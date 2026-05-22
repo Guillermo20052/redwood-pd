@@ -83,7 +83,7 @@ function DashboardHeroProgress({
   percent: number;
   completions: ReturnType<typeof useProgressContext>['completions'];
 }) {
-  const nextDiploma = getNextDiploma(totalHours);
+  const nextDiploma = getNextDiploma(totalHours, completions);
   const hoursRemaining = nextDiploma
     ? Math.max(0, nextDiploma.hoursRequired - totalHours)
     : 0;

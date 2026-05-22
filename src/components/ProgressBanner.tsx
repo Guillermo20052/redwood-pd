@@ -1,20 +1,38 @@
 'use client';
 
 import { getNextDiploma } from '@/lib/diplomas';
+import { getDiploma1Progress } from '@/lib/extras-gating';
+import type { CompletionMap } from '@/lib/verification';
 
 type Props = {
   totalHours: number;
   percent: number;
   diplomaTier: number;
+  completions: CompletionMap;
   profile: { full_name: string; subject: string; start_date: string };
   updateProfile: (p: Partial<{ full_name: string; subject: string; start_date: string }>) => void;
 };
 
-export function ProgressBanner({ totalHours, percent, diplomaTier, profile, updateProfile }: Props) {
-  const next = getNextDiploma(totalHours);
-  const hint = next
-    ? `${(next.hoursRequired - totalHours).toFixed(1)}h restantes para Diploma ${next.tier}`
-    : '🏆 Programa completo';
+export function ProgressBanner({
+  totalHours,
+  percent,
+  diplomaTier,
+  completions,
+  profile,
+  updateProfile,
+}: Props) {
+  const next = getNextDiploma(totalHours, completions);
+  const d1 = getDiploma1Progress(totalHours, completions);
+  let hint = '🏆 Programa completo';
+  if (next) {
+    if (next.tier === 1 && d1.hoursOk && (!d1.extrasL1Ok || !d1.extrasL2Ok)) {
+      hint = `Extras L1 ${d1.extrasL1}/4 · L2 ${d1.extrasL2}/4 para Diploma 1`;
+    } else if (totalHours < next.hoursRequired) {
+      hint = `${(next.hoursRequired - totalHours).toFixed(1)}h restantes para Diploma ${next.tier}`;
+    } else {
+      hint = `Completa tareas extra para Diploma ${next.tier}`;
+    }
+  }
   return (
     <>
       <div className="teacher-card no-print">

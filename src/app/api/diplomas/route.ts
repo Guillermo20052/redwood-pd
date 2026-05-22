@@ -3,7 +3,7 @@ import { getSessionUserId, loadCompletions } from '@/lib/completions-service';
 import { isLocalMode, localDb } from '@/lib/local-db';
 import { createClient } from '@/lib/supabase/server';
 import { sumVerifiedHours } from '@/lib/verification';
-import { getEarnedTiers, type DiplomaTier } from '@/lib/diplomas';
+import { getDiploma, getEarnedTiers, type DiplomaTier } from '@/lib/diplomas';
 import { isAdminUser } from '@/lib/auth-helpers';
 
 const TIERS = new Set<DiplomaTier>([1, 2, 3]);
@@ -67,12 +67,16 @@ export async function POST(request: Request) {
   // Server-side gate: don't trust the client's claim. Recompute hours.
   const completions = await loadCompletions(session.userId);
   const totalHours = sumVerifiedHours(completions);
-  const earned = new Set(getEarnedTiers(totalHours));
+  const earned = new Set(getEarnedTiers(totalHours, completions));
   if (!earned.has(tier)) {
-    return NextResponse.json(
-      { error: 'Aún no has alcanzado las horas necesarias para este diploma.' },
-      { status: 400 }
-    );
+    const hoursOk = totalHours >= getDiploma(tier).hoursRequired;
+    const msg =
+      hoursOk && tier === 1
+        ? 'Tienes las horas, pero faltan tareas extra (4 de Nivel 1 y 4 de Nivel 2) para este diploma.'
+        : hoursOk
+          ? 'Tienes las horas, pero faltan tareas extra obligatorias para este diploma.'
+          : 'Aún no has alcanzado los requisitos para este diploma.';
+    return NextResponse.json({ error: msg }, { status: 400 });
   }
 
   if (isLocalMode()) {

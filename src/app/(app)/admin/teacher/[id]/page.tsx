@@ -5,6 +5,11 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { isAdminUser } from '@/lib/auth-helpers';
 import { buildInitialCompletions, sumVerifiedHours } from '@/lib/verification';
 import { getEarnedTiers } from '@/lib/diplomas';
+import { getExtraTasksForLevel } from '@/lib/extra-tasks';
+import {
+  countCompletedExtras,
+  DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
+} from '@/lib/extras-gating';
 import { curriculumPath, getPartsByLevel } from '@/lib/curriculum-path';
 import type { CompletionRow, EvaluationRow } from '@/lib/local-db';
 import { Q12_LABEL } from '@/lib/evaluation';
@@ -96,7 +101,7 @@ export default async function TeacherDetailPage({ params }: PageProps) {
   const totalHours = sumVerifiedHours(completionMap);
   const earnedTiers = diplomaEvents && diplomaEvents.length > 0
     ? Array.from(new Set(diplomaEvents.map((d) => d.tier as 1 | 2 | 3))).sort((a, b) => a - b)
-    : getEarnedTiers(totalHours);
+    : getEarnedTiers(totalHours, completionMap);
 
   const verifiedItems = completionRows.filter((r) => r.status === 'verified');
   const partsCompleted = new Set(
@@ -230,6 +235,57 @@ export default async function TeacherDetailPage({ params }: PageProps) {
                     </div>
                   );
                 })}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="font-condensed text-xl font-extrabold mb-4">Tareas Extra</h3>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {(['b', 'i', 'a'] as const).map((level) => {
+            const done = countCompletedExtras(level, completionMap);
+            const tasks = getExtraTasksForLevel(level);
+            const diplomaNote =
+              level !== 'a'
+                ? ` · ${done >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL ? `${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL} hacia Diploma 1 ✓` : `${done}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL} hacia Diploma 1`}`
+                : ' · opcionales';
+            return (
+              <div
+                key={level}
+                className="rounded-xl border border-[var(--gray-200)] bg-white p-4 space-y-3"
+              >
+                <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--gray-500)]">
+                  {LEVEL_LABELS[level]}
+                </p>
+                <p className="text-sm font-semibold text-[var(--navy)]">
+                  {done} / 10 completadas
+                  <span className="text-xs font-normal text-[var(--gray-500)]">{diplomaNote}</span>
+                </p>
+                <div className="grid grid-cols-5 gap-1.5">
+                  {tasks.map((t) => {
+                    const verified = completionMap[t.id]?.status === 'verified';
+                    return (
+                      <div
+                        key={t.id}
+                        title={`#${t.number} ${t.tool}${verified ? ' ✓' : ''}`}
+                        className="flex flex-col items-center gap-0.5"
+                      >
+                        <span
+                          className="inline-flex w-7 h-7 items-center justify-center rounded-full text-[10px] font-bold border"
+                          style={{
+                            background: verified ? 'var(--teal)' : 'white',
+                            color: verified ? 'white' : 'var(--gray-500)',
+                            borderColor: verified ? 'var(--teal)' : 'var(--gray-300)',
+                          }}
+                        >
+                          {verified ? '✓' : t.number}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             );
           })}

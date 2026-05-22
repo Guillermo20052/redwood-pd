@@ -6,6 +6,7 @@ import {
   type TaskInputType,
 } from './curriculum-path';
 import { hoursMap, metaConfig } from './content';
+import { meetsDiplomaExtrasRequirement } from './extras-gating';
 import type { CompletionRow } from './local-db';
 
 export type CompletionMap = Record<string, CompletionRow>;
@@ -42,7 +43,52 @@ export function buildInitialCompletions(existing: CompletionRow[] = []): Complet
       status: prevVerified ? 'available' : 'locked',
     };
   }
+
+  for (const row of existing) {
+    if (row.item_key.startsWith('extra-lvl-')) {
+      map[row.item_key] = row;
+    }
+  }
   return map;
+}
+
+/** Mark an extra task verified (independent of curriculum sequential unlock). */
+export function verifyExtraTask(
+  completions: CompletionMap,
+  itemKey: string,
+  evidenceText: string,
+  gradeResult: TaskGradeResult,
+  meta?: TaskSubmissionMeta
+): CompletionMap {
+  if (!gradeResult.passed) {
+    throw new VerificationError('La tarea aún no cumple los criterios mínimos.', 400);
+  }
+  const inputType = meta?.inputType ?? 'text';
+  const trimmed = evidenceText.trim();
+  if (inputType === 'text' && trimmed.length < verificationConfig.taskEvidenceMinChars) {
+    throw new VerificationError(
+      `La evidencia debe tener al menos ${verificationConfig.taskEvidenceMinChars} caracteres`,
+      400
+    );
+  }
+  if ((inputType === 'screenshot' || inputType === 'document') && !meta?.fileUrl) {
+    throw new VerificationError('Debes subir un archivo para esta tarea.', 400);
+  }
+  const evidenceStored =
+    inputType === 'text' ? trimmed : meta?.fileUrl ?? trimmed;
+
+  const next = { ...completions };
+  next[itemKey] = {
+    item_key: itemKey,
+    status: 'verified',
+    verified_at: new Date().toISOString(),
+    evidence_text: evidenceStored,
+    task_input_type: inputType,
+    task_file_url: meta?.fileUrl ?? null,
+    task_score: 100,
+    task_feedback: gradeResult.feedback,
+  };
+  return next;
 }
 
 export function sumVerifiedHours(completions: CompletionMap): number {
@@ -235,10 +281,13 @@ export function getCurrentLevelSlug(completions: CompletionMap): string {
   return 'b';
 }
 
-export function getDiplomaTier(totalHours: number): 0 | 1 | 2 | 3 {
-  if (totalHours >= 30) return 3;
-  if (totalHours >= 24) return 2;
-  if (totalHours >= 20) return 1;
+export function getDiplomaTier(
+  totalHours: number,
+  completions: CompletionMap = {}
+): 0 | 1 | 2 | 3 {
+  if (totalHours >= 30 && meetsDiplomaExtrasRequirement(completions)) return 3;
+  if (totalHours >= 24 && meetsDiplomaExtrasRequirement(completions)) return 2;
+  if (totalHours >= 20 && meetsDiplomaExtrasRequirement(completions)) return 1;
   return 0;
 }
 

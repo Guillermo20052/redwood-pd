@@ -50,17 +50,17 @@ export function DiplomaCard({ diploma, totalHours, completions, onOpen }: Props)
         <div className="logro-req">
           <strong>{diploma.hoursRequired} horas</strong> verificadas
           {diploma.tier === 1 && (
-            <> + {DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL} extras L1 y L2</>
+            <> + {DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL} Level Up L1 y L2</>
           )}
         </div>
         <p className="logro-msg">{diploma.sublabel}</p>
         {d1 && !earned && (
           <p className="text-xs text-[var(--gray-600)] mt-2 leading-relaxed">
-            {d1.hoursOk ? '20h ✓' : `${totalHours.toFixed(1)}h / 20h`} · Extras L1:{' '}
+            {d1.hoursOk ? '20h ✓' : `${totalHours.toFixed(1)}h / 20h`} · Level Up L1:{' '}
             {d1.extrasL1}/{DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL}
-            {d1.extrasL1Ok ? ' ✓' : ''} · Extras L2: {d1.extrasL2}/{DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL}
+            {d1.extrasL1Ok ? ' ✓' : ''} · Level Up L2: {d1.extrasL2}/{DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL}
             {!d1.extrasL2Ok && d1.hoursOk
-              ? ` — faltan ${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - d1.extrasL2} extras del Nivel 2`
+              ? ` — faltan ${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - d1.extrasL2} Level Up del Nivel 2`
               : d1.extrasL2Ok
                 ? ' ✓'
                 : ''}
@@ -85,7 +85,7 @@ export function DiplomaCard({ diploma, totalHours, completions, onOpen }: Props)
               {!d1?.hoursOk && hoursRemaining > 0
                 ? `Faltan ${hoursRemaining.toFixed(1)}h`
                 : d1 && (!d1.extrasL1Ok || !d1.extrasL2Ok)
-                  ? 'Faltan tareas extra'
+                  ? 'Faltan tareas Level Up'
                   : `Faltan ${hoursRemaining.toFixed(1)}h`}
             </span>
           )}

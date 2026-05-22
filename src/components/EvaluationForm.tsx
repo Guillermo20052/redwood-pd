@@ -10,7 +10,7 @@ import {
 
 type Props = {
   initial: EvaluationRow | null;
-  onSaved: (row: EvaluationRow) => void;
+  onSaved: (row: EvaluationRow, grade?: { score: number; feedback: string } | null) => void;
 };
 
 type FormState = {
@@ -93,6 +93,11 @@ export function EvaluationForm({ initial, onSaved }: Props) {
   const [serverError, setServerError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [justSaved, setJustSaved] = useState(false);
+  const [gradeResult, setGradeResult] = useState<{ score: number; feedback: string } | null>(
+    initial?.score != null && initial.score_feedback
+      ? { score: initial.score, feedback: initial.score_feedback }
+      : null
+  );
 
   const validation = useMemo(() => validateEvaluation(toInput(state)), [state]);
   const isValid = validation.ok;
@@ -128,7 +133,9 @@ export function EvaluationForm({ initial, onSaved }: Props) {
         setServerError(data.error || 'No se pudo guardar la evaluación.');
         return;
       }
-      onSaved(data.evaluation as EvaluationRow);
+      const grade = data.grade as { score: number; feedback: string } | null | undefined;
+      if (grade?.score != null) setGradeResult(grade);
+      onSaved(data.evaluation as EvaluationRow, grade ?? null);
       setJustSaved(true);
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
@@ -140,7 +147,16 @@ export function EvaluationForm({ initial, onSaved }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8" noValidate>
-      {justSaved && (
+      {justSaved && gradeResult && (
+        <div className="eval-success-card text-sm text-[var(--green)] space-y-2">
+          <p>
+            ¡Gracias por completar tu evaluación! Recibiste un puntaje de{' '}
+            <strong>{gradeResult.score}/100</strong>.
+          </p>
+          <p className="text-[var(--gray-800)]">{gradeResult.feedback}</p>
+        </div>
+      )}
+      {justSaved && !gradeResult && (
         <div className="eval-success-card text-sm text-[var(--green)]">
           Gracias por tu evaluación. Puedes editarla cuando quieras.
         </div>

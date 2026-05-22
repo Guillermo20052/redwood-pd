@@ -67,7 +67,7 @@ export function ExtraTaskCard({ task, completions, isAdmin = false, onOpen }: Pr
             color: 'var(--gold)',
           }}
         >
-          TAREA EXTRA · OPCIONAL
+          TAREA LEVEL UP · OPCIONAL
         </span>
         <span className="text-[10px] text-[var(--gray-500)]">#{task.number}</span>
       </div>
@@ -89,7 +89,7 @@ export function ExtraTaskCard({ task, completions, isAdmin = false, onOpen }: Pr
 
       {locked && (
         <p className="text-xs text-[var(--gray-500)] leading-relaxed">
-          Completa el {LEVEL_LABEL[task.level]} para desbloquear las tareas extra.
+          Completa el {LEVEL_LABEL[task.level]} para desbloquear las tareas Level Up.
         </p>
       )}
 

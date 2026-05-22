@@ -72,9 +72,9 @@ export async function POST(request: Request) {
     const hoursOk = totalHours >= getDiploma(tier).hoursRequired;
     const msg =
       hoursOk && tier === 1
-        ? 'Tienes las horas, pero faltan tareas extra (4 de Nivel 1 y 4 de Nivel 2) para este diploma.'
+        ? 'Tienes las horas, pero faltan tareas Level Up (4 de Nivel 1 y 4 de Nivel 2) para este diploma.'
         : hoursOk
-          ? 'Tienes las horas, pero faltan tareas extra obligatorias para este diploma.'
+          ? 'Tienes las horas, pero faltan tareas Level Up obligatorias para este diploma.'
           : 'Aún no has alcanzado los requisitos para este diploma.';
     return NextResponse.json({ error: msg }, { status: 400 });
   }

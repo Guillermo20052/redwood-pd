@@ -109,7 +109,7 @@ function LevelExtraSection({
             color: 'var(--gray-600)',
           }}
         >
-          Completa las 5 partes obligatorias de este nivel para desbloquear las 10 tareas extra.
+          Completa las 5 partes obligatorias de este nivel para desbloquear las 10 tareas Level Up.
         </p>
       )}
 
@@ -145,7 +145,7 @@ export default function TareasExtraPage() {
             color: 'var(--navy)',
           }}
         >
-          Vista previa de admin · todas las tareas extra desbloqueadas · sin guardar en la base de
+          Vista previa de admin · todas las tareas Level Up desbloqueadas · sin guardar en la base de
           datos
         </p>
       )}
@@ -155,7 +155,7 @@ export default function TareasExtraPage() {
           Práctica adicional
         </div>
         <h2 className="font-condensed text-3xl font-extrabold text-[var(--navy)]">
-          Tareas Extra
+          Tareas Level Up
         </h2>
         <p className="text-sm text-[var(--gray-600)] mt-2 max-w-2xl">
           Práctica adicional con cada herramienta del nivel. Las tareas se desbloquean al
@@ -176,14 +176,14 @@ export default function TareasExtraPage() {
             <span className="text-[var(--gray-500)]">({totalHours.toFixed(1)}h)</span>
           </li>
           <li>
-            {d1.extrasL1Ok ? '✓' : '○'} Al menos 4 tareas extra de Nivel 1 ({d1.extrasL1}/4)
+            {d1.extrasL1Ok ? '✓' : '○'} Al menos 4 tareas Level Up de Nivel 1 ({d1.extrasL1}/4)
           </li>
           <li>
-            {d1.extrasL2Ok ? '✓' : '○'} Al menos 4 tareas extra de Nivel 2 ({d1.extrasL2}/4)
+            {d1.extrasL2Ok ? '✓' : '○'} Al menos 4 tareas Level Up de Nivel 2 ({d1.extrasL2}/4)
           </li>
         </ul>
         <p className="text-xs text-[var(--gray-600)] pt-1">
-          Las tareas extra de Nivel 3 son completamente opcionales y no afectan ningún diploma.
+          Las tareas Level Up de Nivel 3 son completamente opcionales y no afectan ningún diploma.
         </p>
       </div>
 

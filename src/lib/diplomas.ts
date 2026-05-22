@@ -27,7 +27,7 @@ export const DIPLOMAS: readonly Diploma[] = [
     tier: 1,
     name: 'Docente IA Consciente',
     sublabel:
-      'Por completar Niveles 1 y 2 (20h), más al menos 4 tareas extra de cada nivel',
+      'Por completar Niveles 1 y 2 (20h), más al menos 4 tareas Level Up de cada nivel',
     hoursRequired: 20,
     iconPath: '/assets/diplomas/diploma-1.svg',
     palette: {

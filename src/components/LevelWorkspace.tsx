@@ -7,6 +7,8 @@ import { useProgressContext } from './Providers';
 import { VerifiedPathSection } from './VerifiedPathSection';
 import { LevelLockBanner } from './LevelLockBanner';
 import { LevelSectionContent } from './LevelSectionContent';
+import { CollaborativeTasksSection } from './CollaborativeTasksSection';
+import { countCollaborativeTasksForLevel } from '@/lib/collaborative-tasks';
 import { isLevelUnlocked, getLevelHours, getLevelProgressPercent } from '@/lib/progress';
 import { getPartsByLevel } from '@/lib/curriculum-path';
 
@@ -20,6 +22,7 @@ const SECTIONS = [
   { id: 'ib', label: 'Alineación IB', icon: '📚' },
   { id: 'subj', label: 'Aplicaciones por Materia', icon: '🎨' },
   { id: 'hsk', label: 'Habilidades', icon: '🌟' },
+  { id: 'collab', label: 'Tareas Colaborativas', icon: '🤝' },
 ] as const;
 
 const LEVEL_EYEBROW: Record<string, string> = {
@@ -48,7 +51,7 @@ export function LevelWorkspace({ slug }: Props) {
     !isLevelUnlocked(completions, slug as 'i' | 'a', false);
   const heroClass = slug === 'b' ? 'lh-b' : slug === 'i' ? 'lh-i' : 'lh-a';
   const parts = getPartsByLevel(slug);
-  const collabCount = parts.filter((p) => p.collaborative).length;
+  const collabCount = countCollaborativeTasksForLevel(slug as 'b' | 'i' | 'a');
   const levelHours = getLevelHours(completions, slug as 'b' | 'i' | 'a');
   const targetHours = level.totalHours ?? 10;
   const progressPct = getLevelProgressPercent(completions, slug as 'b' | 'i' | 'a', targetHours);
@@ -165,7 +168,16 @@ export function LevelWorkspace({ slug }: Props) {
                       verificadas, primero desbloquea este nivel.
                     </p>
                   )}
-                  <LevelSectionContent level={slug} section={section} />
+                  {section === 'collab' ? (
+                    <CollaborativeTasksSection
+                      level={slug as 'b' | 'i' | 'a'}
+                      completions={completions}
+                      isAdmin={isAdmin}
+                      onUpdated={refreshCompletions}
+                    />
+                  ) : (
+                    <LevelSectionContent level={slug} section={section} />
+                  )}
                 </>
               )}
             </>

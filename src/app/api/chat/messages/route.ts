@@ -21,8 +21,7 @@ export async function GET() {
   const { data, error } = await supabase
     .from('chat_messages')
     .select('id, body, created_at, user_id, profiles(full_name, role)')
-    .order('created_at', { ascending: false })
-    .limit(100);
+    .order('created_at', { ascending: true });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
@@ -34,7 +33,7 @@ export async function GET() {
     author_role: (m.profiles as { role?: string })?.role ?? 'teacher',
   }));
 
-  return NextResponse.json({ messages: messages.reverse() });
+  return NextResponse.json({ messages });
 }
 
 export async function POST(request: Request) {

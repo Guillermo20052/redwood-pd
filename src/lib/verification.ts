@@ -45,7 +45,7 @@ export function buildInitialCompletions(existing: CompletionRow[] = []): Complet
   }
 
   for (const row of existing) {
-    if (row.item_key.startsWith('extra-lvl-')) {
+    if (row.item_key.startsWith('extra-lvl-') || row.item_key.startsWith('collab-lvl-')) {
       map[row.item_key] = row;
     }
   }
@@ -87,6 +87,44 @@ export function verifyExtraTask(
     task_file_url: meta?.fileUrl ?? null,
     task_score: 100,
     task_feedback: gradeResult.feedback,
+  };
+  return next;
+}
+
+/** Collaborative task: verified only when reciprocal partner confirmation exists. */
+export function verifyCollaborativeTask(
+  completions: CompletionMap,
+  itemKey: string,
+  evidenceText: string,
+  gradeResult: TaskGradeResult,
+  partner: TaskPartner,
+  reciprocalReady: boolean
+): CompletionMap {
+  if (!gradeResult.passed) {
+    throw new VerificationError('La tarea aún no cumple los criterios mínimos.', 400);
+  }
+  const trimmed = evidenceText.trim();
+  if (trimmed.length < verificationConfig.taskEvidenceMinChars) {
+    throw new VerificationError(
+      `La evidencia debe tener al menos ${verificationConfig.taskEvidenceMinChars} caracteres`,
+      400
+    );
+  }
+  if (partner.name.trim().length < 3) {
+    throw new VerificationError('Indica tu compañera antes de enviar.', 400);
+  }
+  const now = new Date().toISOString();
+  const next = { ...completions };
+  next[itemKey] = {
+    item_key: itemKey,
+    status: reciprocalReady ? 'verified' : 'available',
+    verified_at: reciprocalReady ? now : undefined,
+    evidence_text: trimmed,
+    task_input_type: 'text',
+    task_score: reciprocalReady ? 100 : undefined,
+    task_feedback: gradeResult.feedback,
+    partner_user_id: partner.user_id ?? undefined,
+    partner_name: partner.name.trim(),
   };
   return next;
 }

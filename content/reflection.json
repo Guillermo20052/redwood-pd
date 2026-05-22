@@ -42,9 +42,11 @@
       "slug": "i",
       "name": "Nivel 2 · Integración",
       "questions": [
-        "¿Qué hiciste tú que la IA no podía hacer al planear tu clase?",
-        "¿Qué quedarías dispuesta a automatizar de tu práctica y qué nunca delegarías?",
-        "¿En qué se parece y en qué se diferencia el trabajo IB entre las materias de tus compañeras?"
+        "¿Cómo cambió tu planeación semanal al integrar NotebookLM y Canva en tu flujo de trabajo? Da un ejemplo concreto.",
+        "Compara una clase que diste ANTES de Nivel 2 con una clase que diste DESPUÉS usando al menos 2 herramientas del nivel. ¿Qué diferencia notaron las alumnas?",
+        "¿En qué momento decidiste NO usar IA aunque pudiste? ¿Qué criterio aplicaste?",
+        "Una de tus colegas IB te pide que le expliques cómo integraste estas herramientas. ¿Qué le dices en 3 oraciones?",
+        "¿Cómo aseguraste la integridad académica de las alumnas al introducir estas herramientas en clase?"
       ],
       "parts": [
         {

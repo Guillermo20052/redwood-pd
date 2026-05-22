@@ -1,6 +1,6 @@
 'use client';
 
-import { getToolsByLevel } from '@/lib/content';
+import { getToolsByLevel, type SectionTool } from '@/lib/content';
 import { HABILIDADES_FALLBACK } from '@/lib/habilidades-fallback';
 import {
   getLevelAncillary,
@@ -24,28 +24,67 @@ export function LevelSectionContent({ level, section }: Props) {
   }
 
   if (section === 'tools') {
-    const tools = getToolsByLevel(level);
+    const TOOL_GROUPS: { levels: ('b' | 'i' | 'a')[]; label: string; accent: string; headingSize: 'sm' | 'lg' }[] =
+      level === 'b'
+        ? [{ levels: ['b'], label: 'Nivel 1 · Fundamentos', accent: 'var(--navy)', headingSize: 'lg' }]
+        : level === 'i'
+          ? [
+              { levels: ['b'], label: 'Nivel 1 · Fundamentos', accent: 'var(--navy)', headingSize: 'sm' },
+              { levels: ['i'], label: 'Nivel 2 · Integración', accent: 'var(--teal)', headingSize: 'lg' },
+            ]
+          : [
+              { levels: ['b'], label: 'Nivel 1 · Fundamentos', accent: 'var(--navy)', headingSize: 'sm' },
+              { levels: ['i'], label: 'Nivel 2 · Integración', accent: 'var(--teal)', headingSize: 'sm' },
+              { levels: ['a'], label: 'Nivel 3 · Transformación', accent: 'var(--red)', headingSize: 'lg' },
+            ];
+
+    const renderToolGroup = (tools: SectionTool[]) => (
+      <div className="tools-grid">
+        {tools.map((t) => (
+          <a
+            key={t.name}
+            href={t.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="tool-crd no-underline"
+          >
+            <div className="tool-icon">{t.icon}</div>
+            <div className="tool-name">{t.name}</div>
+            <div className="tool-desc">{t.desc}</div>
+          </a>
+        ))}
+      </div>
+    );
+
     return (
       <div className="sec-content active">
         <div className="sec-hdr">
           <h2 className="sec-title">Herramientas IA</h2>
           <span className="sec-pill">2025–2026</span>
         </div>
-        <div className="tools-grid">
-          {tools.map((t) => (
-            <a
-              key={t.name}
-              href={t.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="tool-crd no-underline"
-            >
-              <div className="tool-icon">{t.icon}</div>
-              <div className="tool-name">{t.name}</div>
-              <div className="tool-desc">{t.desc}</div>
-            </a>
-          ))}
-        </div>
+        <p className="mb-5 text-sm text-[var(--gray-600)]" style={{ fontSize: 13, lineHeight: 1.55 }}>
+          Tu caja de herramientas crece con cada nivel — aquí ves todo lo que has incorporado hasta ahora.
+        </p>
+        {TOOL_GROUPS.map((group, idx) => {
+          const tools = group.levels.flatMap((lv) => getToolsByLevel(lv));
+          if (!tools.length) return null;
+          return (
+            <section key={group.label} className={idx > 0 ? 'mt-8 pt-6 border-t border-[var(--gray-200)]' : ''}>
+              <h3
+                className="font-condensed font-extrabold mb-3"
+                style={{
+                  color: group.accent,
+                  fontSize: group.headingSize === 'lg' ? 20 : 14,
+                  letterSpacing: group.headingSize === 'lg' ? '-0.02em' : '0.04em',
+                  textTransform: group.headingSize === 'sm' ? 'uppercase' : undefined,
+                }}
+              >
+                {group.label}
+              </h3>
+              {renderToolGroup(tools)}
+            </section>
+          );
+        })}
       </div>
     );
   }

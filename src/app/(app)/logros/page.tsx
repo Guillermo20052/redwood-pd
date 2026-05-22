@@ -24,7 +24,7 @@ export default function LogrosPage() {
         <h2>Cada hora cuenta. Cada paso reconoce tu compromiso.</h2>
         <p>
           Tres niveles de reconocimiento conforme acumulas horas verificadas en la ruta obligatoria,
-          más tareas extra para el Diploma 1.
+          más tareas Level Up para el Diploma 1.
         </p>
         <p className="mt-3 text-sm text-white/85">
           <strong>{totalHours.toFixed(1)}h</strong> verificadas (ruta obligatoria)
@@ -43,10 +43,10 @@ export default function LogrosPage() {
         >
           <p className="font-semibold mb-1">Diploma 1 — requisitos</p>
           <p>
-            {d1.hoursOk ? '20h ✓' : `${totalHours.toFixed(1)}h / 20h`} · Extras L1:{' '}
+            {d1.hoursOk ? '20h ✓' : `${totalHours.toFixed(1)}h / 20h`} · Level Up L1:{' '}
             {d1.extrasL1}/{DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL}
-            {d1.extrasL1Ok ? ' ✓' : ''} · Extras L2: {d1.extrasL2}/{DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL}
-            {d1.extrasL2Ok ? ' ✓' : ` — faltan ${Math.max(0, DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - d1.extrasL2)} extras del Nivel 2`}
+            {d1.extrasL1Ok ? ' ✓' : ''} · Level Up L2: {d1.extrasL2}/{DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL}
+            {d1.extrasL2Ok ? ' ✓' : ` — faltan ${Math.max(0, DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - d1.extrasL2)} Level Up del Nivel 2`}
           </p>
         </div>
         <div className="logros-progress-bar">

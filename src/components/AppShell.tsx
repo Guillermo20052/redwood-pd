@@ -16,7 +16,7 @@ const nav: { href: string; label: string; dot: string; extra?: boolean }[] = [
   { href: '/nivel/b', label: 'Nivel 1', dot: '#1A2E4A' },
   { href: '/nivel/i', label: 'Nivel 2', dot: '#1A7A6E' },
   { href: '/nivel/a', label: 'Nivel 3', dot: '#B22234' },
-  { href: '/tareas-extra', label: 'Tareas Extra', dot: 'var(--gold)', extra: true },
+  { href: '/tareas-extra', label: 'Tareas Level Up', dot: 'var(--gold)', extra: true },
   { href: '/logros', label: 'Logros', dot: '' },
   { href: '/etica', label: 'Ética', dot: '' },
   { href: '/reflexion', label: 'Reflexión', dot: '' },

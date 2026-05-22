@@ -109,6 +109,9 @@ export type EvaluationRow = {
   q10_text: string;
   q11_text: string | null;
   q12_value: EvaluationQ12;
+  /** AI-generated final score 0–100 (migration 010). */
+  score?: number | null;
+  score_feedback?: string | null;
   submitted_at: string;
   updated_at: string;
 };
@@ -298,6 +301,8 @@ export const localDb = {
       q10_text: payload.q10_text,
       q11_text: payload.q11_text ?? null,
       q12_value: payload.q12_value,
+      score: payload.score ?? existing?.score ?? null,
+      score_feedback: payload.score_feedback ?? existing?.score_feedback ?? null,
       submitted_at: existing?.submitted_at ?? now,
       updated_at: now,
     };

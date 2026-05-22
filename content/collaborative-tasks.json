@@ -1,0 +1,38 @@
+{
+  "collaborative": {
+    "b": [
+      {
+        "id": "collab-lvl-b-1",
+        "level": "b",
+        "title": "Intercambio de prompts con otra docente",
+        "description": "Intercambia un prompt de ChatGPT con otra docente y comparen cuál dio mejores resultados para su clase de prepa IB. Documenta: el prompt que compartiste, el de tu compañera, qué respuesta funcionó mejor para tus alumnas y por qué (mínimo 400 caracteres).",
+        "inputType": "text",
+        "estimatedMinutes": 35,
+        "pairTask": true
+      }
+    ],
+    "i": [
+      {
+        "id": "collab-lvl-i-1",
+        "level": "i",
+        "title": "Co-diseño de sesión con NotebookLM",
+        "description": "Con otra docente de tu materia, co-diseñen una sesión usando NotebookLM con fuentes de ambas (planeaciones, artículos o guías IB). Describe qué fuentes aportó cada una, el esquema de la sesión acordado y cómo lo implementarán con sus alumnas de prepa (mínimo 400 caracteres).",
+        "inputType": "text",
+        "estimatedMinutes": 45,
+        "pairTask": true
+      }
+    ],
+    "a": [
+      {
+        "id": "collab-lvl-a-1",
+        "level": "a",
+        "title": "Mini-clínica SchoolAI con colegas",
+        "description": "Lidera una mini-clínica con 2-3 docentes sobre el uso de SchoolAI en su contexto de prepa IB. Registra: quiénes participaron, qué casos de uso exploraron, qué acuerdos de política tomaron y tu reflexión como facilitadora (mínimo 400 caracteres).",
+        "inputType": "text",
+        "estimatedMinutes": 50,
+        "pairTask": false,
+        "smallGroup": true
+      }
+    ]
+  }
+}

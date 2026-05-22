@@ -25,7 +25,7 @@
           "name": "Parte 2",
           "theme": "Anatomía de un buen prompt",
           "objective": "Comparar la calidad de las respuestas al variar la calidad del prompt.",
-          "practiceTask": "Escribe 3 prompts sobre la misma meta docente (por ejemplo, 'explicar el ciclo del agua a alumnas de secundaria'): uno malo, uno aceptable y uno excelente. Compara las respuestas y documenta qué hizo la diferencia.",
+          "practiceTask": "Escribe 3 prompts sobre la misma meta docente (por ejemplo, 'explicar el ciclo del agua a alumnas de prepa IB'): uno malo, uno aceptable y uno excelente. Compara las respuestas y documenta qué hizo la diferencia.",
           "transferTask": "Reflexión: ¿Qué reglas vas a llevarte para escribir mejores prompts? 2–3 oraciones."
         }
       ]

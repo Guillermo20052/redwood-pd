@@ -242,7 +242,7 @@ export default async function TeacherDetailPage({ params }: PageProps) {
       </section>
 
       <section>
-        <h3 className="font-condensed text-xl font-extrabold mb-4">Tareas Extra</h3>
+        <h3 className="font-condensed text-xl font-extrabold mb-4">Tareas Level Up</h3>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {(['b', 'i', 'a'] as const).map((level) => {
             const done = countCompletedExtras(level, completionMap);
@@ -433,6 +433,22 @@ function StatCard({ label, value }: { label: string; value: string }) {
 function EvaluationPanel({ eval: e }: { eval: EvaluationRow }) {
   return (
     <div className="rounded-xl border border-[var(--gray-200)] bg-white p-5 space-y-4 text-sm">
+      {e.score != null && (
+        <div
+          className="rounded-lg px-4 py-3"
+          style={{ background: 'color-mix(in srgb, var(--teal) 12%, white)' }}
+        >
+          <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--gray-500)]">
+            Puntaje IA
+          </p>
+          <p className="font-condensed text-2xl font-extrabold text-[var(--navy)]">
+            {e.score}/100
+          </p>
+          {e.score_feedback && (
+            <p className="text-sm text-[var(--gray-700)] mt-1">{e.score_feedback}</p>
+          )}
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <Field label="Valor del programa (Q1)">{e.q1_value}/5</Field>
         <Field label="AI-ready (Q2)">{e.q2_value}/5</Field>

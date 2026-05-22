@@ -133,7 +133,7 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
         >
           <div>
             <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--gold)' }}>
-              TAREA EXTRA · OPCIONAL · {task.tool}
+              TAREA LEVEL UP · OPCIONAL · {task.tool}
             </p>
             <h3 className="font-condensed text-lg font-extrabold text-[var(--navy)] mt-1">
               {task.title}

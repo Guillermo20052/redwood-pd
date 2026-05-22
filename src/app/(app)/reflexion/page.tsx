@@ -15,19 +15,44 @@ type Reflection = {
   created_at: string;
 };
 
+function packNotes(freeNotes: string, extraAnswers: string[], startIndex: number): string {
+  const parts: string[] = [];
+  if (freeNotes.trim()) parts.push(freeNotes.trim());
+  extraAnswers.forEach((a, i) => {
+    if (a.trim()) parts.push(`[Pregunta ${startIndex + i}]\n${a.trim()}`);
+  });
+  return parts.join('\n\n');
+}
+
+function unpackNotes(notes: string | null): { free: string; extras: Record<number, string> } {
+  if (!notes) return { free: '', extras: {} };
+  const extras: Record<number, string> = {};
+  let free = notes;
+  if (notes.includes('[Pregunta ')) {
+    const firstIdx = notes.indexOf('[Pregunta ');
+    free = notes.slice(0, firstIdx).trim();
+    const rest = notes.slice(firstIdx);
+    const re = /\[Pregunta (\d+)\]\n([\s\S]*?)(?=\n\n\[Pregunta \d+\]\n|$)/g;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(rest)) !== null) {
+      extras[parseInt(m[1], 10)] = m[2].trim();
+    }
+  }
+  return { free, extras };
+}
+
 export default function ReflexionPage() {
   const [level, setLevel] = useState(1);
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [session, setSession] = useState('');
-  const [q1, setQ1] = useState('');
-  const [q2, setQ2] = useState('');
-  const [q3, setQ3] = useState('');
+  const [answers, setAnswers] = useState<string[]>([]);
   const [notes, setNotes] = useState('');
   const [entries, setEntries] = useState<Reflection[]>([]);
   const [expanded, setExpanded] = useState<string | number | null>(null);
   const [saved, setSaved] = useState(false);
 
   const lvlConfig = reflectionConfig.levels.find((l) => l.level === level);
+  const questionCount = lvlConfig?.questions.length ?? 3;
 
   const load = async () => {
     try {
@@ -53,11 +78,20 @@ export default function ReflexionPage() {
     };
   }, []);
 
+  useEffect(() => {
+    setAnswers(Array(questionCount).fill(''));
+  }, [level, questionCount]);
+
   const save = async () => {
-    if (!q1 && !notes) {
+    const hasAnswer = answers.some((a) => a.trim()) || notes.trim();
+    if (!hasAnswer) {
       alert('Agrega al menos una respuesta.');
       return;
     }
+    const q1 = answers[0] ?? '';
+    const q2 = answers[1] ?? '';
+    const q3 = answers[2] ?? '';
+    const extraFrom4 = answers.slice(3);
     const body = {
       level,
       session_date: date,
@@ -65,7 +99,7 @@ export default function ReflexionPage() {
       q1,
       q2,
       q3,
-      notes,
+      notes: packNotes(notes, extraFrom4, 4),
     };
     try {
       const res = await fetch('/api/reflections', {
@@ -77,9 +111,7 @@ export default function ReflexionPage() {
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
         void load();
-        setQ1('');
-        setQ2('');
-        setQ3('');
+        setAnswers(Array(questionCount).fill(''));
         setNotes('');
         setSession('');
       }
@@ -157,8 +189,6 @@ export default function ReflexionPage() {
       </div>
 
       {lvlConfig?.questions.map((q, i) => {
-        const setters = [setQ1, setQ2, setQ3];
-        const vals = [q1, q2, q3];
         const numClass = i === 0 ? 'n1' : i === 1 ? 'n2' : 'n3';
         return (
           <div key={i} className="ref-qcard">
@@ -168,8 +198,14 @@ export default function ReflexionPage() {
             </div>
             <textarea
               className="ref-ta"
-              value={vals[i]}
-              onChange={(e) => setters[i](e.target.value)}
+              value={answers[i] ?? ''}
+              onChange={(e) =>
+                setAnswers((prev) => {
+                  const next = [...prev];
+                  next[i] = e.target.value;
+                  return next;
+                })
+              }
             />
           </div>
         );
@@ -190,42 +226,49 @@ export default function ReflexionPage() {
         {entries.length === 0 ? (
           <p className="ref-empty-state">Aún no hay reflexiones guardadas.</p>
         ) : (
-          entries.map((e) => (
-            <article key={String(e.id)} className="ref-entry">
-              <div className="ref-entry-hdr">
-                <p className="ref-entry-meta">
-                  📅 {e.session_date} · 📌 {e.session_title}
-                  <span className="ref-entry-lvl">Nivel {e.level}</span>
-                </p>
+          entries.map((e) => {
+            const { free, extras } = unpackNotes(e.notes);
+            const extraLines = Object.entries(extras)
+              .sort(([a], [b]) => Number(a) - Number(b))
+              .map(([, text]) => text);
+            const allAnswers = [e.q1, e.q2, e.q3, ...extraLines].filter(Boolean);
+            return (
+              <article key={String(e.id)} className="ref-entry">
+                <div className="ref-entry-hdr">
+                  <p className="ref-entry-meta">
+                    📅 {e.session_date} · 📌 {e.session_title}
+                    <span className="ref-entry-lvl">Nivel {e.level}</span>
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => remove(e.id)}
+                    className="ref-entry-del"
+                    aria-label="Eliminar"
+                  >
+                    🗑
+                  </button>
+                </div>
+                <p className="ref-entry-preview">{(allAnswers[0] || free || '').slice(0, 120)}…</p>
+                {expanded === e.id && (
+                  <div className="mt-2 text-sm space-y-2">
+                    {allAnswers.map((text, idx) => (
+                      <p key={idx} className="whitespace-pre-wrap">
+                        {text}
+                      </p>
+                    ))}
+                    {free && <p className="italic whitespace-pre-wrap">{free}</p>}
+                  </div>
+                )}
                 <button
                   type="button"
-                  onClick={() => remove(e.id)}
-                  className="ref-entry-del"
-                  aria-label="Eliminar"
+                  className="ref-entry-expand"
+                  onClick={() => setExpanded(expanded === e.id ? null : e.id)}
                 >
-                  🗑
+                  {expanded === e.id ? '▲ Ocultar' : '▼ Ver completa'}
                 </button>
-              </div>
-              <p className="ref-entry-preview">{(e.q1 || e.notes || '').slice(0, 120)}…</p>
-              {expanded === e.id && (
-                <div className="mt-2 text-sm space-y-2">
-                  {[e.q1, e.q2, e.q3].filter(Boolean).map((text, idx) => (
-                    <p key={idx} className="whitespace-pre-wrap">
-                      {text}
-                    </p>
-                  ))}
-                  {e.notes && <p className="italic">{e.notes}</p>}
-                </div>
-              )}
-              <button
-                type="button"
-                className="ref-entry-expand"
-                onClick={() => setExpanded(expanded === e.id ? null : e.id)}
-              >
-                {expanded === e.id ? '▲ Ocultar' : '▼ Ver completa'}
-              </button>
-            </article>
-          ))
+              </article>
+            );
+          })
         )}
       </section>
     </div>

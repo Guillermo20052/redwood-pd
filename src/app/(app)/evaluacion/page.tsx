@@ -8,6 +8,7 @@ export default function EvaluacionPage() {
   const [loaded, setLoaded] = useState(false);
   const [existing, setExisting] = useState<EvaluationRow | null>(null);
   const [editing, setEditing] = useState(false);
+  const [grade, setGrade] = useState<{ score: number; feedback: string } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -17,6 +18,10 @@ export default function EvaluacionPage() {
         if (!cancelled && res.ok) {
           const data = (await res.json()) as { evaluation: EvaluationRow | null };
           setExisting(data.evaluation);
+          const ev = data.evaluation;
+          if (ev?.score != null && ev.score_feedback) {
+            setGrade({ score: ev.score, feedback: ev.score_feedback });
+          }
         }
       } catch {
         /* show empty form */
@@ -46,9 +51,17 @@ export default function EvaluacionPage() {
 
       {loaded && existing && !editing && (
         <div className="eval-success-card space-y-3 text-left">
-          <p className="text-sm text-[var(--green)]">
-            Gracias por tu evaluación. Puedes editarla cuando quieras.
-          </p>
+          {grade && (
+            <p className="text-sm text-[var(--green)]">
+              ¡Gracias por completar tu evaluación! Recibiste un puntaje de{' '}
+              <strong>{grade.score}/100</strong>. {grade.feedback}
+            </p>
+          )}
+          {!grade && (
+            <p className="text-sm text-[var(--green)]">
+              Gracias por tu evaluación. Puedes editarla cuando quieras.
+            </p>
+          )}
           <p className="text-xs text-[var(--gray-600)]">
             Enviada el <strong>{formatDate(existing.submitted_at)}</strong>
           </p>
@@ -61,8 +74,12 @@ export default function EvaluacionPage() {
       {loaded && showForm && (
         <EvaluationForm
           initial={existing}
-          onSaved={(row) => {
+          onSaved={(row, g) => {
             setExisting(row);
+            if (g) setGrade(g);
+            else if (row.score != null && row.score_feedback) {
+              setGrade({ score: row.score, feedback: row.score_feedback });
+            }
             setEditing(false);
           }}
         />

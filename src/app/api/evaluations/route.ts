@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { isLocalMode, localDb, type EvaluationRow } from '@/lib/local-db';
 import { getSessionUserId } from '@/lib/completions-service';
 import { validateEvaluation } from '@/lib/evaluation';
+import { gradeEvaluation } from '@/lib/evaluation-grader';
 
 export async function GET() {
   const session = await getSessionUserId();
@@ -51,9 +52,21 @@ async function upsert(request: Request) {
   }
   const payload = result.value;
 
+  let gradeResult: { score: number; feedback: string } | null = null;
+  try {
+    gradeResult = await gradeEvaluation(payload);
+  } catch {
+    /* score optional if API key missing */
+  }
+
   if (isLocalMode()) {
-    const row = localDb.upsertEvaluation(session.userId, payload);
-    return NextResponse.json({ evaluation: row });
+    const row = localDb.upsertEvaluation(session.userId, {
+      ...payload,
+      ...(gradeResult
+        ? { score: gradeResult.score, score_feedback: gradeResult.feedback }
+        : { score: null, score_feedback: null }),
+    });
+    return NextResponse.json({ evaluation: row, grade: gradeResult });
   }
 
   const supabase = await createClient();
@@ -70,6 +83,9 @@ async function upsert(request: Request) {
   const upsertPayload = {
     user_id: session.userId,
     ...payload,
+    ...(gradeResult
+      ? { score: gradeResult.score, score_feedback: gradeResult.feedback }
+      : {}),
     submitted_at: existing?.submitted_at ?? now,
     updated_at: now,
   };
@@ -81,5 +97,8 @@ async function upsert(request: Request) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ evaluation: data as EvaluationRow });
+  return NextResponse.json({
+    evaluation: data as EvaluationRow,
+    grade: gradeResult,
+  });
 }

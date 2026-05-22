@@ -4,13 +4,13 @@
       "id": "s1",
       "label": "Parte 1",
       "title": "Parte 1 · Planeación de clase asistida por IA",
-      "objective": "Generar un plan de clase real para esta semana usando IA y editarlo a tu contexto.",
+      "objective": "Generar un plan de clase real para este semestre usando IA y editarlo a tu contexto.",
       "days": [
         {
           "name": "Parte 1",
           "theme": "Planeación de clase asistida por IA",
           "objective": "Construir un plan completo (objetivos, secuencia y evaluación) para una clase próxima.",
-          "practiceTask": "Genera un plan de clase completo para una clase real que darás esta semana o la próxima. Incluye objetivos, secuencia de actividades y evaluación. Edítalo a tu contexto.",
+          "practiceTask": "Genera un plan de clase completo para una clase real que darás este semestre o el próximo. Incluye objetivos, secuencia de actividades y evaluación. Edítalo a tu contexto.",
           "transferTask": "Reflexión: ¿Qué hiciste tú que la IA no podía hacer? 2–3 oraciones."
         }
       ]

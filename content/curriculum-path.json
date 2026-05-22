@@ -31,7 +31,7 @@
       "partSubtitle": "Crea tu cuenta y genera tu primer material de clase con IA",
       "primaryTools": ["ChatGPT"],
       "collaborative": false,
-      "taskPrompt": "Crea tu cuenta GRATIS en ChatGPT (chat.openai.com). Una vez dentro, ten una conversación real con ChatGPT pidiéndole que te genere una introducción de 10 minutos para una clase de tu materia sobre un tema que des esta semana. Sube una captura de pantalla donde se vea claramente: (1) tu prompt completo (qué le pediste), y (2) parte de la respuesta de ChatGPT con el contenido educativo generado. La captura debe incluir el logo o nombre de ChatGPT visible.",
+      "taskPrompt": "Crea tu cuenta GRATIS en ChatGPT (chat.openai.com). Una vez dentro, ten una conversación real con ChatGPT pidiéndole que te genere una introducción de 10 minutos para una clase de tu materia sobre un tema que enseñas este semestre. Sube una captura de pantalla donde se vea claramente: (1) tu prompt completo (qué le pediste), y (2) parte de la respuesta de ChatGPT con el contenido educativo generado. La captura debe incluir el logo o nombre de ChatGPT visible.",
       "taskRubric": {
         "toolName": "ChatGPT",
         "taskGoal": "que la docente haya creado su cuenta gratuita, escrito un prompt para generar material de clase real, y la captura muestre tanto el prompt como la respuesta"
@@ -52,7 +52,7 @@
       "partSubtitle": "Crea tu cuenta y genera tu primer material de clase con IA",
       "primaryTools": ["ChatGPT"],
       "collaborative": false,
-      "reflectionPrompt": "¿Cuál es la primera cosa que vas a usar ChatGPT para preparar esta semana en tu clase, ahora que ya tienes cuenta y lo probaste?"
+      "reflectionPrompt": "¿Cuál es la primera cosa que vas a usar ChatGPT para preparar este semestre en tu clase, ahora que ya tienes cuenta y lo probaste?"
     },
     {
       "order": 3,
@@ -193,7 +193,7 @@
       "partSubtitle": "Más de 60 generadores para rúbricas, planes y evaluaciones",
       "primaryTools": ["MagicSchool"],
       "collaborative": false,
-      "taskPrompt": "Crea tu cuenta en magicschool.ai (gratis para docentes, regístrate con cualquier correo). Explora los generadores y elige 'Rubric Generator' o 'Assessment Builder'. Crea una rúbrica de evaluación para una tarea REAL que vayas a calificar esta semana o la próxima. Personalízala con los criterios IB de tu materia (Criterio A, B, C, D según aplique). Incluye descriptores claros por nivel de desempeño. Descarga el resultado como PDF y súbelo aquí.",
+      "taskPrompt": "Crea tu cuenta en magicschool.ai (gratis para docentes, regístrate con cualquier correo). Explora los generadores y elige 'Rubric Generator' o 'Assessment Builder'. Crea una rúbrica de evaluación para una tarea REAL que vayas a calificar este semestre o el próximo. Personalízala con los criterios IB de tu materia (Criterio A, B, C, D según aplique). Incluye descriptores claros por nivel de desempeño. Descarga el resultado como PDF y súbelo aquí.",
       "taskRubric": {
         "toolName": "MagicSchool",
         "taskGoal": "que la docente haya generado una rúbrica IB real para su materia con criterios identificables y descriptores por nivel"
@@ -214,7 +214,7 @@
       "partSubtitle": "Más de 60 generadores para rúbricas, planes y evaluaciones",
       "primaryTools": ["MagicSchool"],
       "collaborative": false,
-      "reflectionPrompt": "¿Cuál de los más de 60 generadores de MagicSchool te parece más útil para tu materia, y qué ahorro de tiempo específico te imaginas darte esta próxima semana?"
+      "reflectionPrompt": "¿Cuál de los más de 60 generadores de MagicSchool te parece más útil para tu materia, y qué ahorro de tiempo específico te imaginas darte el próximo semestre?"
     },
     {
       "order": 12,
@@ -409,7 +409,7 @@
       "partSubtitle": "Investiga, redacta y crea con la IA de Google",
       "primaryTools": ["Gemini"],
       "collaborative": false,
-      "taskPrompt": "Entra a gemini.google.com (gratis con tu cuenta de Google personal). Usa Gemini para hacer UNA tarea real de tu trabajo esta semana: redactar un correo a familias, mejorar un documento que ya tenías escrito, generar fórmulas para una hoja de cálculo de calificaciones, resumir un texto largo, o crear el borrador de una presentación. Compara mentalmente con cómo lo harías en ChatGPT. Escribe una reflexión describiendo: qué tarea hiciste, qué le pediste a Gemini, qué te respondió, en qué se diferenció de ChatGPT, y cuánto tiempo te ahorraste vs hacerlo manualmente. Mínimo 400 caracteres.",
+      "taskPrompt": "Entra a gemini.google.com (gratis con tu cuenta de Google personal). Usa Gemini para hacer UNA tarea real de tu trabajo este semestre: redactar un correo a familias, mejorar un documento que ya tenías escrito, generar fórmulas para una hoja de cálculo de calificaciones, resumir un texto largo, o crear el borrador de una presentación. Compara mentalmente con cómo lo harías en ChatGPT. Escribe una reflexión describiendo: qué tarea hiciste, qué le pediste a Gemini, qué te respondió, en qué se diferenció de ChatGPT, y cuánto tiempo te ahorraste vs hacerlo manualmente. Mínimo 400 caracteres.",
       "taskRubric": {
         "toolName": "Gemini",
         "taskGoal": "que la docente haya usado Gemini para una tarea real de su trabajo y describa con detalle qué hizo, qué obtuvo y cómo se diferencia de ChatGPT"
@@ -592,7 +592,7 @@
       "partSubtitle": "Convierte texto plano en infografías profesionales",
       "primaryTools": ["Napkin AI"],
       "collaborative": false,
-      "reflectionPrompt": "Hay conceptos en tu materia que las alumnas entienden mejor cuando los ven que cuando los oyen. ¿Cuál de esos conceptos vas a convertir en visual con Napkin esta semana?"
+      "reflectionPrompt": "Hay conceptos en tu materia que las alumnas entienden mejor cuando los ven que cuando los oyen. ¿Cuál de esos conceptos vas a convertir en visual con Napkin este semestre?"
     },
     {
       "order": 33,

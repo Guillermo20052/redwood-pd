@@ -3,7 +3,7 @@
     {
       "name": "ChatGPT",
       "icon": "🤖",
-      "desc": "Planificación, redacción de contenido",
+      "desc": "Planeación, redacción de contenido",
       "url": "https://chat.openai.com"
     },
     {
@@ -13,122 +13,86 @@
       "url": "https://claude.ai"
     },
     {
-      "name": "Gemini",
-      "icon": "🌐",
-      "desc": "Integración Google, investigación",
-      "url": "https://gemini.google.com"
+      "name": "Perplexity",
+      "icon": "🔍",
+      "desc": "Búsqueda con citas y fuentes",
+      "url": "https://www.perplexity.ai"
     },
     {
-      "name": "NotebookLM",
-      "icon": "📓",
-      "desc": "Fuentes propias, guías de estudio",
-      "url": "https://notebooklm.google.com"
-    },
-    {
-      "name": "MagicSchool.ai",
+      "name": "MagicSchool",
       "icon": "🏫",
-      "desc": "Herramientas de IA específicas para educación",
+      "desc": "Herramientas de IA para docentes",
       "url": "https://www.magicschool.ai"
     },
     {
-      "name": "Diffit.me",
+      "name": "Diffit",
       "icon": "📋",
-      "desc": "Nivelación de texto y diferenciación",
+      "desc": "Nivelación de textos y diferenciación",
       "url": "https://www.diffit.me"
-    },
-    {
-      "name": "Canva",
-      "icon": "🎨",
-      "desc": "Recursos visuales con IA",
-      "url": "https://www.canva.com"
     }
   ],
   "i": [
     {
-      "name": "ChatGPT",
-      "icon": "🤖",
-      "desc": "Planificación, redacción de contenido",
-      "url": "https://chat.openai.com"
-    },
-    {
-      "name": "Claude",
-      "icon": "💬",
-      "desc": "Rúbricas, retroalimentación, documentos largos",
-      "url": "https://claude.ai"
-    },
-    {
-      "name": "Gemini",
-      "icon": "🌐",
-      "desc": "Integración Google, investigación",
-      "url": "https://gemini.google.com"
-    },
-    {
       "name": "NotebookLM",
       "icon": "📓",
       "desc": "Fuentes propias, guías de estudio",
       "url": "https://notebooklm.google.com"
     },
     {
-      "name": "MagicSchool.ai",
-      "icon": "🏫",
-      "desc": "Herramientas de IA específicas para educación",
-      "url": "https://www.magicschool.ai"
-    },
-    {
-      "name": "Diffit.me",
-      "icon": "📋",
-      "desc": "Nivelación de texto y diferenciación",
-      "url": "https://www.diffit.me"
-    },
-    {
       "name": "Canva",
       "icon": "🎨",
-      "desc": "Recursos visuales con IA",
+      "desc": "Visuales e infografías con IA",
       "url": "https://www.canva.com"
+    },
+    {
+      "name": "Gemini",
+      "icon": "🌐",
+      "desc": "Workspace Google, investigación",
+      "url": "https://gemini.google.com"
+    },
+    {
+      "name": "Brisk Teaching",
+      "icon": "⚡",
+      "desc": "Retroalimentación en lote",
+      "url": "https://www.briskteaching.com"
+    },
+    {
+      "name": "Gamma",
+      "icon": "📊",
+      "desc": "Presentaciones con IA",
+      "url": "https://gamma.app"
     }
   ],
   "a": [
     {
-      "name": "ChatGPT",
-      "icon": "🤖",
-      "desc": "Planificación, redacción de contenido",
-      "url": "https://chat.openai.com"
+      "name": "Napkin AI",
+      "icon": "📐",
+      "desc": "Diagramas y mapas visuales",
+      "url": "https://www.napkin.ai"
     },
     {
-      "name": "Claude",
-      "icon": "💬",
-      "desc": "Rúbricas, retroalimentación, documentos largos",
-      "url": "https://claude.ai"
+      "name": "Copilot Web",
+      "icon": "💻",
+      "desc": "Microsoft 365, análisis de datos",
+      "url": "https://copilot.microsoft.com"
     },
     {
-      "name": "Gemini",
-      "icon": "🌐",
-      "desc": "Integración Google, investigación",
-      "url": "https://gemini.google.com"
+      "name": "SchoolAI",
+      "icon": "🛡️",
+      "desc": "IA monitoreada para alumnas",
+      "url": "https://schoolai.com"
     },
     {
-      "name": "NotebookLM",
-      "icon": "📓",
-      "desc": "Fuentes propias, guías de estudio",
-      "url": "https://notebooklm.google.com"
+      "name": "Khanmigo",
+      "icon": "🎓",
+      "desc": "Tutoría Khan Academy",
+      "url": "https://www.khanacademy.org/khan-labs"
     },
     {
-      "name": "MagicSchool.ai",
-      "icon": "🏫",
-      "desc": "Herramientas de IA específicas para educación",
-      "url": "https://www.magicschool.ai"
-    },
-    {
-      "name": "Diffit.me",
-      "icon": "📋",
-      "desc": "Nivelación de texto y diferenciación",
-      "url": "https://www.diffit.me"
-    },
-    {
-      "name": "Canva",
-      "icon": "🎨",
-      "desc": "Recursos visuales con IA",
-      "url": "https://www.canva.com"
+      "name": "ElevenLabs",
+      "icon": "🎙️",
+      "desc": "Audio y narración con IA",
+      "url": "https://elevenlabs.io"
     }
   ]
 }

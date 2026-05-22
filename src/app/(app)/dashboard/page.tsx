@@ -16,8 +16,11 @@ const EVAL_UNLOCK_HOURS = 20;
 const LEVEL_TARGET_HOURS = 10;
 const PROGRAM_MAX_HOURS = metaConfig.programMaxHours ?? 30;
 
-const WARM_INTRO =
-  'En Redwood High creemos que una maestra que nunca deja de aprender es la maestra que sus alumnas nunca olvidan. Este programa no es una lista de tareas por completar — es una invitación a mantenerte vigente, curiosa y conectada con lo que más importa.';
+const WARM_INTRO_PRIMARY =
+  'En Redwood High creemos que una maestra que nunca deja de aprender es la maestra que sus alumnas nunca olvidan. Este programa no es una lista de tareas por completar — es una invitación a mantenerte vigente, curiosa y conectada con lo que más importa: encontrar mejores formas de llegar a cada alumna, liberar tiempo para lo que le da alma a nuestra comunidad y fortalecer la esencia que nos hace ser quienes somos.';
+
+const WARM_INTRO_SECONDARY =
+  'Cada herramienta que explores y cada reflexión que registres aquí son semillas para tu práctica futura — no para mañana, sino para la docente que seguirás eligiendo ser. Avanza a tu ritmo, vuelve cuando lo necesites, y confía en que cada pequeño avance te acerca a tener más tiempo, más energía y más presencia para lo que ninguna herramienta puede reemplazar: conocer, guiar y acompañar a cada alumna.';
 
 const LEVEL_ICONS: Record<string, string> = { b: '🌱', i: '🌳', a: '🌲' };
 
@@ -312,23 +315,24 @@ export default function DashboardPage() {
             Liceo Redwood · Monterrey · Ruta de Desarrollo Profesional
           </div>
           <h2>Siempre mejores. Siempre más conectadas.</h2>
-          <p>{WARM_INTRO}</p>
+          <p className="mb-3">{WARM_INTRO_PRIMARY}</p>
+          <p>{WARM_INTRO_SECONDARY}</p>
           <div className="hero-stat-row">
             <div className="hero-stat-box">
               <div className="hs-num">3</div>
-              <div className="hs-lbl">Niveles · A tu ritmo</div>
+              <div className="hs-lbl">Niveles progresivos</div>
             </div>
             <div className="hero-stat-box">
               <div className="hs-num">30h</div>
-              <div className="hs-lbl">acreditables</div>
+              <div className="hs-lbl">Horas acreditables</div>
             </div>
             <div className="hero-stat-box">
               <div className="hs-num">Tu ritmo</div>
-              <div className="hs-lbl">sin fechas límite</div>
+              <div className="hs-lbl">Sin tiempos impuestos</div>
             </div>
             <div className="hero-stat-box">
               <div className="hs-num">IB + IA</div>
-              <div className="hs-lbl">alineación curricular</div>
+              <div className="hs-lbl">Alineado a tu práctica real</div>
             </div>
           </div>
         </div>

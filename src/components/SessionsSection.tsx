@@ -90,30 +90,25 @@ function SessionPartCard({ part, level }: { part: PartGroup; level: string }) {
       >
         {videoSummary ? (
           <p>
-            <span className="font-bold text-[var(--gray-700)]">▶ Video (~36 min):</span>{' '}
+            <span className="font-bold text-[var(--gray-700)]">▶ Video:</span>{' '}
             {videoSummary}
           </p>
         ) : null}
         {taskSummary ? (
           <p>
-            <span className="font-bold text-[var(--gray-700)]">✎ Tarea (~60 min):</span>{' '}
+            <span className="font-bold text-[var(--gray-700)]">✎ Tarea:</span>{' '}
             {taskSummary}
           </p>
         ) : null}
         {reflection?.reflectionPrompt ? (
           <p>
-            <span className="font-bold text-[var(--gray-700)]">💭 Reflexión (~24 min):</span>{' '}
+            <span className="font-bold text-[var(--gray-700)]">💭 Reflexión:</span>{' '}
             {reflection.reflectionPrompt}
           </p>
         ) : null}
       </div>
 
-      <footer
-        className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--gray-100)] pt-2"
-      >
-        <span className="text-[11px] font-semibold text-[var(--gray-600)]">
-          Tiempo total estimado: 2 horas
-        </span>
+      <footer className="mt-3 flex justify-end border-t border-[var(--gray-100)] pt-2">
         <div className="flex items-center gap-1.5" aria-label="Video, tarea y reflexión">
           {(['video', 'task', 'reflection'] as const).map((stage) => (
             <span
@@ -152,7 +147,7 @@ export function SessionsSection({ level }: Props) {
 
       <p className="mb-4 text-sm text-[var(--gray-600)]" style={{ fontSize: 13, lineHeight: 1.55 }}>
         Vista previa de las 5 partes del nivel: herramienta, video, tarea y reflexión. Aquí puedes
-        planificar tu semana sin esperar a desbloquear cada parte en la ruta verificada.
+        planificar tu semestre sin esperar a desbloquear cada parte en la ruta verificada.
       </p>
 
       <div className="flex flex-col gap-3">

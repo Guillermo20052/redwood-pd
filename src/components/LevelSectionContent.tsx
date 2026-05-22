@@ -7,6 +7,7 @@ import {
   getModalitiesPill,
   getSubjectsPill,
 } from '@/lib/level-ancillary';
+import { getAplicacionesIb } from '@/lib/aplicaciones-ib';
 import { SessionsSection } from './SessionsSection';
 
 type Props = {
@@ -95,14 +96,19 @@ export function LevelSectionContent({ level, section }: Props) {
   }
 
   if (section === 'subj') {
+    const subjects = getAplicacionesIb(level);
     return (
       <div className="sec-content active">
         <div className="sec-hdr">
           <div className="sec-title">Aplicaciones por Materia</div>
-          <div className="sec-pill">{getSubjectsPill(level)}</div>
+          <div className="sec-pill">{getSubjectsPill(level)} · IB DP</div>
         </div>
+        <p className="mb-4 text-sm text-[var(--gray-600)]" style={{ fontSize: 13, lineHeight: 1.55 }}>
+          Ejemplos concretos por materia del Bachillerato Internacional y las cinco herramientas de
+          este nivel.
+        </p>
         <div className="subj-grid">
-          {data.subjects.map((s) => (
+          {subjects.map((s) => (
             <div
               key={s.name}
               className="subj-crd"

@@ -7,7 +7,7 @@
         "number": 1,
         "tool": "ChatGPT",
         "title": "Genera 5 preguntas tipo IB para tu próxima evaluación",
-        "description": "Usa ChatGPT para generar 5 preguntas de evaluación tipo IB sobre el tema que estás enseñando esta semana (Biología, Historia, Matemáticas, etc.). Las preguntas deben mostrar distintos niveles de Bloom. Sube una captura donde se vean las 5 preguntas y el prompt que usaste.",
+        "description": "Usa ChatGPT para generar 5 preguntas de evaluación tipo IB sobre el tema que estás enseñando este semestre (Biología, Historia, Matemáticas, etc.). Las preguntas deben mostrar distintos niveles de Bloom. Sube una captura donde se vean las 5 preguntas y el prompt que usaste.",
         "inputType": "screenshot",
         "estimatedMinutes": 45,
         "rubric": "La captura debe mostrar 5 preguntas claramente distintas, con variedad de niveles cognitivos, y el prompt original visible."

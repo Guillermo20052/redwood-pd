@@ -13,14 +13,21 @@ type StageStatus = 'locked' | 'available' | 'verified';
 type Props = {
   part: PartGroup;
   completions: CompletionMap;
+  isAdmin?: boolean;
   onPartComplete?: (partId: string) => void;
 };
 
 const SUCCESS_DELAY_MS = 1500;
 
-function stageStatus(itemKey: string | undefined, completions: CompletionMap): StageStatus {
+function stageStatus(
+  itemKey: string | undefined,
+  completions: CompletionMap,
+  isAdmin = false
+): StageStatus {
   if (!itemKey) return 'locked';
   const row = completions[itemKey];
+  if (row?.status === 'verified') return 'verified';
+  if (isAdmin) return 'available';
   return (row?.status as StageStatus | undefined) ?? 'locked';
 }
 
@@ -67,14 +74,14 @@ function PartHeading({
 }
 
 export const PartCard = forwardRef<HTMLElement, Props>(function PartCard(
-  { part, completions, onPartComplete },
+  { part, completions, isAdmin = false, onPartComplete },
   ref
 ) {
   const level = part.level as 'b' | 'i' | 'a';
   const stages = part.stages;
-  const videoS = stageStatus(stages.video?.itemKey, completions);
-  const taskS = stageStatus(stages.task?.itemKey, completions);
-  const reflS = stageStatus(stages.reflection?.itemKey, completions);
+  const videoS = stageStatus(stages.video?.itemKey, completions, isAdmin);
+  const taskS = stageStatus(stages.task?.itemKey, completions, isAdmin);
+  const reflS = stageStatus(stages.reflection?.itemKey, completions, isAdmin);
   const verifiedCount = [videoS, taskS, reflS].filter((s) => s === 'verified').length;
   const activeDotIndex =
     videoS !== 'verified' ? 0 : taskS !== 'verified' ? 1 : reflS !== 'verified' ? 2 : 2;
@@ -82,7 +89,7 @@ export const PartCard = forwardRef<HTMLElement, Props>(function PartCard(
   let status: PartStatus;
   if (videoS === 'verified' && taskS === 'verified' && reflS === 'verified') {
     status = 'complete';
-  } else if (videoS === 'locked') {
+  } else if (!isAdmin && videoS === 'locked') {
     status = 'locked';
   } else {
     status = 'active';

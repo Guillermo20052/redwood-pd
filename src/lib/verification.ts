@@ -291,7 +291,12 @@ export function getDiplomaTier(
   return 0;
 }
 
-export function isLevelUnlocked(completions: CompletionMap, level: 'i' | 'a'): boolean {
+export function isLevelUnlocked(
+  completions: CompletionMap,
+  level: 'i' | 'a',
+  isAdmin = false
+): boolean {
+  if (isAdmin) return true;
   const b = getLevelHoursVerified(completions, 'b');
   const i = getLevelHoursVerified(completions, 'i');
   const locks = metaConfig.levelLocks;

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
+import { isAllowedSignupEmail, SIGNUP_DOMAIN_ERROR } from '@/lib/signup-domain';
 
 const hasSupabase = isSupabaseConfigured();
 
@@ -35,6 +36,11 @@ export default function SignupPage() {
 
     if (!hasSupabase) {
       setError('Supabase no está configurado en este entorno. Usa modo local desde /login.');
+      return;
+    }
+
+    if (!isAllowedSignupEmail(email)) {
+      setError(SIGNUP_DOMAIN_ERROR);
       return;
     }
 
@@ -149,9 +155,12 @@ export default function SignupPage() {
               className="mt-1 w-full border border-[var(--gray-200)] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--red)]/30 focus:border-[var(--red)]"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="docente@redwood.edu.mx"
+              placeholder="nombre@liceodemonterrey.edu.mx"
               disabled={loading}
             />
+            <p className="mt-1.5 text-[11px] text-[var(--gray-500)] leading-snug">
+              Solo emails @liceodemonterrey.edu.mx pueden registrarse.
+            </p>
           </label>
           <label className="block">
             <span className="text-[10px] font-bold uppercase text-[var(--gray-500)]">

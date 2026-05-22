@@ -8,6 +8,7 @@ import { FileUpload } from './FileUpload';
 
 type Props = {
   task: ExtraTask;
+  isAdmin?: boolean;
   onClose: () => void;
   onVerified: () => void;
 };
@@ -17,8 +18,8 @@ type GradeResult = {
   feedback: string;
 };
 
-export function ExtraTaskModal({ task, onClose, onVerified }: Props) {
-  const { verifyTask, completions } = useProgressContext();
+export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: Props) {
+  const { verifyTask, completions, markAdminSkipped } = useProgressContext();
   const inputType = task.inputType;
   const isFileTask = inputType === 'screenshot' || inputType === 'document';
 
@@ -28,6 +29,7 @@ export function ExtraTaskModal({ task, onClose, onVerified }: Props) {
   const [showRubric, setShowRubric] = useState(false);
   const [lastResult, setLastResult] = useState<GradeResult | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [adminSkipping, setAdminSkipping] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const row = completions[task.id];
@@ -87,6 +89,26 @@ export function ExtraTaskModal({ task, onClose, onVerified }: Props) {
       setErrorMessage((e as Error).message || 'No se pudo enviar la tarea.');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleAdminSkip = async () => {
+    if (adminSkipping) return;
+    setAdminSkipping(true);
+    setErrorMessage(null);
+    try {
+      const res = await fetch('/api/verify/task', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itemKey: task.id, adminSkip: true }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || 'Error al marcar vista previa');
+      markAdminSkipped(task.id);
+      onVerified();
+    } catch (e) {
+      setErrorMessage((e as Error).message);
+      setAdminSkipping(false);
     }
   };
 
@@ -172,20 +194,40 @@ export function ExtraTaskModal({ task, onClose, onVerified }: Props) {
             </div>
           )}
 
-          <button
-            type="button"
-            className="btn-primary w-full"
-            onClick={submit}
-            disabled={!meets || submitting || passed}
-          >
-            {submitting
-              ? isFileTask
-                ? 'Subiendo y evaluando…'
-                : 'Evaluando con IA…'
-              : passed
-                ? 'Completada'
-                : 'Enviar para evaluación'}
-          </button>
+          {!isAdmin ? (
+            <button
+              type="button"
+              className="btn-primary w-full"
+              onClick={submit}
+              disabled={!meets || submitting || passed}
+            >
+              {submitting
+                ? isFileTask
+                  ? 'Subiendo y evaluando…'
+                  : 'Evaluando con IA…'
+                : passed
+                  ? 'Completada'
+                  : 'Enviar para evaluación'}
+            </button>
+          ) : (
+            <div className="space-y-2">
+              <button
+                type="button"
+                className="btn-primary w-full"
+                onClick={handleAdminSkip}
+                disabled={adminSkipping || passed}
+                style={{
+                  background: 'color-mix(in srgb, var(--gold) 25%, var(--navy))',
+                  border: '1.5px solid var(--gold)',
+                }}
+              >
+                {adminSkipping ? 'Marcando…' : 'Marcar vista previa (admin)'}
+              </button>
+              <p className="text-[10px] text-center text-[var(--gray-500)]">
+                No guarda en la base de datos · solo para explorar el flujo
+              </p>
+            </div>
+          )}
 
           {lastResult && (
             <div

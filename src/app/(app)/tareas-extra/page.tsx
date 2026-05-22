@@ -37,6 +37,7 @@ function LevelExtraSection({
   optional,
   diplomaRelevant,
   completions,
+  isAdmin,
   onOpenTask,
 }: {
   level: 'b' | 'i' | 'a';
@@ -45,11 +46,12 @@ function LevelExtraSection({
   optional?: boolean;
   diplomaRelevant?: boolean;
   completions: ReturnType<typeof useProgressContext>['completions'];
+  isAdmin: boolean;
   onOpenTask: (t: ExtraTask) => void;
 }) {
   const tasks = getExtraTasksForLevel(level);
   const done = countCompletedExtras(level, completions);
-  const levelDone = isLevelComplete(level, completions);
+  const levelDone = isAdmin || isLevelComplete(level, completions);
   const diplomaMet =
     !diplomaRelevant || done >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL;
 
@@ -98,7 +100,7 @@ function LevelExtraSection({
         </p>
       )}
 
-      {!levelDone && (
+      {!isAdmin && !levelDone && (
         <p
           className="text-sm rounded-lg px-4 py-3 border"
           style={{
@@ -117,6 +119,7 @@ function LevelExtraSection({
             key={task.id}
             task={task}
             completions={completions}
+            isAdmin={isAdmin}
             onOpen={onOpenTask}
           />
         ))}
@@ -126,12 +129,27 @@ function LevelExtraSection({
 }
 
 export default function TareasExtraPage() {
-  const { completions, totalHours, refreshCompletions } = useProgressContext();
+  const { completions, totalHours, refreshCompletions, profile } = useProgressContext();
   const [activeTask, setActiveTask] = useState<ExtraTask | null>(null);
   const d1 = getDiploma1Progress(totalHours, completions);
+  const isAdmin = profile.role === 'admin';
 
   return (
     <div className="space-y-8 pb-12">
+      {isAdmin && (
+        <p
+          className="text-xs font-semibold rounded-lg px-3 py-2"
+          style={{
+            background: 'color-mix(in srgb, var(--gold) 18%, transparent)',
+            border: '1px solid var(--gold)',
+            color: 'var(--navy)',
+          }}
+        >
+          Vista previa de admin · todas las tareas extra desbloqueadas · sin guardar en la base de
+          datos
+        </p>
+      )}
+
       <div>
         <div className="level-hero-tag" style={{ color: 'var(--gold)' }}>
           Práctica adicional
@@ -178,6 +196,7 @@ export default function TareasExtraPage() {
           optional={s.optional}
           diplomaRelevant={s.diplomaRelevant}
           completions={completions}
+          isAdmin={isAdmin}
           onOpenTask={setActiveTask}
         />
       ))}
@@ -185,6 +204,7 @@ export default function TareasExtraPage() {
       {activeTask && (
         <ExtraTaskModal
           task={activeTask}
+          isAdmin={isAdmin}
           onClose={() => setActiveTask(null)}
           onVerified={() => {
             void refreshCompletions();

@@ -13,7 +13,12 @@ export function isPartComplete(part: PartGroup, completions: CompletionMap): boo
 }
 
 /** Parts visible under progressive reveal: Part 1 always; Part N only if Part N-1 is complete. */
-export function getVisibleParts(parts: PartGroup[], completions: CompletionMap): PartGroup[] {
+export function getVisibleParts(
+  parts: PartGroup[],
+  completions: CompletionMap,
+  isAdmin = false
+): PartGroup[] {
+  if (isAdmin) return parts;
   return parts.filter((part, idx) => {
     if (idx === 0) return true;
     return isPartComplete(parts[idx - 1]!, completions);

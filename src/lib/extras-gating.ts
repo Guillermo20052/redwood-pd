@@ -12,7 +12,12 @@ export function isLevelComplete(level: 'b' | 'i' | 'a', completions: CompletionM
   return parts.every((part) => isPartComplete(part, completions));
 }
 
-export function isExtraTaskAvailable(extraId: string, completions: CompletionMap): boolean {
+export function isExtraTaskAvailable(
+  extraId: string,
+  completions: CompletionMap,
+  isAdmin = false
+): boolean {
+  if (isAdmin) return completions[extraId]?.status !== 'verified';
   const level = parseExtraLevel(extraId);
   if (!level) return false;
   if (completions[extraId]?.status === 'verified') return false;

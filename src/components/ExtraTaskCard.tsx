@@ -9,6 +9,7 @@ export type ExtraTaskStatus = 'locked' | 'available' | 'verified';
 type Props = {
   task: ExtraTask;
   completions: CompletionMap;
+  isAdmin?: boolean;
   onOpen: (task: ExtraTask) => void;
 };
 
@@ -24,15 +25,19 @@ function inputLabel(type: ExtraTask['inputType']): string {
   return '✍️ Texto';
 }
 
-export function getExtraTaskStatus(task: ExtraTask, completions: CompletionMap): ExtraTaskStatus {
+export function getExtraTaskStatus(
+  task: ExtraTask,
+  completions: CompletionMap,
+  isAdmin = false
+): ExtraTaskStatus {
   if (completions[task.id]?.status === 'verified') return 'verified';
+  if (isAdmin || isExtraTaskAvailable(task.id, completions, isAdmin)) return 'available';
   if (!isLevelComplete(task.level, completions)) return 'locked';
-  if (isExtraTaskAvailable(task.id, completions)) return 'available';
   return 'locked';
 }
 
-export function ExtraTaskCard({ task, completions, onOpen }: Props) {
-  const status = getExtraTaskStatus(task, completions);
+export function ExtraTaskCard({ task, completions, isAdmin = false, onOpen }: Props) {
+  const status = getExtraTaskStatus(task, completions, isAdmin);
   const locked = status === 'locked';
   const verified = status === 'verified';
 

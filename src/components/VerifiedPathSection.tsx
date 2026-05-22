@@ -9,6 +9,7 @@ import { PartCard } from './PartCard';
 type Props = {
   level: string;
   completions: CompletionMap;
+  isAdmin?: boolean;
   /** Kept for API compatibility; verifications now refresh completions via the hook. */
   onUpdated?: () => void;
   /** Kept for API compatibility; ignored under the composite-part UI. */
@@ -65,11 +66,12 @@ function LevelCompleteCelebration() {
   );
 }
 
-export function VerifiedPathSection({ level, completions }: Props) {
+export function VerifiedPathSection({ level, completions, isAdmin = false }: Props) {
   const parts = getPartsByLevel(level);
-  const visibleParts = getVisibleParts(parts, completions);
-  const allComplete = parts.length > 0 && parts.every((p) => isPartComplete(p, completions));
-  const hasLockedNext = visibleParts.length < parts.length;
+  const visibleParts = getVisibleParts(parts, completions, isAdmin);
+  const allComplete =
+    !isAdmin && parts.length > 0 && parts.every((p) => isPartComplete(p, completions));
+  const hasLockedNext = !isAdmin && visibleParts.length < parts.length;
   const lastVisible = visibleParts[visibleParts.length - 1];
 
   const cardRefs = useRef<Map<string, HTMLElement>>(new Map());
@@ -116,6 +118,7 @@ export function VerifiedPathSection({ level, completions }: Props) {
             ref={setRef(part.partId)}
             part={part}
             completions={completions}
+            isAdmin={isAdmin}
             onPartComplete={handlePartComplete}
           />
         ))}

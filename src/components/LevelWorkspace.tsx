@@ -38,11 +38,14 @@ type Props = { slug: string };
 
 export function LevelWorkspace({ slug }: Props) {
   const level = levels.find((l) => l.slug === slug)!;
-  const { completions, refreshCompletions } = useProgressContext();
+  const { completions, refreshCompletions, profile } = useProgressContext();
   const [section, setSection] = useState(DEFAULT_SECTION);
+  const isAdmin = profile.role === 'admin';
 
   const locked =
-    (slug === 'i' || slug === 'a') && !isLevelUnlocked(completions, slug as 'i' | 'a');
+    !isAdmin &&
+    (slug === 'i' || slug === 'a') &&
+    !isLevelUnlocked(completions, slug as 'i' | 'a', false);
   const heroClass = slug === 'b' ? 'lh-b' : slug === 'i' ? 'lh-i' : 'lh-a';
   const parts = getPartsByLevel(slug);
   const collabCount = parts.filter((p) => p.collaborative).length;
@@ -69,6 +72,19 @@ export function LevelWorkspace({ slug }: Props) {
         </aside>
 
         <div className="content-area">
+          {isAdmin && (
+            <p
+              className="text-xs font-semibold rounded-lg px-3 py-2 mb-4"
+              style={{
+                background: 'color-mix(in srgb, var(--gold) 18%, transparent)',
+                border: '1px solid var(--gold)',
+                color: 'var(--navy)',
+              }}
+            >
+              Vista previa de admin · sin restricciones de nivel o parte
+            </p>
+          )}
+
           <div className={`level-hero ${heroClass}`}>
             <div className="level-hero-tag">{LEVEL_EYEBROW[slug]}</div>
             <h2>{level.tagline}</h2>
@@ -135,6 +151,7 @@ export function LevelWorkspace({ slug }: Props) {
                   <VerifiedPathSection
                     level={slug}
                     completions={completions}
+                    isAdmin={isAdmin}
                     onUpdated={refreshCompletions}
                   />
                 </div>

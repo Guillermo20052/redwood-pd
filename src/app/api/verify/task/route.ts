@@ -86,6 +86,7 @@ export async function POST(request: Request) {
 
   const current = await loadCompletions(session.userId);
   const trimmed = typeof evidenceText === 'string' ? evidenceText.trim() : '';
+  const isAdmin = await isAdminUser(session.userId);
 
   if (isExtraItemKey(itemKey)) {
     const extra = getExtraTask(itemKey);
@@ -95,7 +96,7 @@ export async function POST(request: Request) {
     if (current[itemKey]?.status === 'verified') {
       return NextResponse.json({ error: 'Ya verificado' }, { status: 400 });
     }
-    if (!isExtraTaskAvailable(itemKey, current)) {
+    if (!isAdmin && !isExtraTaskAvailable(itemKey, current)) {
       return NextResponse.json(
         {
           error:
@@ -108,6 +109,16 @@ export async function POST(request: Request) {
     const inputType: TaskInputType = isTaskInputType(bodyInputType)
       ? bodyInputType
       : extra.inputType;
+
+    if (isAdmin) {
+      return NextResponse.json(
+        {
+          error:
+            'Vista admin: usa «Marcar vista previa (admin)» para explorar sin guardar en la base de datos.',
+        },
+        { status: 403 }
+      );
+    }
 
     if (inputType === 'text') {
       if (trimmed.length < verificationConfig.taskEvidenceMinChars) {

@@ -65,11 +65,12 @@ function ProgressRing({ percent, size = 180 }: { percent: number; size?: number 
 
 function levelDotStatus(
   slug: LevelSlug,
-  completions: ReturnType<typeof useProgressContext>['completions']
+  completions: ReturnType<typeof useProgressContext>['completions'],
+  isAdmin: boolean
 ): 'complete' | 'active' | 'locked' {
   const hours = getLevelHours(completions, slug);
   if (hours >= LEVEL_TARGET_HOURS) return 'complete';
-  if (slug === 'b') return hours > 0 ? 'active' : 'active';
+  if (slug === 'b' || isAdmin) return hours > 0 ? 'active' : 'active';
   if (!isLevelUnlocked(completions, slug)) return 'locked';
   return hours > 0 ? 'active' : 'active';
 }
@@ -78,10 +79,12 @@ function DashboardHeroProgress({
   totalHours,
   percent,
   completions,
+  isAdmin,
 }: {
   totalHours: number;
   percent: number;
   completions: ReturnType<typeof useProgressContext>['completions'];
+  isAdmin: boolean;
 }) {
   const nextDiploma = getNextDiploma(totalHours, completions);
   const hoursRemaining = nextDiploma
@@ -140,7 +143,7 @@ function DashboardHeroProgress({
         </p>
         <div className="flex items-center gap-4">
           {levelLabels.map(({ slug, label }) => {
-            const status = levelDotStatus(slug, completions);
+            const status = levelDotStatus(slug, completions, isAdmin);
             const fill =
               status === 'complete'
                 ? 'var(--teal)'
@@ -273,7 +276,8 @@ function LevelDashboardCard({
 }
 
 export default function DashboardPage() {
-  const { totalHours, percent, completions } = useProgressContext();
+  const { totalHours, percent, completions, profile } = useProgressContext();
+  const isAdmin = profile.role === 'admin';
   const [evaluation, setEvaluation] = useState<EvaluationRow | null>(null);
   const [evalLoaded, setEvalLoaded] = useState(false);
 
@@ -333,6 +337,7 @@ export default function DashboardPage() {
           totalHours={totalHours}
           percent={percent}
           completions={completions}
+          isAdmin={isAdmin}
         />
       </div>
 
@@ -345,7 +350,8 @@ export default function DashboardPage() {
           const slug = lvl.slug as LevelSlug;
           const hrs = getLevelHours(completions, slug);
           const pct = getLevelProgressPercent(completions, slug, LEVEL_TARGET_HOURS);
-          const unlocked = slug === 'b' || isLevelUnlocked(completions, slug);
+          const unlocked =
+            isAdmin || slug === 'b' || isLevelUnlocked(completions, slug, isAdmin);
           const bH = getLevelHours(completions, 'b');
           const iH = getLevelHours(completions, 'i');
 

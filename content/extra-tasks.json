@@ -119,7 +119,7 @@
         "number": 1,
         "tool": "NotebookLM",
         "title": "Crea un cuaderno con tus propias fuentes del trimestre",
-        "description": "Sube al menos 3 fuentes propias (PDFs de planeaciones, guías IB, artículos) a NotebookLM y genera un resumen ejecutivo del trimestre. Captura el cuaderno con fuentes listadas y el resumen.",
+        "description": "**Qué vas a hacer**\nArmar en NotebookLM un cuaderno con al menos tres fuentes propias del trimestre y generar un resumen ejecutivo que integre tu planeación, guías IB y lecturas — un hub de referencia para retomar contenidos al cerrar el ciclo o al arrancar tu planeación 2026-27.\n\n**Pasos**\n- Reúne PDFs de planeaciones, guías de syllabus, artículos o evaluaciones que ya usaste con tus alumnas.\n- Crea un cuaderno nuevo en NotebookLM y sube las fuentes (mínimo 3).\n- Pide un resumen ejecutivo del trimestre: temas cubiertos, conceptos clave y huecos pendientes.\n- Verifica que el resumen cite o refleje TUS documentos, no conocimiento genérico.\n- Captura pantalla con la lista de fuentes visible y el resumen generado.\n\n**Qué subes y cómo se evalúa**\nSube una captura donde se vean al menos 3 fuentes cargadas y un resumen coherente que las integre. La IA verifica que el cuaderno muestre integración real de tus materiales, no un resumen superficial desconectado de tus archivos.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "Debe verse al menos 3 fuentes cargadas y un resumen coherente que las integre."
@@ -130,7 +130,7 @@
         "number": 2,
         "tool": "NotebookLM",
         "title": "Genera preguntas de estudio desde tu material de Matemáticas",
-        "description": "Carga material de Matemáticas (apuntes, ejercicios, guía) en NotebookLM y pídele preguntas de repaso para alumnas. Escribe qué fuentes subiste, 5 preguntas que generó y cómo las usarías antes de un examen.",
+        "description": "**Qué vas a hacer**\nCargar tu material de Matemáticas en NotebookLM y generar preguntas de repaso ancladas a TUS fuentes — un banco concreto para usar antes de un examen parcial o archivar en tu planeación 2026-27.\n\n**Pasos**\n- Sube apuntes, ejercicios tipo Paper, guía de unidad o lista de fórmulas que ya uses en DP.\n- Pide a NotebookLM al menos 5 preguntas de repaso con distintos niveles (procedimental, aplicación, justificación).\n- Revisa que cada pregunta se apoye en el material subido; descarta las que suenen genéricas.\n- Ajusta fuentes o prompt si NotebookLM se desvía del programa.\n- Redacta cómo las usarías con tus alumnas (repaso guiado, estación, ticket de salida).\n\n**Qué subes y cómo se evalúa**\nPega un texto de mínimo 400 caracteres listando las fuentes subidas, al menos 5 preguntas generadas y tu plan de uso antes de un examen. La IA revisa anclaje a tus materiales, variedad de preguntas y aplicación pedagógica IB.",
         "inputType": "text",
         "estimatedMinutes": 18,
         "rubric": "Debe listar fuentes, al menos 5 preguntas de repaso y aplicación pedagógica. Mínimo 400 caracteres."
@@ -141,7 +141,7 @@
         "number": 3,
         "tool": "Canva con IA",
         "title": "Infografía visual para una unidad de Artes o Diseño",
-        "description": "Usa Canva con IA para crear una infografía que explique un concepto de tu unidad (técnicas, artistas, proceso creativo). Sube captura de la infografía terminada.",
+        "description": "**Qué vas a hacer**\nDiseñar con Canva con IA una infografía visual que explique un concepto central de tu unidad de Artes o Diseño — técnicas, artistas o proceso creativo — como recurso de apoyo reutilizable para tus alumnas en 2026-27.\n\n**Pasos**\n- Elige un concepto concreto de tu unidad IB (no un tema demasiado amplio).\n- Usa plantilla o prompt de IA en Canva pidiendo jerarquía visual clara: título, 3-5 bloques, iconos o imágenes.\n- Revisa legibilidad, precisión del contenido y tono apropiado para prepa.\n- Ajusta colores, tipografía y textos hasta que sea usable en clase sin rehacerla.\n- Captura la infografía terminada en vista completa.\n\n**Qué subes y cómo se evalúa**\nSube una captura de la infografía final legible. La IA verifica título visible, elementos visuales coherentes y texto breve que explique el concepto con rigor pertinente a Artes o Diseño IB.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "La infografía debe ser legible, con título, elementos visuales y texto breve que explique el concepto."
@@ -152,7 +152,7 @@
         "number": 4,
         "tool": "Canva con IA",
         "title": "Presentación para padres sobre evaluaciones IB",
-        "description": "Crea en Canva una presentación de 5-7 diapositivas para explicar a padres cómo funcionan las evaluaciones IB en tu materia. Exporta PDF y súbelo.",
+        "description": "**Qué vas a hacer**\nCrear en Canva con IA una presentación de 5-7 diapositivas para padres de familia que explique con claridad cómo funcionan las evaluaciones IB en tu materia — criterios, formatos y expectativas — lista para reutilizar en juntas o comunicación 2026-27.\n\n**Pasos**\n- Define qué debe entender un padre: criterios A/B/C/D, Papers, componentes internos o externos según tu curso.\n- Genera la presentación con lenguaje accesible, sin jerga sin explicar.\n- Incluye un ejemplo concreto de tarea o rubrica simplificada.\n- Revisa fechas, nombres de evaluaciones y datos de tu materia en Redwood.\n- Exporta a PDF de buena resolución.\n\n**Qué subes y cómo se evalúa**\nSube el PDF con 5-7 diapositivas. La IA revisa claridad para audiencia de padres, cobertura de evaluación IB en tu materia y tono profesional, no una plantilla vacía.",
         "inputType": "document",
         "estimatedMinutes": 42,
         "rubric": "El PDF debe tener 5-7 diapositivas con contenido claro para audiencia de padres sobre evaluación IB."
@@ -163,7 +163,7 @@
         "number": 5,
         "tool": "Gemini",
         "title": "Organiza investigación en Google Drive con Gemini",
-        "description": "Usa Gemini en Workspace para resumir o organizar notas de una carpeta de Drive (planeaciones, investigación). Captura la conversación con Gemini y el resultado (resumen o tabla).",
+        "description": "**Qué vas a hacer**\nUsar Gemini en Google Workspace para resumir u organizar el contenido de una carpeta real de Drive — planeaciones, investigación, borradores — y obtener un output útil (resumen, tabla o lista priorizada) a partir de TU material escolar.\n\n**Pasos**\n- Elige una carpeta de Drive con documentos de tu materia (mínimo 3 archivos relacionados).\n- Abre Gemini en Workspace y conéctalo a esa carpeta o selecciona archivos concretos.\n- Pide un resumen temático, tabla de conceptos o lista de pendientes pedagógicos.\n- Contrasta el resultado con los archivos: ¿refleja lo que contienen?\n- Captura la conversación con Gemini y el output generado en la misma imagen o secuencia clara.\n\n**Qué subes y cómo se evalúa**\nSube una captura que muestre tu prompt, la interacción con Gemini y un resultado útil derivado del material escolar. La IA verifica que el output provenga de tus archivos y no sea texto genérico sin vínculo con la carpeta.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "Debe mostrarse interacción con Gemini y un output útil (resumen, lista, tabla) derivado de material escolar."
@@ -174,7 +174,7 @@
         "number": 6,
         "tool": "Gemini",
         "title": "Borrador de guía de estudio para examen parcial",
-        "description": "Con Gemini, genera una guía de estudio para un examen parcial de tu materia (Ciencias, Humanidades, etc.). Escribe el tema, los apartados de la guía y un tip que le darías a tus alumnas.",
+        "description": "**Qué vas a hacer**\nGenerar con Gemini un borrador de guía de estudio para un examen parcial de tu materia IB — con apartados claros y consejos para alumnas — que puedas pulir y reutilizar en tu planeación 2026-27.\n\n**Pasos**\n- Define el tema del parcial, criterios evaluados y formato del examen (Paper, componente interno, etc.).\n- Pide a Gemini una guía con al menos 4 apartados: conceptos clave, errores frecuentes, estrategias ATL y autoevaluación.\n- Revisa rigor IB: vocabulario, comandos de enunciado y profundidad adecuada a DP.\n- Edita lo que no refleje tu programa ni el nivel de tus alumnas.\n- Redacta un tip personal que añadirías al entregar la guía.\n\n**Qué subes y cómo se evalúa**\nEscribe mínimo 400 caracteres con el tema del examen, la estructura de la guía (al menos 4 apartados) y un consejo pedagógico concreto para tus alumnas. La IA revisa coherencia IB, utilidad del borrador y especificidad a tu materia.",
         "inputType": "text",
         "estimatedMinutes": 18,
         "rubric": "Debe incluir tema del examen, estructura de la guía con al menos 4 apartados, y consejo pedagógico. Mínimo 400 caracteres."
@@ -185,7 +185,7 @@
         "number": 7,
         "tool": "Brisk Teaching",
         "title": "Retroalimentación en lote sobre trabajos cortos",
-        "description": "Usa Brisk Teaching para dar retroalimentación sobre al menos 3 trabajos cortos o párrafos de alumnas (pueden ser anónimos). Captura el panel con comentarios generados.",
+        "description": "**Qué vas a hacer**\nProbar Brisk Teaching para dar retroalimentación en lote sobre al menos tres trabajos cortos o párrafos de alumnas (anonimizados) — comparando si los comentarios son específicos al texto y útiles para mejora formativa en DP.\n\n**Pasos**\n- Prepara tres muestras breves: respuestas de examen, párrafos de ensayo, soluciones o reflexiones (sin datos personales).\n- Activa Brisk en el documento o flujo que uses (Docs, Classroom, extensión según tu configuración).\n- Genera comentarios para cada pieza indicando criterio o habilidad ATL que evalúas.\n- Revisa si los comentarios citan evidencia del texto o son plantillas vacías.\n- Captura el panel o documento donde se vean las tres retroalimentaciones.\n\n**Qué subes y cómo se evalúa**\nSube una captura con retroalimentación visible para al menos 3 trabajos. La IA verifica comentarios específicos al contenido, no frases genéricas repetidas en las tres piezas.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "Debe verse retroalimentación para al menos 3 piezas de trabajo con comentarios específicos, no genéricos."
@@ -196,7 +196,7 @@
         "number": 8,
         "tool": "Brisk Teaching",
         "title": "Rúbrica de retroalimentación para proyecto interdisciplinario",
-        "description": "Con Brisk, genera criterios de retroalimentación para un proyecto que cruza dos materias. Sube el documento o PDF con los criterios y ejemplos de comentarios.",
+        "description": "**Qué vas a hacer**\nUsar Brisk Teaching para generar criterios de retroalimentación y ejemplos de comentarios para un proyecto interdisciplinario IB que cruza tu materia con otra del plantel — un documento reutilizable para equipos de maestras sin repetir materia.\n\n**Pasos**\n- Define el proyecto: pregunta indagadora, entregables, materias involucradas y criterios IB relevantes.\n- Pide a Brisk criterios claros (logro esperado) y 2-3 comentarios modelo por nivel de desempeño.\n- Asegura que los criterios hablen de ambas disciplinas, no solo de la tuya.\n- Edita ejemplos para que suenen como feedback que darías tú en Redwood.\n- Exporta criterios y comentarios modelo en PDF.\n\n**Qué subes y cómo se evalúa**\nSube el PDF con criterios y ejemplos de comentarios. La IA verifica claridad para proyecto interdisciplinario, alineación IB y comentarios aplicables, no criterios vagos copiados sin contexto.",
         "inputType": "document",
         "estimatedMinutes": 42,
         "rubric": "El documento debe incluir criterios claros y ejemplos de comentarios aplicables a proyecto interdisciplinario IB."
@@ -207,7 +207,7 @@
         "number": 9,
         "tool": "Gamma",
         "title": "Presentación de indagación para clase de Ciencias",
-        "description": "Crea en Gamma una presentación de 6-8 diapositivas que guíe una indagación en Ciencias (hipótesis, método, datos, conclusión). Captura la presentación completa en vista previa.",
+        "description": "**Qué vas a hacer**\nCrear en Gamma una presentación de 6-8 diapositivas que guíe a tus alumnas por el ciclo de indagación científica — hipótesis, método, datos, conclusión — como recurso de clase reutilizable en tu unidad de Ciencias.\n\n**Pasos**\n- Elige un contexto de indagación real de tu programa IB (laboratorio, estudio de caso, IA del tema).\n- En Gamma, pide estructura por fases del método científico con preguntas guía en cada diapositiva.\n- Revisa que el flujo exija pensamiento crítico, no solo lectura pasiva.\n- Ajusta vocabulario, ejemplos y tiempos sugeridos por fase.\n- Captura la presentación completa en vista previa (todas las diapositivas visibles o scroll claro).\n\n**Qué subes y cómo se evalúa**\nSube captura de la presentación con al menos 6 diapositivas coherentes. La IA verifica secuencia de indagación científica, coherencia entre fases y pertinencia al contexto IB de Ciencias.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "La presentación debe seguir estructura de indagación científica con al menos 6 diapositivas coherentes."
@@ -218,7 +218,7 @@
         "number": 10,
         "tool": "Gamma",
         "title": "Pitch de unidad para colegas del departamento",
-        "description": "Usa Gamma para armar un pitch de 5 minutos sobre una unidad nueva que quieres implementar. Escribe objetivo de la unidad, estructura de la presentación y qué feedback pedirías a colegas.",
+        "description": "**Qué vas a hacer**\nArmar en Gamma un pitch de 5 minutos sobre una unidad nueva que quieres implementar en 2026-27 y preparar una pregunta concreta de feedback para colegas de otras materias del departamento.\n\n**Pasos**\n- Define objetivo de la unidad, conexión con criterios IB y perfil de alumnas DP.\n- Genera en Gamma una secuencia breve: gancho, contenidos, evaluación, riesgos y necesidades.\n- Practica que el pitch quepa en 5 minutos (6-8 diapositivas máximo).\n- Formula una pregunta específica para colegas interdisciplinarios (no de tu misma materia).\n- Redacta objetivo, estructura de diapositivas y la pregunta de feedback.\n\n**Qué subes y cómo se evalúa**\nEscribe mínimo 400 caracteres con el objetivo de la unidad, la secuencia del pitch en Gamma y la pregunta concreta que harías a colegas. La IA revisa claridad del plan, enfoque IB y utilidad del feedback solicitado.",
         "inputType": "text",
         "estimatedMinutes": 18,
         "rubric": "Debe describir objetivo de unidad, secuencia del pitch y pregunta concreta para colegas. Mínimo 400 caracteres."

@@ -37,7 +37,7 @@ export default function EvaluacionPage() {
   const showForm = !existing || editing;
 
   return (
-    <div className="space-y-6">
+    <div className="app-page">
       <div className="level-hero lh-eval">
         <div className="level-hero-tag">Cierre del programa</div>
         <h2>Tu voz construye la próxima edición</h2>

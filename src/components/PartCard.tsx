@@ -137,7 +137,7 @@ export const PartCard = forwardRef<HTMLElement, Props>(function PartCard(
             <StageDot filled={false} level={level} />
           </div>
         </div>
-        <p className="text-xs text-[var(--gray-500)] mt-2">
+        <p className="part-card-lock-msg">
           Completa la Parte {prevNum} para desbloquear.
         </p>
       </article>

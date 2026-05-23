@@ -102,20 +102,14 @@ function DashboardHeroProgress({
   ];
 
   return (
-    <div
-      className="w-full max-w-[320px] rounded-xl px-5 py-5 text-center"
-      style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}
-    >
+    <div className="dash-hero-panel w-full max-w-[320px] rounded-xl px-5 py-5 text-center">
       <div className="relative mx-auto mb-3" style={{ width: 180, height: 180 }}>
         <ProgressRing percent={ringPct} />
         <div
           className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
           style={{ padding: 24 }}
         >
-          <span
-            className="font-condensed font-extrabold leading-none text-white"
-            style={{ fontSize: 36 }}
-          >
+          <span className="dash-hero-hours font-condensed font-extrabold leading-none text-white">
             {totalHours.toFixed(1)}
           </span>
           <span className="text-[11px] text-white/65 mt-1">de {PROGRAM_MAX_HOURS}h</span>
@@ -209,20 +203,11 @@ function LevelDashboardCard({
   return (
     <Link
       href={`/nivel/${slug}`}
-      className={`dash-level-card relative flex gap-3 rounded-xl border p-4 no-underline transition-all duration-150 ${
-        unlocked ? 'hover:-translate-y-0.5 hover:shadow-md cursor-pointer' : 'opacity-75'
+      className={`dash-level-card dash-level-card--${slug} relative flex gap-5 rounded-xl border no-underline ${
+        unlocked ? 'cursor-pointer' : 'opacity-75'
       }`}
       style={{
-        background: `linear-gradient(135deg, ${bg} 0%, #fff 70%)`,
-        borderColor: 'var(--gray-200)',
-        borderTopWidth: 4,
-        borderTopColor: color,
-      }}
-      onMouseEnter={(e) => {
-        if (unlocked) e.currentTarget.style.borderColor = color;
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = 'var(--gray-200)';
+        background: `linear-gradient(135deg, ${bg} 0%, #fff 72%)`,
       }}
     >
       {!unlocked ? (
@@ -266,7 +251,7 @@ function LevelDashboardCard({
                 style={{ width: `${pct}%`, background: color }}
               />
             </div>
-            <p className="text-[11px] font-semibold mt-1.5" style={{ color }}>
+            <p className="dash-level-stat-num text-[11px] font-semibold mt-1.5" style={{ color }}>
               {hours.toFixed(1)}h / {LEVEL_TARGET_HOURS}h
             </p>
           </div>
@@ -308,8 +293,8 @@ export default function DashboardPage() {
   const showEvalCta = totalHours >= EVAL_UNLOCK_HOURS;
 
   return (
-    <div className="space-y-8">
-      <div className="level-hero lh-dash flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+    <div className="app-page">
+      <div className="level-hero lh-dash flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
         <div className="min-w-0 flex-1" style={{ maxWidth: '100%' }}>
           <div className="level-hero-tag">
             Liceo Redwood · Monterrey · Ruta de Desarrollo Profesional
@@ -349,7 +334,7 @@ export default function DashboardPage() {
         <EvaluationCta evaluation={evalLoaded ? evaluation : null} loaded={evalLoaded} />
       )}
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="dash-level-grid grid gap-6 md:grid-cols-3">
         {levels.map((lvl) => {
           const slug = lvl.slug as LevelSlug;
           const hrs = getLevelHours(completions, slug);
@@ -401,7 +386,7 @@ function EvaluationCta({
   return (
     <Link
       href="/evaluacion"
-      className={`block rounded-xl border p-5 transition no-underline ${
+      className={`eval-cta-card block rounded-xl border p-6 transition no-underline ${
         submitted
           ? 'border-[var(--green)] bg-[var(--green-light)]'
           : 'border-[var(--teal)] bg-[var(--teal-light)]'

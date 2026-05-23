@@ -149,7 +149,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         )}
       </nav>
 
-      <main className={isLevelPage ? 'flex-1' : 'flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full'}>
+      <main
+        className={
+          isLevelPage
+            ? 'flex-1'
+            : 'flex-1 px-4 py-8 md:px-10 md:py-12 lg:px-14 max-w-6xl mx-auto w-full'
+        }
+      >
         {children}
       </main>
 

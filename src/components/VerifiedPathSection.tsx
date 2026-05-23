@@ -21,14 +21,7 @@ type Props = {
 
 function NextPartTeaser({ partNumber }: { partNumber: number }) {
   return (
-    <div
-      className="flex items-center gap-3 rounded-lg px-4 py-3"
-      style={{
-        minHeight: 80,
-        border: '1px solid rgba(201, 151, 42, 0.3)',
-        background: 'var(--gray-50)',
-      }}
-    >
+    <div className="next-part-teaser flex items-center gap-3 rounded-lg px-4 py-3">
       <span aria-hidden className="text-xl opacity-60">
         🔒
       </span>

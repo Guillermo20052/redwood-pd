@@ -58,7 +58,7 @@ function LevelExtraSection({
   return (
     <section className="space-y-4">
       <div
-        className="rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-3"
+        className="extras-level-header rounded-xl px-5 py-4 flex flex-wrap items-center justify-between gap-3"
         style={{ background: accent, color: 'white' }}
       >
         <div className="flex items-center gap-2">
@@ -79,7 +79,7 @@ function LevelExtraSection({
 
       <div className="h-2 rounded-full bg-[var(--gray-200)] overflow-hidden">
         <div
-          className="h-full rounded-full transition-all duration-500"
+          className="extras-progress-fill h-full rounded-full transition-all duration-500"
           style={{ width: `${(done / 10) * 100}%`, background: accent }}
         />
       </div>
@@ -113,7 +113,7 @@ function LevelExtraSection({
         </p>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
         {tasks.map((task) => (
           <ExtraTaskCard
             key={task.id}
@@ -135,7 +135,7 @@ export default function TareasExtraPage() {
   const isAdmin = profile.role === 'admin';
 
   return (
-    <div className="space-y-8 pb-12">
+    <div className="app-page pb-12">
       {isAdmin && (
         <p
           className="text-xs font-semibold rounded-lg px-3 py-2"
@@ -150,11 +150,11 @@ export default function TareasExtraPage() {
         </p>
       )}
 
-      <div>
-        <div className="level-hero-tag" style={{ color: 'var(--gold)' }}>
+      <div className="extras-page-hero">
+        <div className="level-hero-tag text-[var(--gold)] tracking-[0.2em]">
           Práctica adicional
         </div>
-        <h2 className="font-condensed text-3xl font-extrabold text-[var(--navy)]">
+        <h2 className="font-condensed font-extrabold text-[var(--navy)]">
           Tareas Level Up
         </h2>
         <p className="text-sm text-[var(--gray-600)] mt-2 max-w-2xl">
@@ -163,10 +163,7 @@ export default function TareasExtraPage() {
         </p>
       </div>
 
-      <div
-        className="rounded-xl border-2 p-4 space-y-2"
-        style={{ borderColor: 'var(--gold)', background: 'var(--gold-light)' }}
-      >
+      <div className="extras-diploma-banner border-2 border-[var(--gold)] bg-[var(--gold-light)] space-y-2">
         <p className="text-sm font-bold text-[var(--navy)]">
           Para obtener el Diploma 1 necesitas:
         </p>

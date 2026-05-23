@@ -109,7 +109,7 @@ export function CommunityChat({
       </div>
       <div className="chat-messages">
         {messages.length === 0 && (
-          <p className="py-8 text-center text-sm text-[var(--gray-500)]">
+          <p className="chat-empty-state">
             Sé la primera en escribir en el canal escolar.
           </p>
         )}
@@ -122,14 +122,11 @@ export function CommunityChat({
           return (
             <div key={m.id} className={isOwn ? 'flex flex-col items-end' : ''}>
               <div className="chat-meta flex items-center gap-1.5 flex-wrap">
-                <span style={isAdminMsg ? { color: 'var(--red)', fontWeight: 700 } : undefined}>
+                <span className={isAdminMsg ? 'chat-meta-admin' : undefined}>
                   {m.author_name}
                 </span>
                 {isAdminMsg && (
-                  <span
-                    className="inline-block text-white text-[10px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider"
-                    style={{ background: 'var(--red)' }}
-                  >
+                  <span className="chat-admin-badge">
                     ADMIN
                   </span>
                 )}
@@ -142,8 +139,7 @@ export function CommunityChat({
                 })}</span>
               </div>
               <div
-                className={`chat-bubble ${isOwn ? 'chat-bubble--own' : 'chat-bubble--other'}`}
-                style={isAdminMsg && !isOwn ? { borderLeft: '4px solid var(--red)' } : undefined}
+                className={`chat-bubble ${isOwn ? 'chat-bubble--own' : 'chat-bubble--other'}${isAdminMsg && !isOwn ? ' chat-bubble--admin' : ''}`}
               >
                 {m.body}
               </div>

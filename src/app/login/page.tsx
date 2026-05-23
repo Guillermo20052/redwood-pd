@@ -89,38 +89,40 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f0edea] p-4">
+    <div className="auth-page">
       <div className="login-card w-full max-w-[440px]">
-        <Image
-          src="/assets/logo-header.png"
-          alt="Liceo Redwood"
-          width={140}
-          height={48}
-          className="mx-auto mb-4 h-12 w-auto"
-          priority
-        />
+        <div className="auth-logo-wrap">
+          <Image
+            src="/assets/logo-header.png"
+            alt="Liceo Redwood"
+            width={160}
+            height={56}
+            className="h-14 w-auto"
+            priority
+          />
+        </div>
         <h1>Tu ruta de desarrollo profesional con IA</h1>
         <p className="text-sm text-center text-[var(--gray-500)] mb-6 mt-2">
           Inicia sesión para continuar tu camino
         </p>
         <form onSubmit={signIn} className="space-y-4">
-          <label className="block">
-            <span className="text-[10px] font-bold uppercase text-[var(--gray-500)]">
+          <label className="auth-field">
+            <span>
               Correo electrónico
             </span>
             <input
               type="email"
               required
               autoComplete="email"
-              className="mt-1 w-full border border-[var(--gray-200)] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--red)]/30 focus:border-[var(--red)]"
+              className="auth-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="docente@redwood.edu.mx"
               disabled={loading}
             />
           </label>
-          <label className="block">
-            <span className="text-[10px] font-bold uppercase text-[var(--gray-500)]">
+          <label className="auth-field">
+            <span>
               Contraseña
             </span>
             <input
@@ -128,7 +130,7 @@ function LoginForm() {
               required
               autoComplete="current-password"
               minLength={6}
-              className="mt-1 w-full border border-[var(--gray-200)] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--red)]/30 focus:border-[var(--red)]"
+              className="auth-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
@@ -144,7 +146,7 @@ function LoginForm() {
               {info}
             </p>
           )}
-          <button type="submit" className="btn-primary w-full" disabled={loading}>
+          <button type="submit" className="btn-primary auth-submit-btn w-full" disabled={loading}>
             {loading ? 'Cargando…' : 'Iniciar sesión'}
           </button>
           <button

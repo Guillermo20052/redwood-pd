@@ -103,56 +103,58 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f0edea] p-4">
+    <div className="auth-page">
       <div className="login-card w-full max-w-[440px]">
-        <Image
-          src="/assets/logo-header.png"
-          alt="Liceo Redwood"
-          width={140}
-          height={48}
-          className="mx-auto mb-4 h-12 w-auto"
-          priority
-        />
+        <div className="auth-logo-wrap">
+          <Image
+            src="/assets/logo-header.png"
+            alt="Liceo Redwood"
+            width={160}
+            height={56}
+            className="h-14 w-auto"
+            priority
+          />
+        </div>
         <h1>Crea tu cuenta</h1>
         <p className="text-sm text-center text-[var(--gray-500)] mb-6 mt-2">
           Únete al programa de Desarrollo Profesional con IA
         </p>
         <form onSubmit={signUp} className="space-y-4">
-          <label className="block">
-            <span className="text-[10px] font-bold uppercase text-[var(--gray-500)]">
+          <label className="auth-field">
+            <span>
               Nombre completo
             </span>
             <input
               required
               autoComplete="name"
-              className="mt-1 w-full border border-[var(--gray-200)] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--red)]/30 focus:border-[var(--red)]"
+              className="auth-input"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="Ej. Sofía Martínez"
               disabled={loading}
             />
           </label>
-          <label className="block">
-            <span className="text-[10px] font-bold uppercase text-[var(--gray-500)]">
+          <label className="auth-field">
+            <span>
               Materia o área
             </span>
             <input
-              className="mt-1 w-full border border-[var(--gray-200)] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--red)]/30 focus:border-[var(--red)]"
+              className="auth-input"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="Ej. Matemáticas"
               disabled={loading}
             />
           </label>
-          <label className="block">
-            <span className="text-[10px] font-bold uppercase text-[var(--gray-500)]">
+          <label className="auth-field">
+            <span>
               Correo
             </span>
             <input
               type="email"
               required
               autoComplete="email"
-              className="mt-1 w-full border border-[var(--gray-200)] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--red)]/30 focus:border-[var(--red)]"
+              className="auth-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="nombre@liceodemonterrey.edu.mx"
@@ -162,8 +164,8 @@ export default function SignupPage() {
               Solo emails @liceodemonterrey.edu.mx pueden registrarse.
             </p>
           </label>
-          <label className="block">
-            <span className="text-[10px] font-bold uppercase text-[var(--gray-500)]">
+          <label className="auth-field">
+            <span>
               Contraseña
             </span>
             <input
@@ -171,7 +173,7 @@ export default function SignupPage() {
               required
               autoComplete="new-password"
               minLength={6}
-              className="mt-1 w-full border border-[var(--gray-200)] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--red)]/30 focus:border-[var(--red)]"
+              className="auth-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Mínimo 6 caracteres"
@@ -188,7 +190,7 @@ export default function SignupPage() {
               {info}
             </p>
           )}
-          <button type="submit" className="btn-primary w-full" disabled={loading}>
+          <button type="submit" className="btn-primary auth-submit-btn w-full" disabled={loading}>
             {loading ? 'Creando cuenta…' : 'Registrarme'}
           </button>
           <p className="text-xs text-center text-[var(--gray-500)] pt-2 border-t border-[var(--gray-200)]">

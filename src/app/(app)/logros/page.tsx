@@ -20,7 +20,7 @@ export default function LogrosPage() {
   const progressPct = Math.min(100, (totalHours / 30) * 100);
 
   return (
-    <div className="space-y-10 no-print">
+    <div className="app-page no-print">
       <div className="logros-hero logros-hero--dramatic">
         <div className="logros-hero-glow" aria-hidden />
         <div className="level-hero-tag">Tus diplomas · Liceo Redwood</div>

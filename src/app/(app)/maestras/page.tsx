@@ -147,8 +147,8 @@ function MaestrasView({ teachers }: { teachers: TeacherStat[] }) {
           </p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-[var(--gray-200)] bg-white">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+          <table className="admin-table w-full text-sm">
             <thead>
               <tr className="bg-[var(--gray-100)] text-left">
                 <th className="p-3 font-bold font-condensed text-[var(--gray-700)]">Maestra</th>
@@ -160,12 +160,8 @@ function MaestrasView({ teachers }: { teachers: TeacherStat[] }) {
               </tr>
             </thead>
             <tbody>
-              {sorted.map((t, idx) => (
-                <tr
-                  key={t.user_id}
-                  className="border-t align-middle"
-                  style={{ background: idx % 2 === 0 ? 'white' : '#f9f9f9' }}
-                >
+              {sorted.map((t) => (
+                <tr key={t.user_id} className="align-middle">
                   <td className="p-3">
                     <p className="font-semibold text-[var(--gray-900)]">
                       {t.full_name || '—'}
@@ -193,7 +189,7 @@ function MaestrasView({ teachers }: { teachers: TeacherStat[] }) {
                   <td className="p-3">
                     <Link
                       href={`/admin/teacher/${t.user_id}`}
-                      className="inline-block rounded-lg border border-[var(--navy)] px-3 py-1 text-xs font-bold text-[var(--navy)] hover:bg-[var(--navy)] hover:text-white transition-colors whitespace-nowrap"
+                      className="admin-detail-btn whitespace-nowrap"
                     >
                       Ver detalle →
                     </Link>
@@ -210,7 +206,7 @@ function MaestrasView({ teachers }: { teachers: TeacherStat[] }) {
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-[var(--gray-200)] bg-white p-4">
+    <div className="admin-stat-card">
       <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--gray-500)] mb-1">
         {label}
       </p>

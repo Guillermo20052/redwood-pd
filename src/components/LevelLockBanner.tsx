@@ -20,7 +20,7 @@ export function LevelLockBanner({
   const pct = Math.min(100, (current / target) * 100);
 
   return (
-    <div className="lock-banner rounded-xl bg-gradient-to-br from-[#2a2a2a] to-[#4a4440] p-6 text-center text-white mb-6">
+    <div className="lock-banner text-center text-white mb-8">
       <h3 className="font-condensed text-xl font-extrabold mb-2">🔒 Nivel bloqueado</h3>
       <p className="text-sm text-white/70 mb-4">
         {level === 'i'

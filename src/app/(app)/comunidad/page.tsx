@@ -68,7 +68,7 @@ export default function ComunidadPage() {
   }, [teachers]);
 
   return (
-    <div className="space-y-6">
+    <div className="app-page">
       <div className="level-hero lh-com">
         <div className="level-hero-tag">Aprendemos mejor juntas</div>
         <h2>La comunidad Redwood</h2>
@@ -78,7 +78,7 @@ export default function ComunidadPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 rounded-xl border border-[var(--gray-200)] bg-white p-4 sm:grid-cols-3">
+      <div className="comunidad-stat-grid grid grid-cols-1 gap-6 sm:grid-cols-3">
         <Stat label="Docentes registradas" value={loading ? '…' : String(summary.total)} />
         <Stat
           label="Horas verificadas (cohorte)"

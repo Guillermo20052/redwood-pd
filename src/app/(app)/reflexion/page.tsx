@@ -138,7 +138,7 @@ export default function ReflexionPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="app-page">
       <div className="ref-hero">
         <div className="ref-hero-deco">🪞</div>
         <div className="ref-hero-tag">Reflexión docente</div>

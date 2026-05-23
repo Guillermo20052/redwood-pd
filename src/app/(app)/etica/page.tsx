@@ -1,6 +1,6 @@
 export default function EticaPage() {
   return (
-    <article className="space-y-8">
+    <article className="app-page">
       <div className="level-hero lh-e">
         <div className="level-hero-tag">Ética · Política institucional</div>
         <h2>Integridad académica e IA en el IB</h2>

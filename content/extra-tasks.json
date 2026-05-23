@@ -7,7 +7,7 @@
         "number": 1,
         "tool": "ChatGPT",
         "title": "Genera 5 preguntas tipo IB para tu próxima evaluación",
-        "description": "Usa ChatGPT para generar 5 preguntas de evaluación tipo IB sobre el tema que estás enseñando este semestre (Biología, Historia, Matemáticas, etc.). Las preguntas deben mostrar distintos niveles de Bloom. Sube una captura donde se vean las 5 preguntas y el prompt que usaste.",
+        "description": "**Qué vas a hacer**\nUsar ChatGPT para generar 5 preguntas de evaluación tipo IB sobre un tema de tu materia DP — con distintos niveles cognitivos (recordar, comprender, aplicar, analizar) y alineadas a tus criterios de evaluación — y así sumar un banco reutilizable para tu planeación 2026-27.\n\n**Pasos**\n- Elige un tema concreto de una unidad que enseñes o que llevarás el próximo ciclo escolar.\n- Abre ChatGPT y pídele 5 preguntas tipo IB; sé específica con criterios (A, B, C, D) y el formato (Paper, componente interno, etc.).\n- Revisa rigor IB: comandos de enunciado, vocabulario preciso y variación real de complejidad.\n- Si algo no convence, refina el prompt y vuelve a pedir hasta tener un set sólido.\n- Captura la pantalla mostrando tu prompt y las 5 preguntas finales.\n\n**Qué subes y cómo se evalúa**\nSube una captura clara donde se vea tu prompt original y las 5 preguntas que ChatGPT generó. La IA verifica que las preguntas varíen en complejidad cognitiva, estén alineadas al formato IB y que tu prompt refleje intencionalidad pedagógica.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "La captura debe mostrar 5 preguntas claramente distintas, con variedad de niveles cognitivos, y el prompt original visible."
@@ -18,7 +18,7 @@
         "number": 2,
         "tool": "ChatGPT",
         "title": "Rediseña una actividad existente para hacerla más colaborativa",
-        "description": "Toma una actividad que ya usaste con tus alumnas y pídele a ChatGPT que te sugiera 3 formas de rediseñarla para que sea más colaborativa. Escribe qué actividad elegiste, qué propuso ChatGPT y cuál vas a probar (mínimo 400 caracteres).",
+        "description": "**Qué vas a hacer**\nTomar una actividad que ya usaste con tus alumnas y pedirle a ChatGPT tres variantes para hacerla más colaborativa — sin rediseñar desde cero — y elegir cuál probarás primero en aula IB.\n\n**Pasos**\n- Elige una actividad real de tu materia (laboratorio, análisis de fuentes, resolución de problemas, debate, etc.).\n- Describe el contexto en ChatGPT: nivel DP, tamaño del grupo, tiempo y qué hacen las alumnas hoy.\n- Pídele exactamente 3 propuestas más colaborativas (roles, parejas cruzadas entre materias, think-pair-share, etc.).\n- Compara las tres ideas y decide cuál implementarás y por qué.\n- Redacta tu reflexión final con evidencia de lo que ChatGPT propuso.\n\n**Qué subes y cómo se evalúa**\nPega un texto de mínimo 400 caracteres describiendo la actividad original, las 3 sugerencias de ChatGPT y cuál vas a probar con justificación pedagógica. La IA revisa claridad, uso intencional de la herramienta y coherencia con práctica colaborativa IB.",
         "inputType": "text",
         "estimatedMinutes": 18,
         "rubric": "Debe describir la actividad original, las 3 sugerencias de ChatGPT, y justificar cuál elegirá probar. Mínimo 400 caracteres."
@@ -29,7 +29,7 @@
         "number": 3,
         "tool": "Claude",
         "title": "Retroalimentación diferenciada en un ensayo de Lengua",
-        "description": "Sube un borrador de ensayo (o un párrafo modelo) a Claude y pídele retroalimentación para dos perfiles: alumna que domina la estructura y alumna que necesita apoyo en organización. Captura ambas respuestas de Claude.",
+        "description": "**Qué vas a hacer**\nSubir un borrador de ensayo (o un párrafo modelo) a Claude y solicitar retroalimentación diferenciada para dos perfiles de alumnas de Lengua IB — comparando cómo adapta tono, foco y siguiente paso según cada necesidad.\n\n**Pasos**\n- Prepara un texto base: borrador real (anonimizado), párrafo modelo o extracto tipo Paper 1/2.\n- En Claude, pide retroalimentación para la alumna que domina estructura y criterios formales.\n- Con el mismo texto, pide retroalimentación para la alumna que necesita apoyo en organización y coherencia.\n- Revisa que ambas respuestas citen el texto y no sean plantillas genéricas.\n- Captura pantalla donde se vean el fragmento base y las dos retroalimentaciones en secuencia clara.\n\n**Qué subes y cómo se evalúa**\nSube una captura que muestre el mismo texto base y dos retroalimentaciones claramente diferenciadas según el perfil indicado. La IA verifica diferenciación real, referencia al texto y utilidad para feedback formativo en DP.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "La captura debe mostrar el mismo texto base y dos retroalimentaciones claramente diferenciadas según el perfil indicado."
@@ -40,7 +40,7 @@
         "number": 4,
         "tool": "Claude",
         "title": "Identifica las 3 preguntas con más errores en un examen",
-        "description": "Sube tu examen pasado (o una lista de preguntas con respuestas frecuentes) a Claude y pídele que identifique las 3 preguntas donde más alumnas fallaron y por qué. Describe qué subiste, qué respondió Claude y qué cambiarías en tu próxima evaluación.",
+        "description": "**Qué vas a hacer**\nSubir un examen pasado o un listado de preguntas con patrones de error a Claude para que identifique las tres preguntas con más fallas de tus alumnas y proponga el porqué — y tú definas ajustes concretos a tu próxima evaluación.\n\n**Pasos**\n- Reúne material: examen escaneado, banco de ítems o tabla con preguntas y errores frecuentes (anonimiza datos sensibles).\n- Súbelo a Claude o pégale el contenido estructurado.\n- Pídele las 3 preguntas (o tipos de ítem) problemáticas y la probable causa del error (concepto, redacción, comando, habilidad ATL).\n- Contrasta con tu criterio profesional: ¿coincide con lo que viste en calificaciones?\n- Redacta qué cambiarías en la próxima evaluación (enunciado, scaffolding, repaso).\n\n**Qué subes y cómo se evalúa**\nEscribe mínimo 400 caracteres indicando qué subiste, las 3 preguntas o patrones que Claude identificó y al menos un ajuste concreto a tu próxima evaluación. La IA revisa especificidad del diagnóstico y utilidad pedagógica del cambio propuesto.",
         "inputType": "text",
         "estimatedMinutes": 18,
         "rubric": "Debe mencionar el material subido, las 3 preguntas o patrones identificados, y al menos un ajuste concreto a la práctica evaluativa. Mínimo 400 caracteres."
@@ -51,7 +51,7 @@
         "number": 5,
         "tool": "Perplexity",
         "title": "Investiga un tema IB con fuentes académicas citadas",
-        "description": "Elige un tema de tu unidad actual (p. ej. ecosistemas, Revolución Mexicana, funciones cuadráticas) y pídele a Perplexity un resumen con al menos 5 fuentes académicas citadas. Sube captura del resumen y de la lista de referencias.",
+        "description": "**Qué vas a hacer**\nInvestigar con Perplexity un tema de tu unidad IB DP y obtener un resumen respaldado por al menos cinco fuentes académicas citadas — referencia verificada que puedes archivar para explicar el tema a tus alumnas o integrar a tu planeación 2026-27.\n\n**Pasos**\n- Elige un tema concreto de tu programa (ecosistema, revolución, función, teoría literaria, etc.).\n- Formula en Perplexity una pregunta precisa pidiendo síntesis con fuentes académicas (revistas, instituciones, autores reconocidos).\n- Revisa el resumen: abre al menos una cita y confirma que respalda el contenido.\n- Ajusta la consulta si las fuentes son débiles o demasiado generales.\n- Captura pantalla del resumen y de la lista de referencias numeradas o enlazadas.\n\n**Qué subes y cómo se evalúa**\nSube una captura donde se vea el tema investigado, un resumen sustantivo y las referencias visibles. La IA verifica rigor de la pregunta, calidad aparente de las fuentes y pertinencia al contexto IB.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "Debe verse el tema investigado, un resumen sustantivo y referencias numeradas o enlaces a fuentes académicas."
@@ -62,7 +62,7 @@
         "number": 6,
         "tool": "Perplexity",
         "title": "Compara dos enfoques pedagógicos con evidencia",
-        "description": "Usa Perplexity para comparar dos enfoques sobre un tema de tu materia (p. ej. evaluación formativa vs sumativa, indagación guiada vs abierta). Exporta o guarda el resultado como PDF y súbelo.",
+        "description": "**Qué vas a hacer**\nUsar Perplexity para comparar dos enfoques pedagógicos relevantes a tu materia IB (p. ej. evaluación formativa vs sumativa, indagación guiada vs abierta) con evidencia citada, y exportar el resultado como documento de consulta para tus decisiones de enseñanza.\n\n**Pasos**\n- Define los dos enfoques y el dilema pedagógico que te importa en DP.\n- Pide a Perplexity una comparación con pros, contras y referencias académicas aplicadas a aula de prepa IB.\n- Contrasta las citas: ¿responden al contexto escolar o son solo teoría general?\n- Anota qué adoptarías, descartarías o adaptarías para tus alumnas.\n- Exporta o guarda la conversación o resultado como PDF legible.\n\n**Qué subes y cómo se evalúa**\nSube el PDF comparando ambos enfoques con citas o referencias visibles. La IA revisa que la comparación sea equilibrada, fundamentada y aplicable al contexto escolar IB, no un resumen superficial sin evidencia.",
         "inputType": "document",
         "estimatedMinutes": 42,
         "rubric": "El documento debe comparar dos enfoques con citas o referencias, aplicados a contexto escolar IB."
@@ -73,7 +73,7 @@
         "number": 7,
         "tool": "MagicSchool",
         "title": "Genera un plan de clase de 45 min con MagicSchool",
-        "description": "En MagicSchool, genera un plan de clase de 45 minutos para una materia que impartes (Artes, Ciencias, etc.) incluyendo objetivo, actividad de apertura, desarrollo y cierre. Sube captura del plan completo.",
+        "description": "**Qué vas a hacer**\nGenerar en MagicSchool un plan de clase de 45 minutos para tu materia IB — con objetivo, apertura, desarrollo y cierre — listo para ajustar y archivar en tu planeación 2026-27.\n\n**Pasos**\n- Elige la plantilla o herramienta de plan de clase en MagicSchool y tu tema de sesión (unidad DP concreta).\n- Indica nivel, duración (45 min), número de alumnas y habilidad ATL que quieres trabajar.\n- Genera el plan y revisa secuencia y tiempos: ¿la apertura engancha? ¿el desarrollo exige pensamiento IB?\n- Ajusta prompt o campos hasta que la sesión sea implementable.\n- Captura el plan completo en pantalla (objetivo y todas las fases visibles).\n\n**Qué subes y cómo se evalúa**\nSube una captura del plan de 45 min con objetivo, actividades por fase y tiempos o secuencia clara. La IA verifica coherencia de la sesión, alineación pedagógica y completitud de apertura-desarrollo-cierre.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "La captura debe mostrar objetivo, secuencia de actividades y tiempos o fases claras de una sesión de 45 min."
@@ -84,7 +84,7 @@
         "number": 8,
         "tool": "MagicSchool",
         "title": "Crea comunicación para padres de familia sobre un proyecto",
-        "description": "Usa MagicSchool para redactar un correo o mensaje para padres explicando un proyecto IB que tus alumnas están realizando. Sube el documento generado (PDF o captura exportada).",
+        "description": "**Qué vas a hacer**\nRedactar con MagicSchool un correo o mensaje profesional para padres de familia que explique un proyecto IB que tus alumnas están realizando — propósito, fechas, expectativas y cómo pueden apoyar desde casa.\n\n**Pasos**\n- Reúne datos del proyecto: nombre, propósito IB, cronograma, entregables y rol de las alumnas.\n- Usa MagicSchool (plantilla de comunicación a padres o prompt libre) con tono claro y respetuoso.\n- Revisa que no haya jerga sin explicar y que las fechas sean exactas.\n- Corrige manualmente lo que la IA no conozca de tu contexto en Redwood.\n- Exporta el mensaje como PDF o documento de alta calidad.\n\n**Qué subes y cómo se evalúa**\nSube el documento generado (PDF preferible). La IA revisa claridad para padres, mención del proyecto y expectativas, fechas o hitos concretos, y tono profesional acorde a comunicación escolar IB.",
         "inputType": "document",
         "estimatedMinutes": 42,
         "rubric": "El mensaje debe ser claro para padres, mencionar el proyecto, fechas o expectativas, y tono profesional."
@@ -95,7 +95,7 @@
         "number": 9,
         "tool": "Diffit",
         "title": "Nivela una lectura de Historia para dos niveles",
-        "description": "Sube un artículo o capítulo corto de Historia a Diffit y genera versiones para nivel avanzado y nivel con apoyo. Captura las dos versiones o el panel de niveles de lectura.",
+        "description": "**Qué vas a hacer**\nSubir un artículo o capítulo breve de Historia a Diffit y generar dos versiones de lectura — nivel avanzado y nivel con apoyo — para que todas tus alumnas accedan al mismo contenido con distinta complejidad lingüística en tu biblioteca de materiales.\n\n**Pasos**\n- Elige un texto auténtico de Historia IB (fuente primaria comentada, artículo, apartado del libro).\n- Súbelo a Diffit y configura niveles o pide versiones diferenciadas explícitamente.\n- Compara ambas salidas: vocabulario, longitud de oraciones, apoyos y preguntas integradas.\n- Ajusta configuración si una versión queda demasiado simplificada o casi idéntica a la otra.\n- Captura el panel de niveles o las dos versiones donde se note la diferencia.\n\n**Qué subes y cómo se evalúa**\nSube captura del texto original y al menos dos versiones diferenciadas. La IA verifica que los cambios en complejidad sean visibles y pedagógicamente coherentes para aula de prepa IB.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "Debe mostrarse el texto original y al menos dos versiones diferenciadas con cambios visibles en complejidad."
@@ -106,7 +106,7 @@
         "number": 10,
         "tool": "Diffit",
         "title": "Preguntas de comprensión para una lectura de Biología",
-        "description": "Usa Diffit con un texto de Biología (artículo, noticia científica o apartado del libro) y genera preguntas de comprensión. Describe el texto que usaste, las preguntas que generó Diffit y cómo las usarías en clase.",
+        "description": "**Qué vas a hacer**\nUsar Diffit con un texto de Biología para generar preguntas de comprensión alineadas a indagación o evaluación formativa — y definir cómo las aplicarás con tus alumnas en la unidad actual o en material de repaso que reutilizarás en 2026-27.\n\n**Pasos**\n- Selecciona un texto de Biología (noticia científica, artículo corto, apartado del libro o recurso IB).\n- Súbelo a Diffit y genera preguntas de comprensión (literal, inferencial, aplicación).\n- Revisa calidad: ¿exigen evidencia del texto? ¿promueven pensamiento científico?\n- Edita o descarta preguntas débiles antes de usarlas en clase.\n- Redacta tu plan de uso (activación, parejas, ticket de salida, etc.).\n\n**Qué subes y cómo se evalúa**\nEscribe mínimo 400 caracteres identificando el texto, describiendo las preguntas que generó Diffit y cómo las aplicarías en aula IB. La IA revisa identificación clara del material, calidad de las preguntas descritas y uso didáctico concreto.",
         "inputType": "text",
         "estimatedMinutes": 18,
         "rubric": "Debe identificar el texto, listar o describir preguntas generadas, y explicar uso en aula IB. Mínimo 400 caracteres."

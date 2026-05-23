@@ -231,7 +231,7 @@
         "number": 1,
         "tool": "Napkin AI",
         "title": "Diagrama de flujo de un proceso histórico",
-        "description": "Usa Napkin AI para diagramar un proceso histórico que enseñas (causa-efecto, cadena de eventos). Sube captura del diagrama terminado con etiquetas legibles.",
+        "description": "**Qué vas a hacer**\nDiseñar con Napkin AI un diagrama de flujo de un proceso histórico que enseñas — causa-efecto o cadena de eventos — como recurso visual que tus alumnas puedan consultar y que puedas compartir con colegas de Humanidades como modelo de síntesis IB.\n\n**Pasos**\n- Elige un proceso concreto de tu programa DP (revolución, reforma, conflicto, cambio estructural).\n- En Napkin, pide un diagrama con al menos 5 nodos o pasos etiquetados y flechas de relación claras.\n- Revisa precisión histórica, legibilidad y vocabulario académico apropiado a prepa.\n- Ajusta nodos o conexiones donde la IA simplifique de más o omita matices.\n- Captura el diagrama terminado en vista completa con etiquetas legibles.\n\n**Qué subes y cómo se evalúa**\nSube una captura del diagrama final. La IA verifica secuencia o relaciones causa-efecto con al menos 5 pasos etiquetados, rigor histórico visible y utilidad como recurso de aula IB, no un esquema decorativo.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "El diagrama debe mostrar secuencia o relaciones causa-efecto con al menos 5 nodos o pasos etiquetados."
@@ -242,7 +242,7 @@
         "number": 2,
         "tool": "Napkin AI",
         "title": "Mapa conceptual de un tema de Biología",
-        "description": "Crea con Napkin un mapa conceptual de un tema de Biología (célula, ecosistema, genética). Describe el tema, los conceptos principales del mapa y cómo lo usarías al inicio de la unidad.",
+        "description": "**Qué vas a hacer**\nConstruir con Napkin AI un mapa conceptual de un tema de Biología IB — célula, ecosistema, genética u otro núcleo de tu syllabus — y definir cómo lo usarás para activar la unidad y orientar a tus alumnas en 2026-27.\n\n**Pasos**\n- Selecciona un tema donde las relaciones entre conceptos sean centrales para el aprendizaje.\n- Genera el mapa pidiendo al menos 6 conceptos vinculados con conectores que indiquen tipo de relación.\n- Verifica alineación con criterios IB y terminología DP correcta.\n- Planea un momento de aula: activación, lluvia de ideas o ticket de entrada con el mapa.\n- Redacta tema, conceptos clave y uso didáctico concreto.\n\n**Qué subes y cómo se evalúa**\nEscribe mínimo 400 caracteres nombrando el tema, al menos 6 conceptos relacionados y cómo usarás el mapa al inicio de la unidad. La IA revisa coherencia conceptual, rigor de Biología IB y diseño didáctico intencional.",
         "inputType": "text",
         "estimatedMinutes": 18,
         "rubric": "Debe nombrar el tema, al menos 6 conceptos relacionados y uso didáctico en aula. Mínimo 400 caracteres."
@@ -253,7 +253,7 @@
         "number": 3,
         "tool": "Copilot Web",
         "title": "Tabla comparativa con datos de Excel en Copilot",
-        "description": "En Microsoft Copilot, sube o describe una tabla de datos (calificaciones, resultados de laboratorio) y pídele un análisis o gráfico sugerido. Captura la respuesta con la tabla o visualización.",
+        "description": "**Qué vas a hacer**\nUsar Copilot Web para analizar una tabla real de tu práctica — calificaciones, resultados de laboratorio, encuestas de clase — y obtener una recomendación de visualización o interpretación que informe una decisión pedagógica concreta.\n\n**Pasos**\n- Prepara datos tabulares anonimizados (Excel exportado o tabla pegada en el chat).\n- Pide a Copilot un análisis: tendencias, comparaciones, outliers o gráfico sugerido.\n- Contrasta la respuesta con tu lectura profesional: ¿coincide con lo que ves en aula?\n- Identifica una acción que tomarías (reteaching, agrupación, ajuste de evaluación).\n- Captura la tabla visible y la respuesta de Copilot con análisis o visualización.\n\n**Qué subes y cómo se evalúa**\nSube una captura donde se vean datos tabulares y el análisis o recomendación de Copilot. La IA verifica que los datos sean reales de contexto escolar y que el análisis vaya más allá de un resumen superficial.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "Debe mostrarse datos tabulares y análisis o recomendación de visualización de Copilot."
@@ -264,7 +264,7 @@
         "number": 4,
         "tool": "Copilot Web",
         "title": "Borrador de informe para coordinación académica",
-        "description": "Usa Copilot para redactar un borrador de informe trimestral (logros, retos, plan). Exporta PDF y súbelo. Debe ser específico a tu materia o rol.",
+        "description": "**Qué vas a hacer**\nRedactar con Copilot Web un borrador de informe trimestral para coordinación académica — logros, retos y plan — con datos y narrativa específicos de tu materia o rol, listo para pulir antes de presentarlo al liderazgo escolar.\n\n**Pasos**\n- Reúne evidencias del trimestre: resultados de evaluación, proyectos IB, retos con alumnas, iniciativas con IA.\n- Pide a Copilot estructura en tres secciones con tono profesional y ejemplos concretos de Redwood.\n- Sustituye cualquier dato genérico por cifras o casos reales de tu práctica.\n- Revisa que el plan trimestral siguiente sea accionable, no lista de deseos.\n- Exporta el informe en PDF.\n\n**Qué subes y cómo se evalúa**\nSube el PDF del informe. La IA verifica secciones de logros, retos y plan con contenido específico a tu materia o rol — no una plantilla vacía rellenable por cualquier docente.",
         "inputType": "document",
         "estimatedMinutes": 42,
         "rubric": "El informe debe tener secciones de logros, retos y plan con contenido específico, no plantilla vacía."
@@ -275,7 +275,7 @@
         "number": 5,
         "tool": "SchoolAI",
         "title": "Configura un space monitoreado para práctica guiada",
-        "description": "Crea un space en SchoolAI para que tus alumnas practiquen un tema con IA monitoreada (preguntas guiadas, límite de temas). Captura la configuración del space y el prompt de sistema.",
+        "description": "**Qué vas a hacer**\nConfigurar un Space en SchoolAI para práctica guiada con IA monitoreada — un tutor con límites pedagógicos claros que tus alumnas usarán en una unidad exigente y que tú supervisarás en tiempo real, diseñado para implementar en 2026-27.\n\n**Pasos**\n- Elige un tema IB DP donde tus alumnas suelen necesitar apoyo individual (repaso, tipo de problema, concepto denso).\n- Crea el Space con prompt de tutor: qué SÍ ayudar, qué redirigir a ti y tono esperado.\n- Activa restricciones de monitoreo y temas permitidos según tu criterio ético.\n- Prueba con 2-3 preguntas tipo alumna y verifica que la IA respete tus límites.\n- Captura configuración del Space (nombre, prompt, restricciones) y un fragmento de conversación de prueba.\n\n**Qué subes y cómo se evalúa**\nSube una captura con configuración del Space y conversación de prueba visible. La IA verifica propósito pedagógico claro, límites en el prompt y comportamiento de tutor alineado, no respuestas genéricas fuera de rol.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "Debe verse nombre del space, restricciones o monitoreo activo, y prompt o instrucciones para alumnas."
@@ -286,7 +286,7 @@
         "number": 6,
         "tool": "SchoolAI",
         "title": "Reflexión sobre límites éticos del space con alumnas",
-        "description": "Después de probar SchoolAI, escribe qué límites pondrías (temas prohibidos, duración, supervisión) y cómo explicarías el uso ético a tus alumnas de prepa IB.",
+        "description": "**Qué vas a hacer**\nDefinir una política de límites éticos para Spaces con alumnas en prepa IB y redactar un guion breve para explicar uso responsable de IA — criterios que podrías compartir con otras docentes del plantel que integren SchoolAI.\n\n**Pasos**\n- Lista al menos 3 límites concretos: temas prohibidos, duración por sesión, supervisión docente, privacidad de datos.\n- Conecta cada límite con un riesgo real (plagio, dependencia, desinformación, sesgo).\n- Redacta un guion de 1-2 minutos para abrir con tus alumnas antes del primer uso.\n- Incluye qué hacer si la IA responde fuera de límites (reportar, cerrar sesión, acudir a ti).\n- Cierra con una norma de cierre que refuerce pensamiento crítico ATL.\n\n**Qué subes y cómo se evalúa**\nEscribe mínimo 400 caracteres con al menos 3 límites concretos y el guion para alumnas sobre uso ético. La IA revisa especificidad de los límites, coherencia IB y utilidad como modelo replicable para el departamento.",
         "inputType": "text",
         "estimatedMinutes": 18,
         "rubric": "Debe listar al menos 3 límites concretos y un guion breve para alumnas sobre uso ético. Mínimo 400 caracteres."
@@ -297,7 +297,7 @@
         "number": 7,
         "tool": "Khanmigo",
         "title": "Sesión de tutoría Khanmigo en Matemáticas",
-        "description": "Realiza una sesión de tutoría en Khanmigo sobre un tema de Matemáticas (fracciones, álgebra, geometría). Captura la conversación donde Khanmigo guíe con preguntas, no solo dé la respuesta.",
+        "description": "**Qué vas a hacer**\nConducir una sesión de tutoría en Khanmigo sobre un tema de Matemáticas IB — fracciones, álgebra, geometría u otro núcleo de tu curso — y evaluar si su método socrático merece recomendarse a tus alumnas o a colegas de otras materias con problemas similares.\n\n**Pasos**\n- Elige un procedimiento o concepto donde tus alumnas suelen pedir la respuesta directa.\n- Inicia conversación en Khanmigo sin pedir la solución final de entrada.\n- Observa si hace preguntas guía antes de revelar procedimiento o resultado.\n- Interrumpe si resuelve todo: reformula para exigir razonamiento paso a paso.\n- Captura un tramo de conversación que muestre al menos dos intercambios socráticos.\n\n**Qué subes y cómo se evalúa**\nSube una captura con interacción socrática visible: Khanmigo pregunta antes de dar procedimiento o respuesta. La IA verifica método de tutoría, no solo entrega de solución final.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "La captura debe mostrar interacción socrática: Khanmigo hace preguntas antes de revelar procedimiento o respuesta."
@@ -308,7 +308,7 @@
         "number": 8,
         "tool": "Khanmigo",
         "title": "Plan para usar Khanmigo en estudio independiente",
-        "description": "Diseña un plan de 2 semanas para que alumnas usen Khanmigo en estudio independiente de tu materia. Sube PDF con calendario, objetivos y reglas de uso.",
+        "description": "**Qué vas a hacer**\nDiseñar un plan de dos semanas para que tus alumnas usen Khanmigo en estudio independiente de tu materia IB — con calendario, objetivos ATL y reglas claras — como protocolo reutilizable que puedas implementar y compartir con el departamento en 2026-27.\n\n**Pasos**\n- Define el bloque de contenidos o habilidades del plan (unidad, repaso pre-PA, práctica de Papers).\n- Establece objetivos por sesión y criterios de éxito observables.\n- Redacta reglas: cuándo usar Khanmigo, cuándo acudir a ti, qué registrar en bitácora.\n- Arma calendario de 10 días hábiles con tiempos sugeridos.\n- Exporta el plan en PDF listo para entregar a alumnas y coordinación.\n\n**Qué subes y cómo se evalúa**\nSube el PDF del plan de 2 semanas. La IA verifica objetivos, sesiones calendarizadas y reglas claras para alumnas — un documento implementable, no un esquema vago.",
         "inputType": "document",
         "estimatedMinutes": 42,
         "rubric": "El plan debe cubrir 2 semanas con objetivos, sesiones y reglas claras para alumnas."
@@ -319,7 +319,7 @@
         "number": 9,
         "tool": "ElevenLabs",
         "title": "Audio introductorio de unidad en dos idiomas",
-        "description": "Con ElevenLabs, genera un audio de 1-2 min que presente una unidad nueva (puede ser español o español + inglés para IB). Captura la interfaz con el script y el reproductor.",
+        "description": "**Qué vas a hacer**\nProducir con ElevenLabs un audio introductorio de 1-2 minutos para una unidad nueva — en español o bilingüe español-inglés según tu curso IB — que tus alumnas escucharán antes de la primera sesión y que podrás reutilizar al abrir la unidad en 2026-27.\n\n**Pasos**\n- Redacta un script breve: gancho, preguntas indagadoras, expectativas y conexión con criterios IB.\n- Elige voz y ritmo apropiados para prepa; si es bilingüe, marca transiciones claras.\n- Genera el audio en ElevenLabs y escucha completo: ¿suena natural y preciso?\n- Ajusta pronunciación de términos técnicos o nombres propios.\n- Captura interfaz con script visible y reproductor mostrando duración generada.\n\n**Qué subes y cómo se evalúa**\nSube captura con script de la unidad y evidencia de audio generado (reproductor o duración). La IA verifica propósito introductorio claro, alineación IB y calidad del guion, no solo un archivo de prueba sin contenido curricular.",
         "inputType": "screenshot",
         "estimatedMinutes": 30,
         "rubric": "Debe mostrarse script de la unidad y evidencia de audio generado (reproductor o duración)."
@@ -330,7 +330,7 @@
         "number": 10,
         "tool": "ElevenLabs",
         "title": "Podcast breve de repaso para alumnas",
-        "description": "Crea un podcast de 2-3 min con ElevenLabs repasando conceptos clave de tu unidad actual. Describe el tema, el guion que escribiste y cómo lo compartirías con alumnas.",
+        "description": "**Qué vas a hacer**\nCrear con ElevenLabs un podcast de repaso de 2-3 minutos sobre conceptos clave de tu unidad y definir un protocolo de distribución — un formato que puedes replicar cada unidad y modelar para colegas que quieran incorporar audio en su práctica IB.\n\n**Pasos**\n- Selecciona 3-5 conceptos críticos alineados a criterios o formato de evaluación DP.\n- Escribe guion con estructura: intro, desarrollo por concepto, cierre con pregunta de autoevaluación.\n- Genera el audio en ElevenLabs y verifica claridad y ritmo para escucha móvil.\n- Define canal de distribución (Classroom, Drive, QR en aula) y momento de uso (repaso, flipped).\n- Redacta tema, resumen del guion y plan de compartir con alumnas.\n\n**Qué subes y cómo se evalúa**\nEscribe mínimo 400 caracteres con tema, puntos clave del guion y plan de distribución a alumnas. La IA revisa rigor conceptual IB, coherencia del guion y estrategia pedagógica de uso, no solo descripción del archivo de audio.",
         "inputType": "text",
         "estimatedMinutes": 18,
         "rubric": "Debe incluir tema, resumen del guion con puntos clave, y plan de distribución a alumnas. Mínimo 400 caracteres."

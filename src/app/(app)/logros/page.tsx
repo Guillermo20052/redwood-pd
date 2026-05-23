@@ -5,50 +5,45 @@ import { useProgressContext } from '@/components/Providers';
 import { DiplomaCard } from '@/components/DiplomaCard';
 import { DiplomaModal } from '@/components/DiplomaModal';
 import { DIPLOMAS, getNextDiploma, type Diploma } from '@/lib/diplomas';
-import {
-  DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
-  getDiploma1Progress,
-} from '@/lib/extras-gating';
+
+const DIPLOMA_EXPLANATION = [
+  'Hay 3 diplomas en el programa Redwood PD. Cada uno reconoce un nivel diferente de dominio.',
+  'DIPLOMA 1 — DOCENTE IA CONSCIENTE (Bronce): Completa Niveles 1 y 2 (20 horas verificadas) + 4 tareas Level Up del Nivel 1 + 4 tareas Level Up del Nivel 2.',
+  'DIPLOMA 2 — DOCENTE IA INNOVADORA (Plata): Diploma 1 completo + 24 horas verificadas en total (los requisitos de Diploma 1 se mantienen).',
+  'DIPLOMA 3 — DOCENTE IA TRANSFORMADORA (Oro): Diploma 2 completo + 30 horas verificadas en total + al menos 4 tareas Level Up del Nivel 3 (los requisitos de Diploma 1 y 2 se mantienen).',
+] as const;
 
 export default function LogrosPage() {
   const { totalHours, completions, profile } = useProgressContext();
   const [active, setActive] = useState<Diploma | null>(null);
   const next = getNextDiploma(totalHours, completions);
-  const d1 = getDiploma1Progress(totalHours, completions);
   const progressPct = Math.min(100, (totalHours / 30) * 100);
 
   return (
-    <div className="space-y-8 no-print">
-      <div className="logros-hero">
+    <div className="space-y-10 no-print">
+      <div className="logros-hero logros-hero--dramatic">
+        <div className="logros-hero-glow" aria-hidden />
         <div className="level-hero-tag">Tus diplomas · Liceo Redwood</div>
         <h2>Cada hora cuenta. Cada paso reconoce tu compromiso.</h2>
-        <p>
-          Tres niveles de reconocimiento conforme acumulas horas verificadas en la ruta obligatoria,
-          más tareas Level Up para el Diploma 1.
-        </p>
-        <p className="mt-3 text-sm text-white/85">
-          <strong>{totalHours.toFixed(1)}h</strong> verificadas (ruta obligatoria)
+
+        <div className="logros-explanation">
+          {DIPLOMA_EXPLANATION.map((paragraph) => (
+            <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+          ))}
+        </div>
+
+        <p className="logros-hours-summary">
+          <strong>{totalHours.toFixed(1)}h</strong> verificadas
           {next ? (
             <>
               {' '}
-              · próximo: Diploma {next.tier}
+              · Próximo: <span className="logros-next-name">{next.name}</span>
             </>
           ) : (
-            <> · 🏆 Programa completo</>
+            <> · Programa completo</>
           )}
         </p>
-        <div
-          className="mt-3 rounded-lg px-4 py-3 text-sm"
-          style={{ background: 'rgba(255,255,255,0.12)' }}
-        >
-          <p className="font-semibold mb-1">Diploma 1 — requisitos</p>
-          <p>
-            {d1.hoursOk ? '20h ✓' : `${totalHours.toFixed(1)}h / 20h`} · Level Up L1:{' '}
-            {d1.extrasL1}/{DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL}
-            {d1.extrasL1Ok ? ' ✓' : ''} · Level Up L2: {d1.extrasL2}/{DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL}
-            {d1.extrasL2Ok ? ' ✓' : ` — faltan ${Math.max(0, DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - d1.extrasL2)} Level Up del Nivel 2`}
-          </p>
-        </div>
+
         <div className="logros-progress-bar">
           <div className="logros-progress-fill" style={{ width: `${progressPct}%` }} />
         </div>

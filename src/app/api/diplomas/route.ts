@@ -3,7 +3,13 @@ import { getSessionUserId, loadCompletions } from '@/lib/completions-service';
 import { isLocalMode, localDb } from '@/lib/local-db';
 import { createClient } from '@/lib/supabase/server';
 import { sumVerifiedHours } from '@/lib/verification';
-import { getDiploma, getEarnedTiers, type DiplomaTier } from '@/lib/diplomas';
+import {
+  getDiploma,
+  getEarnedTiers,
+  isDiplomaTierEarned,
+  type DiplomaTier,
+} from '@/lib/diplomas';
+import { meetsDiploma3ExtrasRequirement } from '@/lib/extras-gating';
 import { isAdminUser } from '@/lib/auth-helpers';
 
 const TIERS = new Set<DiplomaTier>([1, 2, 3]);
@@ -67,15 +73,19 @@ export async function POST(request: Request) {
   // Server-side gate: don't trust the client's claim. Recompute hours.
   const completions = await loadCompletions(session.userId);
   const totalHours = sumVerifiedHours(completions);
-  const earned = new Set(getEarnedTiers(totalHours, completions));
-  if (!earned.has(tier)) {
+  if (!isDiplomaTierEarned(tier, totalHours, completions)) {
     const hoursOk = totalHours >= getDiploma(tier).hoursRequired;
-    const msg =
-      hoursOk && tier === 1
-        ? 'Tienes las horas, pero faltan tareas Level Up (4 de Nivel 1 y 4 de Nivel 2) para este diploma.'
-        : hoursOk
-          ? 'Tienes las horas, pero faltan tareas Level Up obligatorias para este diploma.'
-          : 'Aún no has alcanzado los requisitos para este diploma.';
+    let msg = 'Aún no has alcanzado los requisitos para este diploma.';
+    if (hoursOk && tier === 1) {
+      msg =
+        'Tienes las horas, pero faltan tareas Level Up (4 de Nivel 1 y 4 de Nivel 2) para este diploma.';
+    } else if (hoursOk && tier === 3 && !meetsDiploma3ExtrasRequirement(completions)) {
+      msg =
+        'Tienes las 30h, pero faltan al menos 4 tareas Level Up del Nivel 3 para el Diploma de Oro.';
+    } else if (hoursOk) {
+      msg =
+        'Tienes las horas, pero faltan tareas Level Up obligatorias para este diploma.';
+    }
     return NextResponse.json({ error: msg }, { status: 400 });
   }
 

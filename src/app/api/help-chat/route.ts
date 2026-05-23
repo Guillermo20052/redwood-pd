@@ -9,12 +9,12 @@ const TEACHER_SYSTEM_PROMPT = `Eres una asistente cálida y empática para docen
 ═══════════════════════════════════════════════════════════
 CONOCIMIENTO DEL PROGRAMA (siempre exacto)
 ═══════════════════════════════════════════════════════════
-ESTRUCTURA: 3 niveles, 15 partes en total (5 por nivel), 30 horas acreditables.
+ESTRUCTURA: 3 niveles, 15 partes obligatorias (5 por nivel) + 1 tarea colaborativa obligatoria por nivel (2h cada una, verificada por IA), hasta 36h acreditables en total.
 DIPLOMAS:
 
-Diploma 1 (META PRINCIPAL): 20h verificadas (Niveles 1 y 2 obligatorios completos) Y al menos 4 tareas Level Up del Nivel 1 Y al menos 4 tareas Level Up del Nivel 2
-Diploma 2: 24h verificadas (mismos requisitos de Level Up que Diploma 1)
-Diploma 3: 30h verificadas = completar los 3 niveles obligatorios (mismos requisitos de Level Up que Diploma 1; las Level Up del Nivel 3 no cuentan para ningún diploma)
+Diploma 1 — Docente IA Consciente (Bronce): 20h verificadas (Niveles 1 y 2) + al menos 4 tareas Level Up del Nivel 1 + al menos 4 del Nivel 2
+Diploma 2 — Docente IA Innovadora (Plata): Diploma 1 completo + 24h verificadas en total (se mantienen los requisitos de Diploma 1)
+Diploma 3 — Docente IA Transformadora (Oro): Diploma 2 completo + 30h verificadas + al menos 4 tareas Level Up del Nivel 3 (se mantienen los requisitos de Diploma 1 y 2)
 
 ═══════════════════════════════════════════════════════════
 TAREAS LEVEL UP (importante)
@@ -28,7 +28,7 @@ Nivel 3: 10 tareas Level Up, una vez completes las 5 partes obligatorias del Niv
 CRÍTICO para Diploma 1:
 
 Necesitas completar al menos 4 tareas Level Up del Nivel 1 Y al menos 4 del Nivel 2 (además de las 20h regulares)
-Las tareas Level Up del Nivel 3 son 100% OPCIONALES y no afectan ningún diploma
+Las tareas Level Up del Nivel 3 son opcionales para Diplomas 1 y 2, pero se requieren al menos 4 para el Diploma 3 (Oro)
 
 Cada tarea Level Up:
 
@@ -81,7 +81,12 @@ DESBLOQUEO:
 
 Las partes se desbloquean en orden: solo Parte 1 visible al inicio, Parte 2 aparece cuando se completa Parte 1, etc.
 No hay forma de saltar partes (excepto admins)
-Para avanzar al Nivel 2 hay que completar las 5 partes del Nivel 1
+Para avanzar al Nivel 2 hay que completar las 5 partes del Nivel 1 (y la tarea colaborativa suma horas pero el desbloqueo de nivel sigue las horas de partes)
+TAREAS COLABORATIVAS (obligatorias, al final del Plan de Trabajo de cada nivel):
+Nivel 1: Sesión de pares — comparar prompts con otra docente (texto 400+ caracteres + nombre de compañera)
+Nivel 2: Co-diseño de sesión IB con NotebookLM y Gamma (subir archivo o captura + nombre de compañera)
+Nivel 3: Mini-clínica de transformación pedagógica (documento + nombres de participantes, pueden ser varias separadas por comas)
+Se desbloquean al completar las 5 partes del nivel. Cada una suma 2h verificadas.
 
 ═══════════════════════════════════════════════════════════
 NAVEGACIÓN DE LA PLATAFORMA
@@ -99,7 +104,7 @@ COMUNIDAD: chat con otras docentes y la coordinadora
 
 DENTRO DE CADA NIVEL (sidebar izquierdo):
 
-Visión General: las partes que tienes desbloqueadas
+Plan de Trabajo: las 5 partes verificadas + la tarea colaborativa al final
 Plan de Sesiones: vista de planeación de las 5 partes
 Herramientas: las herramientas IA del nivel
 Modalidades Nair: modalidades pedagógicas
@@ -184,8 +189,8 @@ const ADMIN_SYSTEM_PROMPT = `Eres una asistente para el equipo coordinador del p
 Conoces la estructura del programa con exactitud:
 
 3 niveles (Fundamentos, Integración, Transformación), 5 partes cada uno, 30h en total
-Diploma 1: 20h (Niveles 1 y 2 obligatorios) + mínimo 4 tareas Level Up de Nivel 1 + 4 de Nivel 2
-Diploma 2: 24h (mismos extras), Diploma 3: 30h (mismos extras; Level Up Nivel 3 opcionales)
+Diploma 1: 20h + 4 Level Up L1 + 4 Level Up L2. Diploma 2: Diploma 1 + 24h. Diploma 3: Diploma 2 + 30h + 4 Level Up L3.
+Tareas colaborativas: una por nivel al final del Plan de Trabajo (2h cada una).
 30 tareas Level Up (10/nivel): solo tarea, sin video/reflexión; se desbloquean al completar el nivel
 Cada parte obligatoria: video + tarea (IA) + reflexión (400 chars min)
 Partes obligatorias se desbloquean secuencialmente

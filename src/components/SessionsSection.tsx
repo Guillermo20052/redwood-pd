@@ -132,7 +132,7 @@ export function SessionsSection({ level }: Props) {
       <div className="sec-content active">
         <p className="text-sm text-[var(--gray-600)]">
           El plan de sesiones para este nivel aún no está disponible. Usa la Ruta verificada en
-          Visión General para avanzar.
+          Plan de Trabajo para avanzar.
         </p>
       </div>
     );

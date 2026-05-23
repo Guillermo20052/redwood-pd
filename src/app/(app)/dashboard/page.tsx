@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { levels, tools, metaConfig } from '@/lib/content';
+import { levels, metaConfig } from '@/lib/content';
 import { useProgressContext } from '@/components/Providers';
 import {
   getLevelHours,
@@ -386,27 +386,6 @@ export default function DashboardPage() {
           );
         })}
       </div>
-
-      <section>
-        <div className="sec-hdr">
-          <h2 className="sec-title">Herramientas IA · 2025–2026</h2>
-        </div>
-        <div className="tools-grid">
-          {tools.map((t) => (
-            <a
-              key={t.name}
-              href={t.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="tool-crd no-underline"
-            >
-              <div className="tool-icon">{t.icon}</div>
-              <div className="tool-name">{t.name}</div>
-              <div className="tool-desc">{t.desc}</div>
-            </a>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

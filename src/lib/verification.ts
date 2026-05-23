@@ -6,7 +6,14 @@ import {
   type TaskInputType,
 } from './curriculum-path';
 import { hoursMap, metaConfig } from './content';
-import { meetsDiplomaExtrasRequirement } from './extras-gating';
+import {
+  COLLAB_VERIFIED_HOURS,
+  getCollaborativeTaskForLevel,
+} from './collaborative-tasks';
+import {
+  meetsDiploma1ExtrasRequirement,
+  meetsDiploma3ExtrasRequirement,
+} from './extras-gating';
 import type { CompletionRow } from './local-db';
 
 export type CompletionMap = Record<string, CompletionRow>;
@@ -91,42 +98,61 @@ export function verifyExtraTask(
   return next;
 }
 
-/** Collaborative task: verified only when reciprocal partner confirmation exists. */
+/** Collaborative task: verified immediately when AI grading passes. */
 export function verifyCollaborativeTask(
   completions: CompletionMap,
   itemKey: string,
   evidenceText: string,
   gradeResult: TaskGradeResult,
   partner: TaskPartner,
-  reciprocalReady: boolean
+  meta?: TaskSubmissionMeta
 ): CompletionMap {
   if (!gradeResult.passed) {
     throw new VerificationError('La tarea aún no cumple los criterios mínimos.', 400);
   }
+  const inputType = meta?.inputType ?? 'text';
   const trimmed = evidenceText.trim();
-  if (trimmed.length < verificationConfig.taskEvidenceMinChars) {
+  if (inputType === 'text' && trimmed.length < verificationConfig.taskEvidenceMinChars) {
     throw new VerificationError(
       `La evidencia debe tener al menos ${verificationConfig.taskEvidenceMinChars} caracteres`,
       400
     );
   }
+  if ((inputType === 'screenshot' || inputType === 'document') && !meta?.fileUrl) {
+    throw new VerificationError('Debes subir un archivo para esta tarea.', 400);
+  }
   if (partner.name.trim().length < 3) {
     throw new VerificationError('Indica tu compañera antes de enviar.', 400);
   }
-  const now = new Date().toISOString();
+  const evidenceStored =
+    inputType === 'text' ? trimmed : meta?.fileUrl ?? trimmed;
+
   const next = { ...completions };
   next[itemKey] = {
     item_key: itemKey,
-    status: reciprocalReady ? 'verified' : 'available',
-    verified_at: reciprocalReady ? now : undefined,
-    evidence_text: trimmed,
-    task_input_type: 'text',
-    task_score: reciprocalReady ? 100 : undefined,
+    status: 'verified',
+    verified_at: new Date().toISOString(),
+    evidence_text: evidenceStored,
+    task_input_type: inputType,
+    task_file_url: meta?.fileUrl ?? null,
+    task_score: 100,
     task_feedback: gradeResult.feedback,
     partner_user_id: partner.user_id ?? undefined,
     partner_name: partner.name.trim(),
   };
   return next;
+}
+
+function sumCollabHours(completions: CompletionMap, level?: 'b' | 'i' | 'a'): number {
+  let total = 0;
+  const levels: ('b' | 'i' | 'a')[] = level ? [level] : ['b', 'i', 'a'];
+  for (const lvl of levels) {
+    const task = getCollaborativeTaskForLevel(lvl);
+    if (task && completions[task.id]?.status === 'verified') {
+      total += task.verifiedHours ?? COLLAB_VERIFIED_HOURS;
+    }
+  }
+  return total;
 }
 
 export function sumVerifiedHours(completions: CompletionMap): number {
@@ -137,6 +163,7 @@ export function sumVerifiedHours(completions: CompletionMap): number {
       total += hoursMap[item.itemKey] ?? item.hours;
     }
   }
+  total += sumCollabHours(completions);
   return Math.round(total * 10) / 10;
 }
 
@@ -148,6 +175,7 @@ export function getLevelHoursVerified(completions: CompletionMap, level: 'b' | '
       total += hoursMap[item.itemKey] ?? item.hours;
     }
   }
+  total += sumCollabHours(completions, level);
   return Math.round(total * 10) / 10;
 }
 
@@ -323,9 +351,10 @@ export function getDiplomaTier(
   totalHours: number,
   completions: CompletionMap = {}
 ): 0 | 1 | 2 | 3 {
-  if (totalHours >= 30 && meetsDiplomaExtrasRequirement(completions)) return 3;
-  if (totalHours >= 24 && meetsDiplomaExtrasRequirement(completions)) return 2;
-  if (totalHours >= 20 && meetsDiplomaExtrasRequirement(completions)) return 1;
+  const base = meetsDiploma1ExtrasRequirement(completions);
+  if (totalHours >= 30 && base && meetsDiploma3ExtrasRequirement(completions)) return 3;
+  if (totalHours >= 24 && base) return 2;
+  if (totalHours >= 20 && base) return 1;
   return 0;
 }
 

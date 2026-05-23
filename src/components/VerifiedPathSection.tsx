@@ -2,8 +2,11 @@
 
 import { useCallback, useRef } from 'react';
 import { getPartsByLevel, verificationConfig } from '@/lib/curriculum-path';
-import { getVisibleParts, isPartComplete } from '@/lib/part-progress';
+import { getCollaborativeTaskForLevel } from '@/lib/collaborative-tasks';
+import { isLevelFullyComplete } from '@/lib/extras-gating';
+import { getVisibleParts } from '@/lib/part-progress';
 import type { CompletionMap } from '@/lib/verification';
+import { CollaborativeTaskCard } from './CollaborativeTaskCard';
 import { PartCard } from './PartCard';
 
 type Props = {
@@ -60,17 +63,23 @@ function LevelCompleteCelebration() {
         ¡Completaste el Nivel!
       </p>
       <p className="mt-1 text-sm text-[var(--gray-700)] leading-relaxed">
-        Has terminado las 5 partes verificadas. Tu progreso del nivel está al 100%.
+        Has terminado las 5 partes y la tarea colaborativa. Tu progreso del nivel está al 100%.
       </p>
     </div>
   );
 }
 
-export function VerifiedPathSection({ level, completions, isAdmin = false }: Props) {
+export function VerifiedPathSection({
+  level,
+  completions,
+  isAdmin = false,
+  onUpdated,
+}: Props) {
+  const levelSlug = level as 'b' | 'i' | 'a';
   const parts = getPartsByLevel(level);
   const visibleParts = getVisibleParts(parts, completions, isAdmin);
-  const allComplete =
-    !isAdmin && parts.length > 0 && parts.every((p) => isPartComplete(p, completions));
+  const fullyComplete = isLevelFullyComplete(levelSlug, completions);
+  const collabTask = getCollaborativeTaskForLevel(levelSlug);
   const hasLockedNext = !isAdmin && visibleParts.length < parts.length;
   const lastVisible = visibleParts[visibleParts.length - 1];
 
@@ -99,16 +108,16 @@ export function VerifiedPathSection({ level, completions, isAdmin = false }: Pro
   return (
     <section>
       <div className="sec-hdr">
-        <h2 className="sec-title">Ruta de aprendizaje verificada</h2>
+        <h2 className="sec-title">Plan de Trabajo</h2>
         <span className="sec-pill">
-          {parts.length} partes · Tarea {verificationConfig.taskEvidenceMinChars}+ · Reflexión{' '}
-          {verificationConfig.reflectionMinChars ?? 80}+ caracteres
+          {parts.length} partes + colaborativa · Tarea {verificationConfig.taskEvidenceMinChars}+ ·
+          Reflexión {verificationConfig.reflectionMinChars ?? 80}+ caracteres
         </span>
       </div>
 
       <p className="text-sm text-[var(--gray-600)] mb-4" style={{ fontSize: 13, lineHeight: 1.55 }}>
-        Tu ruta verificada: cada parte combina video, tarea con IA y reflexión. Avanza a tu ritmo —
-        cada etapa se desbloquea al completar la anterior.
+        Tu ruta verificada: cada parte combina video, tarea con IA y reflexión. Al terminar las 5
+        partes, desbloqueas la tarea colaborativa obligatoria con otra docente del programa.
       </p>
 
       <div className="space-y-3">
@@ -123,9 +132,18 @@ export function VerifiedPathSection({ level, completions, isAdmin = false }: Pro
           />
         ))}
 
-        {allComplete ? <LevelCompleteCelebration /> : null}
+        {visibleParts.length === parts.length && collabTask ? (
+          <CollaborativeTaskCard
+            task={collabTask}
+            completions={completions}
+            isAdmin={isAdmin}
+            onUpdated={() => onUpdated?.()}
+          />
+        ) : null}
 
-        {!allComplete && hasLockedNext && lastVisible ? (
+        {fullyComplete ? <LevelCompleteCelebration /> : null}
+
+        {hasLockedNext && lastVisible ? (
           <NextPartTeaser partNumber={lastVisible.partNumber} />
         ) : null}
       </div>

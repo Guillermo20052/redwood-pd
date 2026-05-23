@@ -7,22 +7,17 @@ import { useProgressContext } from './Providers';
 import { VerifiedPathSection } from './VerifiedPathSection';
 import { LevelLockBanner } from './LevelLockBanner';
 import { LevelSectionContent } from './LevelSectionContent';
-import { CollaborativeTasksSection } from './CollaborativeTasksSection';
-import { countCollaborativeTasksForLevel } from '@/lib/collaborative-tasks';
 import { isLevelUnlocked, getLevelHours, getLevelProgressPercent } from '@/lib/progress';
-import { getPartsByLevel } from '@/lib/curriculum-path';
-
 const DEFAULT_SECTION = 'ov';
 
 const SECTIONS = [
-  { id: 'ov', label: 'Visión General', icon: '🎯' },
+  { id: 'ov', label: 'Plan de Trabajo', icon: '🎯' },
   { id: 'wk', label: 'Plan de Sesiones', icon: '📅' },
   { id: 'tools', label: 'Herramientas', icon: '🔧' },
   { id: 'mod', label: 'Modalidades Nair', icon: '🧠' },
   { id: 'ib', label: 'Alineación IB', icon: '📚' },
   { id: 'subj', label: 'Aplicaciones por Materia', icon: '🎨' },
   { id: 'hsk', label: 'Habilidades', icon: '🌟' },
-  { id: 'collab', label: 'Tareas Colaborativas', icon: '🤝' },
 ] as const;
 
 const LEVEL_EYEBROW: Record<string, string> = {
@@ -50,8 +45,6 @@ export function LevelWorkspace({ slug }: Props) {
     (slug === 'i' || slug === 'a') &&
     !isLevelUnlocked(completions, slug as 'i' | 'a', false);
   const heroClass = slug === 'b' ? 'lh-b' : slug === 'i' ? 'lh-i' : 'lh-a';
-  const parts = getPartsByLevel(slug);
-  const collabCount = countCollaborativeTasksForLevel(slug as 'b' | 'i' | 'a');
   const levelHours = getLevelHours(completions, slug as 'b' | 'i' | 'a');
   const targetHours = level.totalHours ?? 10;
   const progressPct = getLevelProgressPercent(completions, slug as 'b' | 'i' | 'a', targetHours);
@@ -102,8 +95,8 @@ export function LevelWorkspace({ slug }: Props) {
                 <div className="hs-lbl">verificadas</div>
               </div>
               <div className="hero-stat-box">
-                <div className="hs-num">{collabCount}</div>
-                <div className="hs-lbl">tareas colaborativas</div>
+                <div className="hs-num">1</div>
+                <div className="hs-lbl">tarea colaborativa</div>
               </div>
               <div className="hero-stat-box">
                 <div className="hs-num">{progressPct}%</div>
@@ -147,7 +140,7 @@ export function LevelWorkspace({ slug }: Props) {
                         Meta del nivel
                       </div>
                       <div className="goal-txt">
-                        Completa las 5 partes verificadas para sumar {targetHours}h acreditables.
+                        Completa las 5 partes y la tarea colaborativa para sumar horas acreditables.
                       </div>
                     </div>
                   </div>
@@ -168,16 +161,7 @@ export function LevelWorkspace({ slug }: Props) {
                       verificadas, primero desbloquea este nivel.
                     </p>
                   )}
-                  {section === 'collab' ? (
-                    <CollaborativeTasksSection
-                      level={slug as 'b' | 'i' | 'a'}
-                      completions={completions}
-                      isAdmin={isAdmin}
-                      onUpdated={refreshCompletions}
-                    />
-                  ) : (
-                    <LevelSectionContent level={slug} section={section} />
-                  )}
+                  <LevelSectionContent level={slug} section={section} />
                 </>
               )}
             </>

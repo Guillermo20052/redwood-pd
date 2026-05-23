@@ -2,36 +2,41 @@
   "collaborative": {
     "b": [
       {
-        "id": "collab-lvl-b-1",
+        "id": "collab-lvl-b",
         "level": "b",
-        "title": "Intercambio de prompts con otra docente",
-        "description": "Intercambia un prompt de ChatGPT con otra docente y comparen cuál dio mejores resultados para su clase de prepa IB. Documenta: el prompt que compartiste, el de tu compañera, qué respuesta funcionó mejor para tus alumnas y por qué (mínimo 400 caracteres).",
+        "levelLabel": "NIVEL 1",
+        "title": "Sesión de pares: Comparen prompts y resultados",
+        "description": "Esta tarea debes hacerla con OTRA docente del programa. Con otra docente del programa, intercambien un prompt que cada una usó esta semana en ChatGPT o Claude. Comparen los resultados: ¿cuál herramienta dio mejor respuesta y por qué? Suban una reflexión conjunta de al menos 400 caracteres firmada por ambas.",
         "inputType": "text",
         "estimatedMinutes": 35,
-        "pairTask": true
+        "verifiedHours": 2,
+        "allowMultiplePartners": false
       }
     ],
     "i": [
       {
-        "id": "collab-lvl-i-1",
+        "id": "collab-lvl-i",
         "level": "i",
-        "title": "Co-diseño de sesión con NotebookLM",
-        "description": "Con otra docente de tu materia, co-diseñen una sesión usando NotebookLM con fuentes de ambas (planeaciones, artículos o guías IB). Describe qué fuentes aportó cada una, el esquema de la sesión acordado y cómo lo implementarán con sus alumnas de prepa (mínimo 400 caracteres).",
-        "inputType": "text",
+        "levelLabel": "NIVEL 2",
+        "title": "Co-diseño de sesión IB con IA",
+        "description": "Esta tarea debes hacerla con OTRA docente del programa. Con otra docente (idealmente de tu misma materia o un área relacionada IB), co-diseñen una sesión completa usando NotebookLM con fuentes de ambas y produzcan una presentación en Gamma. Suban el archivo de Gamma o una captura del producto final.",
+        "inputType": "document",
         "estimatedMinutes": 45,
-        "pairTask": true
+        "verifiedHours": 2,
+        "allowMultiplePartners": false
       }
     ],
     "a": [
       {
-        "id": "collab-lvl-a-1",
+        "id": "collab-lvl-a",
         "level": "a",
-        "title": "Mini-clínica SchoolAI con colegas",
-        "description": "Lidera una mini-clínica con 2-3 docentes sobre el uso de SchoolAI en su contexto de prepa IB. Registra: quiénes participaron, qué casos de uso exploraron, qué acuerdos de política tomaron y tu reflexión como facilitadora (mínimo 400 caracteres).",
-        "inputType": "text",
+        "levelLabel": "NIVEL 3",
+        "title": "Mini-clínica de transformación pedagógica",
+        "description": "Esta tarea debes hacerla con OTRAS docentes del programa. Lidera una mini-clínica de 30 minutos con 2-3 docentes mostrando cómo integraste IA en una unidad. Sube la presentación o un resumen escrito de la clínica incluyendo los nombres de las docentes participantes.",
+        "inputType": "document",
         "estimatedMinutes": 50,
-        "pairTask": false,
-        "smallGroup": true
+        "verifiedHours": 2,
+        "allowMultiplePartners": true
       }
     ]
   }

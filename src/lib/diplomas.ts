@@ -1,8 +1,10 @@
 import type { CompletionMap } from './verification';
 import {
   DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
-  meetsDiplomaExtrasRequirement,
+  meetsDiploma1ExtrasRequirement,
+  meetsDiploma3ExtrasRequirement,
   getDiploma1Progress,
+  countCompletedExtras,
 } from './extras-gating';
 
 export type DiplomaTier = 1 | 2 | 3;
@@ -27,7 +29,7 @@ export const DIPLOMAS: readonly Diploma[] = [
     tier: 1,
     name: 'Docente IA Consciente',
     sublabel:
-      'Por completar Niveles 1 y 2 (20h), más al menos 4 tareas Level Up de cada nivel',
+      'Bronce · Niveles 1 y 2 completos (20h) + 4 Level Up de cada nivel',
     hoursRequired: 20,
     iconPath: '/assets/diplomas/diploma-1.svg',
     palette: {
@@ -40,7 +42,7 @@ export const DIPLOMAS: readonly Diploma[] = [
     tier: 2,
     name: 'Docente IA Innovadora',
     sublabel:
-      'Por integrar IA en su planeación, diferenciación y evaluación cotidianas (24h + extras Diploma 1)',
+      'Plata · Diploma 1 + 24h verificadas en total',
     hoursRequired: 24,
     iconPath: '/assets/diplomas/diploma-2.svg',
     palette: {
@@ -53,7 +55,7 @@ export const DIPLOMAS: readonly Diploma[] = [
     tier: 3,
     name: 'Docente IA Transformadora',
     sublabel:
-      'Por liderar la transformación pedagógica con IA en el Liceo Redwood (30h + extras Diploma 1)',
+      'Oro · Diploma 2 + 30h verificadas + 4 Level Up del Nivel 3',
     hoursRequired: 30,
     iconPath: '/assets/diplomas/diploma-3.svg',
     palette: {
@@ -70,7 +72,7 @@ export function getDiploma(tier: DiplomaTier): Diploma {
   return d;
 }
 
-/** Tier earned only when hours AND (for all tiers) Diploma 1 extra requirements are met. */
+/** Tier earned when hours AND cumulative extra requirements for that tier are met. */
 export function isDiplomaTierEarned(
   tier: DiplomaTier,
   totalHours: number,
@@ -78,7 +80,9 @@ export function isDiplomaTierEarned(
 ): boolean {
   const d = getDiploma(tier);
   if (totalHours < d.hoursRequired) return false;
-  return meetsDiplomaExtrasRequirement(completions);
+  if (!meetsDiploma1ExtrasRequirement(completions)) return false;
+  if (tier === 3 && !meetsDiploma3ExtrasRequirement(completions)) return false;
+  return true;
 }
 
 export function getEarnedDiplomas(totalHours: number, completions: CompletionMap = {}): Diploma[] {
@@ -96,4 +100,10 @@ export function getEarnedTiers(totalHours: number, completions: CompletionMap = 
   return getEarnedDiplomas(totalHours, completions).map((d) => d.tier);
 }
 
-export { DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL, getDiploma1Progress, meetsDiplomaExtrasRequirement };
+export {
+  DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
+  getDiploma1Progress,
+  meetsDiploma1ExtrasRequirement,
+  meetsDiploma3ExtrasRequirement,
+  countCompletedExtras,
+};

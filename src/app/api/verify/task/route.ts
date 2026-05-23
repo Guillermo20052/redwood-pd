@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import {
   getSessionUserId,
   loadCompletions,
-  loadProfile,
   saveCompletions,
 } from '@/lib/completions-service';
 import {
@@ -22,7 +21,7 @@ import {
   type TaskInputType,
 } from '@/lib/curriculum-path';
 import { getExtraTask, isExtraItemKey } from '@/lib/extra-tasks';
-import { isExtraTaskAvailable } from '@/lib/extras-gating';
+import { isExtraTaskAvailable, isMandatoryPartsComplete } from '@/lib/extras-gating';
 import { gradeTaskSubmission } from '@/lib/ai-grader';
 import {
   fileUrlToPath,
@@ -101,6 +100,19 @@ export async function POST(request: Request) {
     if (!collab) {
       return NextResponse.json({ error: 'Tarea colaborativa no encontrada' }, { status: 400 });
     }
+    if (current[itemKey]?.status === 'verified') {
+      return NextResponse.json({ error: 'Ya verificado' }, { status: 400 });
+    }
+    if (!isAdmin && !isMandatoryPartsComplete(collab.level, current)) {
+      return NextResponse.json(
+        {
+          error:
+            'Completa las 5 partes obligatorias de este nivel para desbloquear la Tarea Colaborativa.',
+        },
+        { status: 400 }
+      );
+    }
+
     const partnerName = (partner?.name ?? '').trim();
     const partnerUserId =
       typeof partner?.user_id === 'string' && partner.user_id.length > 0
@@ -108,25 +120,53 @@ export async function POST(request: Request) {
         : null;
     if (partnerName.length < 3) {
       return NextResponse.json(
-        { error: 'Indica tu compañera antes de enviar la tarea colaborativa.' },
-        { status: 400 }
-      );
-    }
-    if (trimmed.length < verificationConfig.taskEvidenceMinChars) {
-      return NextResponse.json(
-        {
-          error: `La tarea debe tener al menos ${verificationConfig.taskEvidenceMinChars} caracteres.`,
-        },
+        { error: 'Indica el nombre de tu compañera antes de enviar la tarea colaborativa.' },
         { status: 400 }
       );
     }
 
+    const inputType: TaskInputType = isTaskInputType(bodyInputType)
+      ? bodyInputType
+      : collab.inputType;
+
+    if (inputType === 'text') {
+      if (trimmed.length < verificationConfig.taskEvidenceMinChars) {
+        return NextResponse.json(
+          {
+            error: `La tarea debe tener al menos ${verificationConfig.taskEvidenceMinChars} caracteres.`,
+          },
+          { status: 400 }
+        );
+      }
+    } else {
+      if (!fileUrl || typeof fileUrl !== 'string') {
+        return NextResponse.json({ error: 'Debes subir un archivo para esta tarea.' }, { status: 400 });
+      }
+      if (!fileUrlBelongsToUser(fileUrl, session.userId)) {
+        return NextResponse.json({ error: 'Archivo no válido para tu cuenta.' }, { status: 400 });
+      }
+      const existsCheck = await uploadedFileExists(fileUrl);
+      if (!existsCheck) {
+        return NextResponse.json(
+          { error: 'No se encontró el archivo subido. Vuelve a subirlo.' },
+          { status: 400 }
+        );
+      }
+    }
+
+    const filePath =
+      inputType !== 'text' && fileUrl && !isSupabaseStorageMode()
+        ? fileUrlToPath(fileUrl) ?? undefined
+        : undefined;
+
     let grade;
     try {
       grade = await gradeTaskSubmission({
-        inputType: 'text',
+        inputType,
         taskPrompt: collab.description,
         evidenceText: trimmed,
+        fileUrl: fileUrl ?? undefined,
+        filePath,
         partTitle: collab.title,
         level: collab.level,
         collaborative: true,
@@ -149,20 +189,6 @@ export async function POST(request: Request) {
     }
 
     const partnerPayload: TaskPartner = { user_id: partnerUserId, name: partnerName };
-    const myProfile = await loadProfile(session.userId);
-    const myName = (myProfile?.full_name ?? 'Docente').trim();
-    let reciprocalReady = false;
-    let partnerCompletions: Awaited<ReturnType<typeof loadCompletions>> | null = null;
-
-    if (partnerUserId) {
-      partnerCompletions = await loadCompletions(partnerUserId);
-      const partnerRow = partnerCompletions[itemKey];
-      reciprocalReady =
-        partnerRow?.status === 'verified' ||
-        (partnerRow?.status === 'available' &&
-          (partnerRow.partner_user_id === session.userId ||
-            (partnerRow.partner_name ?? '').toLowerCase() === myName.toLowerCase()));
-    }
 
     try {
       const updated = verifyCollaborativeTask(
@@ -171,32 +197,14 @@ export async function POST(request: Request) {
         trimmed,
         { passed: true, feedback: grade.feedback },
         partnerPayload,
-        reciprocalReady
+        { inputType, fileUrl: fileUrl ?? null }
       );
       await saveCompletions(session.userId, updated);
-
-      if (reciprocalReady && partnerUserId && partnerCompletions) {
-        const partnerUpdated = verifyCollaborativeTask(
-          partnerCompletions,
-          itemKey,
-          partnerCompletions[itemKey]?.evidence_text ?? trimmed,
-          { passed: true, feedback: partnerCompletions[itemKey]?.task_feedback ?? grade.feedback },
-          { user_id: session.userId, name: myName },
-          true
-        );
-        await saveCompletions(partnerUserId, partnerUpdated);
-      }
-
-      const pendingMsg = reciprocalReady
-        ? undefined
-        : `Tu evidencia quedó registrada. Cuando ${partnerName} complete la misma tarea y te declare como compañera, ambas verán la tarea verificada.`;
 
       return NextResponse.json({
         ok: true,
         passed: true,
         feedback: grade.feedback,
-        partnerPending: pendingMsg,
-        reciprocal: reciprocalReady,
         completions: updated,
       });
     } catch (e) {

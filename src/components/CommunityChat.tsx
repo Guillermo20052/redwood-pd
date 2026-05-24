@@ -2,6 +2,14 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+function IconMessageCircle({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+    </svg>
+  );
+}
+
 export type ChatMessage = {
   id: number | string;
   body: string;
@@ -100,18 +108,23 @@ export function CommunityChat({
   };
 
   return (
-    <div className={`chat-panel ${className}`}>
-      <div className="flex items-center justify-between px-4 py-2 border-b border-[var(--gray-200)]">
-        <span className="text-[10px] font-bold uppercase text-[var(--gray-500)]">
-          Canal escolar
-        </span>
+    <div className={`chat-panel comunidad-chat-panel ${className}`}>
+      <div className="comunidad-chat-channel">
+        <span className="comunidad-chat-channel-label">Canal escolar</span>
         {polling && <span className="chat-poll-dot" title="Actualizando" />}
       </div>
-      <div className="chat-messages">
+      <div className="chat-messages comunidad-chat-messages">
         {messages.length === 0 && (
-          <p className="chat-empty-state">
-            Sé la primera en escribir en el canal escolar.
-          </p>
+          <div className="comunidad-chat-empty">
+            <IconMessageCircle className="comunidad-chat-empty-icon" />
+            <p className="comunidad-chat-empty-title">
+              El canal está en silencio — por ahora.
+            </p>
+            <p className="comunidad-chat-empty-copy">
+              Sé la primera en escribir en el canal escolar y abre la conversación para tu cohorte.
+            </p>
+            <p className="comunidad-chat-empty-hint">Escribe el primer mensaje 👋</p>
+          </div>
         )}
         {messages.map((m) => {
           const isOwn =
@@ -120,8 +133,11 @@ export function CommunityChat({
               m.author_name.toLowerCase() === currentUserName.toLowerCase());
           const isAdminMsg = m.author_role === 'admin';
           return (
-            <div key={m.id} className={isOwn ? 'flex flex-col items-end' : ''}>
-              <div className="chat-meta flex items-center gap-1.5 flex-wrap">
+            <div
+              key={m.id}
+              className={`comunidad-chat-msg ${isOwn ? 'comunidad-chat-msg--own' : 'comunidad-chat-msg--other'}`}
+            >
+              <div className="chat-meta comunidad-chat-meta flex items-center gap-1.5 flex-wrap">
                 <span className={isAdminMsg ? 'chat-meta-admin' : undefined}>
                   {m.author_name}
                 </span>
@@ -139,7 +155,7 @@ export function CommunityChat({
                 })}</span>
               </div>
               <div
-                className={`chat-bubble ${isOwn ? 'chat-bubble--own' : 'chat-bubble--other'}${isAdminMsg && !isOwn ? ' chat-bubble--admin' : ''}`}
+                className={`chat-bubble comunidad-chat-bubble ${isOwn ? 'chat-bubble--own' : 'chat-bubble--other'}${isAdminMsg && !isOwn ? ' chat-bubble--admin' : ''}`}
               >
                 {m.body}
               </div>
@@ -148,20 +164,24 @@ export function CommunityChat({
         })}
         <div ref={bottomRef} />
       </div>
-      <form onSubmit={send} className="chat-input-bar">
+      <form onSubmit={send} className="chat-input-bar comunidad-chat-input-bar">
         <input
           type="text"
-          className="chat-input"
+          className="chat-input comunidad-chat-input"
           placeholder="Escribe un mensaje…"
           value={body}
           onChange={(e) => setBody(e.target.value)}
           maxLength={2000}
         />
-        <button type="submit" className="btn-primary shrink-0" disabled={loading || !body.trim()}>
+        <button
+          type="submit"
+          className="btn-primary comunidad-send-btn shrink-0"
+          disabled={loading || !body.trim()}
+        >
           {loading ? '…' : 'Enviar'}
         </button>
       </form>
-      {error && <p className="px-4 pb-2 text-xs text-[var(--red)]">{error}</p>}
+      {error && <p className="comunidad-chat-error">{error}</p>}
     </div>
   );
 }

@@ -35,15 +35,15 @@ export function Leaderboard({ teachers, currentUserId }: Props) {
 
   if (sorted.length === 0) {
     return (
-      <div className="rounded-xl border border-[var(--gray-200)] bg-white p-8 text-center">
+      <div className="comunidad-lb-empty">
         <p className="text-sm text-[var(--gray-500)]">No hay docentes registradas aún.</p>
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[var(--gray-200)] bg-white">
-      <table className="lb-table">
+    <div className="comunidad-lb-card">
+      <table className="lb-table comunidad-lb-table">
         <thead>
           <tr>
             <th>#</th>
@@ -84,57 +84,67 @@ function LbRow({
   const pct = Math.max(0, Math.min(100, teacher.progressPct));
   const lastActivity = formatRelative(teacher.lastActivity);
   const initial = (teacher.full_name || 'D').charAt(0).toUpperCase();
-  const rowClass = isCurrent ? 'lb-row--me' : '';
+  const rowClass = isCurrent ? 'lb-row--me comunidad-lb-row--me' : '';
+  const rankClass =
+    rank === 1
+      ? 'comunidad-lb-rank--gold'
+      : rank === 2
+        ? 'comunidad-lb-rank--silver'
+        : rank === 3
+          ? 'comunidad-lb-rank--bronze'
+          : 'comunidad-lb-rank--default';
 
   return (
-    <tr className={rowClass}>
-      <td data-label="#">{rank}</td>
+    <tr className={`comunidad-lb-row ${rowClass}`}>
+      <td data-label="#">
+        <span className={`comunidad-lb-rank ${rankClass}`}>#{rank}</span>
+      </td>
       <td data-label="Docente">
-        <div className="flex items-center gap-3">
+        <div className="comunidad-lb-docente flex items-center gap-3">
           <span
-            className="lb-avatar"
+            className="lb-avatar comunidad-lb-avatar"
             style={{ background: levelDot }}
             aria-hidden
           >
             {initial}
           </span>
           <div>
-            <div className="font-semibold text-[var(--gray-900)]">
+            <div className="comunidad-lb-name font-semibold text-[var(--gray-900)]">
               {teacher.full_name}
               {isCurrent && (
-                <span className="ml-2 text-[10px] font-bold uppercase text-[var(--red)]">
+                <span className="comunidad-lb-you ml-2 text-[10px] font-bold uppercase text-[var(--red)]">
                   (tú)
                 </span>
               )}
             </div>
-            <div className="text-[10px] text-[var(--gray-500)]">
+            <div className="comunidad-lb-role text-[10px] text-[var(--gray-500)]">
               {teacher.subject || 'Sin materia'}
             </div>
           </div>
         </div>
       </td>
       <td data-label="Nivel">
-        <span className="inline-flex items-center gap-2 text-xs">
+        <span className="comunidad-lb-level inline-flex items-center gap-2 text-xs">
           <span
             aria-hidden
-            className="inline-block h-2.5 w-2.5 rounded-full"
+            className="comunidad-lb-level-dot inline-block h-2.5 w-2.5 rounded-full"
             style={{ backgroundColor: levelDot }}
           />
           {levelLabel}
         </span>
       </td>
-      <td data-label="Horas" className="lb-hours">
+      <td data-label="Horas" className="lb-hours comunidad-lb-hours">
         {hours}h
       </td>
       <td data-label="Progreso">
-        <div className="flex items-center gap-2">
-          <div className="lb-progress-track flex-1 max-w-[100px]">
-            <div className="lb-progress-fill" style={{ width: `${pct}%` }} />
+        <div className="comunidad-lb-progress flex items-center gap-2">
+          <div className="lb-progress-track comunidad-lb-progress-track flex-1 max-w-[100px]">
+            <div className="lb-progress-fill comunidad-lb-progress-fill" style={{ width: `${pct}%` }} />
           </div>
-          <span className="text-xs font-semibold">{Math.round(pct)}%</span>
+          <span className="comunidad-lb-progress-pct text-xs font-semibold">{Math.round(pct)}%</span>
         </div>
       </td>
-      <td data-label="Actividad" className="text-xs text-[var(--gray-500)]">
+      <td data-label="Actividad" className="comunidad-lb-activity text-xs text-[var(--gray-500)]">
         {lastActivity}
       </td>
     </tr>

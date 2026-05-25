@@ -114,22 +114,20 @@ function DashboardHeroProgress({
           className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
           style={{ padding: 24 }}
         >
-          <span className="dash-hero-hours font-condensed font-extrabold leading-none text-white">
+          <span className="dash-hero-hours font-condensed font-extrabold leading-none">
             {totalHours.toFixed(1)}
           </span>
-          <span className="text-[11px] text-white/65 mt-1">de {PROGRAM_MAX_HOURS}h</span>
+          <span className="dash-hero-ring-sub text-[11px] mt-1">de {PROGRAM_MAX_HOURS}h</span>
         </div>
       </div>
 
       {nextDiploma ? (
         <div className="mb-4 text-left">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-white/50">
-            Tu próximo diploma
-          </p>
-          <p className="font-condensed text-base font-extrabold text-[var(--gold)] mt-0.5">
+          <p className="dash-hero-eyebrow">Tu próximo diploma</p>
+          <p className="dash-hero-diploma-name font-condensed text-base font-extrabold mt-0.5">
             {nextDiploma.name}
           </p>
-          <p className="text-xs text-white/75 mt-0.5">
+          <p className="dash-hero-body mt-0.5">
             Faltan <strong>{hoursRemaining.toFixed(1)}h</strong> verificadas
           </p>
         </div>
@@ -140,41 +138,31 @@ function DashboardHeroProgress({
       )}
 
       <div className="text-left">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-2">
-          Niveles activos
-        </p>
-        <div className="flex items-center gap-4">
+        <p className="dash-hero-levels-label">Niveles activos</p>
+        <div className="flex flex-wrap items-center gap-2">
           {levelLabels.map(({ slug, label }) => {
             const status = levelDotStatus(slug, completions, isAdmin);
-            const fill =
-              status === 'complete'
-                ? 'var(--teal)'
-                : status === 'active'
-                  ? 'var(--gold)'
-                  : 'rgba(255,255,255,0.2)';
-            const border =
-              status === 'locked' ? '1px dashed rgba(255,255,255,0.35)' : 'none';
             return (
-              <div key={slug} className="flex items-center gap-1.5">
-                <span
-                  className="inline-block h-3 w-3 rounded-full shrink-0"
-                  style={{ background: fill, border }}
-                  title={
-                    status === 'complete'
-                      ? `${label} completado`
-                      : status === 'locked'
-                        ? `${label} bloqueado`
-                        : `${label} en progreso`
-                  }
-                />
-                <span className="text-[11px] font-semibold text-white/80">{label}</span>
+              <div
+                key={slug}
+                className={`dash-hero-level-item dash-hero-level-item--${slug} dash-hero-level-item--${status}`}
+                title={
+                  status === 'complete'
+                    ? `${label} completado`
+                    : status === 'locked'
+                      ? `${label} bloqueado`
+                      : `${label} en progreso`
+                }
+              >
+                <span className="dash-hero-level-dot" aria-hidden />
+                <span className="dash-hero-level-tag">{label}</span>
               </div>
             );
           })}
         </div>
       </div>
 
-      <p className="mt-3 text-[10px] text-white/55">
+      <p className="dash-hero-hint">
         {percent.toFixed(0)}% hacia diploma mínimo ({metaConfig.totalGoalHours}h)
       </p>
     </div>

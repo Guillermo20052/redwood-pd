@@ -29,6 +29,10 @@
   --bg: #f0edea;
   --ink: #1a1a1a;
   --muted: #6b6b6b;
+  --muted-strong: #555555;
+  --text-secondary: #555555;
+  --text-tertiary: #666666;
+  --text-on-dark-muted: rgba(255, 255, 255, 0.75);
   --line: rgba(0, 0, 0, 0.08);
   --white: #ffffff;
 
@@ -403,17 +407,158 @@ h3,
   padding: clamp(24px, 3vw, 32px) clamp(20px, 3vw, 28px);
   text-align: center;
   border-radius: var(--radius-xl);
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(16px);
-  box-shadow:
-    var(--shadow-card),
-    0 12px 40px rgba(0, 0, 0, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: linear-gradient(165deg, var(--white) 0%, var(--bg-warm-50) 100%);
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--shadow-card);
+}
+
+.dash-hero-panel svg circle:first-of-type {
+  stroke: var(--gray-200) !important;
 }
 
 .dash-hero-hours {
   font-size: clamp(36px, 4vw, 44px) !important;
+  color: var(--gold) !important;
+}
+
+.dash-hero-ring-sub {
+  color: var(--text-secondary);
+}
+
+.dash-hero-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.dash-hero-diploma-name {
+  color: var(--gold);
+}
+
+.dash-hero-body {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.dash-hero-body strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.dash-hero-levels-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.dash-hero-level-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 999px;
+  background: var(--gray-100);
+  border: 1px solid var(--line-soft);
+}
+
+.dash-hero-level-item--complete {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+
+.dash-hero-level-item--complete.dash-hero-level-item--b {
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.dash-hero-level-item--complete.dash-hero-level-item--i {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+
+.dash-hero-level-item--complete.dash-hero-level-item--a {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.dash-hero-level-item--complete .dash-hero-level-tag {
+  color: var(--white);
+}
+
+.dash-hero-level-item--active {
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.dash-hero-level-item--active.dash-hero-level-item--b {
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.dash-hero-level-item--active.dash-hero-level-item--i {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+
+.dash-hero-level-item--active.dash-hero-level-item--a {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.dash-hero-level-item--active .dash-hero-level-tag {
+  color: var(--white);
+}
+
+.dash-hero-level-item--locked {
+  background: var(--gray-100);
+  border: 1px dashed var(--gray-300);
+}
+
+.dash-hero-level-item--locked .dash-hero-level-tag {
+  color: var(--text-secondary);
+}
+
+.dash-hero-level-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--gray-300);
+}
+
+.dash-hero-level-item--complete .dash-hero-level-dot {
+  background: var(--white);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35);
+}
+
+.dash-hero-level-item--active .dash-hero-level-dot {
+  background: var(--gold);
+}
+
+.dash-hero-level-item--locked .dash-hero-level-dot {
+  background: transparent;
+  border: 1.5px dashed var(--gray-400);
+}
+
+.dash-hero-level-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.dash-hero-hint {
+  margin-top: 12px;
+  font-size: 10px;
+  color: var(--text-tertiary);
+  line-height: 1.45;
 }
 
 .dash-intro-block {
@@ -2395,7 +2540,7 @@ h3,
 }
 
 .redwood-tour-step .shepherd-text {
-  color: var(--muted);
+  color: var(--text-secondary);
   line-height: 1.6;
   font-size: 14px;
   padding: 0 18px 12px;
@@ -2892,4 +3037,153 @@ h3,
 
 .logro-card--earned {
   box-shadow: var(--shadow-card), var(--glow-gold);
+}
+
+/* ── Accessibility: contrast on light surfaces ───────────────────────────── */
+
+.dash-welcome-eyebrow,
+.camino-eyebrow,
+.comunidad-stat-label,
+.comunidad-lb-table th,
+.comunidad-panel-pill--muted,
+.extras-diploma-eyebrow,
+.ref-log-hdr,
+.admin-table th,
+.sb-section-title,
+.stage-label,
+.db-lbl,
+.task-lbl,
+.vcrd-meta,
+.tool-desc,
+.dip-sig-role,
+.dip-date,
+.dip-next-hint,
+.help-suggest-label {
+  color: var(--text-secondary);
+}
+
+.camino-milestone-label,
+.camino-subtitle,
+.dash-intro-stats .hero-stat-box .hs-lbl,
+.comunidad-header-subtitle,
+.comunidad-chat-empty-copy,
+.comunidad-segment-btn:not(.comunidad-segment-btn--active),
+.welcome-overview-card p,
+.welcome-pdf-label,
+.welcome-signature-role,
+.welcome-context,
+.extras-diploma-req-meta,
+.educator-perk-modal-tool-desc,
+.educator-perk-modal-dismiss,
+.goal-txt,
+.part-card-lock-msg,
+.ref-qhint,
+.ref-empty-state,
+.logro-locked,
+.logro-check--pending,
+.hsk-intro-tag,
+.hsk-item-how,
+.char-counter,
+.day-exp,
+.eth-list li,
+.check-item label.done {
+  color: var(--text-secondary);
+}
+
+.logro-check--pending .logro-check-icon {
+  color: var(--text-tertiary);
+  border-color: var(--gray-300);
+}
+
+.comunidad-lb-table td.comunidad-lb-activity,
+.comunidad-lb-role,
+.comunidad-chat-meta,
+.chat-meta,
+.eval-section-card .text-\[11px\],
+.mi-perfil-field-note,
+.dash-level-card [class*='gray-500'],
+.dash-level-card [class*='gray-600'],
+.eval-cta-card [class*='gray-500'],
+.eval-cta-card [class*='gray-700'],
+.extra-task-card--locked [class*='gray-500'],
+.extra-task-card--locked [class*='gray-600'],
+.extra-task-card [class*='gray-600'],
+.logro-body [class*='gray-600'],
+.eval-success-card [class*='gray-600'],
+.eval-cta-card [class*='gray-500'],
+.eval-cta-card [class*='gray-700'],
+.app-main [class*='--gray-500'],
+.app-main [class*='--gray-600'],
+.app-page [class*='--gray-500'],
+.app-page [class*='--gray-600'],
+.diploma-overlay [class*='--gray-500'],
+.diploma-overlay [class*='--gray-600'],
+.educator-perk-modal [class*='--gray-500'],
+.educator-perk-modal [class*='--gray-600'],
+.welcome-flow-page [class*='--gray-500'],
+.welcome-flow-page [class*='--gray-600'] {
+  color: var(--text-secondary);
+}
+
+.level-hero [class*='--gray-500'],
+.level-hero [class*='--gray-600'],
+.logros-hero [class*='--gray-500'],
+.logros-hero [class*='--gray-600'] {
+  color: var(--text-on-dark-muted);
+}
+
+.ref-ta::placeholder,
+.ref-ta-obs::placeholder,
+.rw-textarea::placeholder,
+.rw-input::placeholder,
+.comunidad-chat-input::placeholder {
+  color: var(--text-tertiary);
+  opacity: 1;
+}
+
+.comunidad-segment-btn--active,
+.logro-preview-label,
+.part-hours-pill,
+.extra-task-badge,
+.dash-hero-level-item--complete .dash-hero-level-tag,
+.dash-hero-level-item--active .dash-hero-level-tag {
+  color: var(--white);
+}
+
+.logros-explanation p,
+.logros-hours-summary {
+  color: var(--text-on-dark-muted);
+}
+
+.dash-level-card.opacity-75 [class*='gray-500'] {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.eval-scale-opt span {
+  color: var(--ink);
+}
+
+.nav-item {
+  color: var(--gray-700);
+}
+
+.nav-item:not(.active) {
+  color: var(--text-secondary);
+}
+
+.nav-item.active {
+  color: var(--red);
+}
+
+.ref-lvl-tab:not(.active) {
+  color: var(--text-secondary);
+}
+
+.etica-sticky-text {
+  color: var(--navy);
+}
+
+.etica-sticky-text--done {
+  color: var(--green);
 }

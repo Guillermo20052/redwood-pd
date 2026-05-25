@@ -86,6 +86,7 @@ export type ProfileRow = {
   welcome_cynthia_read_at?: string | null;
   welcome_pope_read_at?: string | null;
   welcome_about_read_at?: string | null;
+  tour_completed_at?: string | null;
 };
 
 export type ChatMessage = {

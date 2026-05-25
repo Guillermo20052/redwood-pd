@@ -1,9 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { levels, metaConfig } from '@/lib/content';
 import { useProgressContext } from '@/components/Providers';
+import { PersonalizedHero } from '@/components/PersonalizedHero';
+import { CaminoVisualization } from '@/components/CaminoVisualization';
+import { DiplomaModal } from '@/components/DiplomaModal';
+import { TourTrigger } from '@/components/TourTrigger';
+import type { DiplomaTier } from '@/lib/diplomas';
 import {
   getLevelHours,
   getLevelProgressPercent,
@@ -17,10 +22,10 @@ const LEVEL_TARGET_HOURS = 10;
 const PROGRAM_MAX_HOURS = metaConfig.programMaxHours ?? 30;
 
 const WARM_INTRO_PRIMARY =
-  'En el Liceo de Monterrey Redwood creemos que una maestra que nunca deja de aprender es la maestra que sus alumnas nunca olvidan. Este programa no es una lista de tareas por completar — es una invitación a mantenerte vigente, curiosa y conectada con lo que más importa: encontrar mejores formas de llegar a cada alumna, liberar tiempo para lo que le da alma a nuestra comunidad y fortalecer la esencia que nos hace ser quienes somos.';
+  'En el Liceo de Monterrey Redwood creemos que una maestra que nunca deja de aprender es la maestra que sus alumnas nunca olvidan. Este programa no es una lista de tareas por completar — es una invitación a mantenerte vigente, curiosa y conectada con lo que más importa.';
 
 const WARM_INTRO_SECONDARY =
-  'Cada herramienta que explores y cada reflexión que registres aquí son semillas para tu práctica futura — no para mañana, sino para la docente que seguirás eligiendo ser. Avanza a tu ritmo, vuelve cuando lo necesites, y confía en que cada pequeño avance te acerca a tener más tiempo, más energía y más presencia para lo que ninguna herramienta puede reemplazar: conocer, guiar y acompañar a cada alumna.';
+  'Cada herramienta que explores y cada reflexión que registres aquí son semillas para tu práctica futura. Avanza a tu ritmo, vuelve cuando lo necesites, y confía en que cada pequeño avance te acerca a tener más tiempo, más energía y más presencia para lo que ninguna herramienta puede reemplazar.';
 
 const LEVEL_ICONS: Record<string, string> = { b: '🌱', i: '🌳', a: '🌲' };
 
@@ -186,6 +191,7 @@ function LevelDashboardCard({
   unlocked,
   unlockMsg,
   optional,
+  dataTour,
 }: {
   slug: LevelSlug;
   name: string;
@@ -196,6 +202,7 @@ function LevelDashboardCard({
   unlocked: boolean;
   unlockMsg: string;
   optional?: boolean;
+  dataTour?: string;
 }) {
   const icon = LEVEL_ICONS[slug] ?? '📚';
   const bg = LEVEL_BG[slug] ?? 'rgba(0,0,0,0.03)';
@@ -203,6 +210,7 @@ function LevelDashboardCard({
   return (
     <Link
       href={`/nivel/${slug}`}
+      data-tour={dataTour}
       className={`dash-level-card dash-level-card--${slug} relative flex gap-5 rounded-xl border no-underline ${
         unlocked ? 'cursor-pointer' : 'opacity-75'
       }`}
@@ -264,10 +272,11 @@ function LevelDashboardCard({
 }
 
 export default function DashboardPage() {
-  const { totalHours, percent, completions, profile } = useProgressContext();
+  const { totalHours, percent, completions, profile, diplomaAwardDates } = useProgressContext();
   const isAdmin = profile.role === 'admin';
   const [evaluation, setEvaluation] = useState<EvaluationRow | null>(null);
   const [evalLoaded, setEvalLoaded] = useState(false);
+  const [diplomaModalTier, setDiplomaModalTier] = useState<DiplomaTier | null>(null);
 
   useEffect(() => {
     if (totalHours < EVAL_UNLOCK_HOURS) return;
@@ -294,47 +303,71 @@ export default function DashboardPage() {
 
   return (
     <div className="app-page">
-      <div className="level-hero lh-dash flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
-        <div className="min-w-0 flex-1" style={{ maxWidth: '100%' }}>
-          <div className="level-hero-tag">
-            LICEO DE MONTERREY REDWOOD - RUTA DE DESARROLLO PROFESIONAL
+      <Suspense fallback={null}>
+        <TourTrigger />
+      </Suspense>
+
+      <PersonalizedHero
+        profile={profile}
+        totalHours={totalHours}
+        completions={completions}
+        onViewDiploma={(tier) => setDiplomaModalTier(tier)}
+        progressPanel={
+          <DashboardHeroProgress
+            totalHours={totalHours}
+            percent={percent}
+            completions={completions}
+            isAdmin={isAdmin}
+          />
+        }
+      />
+
+      <CaminoVisualization
+        totalHours={totalHours}
+        completions={completions}
+        profile={profile}
+        onViewDiploma={(tier) => setDiplomaModalTier(tier)}
+      />
+
+      <div className="dash-intro-block">
+        <p className="mb-3">{WARM_INTRO_PRIMARY}</p>
+        <p>{WARM_INTRO_SECONDARY}</p>
+        <div className="hero-stat-row dash-intro-stats">
+          <div className="hero-stat-box">
+            <div className="hs-num">3</div>
+            <div className="hs-lbl">Niveles progresivos</div>
           </div>
-          <h2>Siempre mejores. Siempre más conectadas.</h2>
-          <p className="mb-3">{WARM_INTRO_PRIMARY}</p>
-          <p>{WARM_INTRO_SECONDARY}</p>
-          <div className="hero-stat-row">
-            <div className="hero-stat-box">
-              <div className="hs-num">3</div>
-              <div className="hs-lbl">Niveles progresivos</div>
-            </div>
-            <div className="hero-stat-box">
-              <div className="hs-num">30h</div>
-              <div className="hs-lbl">Horas acreditables</div>
-            </div>
-            <div className="hero-stat-box">
-              <div className="hs-num">Tu ritmo</div>
-              <div className="hs-lbl">Sin tiempos impuestos</div>
-            </div>
-            <div className="hero-stat-box">
-              <div className="hs-num">IB + IA</div>
-              <div className="hs-lbl">Alineado a tu práctica real</div>
-            </div>
+          <div className="hero-stat-box">
+            <div className="hs-num">30h</div>
+            <div className="hs-lbl">Horas acreditables</div>
+          </div>
+          <div className="hero-stat-box">
+            <div className="hs-num">Tu ritmo</div>
+            <div className="hs-lbl">Sin tiempos impuestos</div>
+          </div>
+          <div className="hero-stat-box">
+            <div className="hs-num">IB + IA</div>
+            <div className="hs-lbl">Alineado a tu práctica real</div>
           </div>
         </div>
-
-        <DashboardHeroProgress
-          totalHours={totalHours}
-          percent={percent}
-          completions={completions}
-          isAdmin={isAdmin}
-        />
       </div>
+
+      {diplomaModalTier != null && (
+        <DiplomaModal
+          tier={diplomaModalTier}
+          teacherName={profile.full_name}
+          teacherEmail={profile.email}
+          awardedDate={diplomaAwardDates[diplomaModalTier] ?? new Date()}
+          totalHours={totalHours}
+          onClose={() => setDiplomaModalTier(null)}
+        />
+      )}
 
       {showEvalCta && (
         <EvaluationCta evaluation={evalLoaded ? evaluation : null} loaded={evalLoaded} />
       )}
 
-      <div className="dash-level-grid grid gap-6 md:grid-cols-3">
+      <div className="dash-level-grid grid gap-6 md:grid-cols-3" data-tour="levels">
         {levels.map((lvl) => {
           const slug = lvl.slug as LevelSlug;
           const hrs = getLevelHours(completions, slug);
@@ -367,6 +400,7 @@ export default function DashboardPage() {
               unlocked={unlocked}
               unlockMsg={unlockMsg}
               optional={slug === 'a'}
+              dataTour={slug === 'b' ? 'level-b' : undefined}
             />
           );
         })}

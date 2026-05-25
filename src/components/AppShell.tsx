@@ -120,6 +120,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           const active =
             pathname === item.href ||
             (item.href.startsWith('/nivel') && pathname.startsWith(item.href));
+          const tourAttr =
+            item.href === '/tareas-extra'
+              ? 'nav-tareas-extra'
+              : item.href === '/comunidad'
+                ? 'nav-comunidad'
+                : item.href === '/logros'
+                  ? 'nav-logros'
+                  : undefined;
           return (
             <Link
               key={item.href}
@@ -128,6 +136,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               aria-current={active ? 'page' : undefined}
               onClick={() => setMobileNavOpen(false)}
               style={item.extra ? { color: 'var(--gold)' } : undefined}
+              {...(tourAttr ? { 'data-tour': tourAttr } : {})}
             >
               {item.dot && (
                 <span className="dot" style={{ background: item.dot }} />

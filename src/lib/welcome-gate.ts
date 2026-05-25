@@ -71,7 +71,7 @@ export function getWelcomeConfirmNext(step: WelcomeStep): string {
     case 'papa':
       return '/bienvenida/about';
     case 'about':
-      return '/nivel/b';
+      return '/dashboard';
   }
 }
 

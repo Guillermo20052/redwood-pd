@@ -182,7 +182,7 @@ export function DiplomaCard({ diploma, totalHours, completions, onOpen }: Props)
                 className="btn-primary text-[10px] py-2 px-3 logro-print-btn"
                 style={{ background: diploma.palette.accentColor }}
               >
-                Ver e imprimir
+                Ver certificado
               </button>
             </>
           ) : (

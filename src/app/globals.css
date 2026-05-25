@@ -178,9 +178,229 @@ h3,
   .diploma-print {
     box-shadow: none !important;
   }
+
+  body.diploma-printing {
+    background: #fff !important;
+  }
+
+  body.diploma-printing * {
+    visibility: hidden !important;
+  }
+
+  body.diploma-printing .diploma-overlay,
+  body.diploma-printing .diploma-overlay * {
+    visibility: visible !important;
+  }
+
+  body.diploma-printing .diploma-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    background: #fff !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  body.diploma-printing .diploma-print-target {
+    max-width: none !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body.diploma-printing .diploma-modal-actions,
+  body.diploma-printing .dip-next-hint {
+    display: none !important;
+  }
+
+  body.diploma-printing .diploma-cert,
+  body.diploma-printing .dip-shell,
+  body.diploma-printing .dip-hours-pill,
+  body.diploma-printing .dip-tier-pill {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
 }
 
-/* ── COMUNIDAD PAGE ─────────────────────────────────────────── */
+/* ── DASHBOARD PERSONALIZED WELCOME ─────────────────────────── */
+
+.dash-welcome-card {
+  position: relative;
+  border-radius: var(--radius-xl, 16px);
+  padding: clamp(32px, 5vw, 80px) clamp(24px, 4vw, 48px);
+  background: linear-gradient(
+    145deg,
+    var(--bg-warm-50, #faf7f0) 0%,
+    rgba(249, 236, 238, 0.35) 55%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
+  border: 1px solid var(--line-soft, rgba(26, 46, 74, 0.08));
+  box-shadow: var(--shadow-card, 0 8px 32px rgba(26, 46, 74, 0.08));
+  overflow: hidden;
+}
+
+.dash-welcome-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 100% 0%, rgba(178, 34, 52, 0.05), transparent 55%);
+  pointer-events: none;
+}
+
+.dash-welcome-card--gold {
+  box-shadow: var(--shadow-card, 0 8px 32px rgba(26, 46, 74, 0.08)), var(--glow-gold);
+  border-color: rgba(200, 151, 42, 0.35);
+}
+
+.dash-welcome-card--admin {
+  border-left: 4px solid var(--gold, #c8972a);
+}
+
+.dash-welcome-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 4vw, 40px);
+}
+
+@media (min-width: 1024px) {
+  .dash-welcome-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.dash-welcome-copy {
+  min-width: 0;
+  flex: 1;
+  max-width: 720px;
+}
+
+.dash-welcome-admin-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold, #c8972a);
+  background: var(--gold-light, #fdf5e4);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.dash-welcome-eyebrow {
+  font-family: var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gray-500, #8b8480);
+  margin: 0 0 12px;
+}
+
+.dash-welcome-title {
+  font-family: var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
+  font-size: clamp(36px, 7vw, 72px);
+  font-weight: 800;
+  line-height: 1.02;
+  color: var(--ink, #1e1916);
+  margin: 0 0 12px;
+}
+
+.dash-welcome-tagline {
+  font-family: var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--red, #b22234);
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.dash-welcome-subtitle {
+  font-size: clamp(16px, 2vw, 22px);
+  line-height: 1.55;
+  color: var(--gray-700, #4a4440);
+  margin: 0 0 24px;
+  max-width: 640px;
+}
+
+.dash-welcome-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: var(--radius-md, 10px);
+  background: var(--red, #b22234);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 4px 14px rgba(178, 34, 52, 0.25);
+}
+
+.dash-welcome-cta:hover {
+  background: var(--red-dark, #8b1a28);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(178, 34, 52, 0.3);
+  color: #fff;
+}
+
+.dash-welcome-progress {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+  .dash-welcome-progress {
+    margin: 0;
+    flex-shrink: 0;
+  }
+}
+
+.dash-intro-block {
+  padding: clamp(20px, 3vw, 28px) 0 8px;
+  color: var(--gray-700, #4a4440);
+  font-size: clamp(14px, 1.6vw, 16px);
+  line-height: 1.65;
+}
+
+.dash-intro-stats.hero-stat-row {
+  margin-top: 24px;
+}
+
+.dash-intro-stats .hero-stat-box {
+  background: rgba(26, 46, 74, 0.06);
+  border: 1px solid rgba(26, 46, 74, 0.1);
+}
+
+.dash-intro-stats .hero-stat-box .hs-num {
+  color: var(--navy, #1a2e4a);
+}
+
+.dash-intro-stats .hero-stat-box .hs-lbl {
+  color: var(--gray-600, #6b6560);
+}
+
+@media (max-width: 640px) {
+  .dash-welcome-cta {
+    width: 100%;
+  }
+}
+
 
 .comunidad-page {
   gap: clamp(2rem, 4vw, 3.5rem);
@@ -1393,4 +1613,739 @@ h3,
   color: var(--gray-500);
   cursor: pointer;
   padding: 0 2px;
+}
+
+/* ── DIPLOMA CERTIFICATE (3-tier modal) ─────────────────────── */
+
+.diploma-celebrate {
+  animation: diploma-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes diploma-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.dip-shell {
+  padding: 4px;
+  border-radius: 14px;
+}
+
+.diploma-cert {
+  position: relative;
+  margin: 0;
+  border-width: 7px;
+  border-style: solid;
+  border-radius: 10px;
+  padding: clamp(24px, 4vw, 40px) clamp(20px, 4vw, 44px);
+  text-align: center;
+  overflow: hidden;
+}
+
+.diploma-cert.tier-3 {
+  border-style: double;
+  box-shadow: inset 0 0 0 3px rgba(200, 151, 42, 0.35);
+}
+
+.diploma-cert.tier-3 .dip-title-name {
+  text-shadow: 0 0 24px rgba(200, 151, 42, 0.25);
+}
+
+.dip-corner {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  opacity: 0.22;
+  border-color: var(--dip-accent, var(--navy));
+}
+
+.dip-corner.tl {
+  top: 18px;
+  left: 18px;
+  border-top: 3px solid;
+  border-left: 3px solid;
+}
+
+.dip-corner.tr {
+  top: 18px;
+  right: 18px;
+  border-top: 3px solid;
+  border-right: 3px solid;
+}
+
+.dip-corner.bl {
+  bottom: 18px;
+  left: 18px;
+  border-bottom: 3px solid;
+  border-left: 3px solid;
+}
+
+.dip-corner.br {
+  bottom: 18px;
+  right: 18px;
+  border-bottom: 3px solid;
+  border-right: 3px solid;
+}
+
+.dip-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(6rem, 18vw, 9rem);
+  opacity: 0.06;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.dip-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.dip-logo {
+  height: auto;
+  width: auto;
+  max-height: 44px;
+}
+
+.dip-brand {
+  font-family: var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--red);
+}
+
+.dip-school {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin: 0 0 10px;
+}
+
+.dip-cert {
+  font-size: 13px;
+  color: var(--gray-600);
+  font-style: italic;
+  margin: 0 0 8px;
+}
+
+.dip-teacher-name {
+  font-family: var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
+  font-size: clamp(28px, 5vw, 38px);
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1.1;
+  margin: 6px 0 12px;
+}
+
+.dip-tier-pill {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 20px;
+  border: 2px solid;
+  background: rgba(255, 255, 255, 0.65);
+  margin-bottom: 10px;
+}
+
+.dip-title-name {
+  font-family: var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
+  font-size: clamp(20px, 3.5vw, 24px);
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0 0 12px;
+  letter-spacing: 0.3px;
+}
+
+.dip-description {
+  font-size: 13px;
+  color: var(--gray-700);
+  line-height: 1.7;
+  max-width: 520px;
+  margin: 0 auto 16px;
+}
+
+.dip-hours-pill {
+  display: inline-block;
+  font-family: var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
+  font-size: clamp(16px, 3vw, 20px);
+  font-weight: 800;
+  color: #fff;
+  background: var(--navy);
+  padding: 8px 24px;
+  border-radius: 8px;
+  letter-spacing: 1px;
+  margin: 4px 0 10px;
+}
+
+.dip-program {
+  font-size: 11px;
+  color: var(--gray-600);
+  letter-spacing: 0.3px;
+  margin: 0 0 16px;
+}
+
+.dip-divider {
+  border: 0;
+  border-top: 1px solid var(--gray-200);
+  margin: 0 auto 20px;
+  max-width: 420px;
+}
+
+.dip-sigs-row {
+  display: flex;
+  justify-content: center;
+  gap: clamp(24px, 6vw, 56px);
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.dip-sig {
+  text-align: center;
+  min-width: 140px;
+}
+
+.dip-sig-line {
+  width: 140px;
+  height: 1px;
+  background: var(--gray-300);
+  margin: 0 auto 6px;
+}
+
+.dip-sig-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0;
+}
+
+.dip-sig-role {
+  font-size: 10px;
+  color: var(--gray-500);
+  margin: 2px 0 0;
+}
+
+.dip-date {
+  font-size: 11px;
+  color: var(--gray-500);
+  margin: 0;
+}
+
+.dip-next-hint {
+  font-size: 11px;
+  text-align: center;
+  padding: 10px 16px;
+  margin-top: 16px;
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--gray-700);
+  border-radius: 8px;
+}
+
+@media (max-width: 640px) {
+  .diploma-overlay {
+    padding: 8px;
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+
+  .diploma-print-target {
+    margin: auto 0;
+  }
+
+  .diploma-cert {
+    padding: 20px 16px;
+  }
+
+  .dip-sigs-row {
+    gap: 20px;
+  }
+}
+
+/* ── CELEBRATION TOASTS ─────────────────────────────────────── */
+
+.toast-stack {
+  position: fixed;
+  top: clamp(12px, 3vw, 20px);
+  right: clamp(12px, 3vw, 20px);
+  left: auto;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: min(360px, calc(100vw - 24px));
+  pointer-events: none;
+}
+
+.toast-item {
+  pointer-events: auto;
+  background: var(--bg-warm-50, #faf7f0);
+  border-left: 4px solid var(--gold, #c8972a);
+  border-radius: var(--radius-md, 10px);
+  box-shadow: 0 8px 24px rgba(26, 46, 74, 0.12);
+  padding: 12px 14px;
+  animation: toast-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.toast-message {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-800, #2a2520);
+  line-height: 1.45;
+}
+
+.toast-action {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy, #1a2e4a);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.toast-action:hover {
+  color: var(--red, #b22234);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .toast-stack {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    max-width: min(420px, calc(100vw - 24px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast-item {
+    animation: none;
+  }
+}
+
+/* ─── Camino al Diploma ─────────────────────────────────────────────────── */
+
+.camino-section {
+  margin: clamp(20px, 3vw, 32px) 0 clamp(8px, 2vw, 16px);
+}
+
+.camino-header {
+  margin-bottom: 16px;
+}
+
+.camino-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin-bottom: 6px;
+}
+
+.camino-title {
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0 0 6px;
+  letter-spacing: 0.02em;
+}
+
+.camino-subtitle {
+  font-size: clamp(13px, 1.5vw, 15px);
+  color: var(--gray-600);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.camino-viz {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(
+    145deg,
+    var(--bg-warm-50) 0%,
+    var(--gold-light) 55%,
+    rgba(234, 240, 248, 0.85) 100%
+  );
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--shadow-card);
+  overflow: visible;
+}
+
+.camino-viz--vertical {
+  height: 420px;
+  max-width: 320px;
+  margin-inline: auto;
+}
+
+.camino-path-svg {
+  position: absolute;
+  inset: 12% 4% 18%;
+  width: calc(100% - 8%);
+  height: calc(100% - 30%);
+  pointer-events: none;
+}
+
+.camino-viz--vertical .camino-path-svg {
+  inset: 4% 18% 4% 42%;
+}
+
+.camino-path {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.camino-path--upcoming {
+  stroke: rgba(26, 46, 74, 0.22);
+  stroke-dasharray: 6 8;
+}
+
+.camino-path--achieved {
+  stroke-width: 4;
+  filter: drop-shadow(0 0 4px rgba(200, 151, 42, 0.25));
+}
+
+.camino-path--draw {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: camino-draw-path 1.2s var(--ease-smooth) forwards;
+}
+
+.camino-path--draw-achieved {
+  animation: camino-draw-achieved 1.4s var(--ease-smooth) 0.25s forwards;
+}
+
+.camino-path--fade-in {
+  opacity: 0;
+  animation: camino-path-fade 0.9s var(--ease-smooth) forwards;
+}
+
+@keyframes camino-path-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes camino-draw-path {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes camino-draw-achieved {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.camino-milestone {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.camino-milestone-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+
+.camino-milestone-btn:hover,
+.camino-milestone-btn:focus-visible {
+  transform: translateY(-3px);
+  outline: none;
+}
+
+.camino-milestone-dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(26, 46, 74, 0.35);
+  background: var(--white);
+  transition:
+    background var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
+}
+
+.camino-milestone--medium .camino-milestone-dot {
+  width: 14px;
+  height: 14px;
+}
+
+.camino-milestone--large .camino-milestone-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 20px;
+  border: 2px solid rgba(26, 46, 74, 0.25);
+  background: var(--white);
+  transition:
+    background var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
+}
+
+.camino-milestone-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  white-space: nowrap;
+}
+
+.camino-milestone--achieved .camino-milestone-dot,
+.camino-milestone--achieved.camino-milestone--medium .camino-milestone-dot {
+  background: var(--milestone-color, var(--navy));
+  border-color: var(--milestone-color, var(--navy));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--milestone-color, var(--navy)) 45%, transparent);
+}
+
+.camino-milestone--achieved.camino-milestone--large .camino-milestone-icon {
+  background: color-mix(in srgb, var(--milestone-color, var(--gold)) 18%, white);
+  border-color: var(--milestone-color, var(--gold));
+  box-shadow: 0 0 14px color-mix(in srgb, var(--milestone-color, var(--gold)) 40%, transparent);
+}
+
+.camino-milestone--highlight .camino-milestone-dot,
+.camino-milestone--highlight.camino-milestone--large .camino-milestone-icon {
+  transform: scale(1.08);
+}
+
+.camino-milestone--enter {
+  opacity: 0;
+  animation: camino-milestone-in 0.45s var(--ease-smooth) forwards;
+}
+
+@keyframes camino-milestone-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.camino-you-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.camino-you-marker-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--red);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 800;
+  border: 2.5px solid var(--white);
+  box-shadow: 0 2px 8px rgba(178, 34, 52, 0.35);
+}
+
+.camino-you-marker--pulse .camino-you-marker-inner {
+  animation: camino-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes camino-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(178, 34, 52, 0.35),
+      0 2px 8px rgba(178, 34, 52, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 0 0 8px rgba(178, 34, 52, 0),
+      0 2px 12px rgba(178, 34, 52, 0.35);
+  }
+}
+
+.camino-floating-msg {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  max-width: min(360px, calc(100% - 24px));
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(26, 46, 74, 0.92);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  z-index: 5;
+  box-shadow: var(--shadow-md);
+}
+
+.camino-viz--admin {
+  outline: 1px dashed rgba(200, 151, 42, 0.45);
+  outline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .camino-milestone-label {
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .camino-path--draw,
+  .camino-path--fade-in,
+  .camino-path--draw-achieved,
+  .camino-milestone--enter,
+  .camino-you-marker--pulse .camino-you-marker-inner {
+    animation: none;
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+
+  .camino-milestone-btn:hover,
+  .camino-milestone-btn:focus-visible {
+    transform: none;
+  }
+}
+
+/* ─── Shepherd.js guided tour ───────────────────────────────────────────── */
+
+.redwood-tour-step.shepherd-element {
+  font-family: var(--font-barlow), 'Barlow', system-ui, sans-serif;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card-hover);
+  border: 1px solid var(--line-strong);
+  max-width: min(380px, 90vw);
+  z-index: 10000;
+}
+
+.redwood-tour-step .shepherd-header {
+  padding: 16px 18px 0;
+}
+
+.redwood-tour-step .shepherd-title {
+  font-family: var(--font-barlow-condensed), 'Barlow Condensed', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--ink);
+}
+
+.redwood-tour-step .shepherd-text {
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 14px;
+  padding: 0 18px 12px;
+}
+
+.redwood-tour-step .shepherd-footer {
+  padding: 0 18px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.redwood-tour-step .shepherd-button {
+  background: var(--red);
+  color: var(--white);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+}
+
+.redwood-tour-step .shepherd-button:not(:disabled):hover {
+  background: var(--red-dark);
+}
+
+.redwood-tour-step .shepherd-button-secondary {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--line-strong);
+}
+
+.redwood-tour-step .shepherd-button-secondary:not(:disabled):hover {
+  background: var(--gray-50);
+  color: var(--gray-700);
+}
+
+.shepherd-modal-overlay-container.shepherd-modal-is-visible {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.bienvenida-tour-replay-wrap {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.bienvenida-tour-replay {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  transition: color var(--transition);
+}
+
+.bienvenida-tour-replay:hover {
+  color: var(--red);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .redwood-tour-step {
+    scroll-behavior: auto;
+  }
 }

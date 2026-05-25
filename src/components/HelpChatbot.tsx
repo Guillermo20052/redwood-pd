@@ -82,6 +82,7 @@ export function HelpChatbot() {
       <button
         type="button"
         aria-label="Abrir ayuda"
+        data-tour="chatbot"
         className={`help-fab ${open ? 'help-fab--open' : ''}`}
         onClick={() => setOpen((v) => !v)}
       >

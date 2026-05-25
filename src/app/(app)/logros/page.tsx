@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useProgressContext } from '@/components/Providers';
 import { DiplomaCard } from '@/components/DiplomaCard';
 import { DiplomaModal } from '@/components/DiplomaModal';
-import { DIPLOMAS, getNextDiploma, type Diploma } from '@/lib/diplomas';
+import { DIPLOMAS, getNextDiploma, type DiplomaTier } from '@/lib/diplomas';
 
 const DIPLOMA_EXPLANATION = [
   'Hay 3 diplomas en la Ruta de Desarrollo Profesional del Liceo de Monterrey Redwood. Cada uno reconoce un nivel diferente de dominio.',
@@ -14,10 +14,13 @@ const DIPLOMA_EXPLANATION = [
 ] as const;
 
 export default function LogrosPage() {
-  const { totalHours, completions, profile } = useProgressContext();
-  const [active, setActive] = useState<Diploma | null>(null);
+  const { totalHours, completions, profile, diplomaAwardDates } = useProgressContext();
+  const [activeTier, setActiveTier] = useState<DiplomaTier | null>(null);
   const next = getNextDiploma(totalHours, completions);
   const progressPct = Math.min(100, (totalHours / 30) * 100);
+
+  const activeAwardDate =
+    activeTier != null ? diplomaAwardDates[activeTier] ?? new Date() : new Date();
 
   return (
     <div className="app-page no-print">
@@ -56,19 +59,19 @@ export default function LogrosPage() {
             diploma={d}
             totalHours={totalHours}
             completions={completions}
-            onOpen={() => setActive(d)}
+            onOpen={() => setActiveTier(d.tier)}
           />
         ))}
       </div>
 
-      {active && (
+      {activeTier != null && (
         <DiplomaModal
-          diploma={active}
+          tier={activeTier}
           teacherName={profile.full_name}
-          teacherSubject={profile.subject}
-          awardedDate={new Date()}
+          teacherEmail={profile.email}
+          awardedDate={activeAwardDate}
           totalHours={totalHours}
-          onClose={() => setActive(null)}
+          onClose={() => setActiveTier(null)}
         />
       )}
     </div>

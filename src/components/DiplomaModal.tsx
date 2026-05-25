@@ -2,14 +2,16 @@
 
 import Image from 'next/image';
 import { useEffect } from 'react';
-import type { Diploma } from '@/lib/diplomas';
+import type { DiplomaTier } from '@/lib/diplomas';
+import { getDiplomaTheme } from '@/lib/diploma-themes';
 
 type Props = {
-  diploma: Diploma;
+  tier: DiplomaTier;
   teacherName: string;
-  teacherSubject: string;
+  teacherEmail?: string;
   awardedDate: Date;
   totalHours: number;
+  celebrate?: boolean;
   onClose: () => void;
 };
 
@@ -19,16 +21,28 @@ const DATE_FMT: Intl.DateTimeFormatOptions = {
   day: 'numeric',
 };
 
+function displayName(fullName: string, email?: string): string {
+  const trimmed = fullName.trim();
+  if (trimmed) return trimmed;
+  if (email) {
+    const local = email.split('@')[0]?.trim();
+    if (local) return local;
+  }
+  return 'Nombre de la Docente';
+}
+
 export function DiplomaModal({
-  diploma,
+  tier,
   teacherName,
-  teacherSubject,
+  teacherEmail,
   awardedDate,
   totalHours,
+  celebrate = false,
   onClose,
 }: Props) {
+  const theme = getDiplomaTheme(tier);
   const dateStr = awardedDate.toLocaleDateString('es-MX', DATE_FMT);
-  const tierClass = `tier-${diploma.tier}`;
+  const name = displayName(teacherName, teacherEmail);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -59,65 +73,92 @@ export function DiplomaModal({
       className="diploma-overlay"
       role="dialog"
       aria-modal="true"
-      aria-label={`Diploma ${diploma.tier}: ${diploma.name}`}
+      aria-label={`Diploma ${tier}: ${theme.name}`}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="diploma-print-target bg-white rounded-2xl max-w-[820px] w-full overflow-hidden shadow-2xl">
-        <div className={`diploma-inner-frame ${tierClass}`}>
-          <Image
-            src={diploma.iconPath}
-            alt=""
-            width={80}
-            height={80}
-            className="mx-auto mb-4"
-          />
-          <p className="dip-eyebrow">Liceo de Monterrey Redwood · Monterrey, N.L.</p>
-          <p className="dip-sublabel-main">
-            Reconocimiento por la Ruta de Desarrollo Profesional del Liceo de Monterrey Redwood
-          </p>
-          <p
-            className="dip-teacher-name"
-            style={{ color: diploma.palette.accentColor }}
+      <div
+        className={`diploma-print-target diploma-print ${celebrate ? 'diploma-celebrate' : ''}`}
+      >
+        <div
+          className="dip-shell"
+          style={{ background: `linear-gradient(135deg, ${theme.accentColor}, ${theme.accentColor}dd)` }}
+        >
+          <div
+            className={`diploma-inner-frame diploma-cert tier-${tier}`}
+            style={{
+              background: theme.backgroundTint,
+              borderColor: theme.accentColor,
+              ['--dip-accent' as string]: theme.accentColor,
+            }}
           >
-            {teacherName || 'Nombre de la Docente'}
-          </p>
-          {teacherSubject && (
-            <p className="text-xs text-[var(--gray-700)] mb-2">{teacherSubject}</p>
-          )}
-          <p
-            className="dip-tier-title"
-            style={{ color: diploma.palette.accentColor }}
-          >
-            {diploma.name}
-          </p>
-          <p className="dip-body-text">{diploma.sublabel}</p>
-          <span
-            className={`dip-hours-pill ${tierClass}`}
-            style={{ background: diploma.palette.borderColor }}
-          >
-            {totalHours.toFixed(1)} HORAS DE FORMACIÓN
-          </span>
-          <p className="dip-eyebrow mt-6">
-            Monterrey, N.L., México · {dateStr}
-          </p>
-          <div className="dip-sigs-row">
-            <div>
-              <div className="dip-sig-line" />
-              <p className="text-xs font-bold text-[var(--gray-900)]">Director(a) General</p>
-              <p className="dip-sig-role">Liceo de Monterrey Redwood</p>
+            <div className="dip-corner tl" aria-hidden />
+            <div className="dip-corner tr" aria-hidden />
+            <div className="dip-corner bl" aria-hidden />
+            <div className="dip-corner br" aria-hidden />
+            <div className={`dip-watermark dip-watermark--${theme.cornerMotif}`} aria-hidden>
+              {theme.icon}
             </div>
-            <div>
-              <div className="dip-sig-line" />
-              <p className="text-xs font-bold text-[var(--gray-900)]">Coordinación Académica</p>
-              <p className="dip-sig-role">Desarrollo Profesional</p>
+
+            <div className="dip-header">
+              <Image
+                src="/assets/logo-header.png"
+                alt=""
+                width={120}
+                height={40}
+                className="dip-logo"
+              />
+              <span className="dip-brand">REDWOOD HIGH</span>
             </div>
+
+            <p className="dip-school">LICEO DE MONTERREY · REDWOOD HIGH SCHOOL</p>
+            <p className="dip-cert">certifica con orgullo que</p>
+
+            <h2 className="dip-teacher-name">{name}</h2>
+
+            <span className="dip-tier-pill" style={{ borderColor: theme.accentColor, color: theme.accentColor }}>
+              {theme.label}
+            </span>
+
+            <h3 className={`dip-title-name tier-${tier}`}>
+              {theme.icon} {theme.name}
+            </h3>
+
+            <p className="dip-description">{theme.description}</p>
+
+            <span className="dip-hours-pill">{totalHours.toFixed(1)} HORAS DE FORMACIÓN</span>
+
+            <p className="dip-program">
+              Programa de Desarrollo Profesional con IA · {theme.subtitle}
+            </p>
+
+            <hr className="dip-divider" />
+
+            <div className="dip-sigs-row">
+              <div className="dip-sig">
+                <div className="dip-sig-line" />
+                <p className="dip-sig-name">Cynthia Patuel</p>
+                <p className="dip-sig-role">Directora Redwood High</p>
+              </div>
+              <div className="dip-sig">
+                <div className="dip-sig-line" />
+                <p className="dip-sig-name">Cecilia Leal</p>
+                <p className="dip-sig-role">Coordinadora Académica Redwood High</p>
+              </div>
+            </div>
+
+            <p className="dip-date">Monterrey, N.L., México · {dateStr}</p>
+
+            {theme.nextTierHint && (
+              <p className="dip-next-hint no-print">🔥 {theme.nextTierHint}</p>
+            )}
           </div>
         </div>
-        <div className="diploma-modal-actions flex justify-center gap-3 p-4 no-print">
+
+        <div className="diploma-modal-actions no-print">
           <button type="button" onClick={handlePrint} className="btn-primary">
-            🖨 Imprimir
+            Imprimir Diploma
           </button>
           <button type="button" onClick={onClose} className="btn-outline">
             Cerrar

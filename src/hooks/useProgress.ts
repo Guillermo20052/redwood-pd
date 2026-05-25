@@ -1,11 +1,16 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useToast } from '@/components/Toast';
 import type { CompletionMap } from '@/lib/verification';
 import { sumVerifiedHours, getDiplomaTier, progressPercent } from '@/lib/progress';
+import { fetchDiplomaAwardDates, type DiplomaAwardDates } from '@/lib/diploma-dates';
 import { getEarnedTiers, type DiplomaTier } from '@/lib/diplomas';
+import { buildProgressState, detectCelebrations } from '@/lib/celebration-detector';
+import { runCelebrations } from '@/lib/celebrate';
 
 export function useProgress() {
+  const showToast = useToast();
   const [completions, setCompletions] = useState<CompletionMap>({});
   const [profile, setProfile] = useState({
     full_name: '',
@@ -16,15 +21,41 @@ export function useProgress() {
     welcome_cynthia_read_at: null as string | null,
     welcome_pope_read_at: null as string | null,
     welcome_about_read_at: null as string | null,
+    tour_completed_at: null as string | null,
   });
   const [loading, setLoading] = useState(true);
+  const [diplomaAwardDates, setDiplomaAwardDates] = useState<DiplomaAwardDates>({});
+  const [celebrationTier, setCelebrationTier] = useState<DiplomaTier | null>(null);
+  const completionsRef = useRef<CompletionMap>({});
+  const hasLoadedRef = useRef(false);
+
+  useEffect(() => {
+    completionsRef.current = completions;
+  }, [completions]);
+
+  useEffect(() => {
+    if (!loading) hasLoadedRef.current = true;
+  }, [loading]);
+
+  const maybeCelebrate = useCallback(
+    (prev: CompletionMap, next: CompletionMap) => {
+      if (!hasLoadedRef.current) return;
+      const events = detectCelebrations(buildProgressState(prev), buildProgressState(next));
+      void runCelebrations(events, showToast);
+    },
+    [showToast]
+  );
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/progress');
-      if (res.ok) {
-        const data = await res.json();
+      const [progressRes, dates] = await Promise.all([
+        fetch('/api/progress'),
+        fetchDiplomaAwardDates(),
+      ]);
+      setDiplomaAwardDates(dates);
+      if (progressRes.ok) {
+        const data = await progressRes.json();
         setCompletions(data.completions || {});
         if (data.profile) {
           setProfile({
@@ -36,6 +67,7 @@ export function useProgress() {
             welcome_cynthia_read_at: data.profile.welcome_cynthia_read_at ?? null,
             welcome_pope_read_at: data.profile.welcome_pope_read_at ?? null,
             welcome_about_read_at: data.profile.welcome_about_read_at ?? null,
+            tour_completed_at: data.profile.tour_completed_at ?? null,
           });
         }
       }
@@ -68,25 +100,31 @@ export function useProgress() {
   };
 
   const refreshCompletions = useCallback(async () => {
+    const prev = completionsRef.current;
     const res = await fetch('/api/progress');
     if (res.ok) {
       const data = await res.json();
-      setCompletions(data.completions || {});
+      const next = (data.completions || {}) as CompletionMap;
+      setCompletions(next);
+      maybeCelebrate(prev, next);
     }
-  }, []);
+  }, [maybeCelebrate]);
 
   const applyVerifyResponse = useCallback(async (res: Response) => {
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data?.error || 'Error al verificar');
+    const prev = completionsRef.current;
     if (data?.completions) {
-      setCompletions(data.completions);
+      const next = data.completions as CompletionMap;
+      setCompletions(next);
+      maybeCelebrate(prev, next);
     } else if (data?.ok !== false) {
       // Only refresh when the server actually mutated state. A grading response
       // with `ok: false` is a valid 200 but did not change completions.
       await refreshCompletions();
     }
     return data;
-  }, [refreshCompletions]);
+  }, [maybeCelebrate, refreshCompletions]);
 
   const verifyVideo = useCallback(
     async (itemKey: string, watchPct: number, skipped: boolean = false) => {
@@ -217,9 +255,28 @@ export function useProgress() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ tier }),
-          }).catch(() => {
-            // Silently swallow — event log is nice-to-have, not critical.
-          });
+          })
+            .then(async (postRes) => {
+              if (!postRes.ok) return;
+              const postData = (await postRes.json()) as {
+                created?: boolean;
+                tier?: DiplomaTier;
+              };
+              if (postData.created && postData.tier) {
+                const earnedAt = new Date();
+                setDiplomaAwardDates((prev) => ({
+                  ...prev,
+                  [postData.tier!]: earnedAt,
+                }));
+                // Brief delay so confetti from detectCelebrations leads the modal.
+                window.setTimeout(() => {
+                  setCelebrationTier(postData.tier!);
+                }, 900);
+              }
+            })
+            .catch(() => {
+              // Silently swallow — event log is nice-to-have, not critical.
+            });
         }
       } catch {
         // Network failure — try again next render.
@@ -230,6 +287,10 @@ export function useProgress() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [earnedKey, loading]);
+
+  const dismissCelebration = useCallback(() => {
+    setCelebrationTier(null);
+  }, []);
 
   return {
     completions,
@@ -248,5 +309,8 @@ export function useProgress() {
     percent,
     diplomaTier,
     earnedDiplomas,
+    diplomaAwardDates,
+    celebrationTier,
+    dismissCelebration,
   };
 }

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { BienvenidaTourButton } from '@/components/BienvenidaTourButton';
 import { getSessionUserId, loadProfile } from '@/lib/completions-service';
 import {
   formatWelcomeDate,
@@ -62,6 +63,10 @@ export default async function BienvenidaOverviewPage() {
             )}
           </Link>
         ))}
+      </div>
+
+      <div className="bienvenida-tour-replay-wrap">
+        <BienvenidaTourButton />
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ function youtubeId(url: string | null | undefined): string | null {
 type Props = {
   itemKey: string;
   youtubeUrl: string | null | undefined;
-  /** Level used to derive `allowScrub` (b → free, i/a → anti-scrub enforced). */
+  /** Curriculum level (used by parent for skip affordances; scrub lock is uniform). */
   level: 'b' | 'i' | 'a';
   /** When true, video was verified previously — full seeking, no watch gate. */
   alreadyVerified?: boolean;
@@ -67,7 +67,7 @@ export function VideoPlayer({
 }: Props) {
   const { verifyVideo } = useProgressContext();
   const id = youtubeId(youtubeUrl);
-  const allowScrub = alreadyVerified || level === 'b';
+  const allowScrub = alreadyVerified;
 
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<YT.Player | null>(null);

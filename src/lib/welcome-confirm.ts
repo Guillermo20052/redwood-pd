@@ -38,7 +38,13 @@ export async function confirmWelcomeStep(step: WelcomeStep) {
     }
 
     localDb.upsertProfile({ ...existing, [field]: now });
-    return NextResponse.json({ ok: true, next: getWelcomeConfirmNext(step), [field]: now });
+    const shouldStartTour = step === 'about' && existing.role !== 'admin';
+    return NextResponse.json({
+      ok: true,
+      next: getWelcomeConfirmNext(step),
+      should_start_tour: shouldStartTour,
+      [field]: now,
+    });
   }
 
   const supabase = await createClient();
@@ -73,6 +79,7 @@ export async function confirmWelcomeStep(step: WelcomeStep) {
   return NextResponse.json({
     ok: true,
     next: getWelcomeConfirmNext(step),
+    should_start_tour: step === 'about' && profile?.role !== 'admin',
     [field]: timestamp,
   });
 }

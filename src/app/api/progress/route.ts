@@ -20,6 +20,7 @@ function profilePayload(profile: Awaited<ReturnType<typeof loadProfile>>, email:
       welcome_cynthia_read_at: null,
       welcome_pope_read_at: null,
       welcome_about_read_at: null,
+      tour_completed_at: null,
     };
   }
   return {
@@ -35,6 +36,8 @@ function profilePayload(profile: Awaited<ReturnType<typeof loadProfile>>, email:
       typeof profile.welcome_pope_read_at === 'string' ? profile.welcome_pope_read_at : null,
     welcome_about_read_at:
       typeof profile.welcome_about_read_at === 'string' ? profile.welcome_about_read_at : null,
+    tour_completed_at:
+      typeof profile.tour_completed_at === 'string' ? profile.tour_completed_at : null,
   };
 }
 

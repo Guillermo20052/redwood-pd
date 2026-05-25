@@ -14,7 +14,7 @@ const SECTIONS = [
   { id: 'ov', label: 'Plan de Trabajo', icon: '🎯' },
   { id: 'wk', label: 'Plan de Sesiones', icon: '📅' },
   { id: 'tools', label: 'Herramientas', icon: '🔧' },
-  { id: 'mod', label: 'Modalidades Nair', icon: '🧠' },
+  { id: 'mod', label: 'Modalidades Prakash Nair', icon: '🧠' },
   { id: 'ib', label: 'Alineación IB', icon: '📚' },
   { id: 'subj', label: 'Aplicaciones por Materia', icon: '🎨' },
   { id: 'hsk', label: 'Habilidades', icon: '🌟' },

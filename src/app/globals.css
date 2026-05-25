@@ -1331,6 +1331,87 @@ h3,
   color: var(--navy);
 }
 
+.pull-quote {
+  border-left: 4px solid var(--gold);
+  padding: 24px 32px;
+  margin: 32px 0;
+  font-style: italic;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: rgba(232, 215, 168, 0.12);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  position: relative;
+}
+
+.pull-quote::before {
+  content: '"';
+  font-size: 4rem;
+  color: var(--gold);
+  line-height: 1;
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  font-family: 'Barlow Condensed', serif;
+  opacity: 0.6;
+}
+
+.pull-quote p {
+  margin: 0;
+  padding-top: 12px;
+}
+
+.pull-quote-attribution {
+  display: block;
+  margin-top: 16px;
+  font-size: 0.875rem;
+  font-style: normal;
+  color: var(--muted-strong);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.welcome-pdf-top {
+  margin: 24px 0 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.welcome-pdf-download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f5e6c8 0%, #efe0c4 100%);
+  border: 2px solid rgba(200, 151, 42, 0.55);
+  color: #5c4a1a;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 16px rgba(200, 151, 42, 0.18);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.welcome-pdf-download-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(200, 151, 42, 0.28);
+}
+
+.welcome-pdf-download-icon {
+  flex-shrink: 0;
+}
+
+.welcome-pdf-top-hint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--gray-600);
+  font-style: italic;
+}
+
 .welcome-pdf-link-wrap {
   margin-top: 28px;
   padding-top: 20px;
@@ -1602,6 +1683,30 @@ h3,
 
 .prakash-resource-card:hover .prakash-resource-arrow {
   color: var(--teal);
+}
+
+.prakash-resource-cta {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--teal);
+}
+
+.prakash-resource-card--info {
+  opacity: 0.72;
+  background: var(--gray-50);
+  border-left-color: var(--gray-300);
+  box-shadow: none;
+  cursor: default;
+}
+
+.prakash-resource-card--info .prakash-resource-title {
+  color: var(--gray-700);
+}
+
+.prakash-resource-card--info .prakash-resource-desc {
+  color: var(--gray-500);
 }
 
 .prakash-closing {

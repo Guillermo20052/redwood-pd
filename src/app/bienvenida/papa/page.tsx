@@ -19,6 +19,34 @@ export default async function PapaWelcomePage() {
       <h1 className="welcome-title">Custodiar voces y rostros humanos</h1>
       <p className="welcome-context">Para la LX Jornada Mundial de las Comunicaciones Sociales</p>
 
+      <div className="welcome-pdf-top">
+        <a
+          href="/welcome/mensaje-papa-leon-xiv.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="welcome-pdf-download-btn no-underline"
+        >
+          <svg
+            className="welcome-pdf-download-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Descargar (PDF)
+        </a>
+        <p className="welcome-pdf-top-hint">Lee el mensaje completo antes de continuar.</p>
+      </div>
+
       <div className="welcome-body">
         <p>
           El rostro y la voz no son simples datos biológicos: son dones que revelan la identidad de
@@ -41,28 +69,16 @@ export default async function PapaWelcomePage() {
           a usar herramientas, sino a preguntarse qué tipo de comunicación dignifica a la persona y qué
           tipo la reduce a un perfil o a un output automatizado.
         </p>
-        <blockquote className="welcome-quote">
-          Necesitamos que el rostro y la voz vuelvan a expresar a la persona. Necesitamos custodiar el
-          don de la comunicación como la verdad más profunda del hombre, hacia la cual orientar también
-          toda innovación tecnológica.
+        <blockquote className="pull-quote">
+          <p>
+            Necesitamos que el rostro y la voz vuelvan a expresar a la persona, especialmente cuando
+            es más vulnerable, más herida, más invisible.
+          </p>
+          <span className="pull-quote-attribution">
+            — León XIV PP., Vaticano · 24 de enero de 2026
+          </span>
         </blockquote>
       </div>
-
-      <div className="welcome-pdf-link-wrap">
-        <p className="welcome-pdf-label">Puedes leer el mensaje completo aquí:</p>
-        <a
-          href="/welcome/mensaje-papa-leon-xiv.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="welcome-pdf-link"
-        >
-          Descargar mensaje completo (PDF)
-        </a>
-      </div>
-
-      <footer className="welcome-signature welcome-signature-center">
-        <p className="welcome-signature-role">León XIV PP. · Vaticano, 24 de enero de 2026</p>
-      </footer>
     </WelcomeScreenShell>
   );
 }

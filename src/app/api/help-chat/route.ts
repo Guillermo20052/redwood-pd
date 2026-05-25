@@ -108,7 +108,7 @@ DENTRO DE CADA NIVEL (sidebar izquierdo):
 Plan de Trabajo: las 5 partes verificadas + la tarea colaborativa al final
 Plan de Sesiones: vista de planeación de las 5 partes
 Herramientas: las herramientas IA del nivel
-Modalidades Nair: modalidades pedagógicas
+Modalidades Prakash Nair: modalidades pedagógicas
 Alineación IB: cómo se conecta con el currículum IB
 Aplicaciones por Materia: ejemplos por materia
 Habilidades: qué desarrollan la docente y las alumnas

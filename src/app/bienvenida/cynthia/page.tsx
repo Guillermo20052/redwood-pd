@@ -27,11 +27,15 @@ export default async function CynthiaWelcomePage() {
           con atención el documento compartido. Su lectura es fundamental para comprender el espíritu
           con el que deseamos acercarnos a la IA en Redwood.
         </p>
+        <blockquote className="pull-quote">
+          <p>En nuestro colegio, la tecnología nunca sustituye lo más importante: la persona.</p>
+          <span className="pull-quote-attribution">— Cynthia, Directora · Liceo de Monterrey Redwood</span>
+        </blockquote>
         <p>
-          En nuestro colegio, la tecnología nunca sustituye lo más importante: la persona. Nuestro
-          mayor compromiso sigue siendo mirar, escuchar, acompañar y conectar auténticamente con cada
-          alumna. La IA puede ser una herramienta poderosa, pero el corazón de la educación continúa
-          siendo la relación humana, la presencia, el criterio, la empatía y la formación integral.
+          Nuestro mayor compromiso sigue siendo mirar, escuchar, acompañar y conectar auténticamente con
+          cada alumna. La IA puede ser una herramienta poderosa, pero el corazón de la educación
+          continúa siendo la relación humana, la presencia, el criterio, la empatía y la formación
+          integral.
         </p>
         <p>
           Queremos aprender a usar estas herramientas con responsabilidad, discernimiento y sentido

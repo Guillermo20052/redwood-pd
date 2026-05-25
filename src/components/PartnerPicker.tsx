@@ -178,7 +178,6 @@ export function PartnerPicker({
                 {otherTeachers.map((t) => (
                   <option key={t.user_id} value={t.user_id}>
                     {t.full_name}
-                    {t.subject ? ` (${t.subject})` : ''}
                   </option>
                 ))}
               </select>

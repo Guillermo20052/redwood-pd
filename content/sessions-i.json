@@ -49,14 +49,14 @@
       "id": "s4",
       "label": "Parte 4",
       "title": "Parte 4 · Rúbricas alineadas al IB con otra docente · COLABORATIVO",
-      "objective": "Co-diseñar con una docente de otra materia una rúbrica IB para una tarea transferible.",
+      "objective": "Co-diseñar con otra compañera del programa una rúbrica IB para una tarea transferible.",
       "days": [
         {
           "name": "Parte 4",
           "theme": "Rúbricas alineadas al IB con otra docente (colaborativo)",
-          "objective": "Construir una rúbrica IB compartida entre dos materias distintas.",
-          "practiceTask": "Empareja con una docente de una materia distinta a la tuya. Co-diseñen una rúbrica IB para una tarea transferible (por ejemplo, una investigación). Escribe el nombre completo de tu compañera al inicio del texto.",
-          "transferTask": "Reflexión: ¿En qué se parece y en qué se diferencia la rúbrica IB entre sus materias? 2–3 oraciones."
+          "objective": "Construir una rúbrica IB compartida en colaboración con tu compañera.",
+          "practiceTask": "Empareja con otra compañera del programa. Co-diseñen una rúbrica IB para una tarea transferible (por ejemplo, una investigación). Escribe el nombre completo de tu compañera al inicio del texto.",
+          "transferTask": "Reflexión: ¿En qué se parece y en qué se diferencia la rúbrica IB entre los enfoques de ustedes? 2–3 oraciones."
         }
       ]
     },

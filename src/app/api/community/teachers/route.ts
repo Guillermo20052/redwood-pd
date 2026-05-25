@@ -2,8 +2,12 @@ import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getSessionUserId, loadCompletions } from '@/lib/completions-service';
 import { isLocalMode, localDb, type CompletionRow } from '@/lib/local-db';
-import { sumVerifiedHours, getDiplomaTier } from '@/lib/progress';
-import { getCurrentLevelSlug, buildInitialCompletions } from '@/lib/verification';
+import { getDiplomaTier } from '@/lib/progress';
+import {
+  getCurrentLevelSlug,
+  buildInitialCompletions,
+  sumCohortVerifiedHours,
+} from '@/lib/verification';
 import { metaConfig } from '@/lib/content';
 
 const levelNames: Record<string, string> = {
@@ -38,7 +42,7 @@ function buildRow(
   completionRows: CompletionRow[]
 ): TeacherRow {
   const map = buildInitialCompletions(completionRows);
-  const totalHours = sumVerifiedHours(map);
+  const totalHours = sumCohortVerifiedHours(map);
   const slug = getCurrentLevelSlug(map);
   const goal = metaConfig.programMaxHours || 30;
   const progressPct = Math.min(100, Math.round((totalHours / goal) * 1000) / 10);

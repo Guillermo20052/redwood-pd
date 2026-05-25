@@ -10,6 +10,7 @@ import {
   verifyExtraTask,
   verifyCollaborativeTask,
   VerificationError,
+  verifyAdminSkip,
   type TaskPartner,
 } from '@/lib/verification';
 import { getCollaborativeTask, isCollabItemKey } from '@/lib/collaborative-tasks';
@@ -83,7 +84,13 @@ export async function POST(request: Request) {
   if (body.adminSkip) {
     const admin = await isAdminUser(session.userId);
     if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    return NextResponse.json({ ok: true, adminSkip: true });
+    if (!body.itemKey || typeof body.itemKey !== 'string') {
+      return NextResponse.json({ error: 'itemKey es requerido' }, { status: 400 });
+    }
+    const current = await loadCompletions(session.userId);
+    const updated = verifyAdminSkip(current, body.itemKey);
+    await saveCompletions(session.userId, updated);
+    return NextResponse.json({ ok: true, adminSkip: true, completions: updated });
   }
 
   const { itemKey, evidenceText, fileUrl, inputType: bodyInputType, partner } = body;

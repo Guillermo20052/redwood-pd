@@ -5,6 +5,7 @@ import type { ExtraTask } from '@/lib/extra-tasks';
 import { verificationConfig } from '@/lib/curriculum-path';
 import { useProgressContext } from './Providers';
 import { FileUpload } from './FileUpload';
+import { AdminResetButton } from './AdminResetButton';
 
 type Props = {
   task: ExtraTask;
@@ -19,7 +20,7 @@ type GradeResult = {
 };
 
 export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: Props) {
-  const { verifyTask, completions, markAdminSkipped } = useProgressContext();
+  const { verifyTask, completions, adminSkipItem } = useProgressContext();
   const inputType = task.inputType;
   const isFileTask = inputType === 'screenshot' || inputType === 'document';
 
@@ -97,14 +98,7 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
     setAdminSkipping(true);
     setErrorMessage(null);
     try {
-      const res = await fetch('/api/verify/task', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ itemKey: task.id, adminSkip: true }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.error || 'Error al marcar vista previa');
-      markAdminSkipped(task.id);
+      await adminSkipItem(task.id, 'task');
       onVerified();
     } catch (e) {
       setErrorMessage((e as Error).message);
@@ -224,7 +218,7 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
                 {adminSkipping ? 'Marcando…' : 'Marcar vista previa (admin)'}
               </button>
               <p className="text-[10px] text-center text-[var(--gray-500)]">
-                No guarda en la base de datos · solo para explorar el flujo
+                Avance guardado para vista admin (no cuenta en cohorte)
               </p>
             </div>
           )}
@@ -265,6 +259,10 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
             >
               <p className="text-sm font-semibold">{errorMessage}</p>
             </div>
+          )}
+
+          {isAdmin && alreadyVerified && (
+            <AdminResetButton itemKey={task.id} onReset={onVerified} />
           )}
         </div>
       </div>

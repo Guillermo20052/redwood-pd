@@ -5,6 +5,7 @@ import { useProgressContext } from './Providers';
 import { verificationConfig, type PathItem, type TaskInputType } from '@/lib/curriculum-path';
 import { PartnerPicker, type PartnerTeacher, type PartnerValue } from './PartnerPicker';
 import { FileUpload } from './FileUpload';
+import { AdminResetButton } from './AdminResetButton';
 
 type Props = {
   item: PathItem;
@@ -49,7 +50,7 @@ function promptParagraphs(text: string): string[] {
 }
 
 export function PartStageTask({ item, collaborative, onVerified }: Props) {
-  const { verifyTask, completions, markAdminSkipped, profile } = useProgressContext();
+  const { verifyTask, completions, adminSkipItem, profile } = useProgressContext();
   const isAdmin = profile.role === 'admin';
   const inputType: TaskInputType = item.inputType ?? 'text';
   const isFileTask = inputType === 'screenshot' || inputType === 'document';
@@ -173,15 +174,7 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
     setAdminSkipping(true);
     setErrorMessage(null);
     try {
-      const res = await fetch('/api/verify/task', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ itemKey: item.itemKey, adminSkip: true }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.error || 'Error al saltar');
-      // Advance stage via local state — no DB record written
-      markAdminSkipped(item.itemKey);
+      await adminSkipItem(item.itemKey, 'task');
       onVerified();
     } catch (e) {
       setErrorMessage((e as Error).message);
@@ -355,9 +348,13 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
             {adminSkipping ? 'Saltando…' : 'Saltar tarea (admin)'}
           </button>
           <span className="text-[10px] text-[var(--gray-500)]">
-            Vista admin — no registra progreso ni llama al evaluador
+            Vista admin — avance guardado (no cuenta en cohorte)
           </span>
         </div>
+      )}
+
+      {isAdmin && alreadyVerified && (
+        <AdminResetButton itemKey={item.itemKey} onReset={onVerified} />
       )}
     </div>
   );

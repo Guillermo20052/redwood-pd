@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { VideoPlayer } from './VideoPlayer';
+import { AdminResetButton } from './AdminResetButton';
 import { useProgressContext } from './Providers';
 import type { PathItem } from '@/lib/curriculum-path';
 
@@ -12,7 +13,7 @@ type Props = {
 };
 
 export function PartStageVideo({ item, level, onVerified }: Props) {
-  const { verifyVideo, markAdminSkipped, profile, completions } = useProgressContext();
+  const { verifyVideo, adminSkipItem, profile, completions } = useProgressContext();
   const [skipping, setSkipping] = useState(false);
   const [skipError, setSkipError] = useState('');
 
@@ -38,15 +39,7 @@ export function PartStageVideo({ item, level, onVerified }: Props) {
     setSkipping(true);
     setSkipError('');
     try {
-      const res = await fetch('/api/verify/video', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ itemKey: item.itemKey, watchPct: 1, skipped: true, adminSkip: true }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.error || 'Error al saltar');
-      // Advance stage via local state — no DB record written
-      markAdminSkipped(item.itemKey);
+      await adminSkipItem(item.itemKey, 'video');
       onVerified();
     } catch (e) {
       setSkipError((e as Error).message);
@@ -110,9 +103,13 @@ export function PartStageVideo({ item, level, onVerified }: Props) {
             {skipping ? 'Saltando…' : 'Saltar video (admin)'}
           </button>
           <span className="text-[10px] text-[var(--gray-500)]">
-            Vista admin — no registra progreso
+            Vista admin — avance guardado (no cuenta en cohorte)
           </span>
         </div>
+      )}
+
+      {alreadyVerified && isAdmin && (
+        <AdminResetButton itemKey={item.itemKey} onReset={onVerified} />
       )}
 
       {skipError && <p className="text-xs text-[var(--red)]">{skipError}</p>}

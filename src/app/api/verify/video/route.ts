@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSessionUserId, loadCompletions, saveCompletions } from '@/lib/completions-service';
-import { verifyVideo, VerificationError } from '@/lib/verification';
+import { verifyVideo, VerificationError, verifyAdminSkip } from '@/lib/verification';
 import { isAdminUser } from '@/lib/auth-helpers';
 
 export async function POST(request: Request) {
@@ -12,7 +12,10 @@ export async function POST(request: Request) {
   if (adminSkip) {
     const admin = await isAdminUser(session.userId);
     if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    return NextResponse.json({ ok: true, adminSkip: true });
+    const current = await loadCompletions(session.userId);
+    const updated = verifyAdminSkip(current, itemKey);
+    await saveCompletions(session.userId, updated);
+    return NextResponse.json({ ok: true, adminSkip: true, completions: updated });
   }
 
   try {

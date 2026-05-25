@@ -167,6 +167,25 @@ export function sumVerifiedHours(completions: CompletionMap): number {
   return Math.round(total * 10) / 10;
 }
 
+/** Verified hours excluding admin-skip rows — for cohort leaderboard and stats. */
+export function sumCohortVerifiedHours(completions: CompletionMap): number {
+  let total = 0;
+  for (const item of curriculumPath) {
+    const row = completions[item.itemKey];
+    if (row?.status === 'verified' && !row.is_admin_skip) {
+      total += hoursMap[item.itemKey] ?? item.hours;
+    }
+  }
+  for (const lvl of ['b', 'i', 'a'] as const) {
+    const task = getCollaborativeTaskForLevel(lvl);
+    const row = task ? completions[task.id] : undefined;
+    if (row?.status === 'verified' && !row.is_admin_skip) {
+      total += task!.verifiedHours ?? COLLAB_VERIFIED_HOURS;
+    }
+  }
+  return Math.round(total * 10) / 10;
+}
+
 export function getLevelHoursVerified(completions: CompletionMap, level: 'b' | 'i' | 'a'): number {
   let total = 0;
   for (const item of curriculumPath) {
@@ -313,7 +332,8 @@ export function verifyTask(
 export function verifyReflection(
   completions: CompletionMap,
   itemKey: string,
-  reflectionText: string
+  reflectionText: string,
+  reflectionAiFeedback?: string
 ): CompletionMap {
   const check = canVerifyItem(completions, itemKey);
   if (!check.ok) throw new Error(check.reason);
@@ -330,6 +350,21 @@ export function verifyReflection(
     status: 'verified',
     verified_at: new Date().toISOString(),
     evidence_text: trimmed,
+    ...(reflectionAiFeedback ? { reflection_ai_feedback: reflectionAiFeedback } : {}),
+  };
+  return unlockNext(buildInitialCompletions(Object.values(next)));
+}
+
+/** Admin skip: persist verified row without counting toward cohort metrics. */
+export function verifyAdminSkip(completions: CompletionMap, itemKey: string): CompletionMap {
+  const next = { ...completions };
+  next[itemKey] = {
+    item_key: itemKey,
+    status: 'verified',
+    verified_at: new Date().toISOString(),
+    is_admin_skip: true,
+    video_watch_pct: 1,
+    evidence_text: '[admin skip]',
   };
   return unlockNext(buildInitialCompletions(Object.values(next)));
 }

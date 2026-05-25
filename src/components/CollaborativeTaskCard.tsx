@@ -6,6 +6,7 @@ import { isMandatoryPartsComplete } from '@/lib/extras-gating';
 import type { CompletionMap } from '@/lib/verification';
 import { verificationConfig } from '@/lib/curriculum-path';
 import { FileUpload } from './FileUpload';
+import { AdminResetButton } from './AdminResetButton';
 
 const MIN_CHARS = verificationConfig.taskEvidenceMinChars;
 
@@ -161,8 +162,8 @@ export function CollaborativeTaskCard({
               onChange={(e) => setPartnerName(e.target.value)}
               placeholder={
                 task.allowMultiplePartners
-                  ? 'Ej. María López, Ana Ruiz, Carmen Díaz'
-                  : 'Nombre completo de la docente con quien trabajaste'
+                  ? 'Ej. Ana López, Marta Pérez'
+                  : 'Ej. Ana López'
               }
               disabled={submitting}
             />
@@ -237,6 +238,9 @@ export function CollaborativeTaskCard({
         <p className="text-xs text-[var(--gray-600)]">
           Compañera{task.allowMultiplePartners ? 's' : ''}: {row.partner_name}
         </p>
+      )}
+      {verified && isAdmin && (
+        <AdminResetButton itemKey={task.id} onReset={onUpdated} />
       )}
     </article>
   );

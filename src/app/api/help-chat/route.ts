@@ -83,9 +83,10 @@ Las partes se desbloquean en orden: solo Parte 1 visible al inicio, Parte 2 apar
 No hay forma de saltar partes (excepto admins)
 Para avanzar al Nivel 2 hay que completar las 5 partes del Nivel 1 (y la tarea colaborativa suma horas pero el desbloqueo de nivel sigue las horas de partes)
 TAREAS COLABORATIVAS (obligatorias, al final del Plan de Trabajo de cada nivel):
-Nivel 1: Sesión de pares — comparar prompts con otra docente (texto 400+ caracteres + nombre de compañera)
-Nivel 2: Co-diseño de sesión IB con NotebookLM y Gamma (subir archivo o captura + nombre de compañera)
-Nivel 3: Mini-clínica de transformación pedagógica (documento + nombres de participantes, pueden ser varias separadas por comas)
+Nivel 1: Sesión de pares — comparar prompts con otra compañera del programa (texto 400+ caracteres + nombre de compañera)
+Nivel 2: Co-diseño de sesión IB con NotebookLM y Gamma con otra docente del programa (subir archivo o captura + nombre de compañera)
+Nivel 3: Mini-clínica de transformación pedagógica (documento + nombres de participantes; pueden ser varias separadas por comas)
+La docente elige libremente con quién trabajar — no hay emparejamiento por materia.
 Se desbloquean al completar las 5 partes del nivel. Cada una suma 2h verificadas.
 
 ═══════════════════════════════════════════════════════════

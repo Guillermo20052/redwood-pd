@@ -5,6 +5,7 @@ import { isLocalMode, localDb, type CompletionRow } from '@/lib/local-db';
 import {
   buildInitialCompletions,
   sumVerifiedHours,
+  sumCohortVerifiedHours,
   getCurrentLevelSlug,
   type CompletionMap,
 } from '@/lib/verification';
@@ -80,6 +81,7 @@ export async function GET() {
         verified_at: c.verified_at,
         partner_user_id: typeof c.partner_user_id === 'string' ? c.partner_user_id : undefined,
         partner_name: typeof c.partner_name === 'string' ? c.partner_name : undefined,
+        is_admin_skip: c.is_admin_skip === true,
       })) as CompletionRow[];
     return buildCohortRow(
       {
@@ -148,7 +150,7 @@ function buildCohortRow(
   recordedTiers: DiplomaTier[]
 ): CohortRow {
   const map: CompletionMap = buildInitialCompletions(rows);
-  const totalHours = sumVerifiedHours(map);
+  const totalHours = sumCohortVerifiedHours(map);
   const level = getCurrentLevelSlug(map);
   const lastActivity = rows.reduce<string | null>((acc, r) => {
     if (!r.verified_at) return acc;

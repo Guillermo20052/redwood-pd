@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CompletionMap } from '@/lib/verification';
-import { curriculumPath } from '@/lib/curriculum-path';
 import { sumVerifiedHours, getDiplomaTier, progressPercent } from '@/lib/progress';
 import { getEarnedTiers, type DiplomaTier } from '@/lib/diplomas';
 
@@ -130,35 +129,54 @@ export function useProgress() {
     return applyVerifyResponse(res);
   }, [applyVerifyResponse]);
 
-  /**
-   * Admin-only: marks an item as verified in local memory only.
-   * Does NOT write to the database. Also unlocks the immediately-next
-   * item in the curriculum path so the stage UI advances without a
-   * server round-trip. Vanishes on page refresh — intentional.
-   */
-  const markAdminSkipped = useCallback((itemKey: string) => {
-    setCompletions((prev) => {
-      const updated = { ...prev };
-      updated[itemKey] = {
-        ...(prev[itemKey] ?? {}),
-        item_key: itemKey,
-        status: 'verified',
-        verified_at: new Date().toISOString(),
-      };
-      const idx = curriculumPath.findIndex((p) => p.itemKey === itemKey);
-      if (idx >= 0 && idx < curriculumPath.length - 1) {
-        const nextKey = curriculumPath[idx + 1].itemKey;
-        if (!updated[nextKey] || updated[nextKey].status === 'locked') {
-          updated[nextKey] = {
-            ...(updated[nextKey] ?? {}),
-            item_key: nextKey,
-            status: 'available',
-          };
-        }
+  const adminSkipItem = useCallback(
+    async (itemKey: string, kind: 'video' | 'task' | 'reflection') => {
+      let res: Response;
+      if (kind === 'video') {
+        res = await fetch('/api/verify/video', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemKey, watchPct: 1, skipped: true, adminSkip: true }),
+        });
+      } else if (kind === 'task') {
+        res = await fetch('/api/verify/task', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemKey, adminSkip: true }),
+        });
+      } else {
+        res = await fetch('/api/verify/reflection', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemKey, adminSkip: true }),
+        });
       }
-      return updated;
-    });
-  }, []);
+      return applyVerifyResponse(res);
+    },
+    [applyVerifyResponse]
+  );
+
+  const resetItem = useCallback(
+    async (itemKey: string) => {
+      const res = await fetch('/api/admin/reset-item', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itemKey }),
+      });
+      return applyVerifyResponse(res);
+    },
+    [applyVerifyResponse]
+  );
+
+  /**
+   * @deprecated Use adminSkipItem — kept for any legacy callers.
+   */
+  const markAdminSkipped = useCallback(
+    async (itemKey: string) => {
+      await adminSkipItem(itemKey, 'task');
+    },
+    [adminSkipItem]
+  );
 
   const totalHours = sumVerifiedHours(completions);
   const percent = progressPercent(totalHours);
@@ -217,6 +235,8 @@ export function useProgress() {
     verifyVideo,
     verifyTask,
     verifyReflection,
+    adminSkipItem,
+    resetItem,
     markAdminSkipped,
     totalHours,
     percent,

@@ -68,6 +68,10 @@ export type CompletionRow = {
    */
   partner_user_id?: string;
   partner_name?: string;
+  /** True when an admin used skip — persists for admin UI but excluded from cohort stats. */
+  is_admin_skip?: boolean;
+  /** AI coaching note returned after reflection submission. */
+  reflection_ai_feedback?: string;
 };
 
 export type ProfileRow = {
@@ -169,6 +173,14 @@ export const localDb = {
     if (!db.completions[userId]) db.completions[userId] = {};
     db.completions[userId][row.item_key] = row;
     writeDb(db);
+  },
+  deleteCompletion(userId: string, itemKey: string): boolean {
+    const db = readDb();
+    const userMap = db.completions[userId];
+    if (!userMap || !userMap[itemKey]) return false;
+    delete userMap[itemKey];
+    writeDb(db);
+    return true;
   },
   /**
    * Delete every completion row for `userId` whose `item_key` starts with

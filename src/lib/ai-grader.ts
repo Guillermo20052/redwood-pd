@@ -301,3 +301,32 @@ export async function gradeTaskSubmission(input: GradeTaskInput): Promise<TaskGr
 
 /** @deprecated Use gradeTaskSubmission — kept for existing imports. */
 export const gradeTask = gradeTaskSubmission;
+
+const REFLECTION_FEEDBACK_SYSTEM =
+  'Eres una coach pedagógica de IA para docentes IB del Liceo Redwood. ' +
+  'Genera retroalimentación breve (2-3 oraciones, máximo 250 caracteres) sobre la reflexión de esta docente. ' +
+  'Tono cálido, en español, tuteando. Refiérete a algo específico que ella escribió. ' +
+  'Sugiere UNA dirección concreta que podría explorar. Nunca seas crítica.';
+
+export async function generateReflectionFeedback(
+  reflectionPrompt: string,
+  reflectionText: string
+): Promise<string> {
+  const client = new Anthropic();
+  const userPrompt =
+    `Pregunta de reflexión:\n${reflectionPrompt.trim() || '(sin prompt)'}\n\n` +
+    `Respuesta de la docente:\n${reflectionText.trim()}\n\n` +
+    'Escribe solo el texto de retroalimentación (sin JSON, sin comillas).';
+
+  const response = await client.messages.create({
+    model: MODEL,
+    max_tokens: 200,
+    temperature: 0.4,
+    system: REFLECTION_FEEDBACK_SYSTEM,
+    messages: [{ role: 'user', content: userPrompt }],
+  });
+
+  const block = response.content.find((b) => b.type === 'text');
+  const text = block && block.type === 'text' ? block.text.trim() : '';
+  return text.slice(0, 250);
+}

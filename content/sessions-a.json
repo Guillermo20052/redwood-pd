@@ -34,13 +34,13 @@
       "id": "s3",
       "label": "Parte 3",
       "title": "Parte 3 · Proyecto interdisciplinario con IA · COLABORATIVO",
-      "objective": "Co-diseñar un proyecto de 2 materias donde la IA sea el puente entre disciplinas.",
+      "objective": "Co-diseñar un proyecto interdisciplinario donde la IA sea el puente entre disciplinas.",
       "days": [
         {
           "name": "Parte 3",
           "theme": "Proyecto interdisciplinario con IA (colaborativo)",
           "objective": "Diseñar un plan completo de proyecto interdisciplinario en pareja.",
-          "practiceTask": "Empareja con una docente de otra materia. Diseñen juntas un proyecto de 2 materias donde la IA sea el puente. Documenten el plan completo. Escribe el nombre completo de tu compañera al inicio del texto.",
+          "practiceTask": "Empareja con otra compañera del programa. Diseñen juntas un proyecto interdisciplinario donde la IA sea el puente. Documenten el plan completo. Escribe el nombre completo de tu compañera al inicio del texto.",
           "transferTask": "Reflexión: ¿Qué hace que un proyecto sea genuinamente interdisciplinario y no solo 'dos tareas juntas'? 2–3 oraciones."
         }
       ]
@@ -64,13 +64,13 @@
       "id": "s5",
       "label": "Parte 5",
       "title": "Parte 5 · Tu plan de integración IA — Capstone · COLABORATIVO",
-      "objective": "Escribir tu plan personal de integración de IA y revisarlo en pareja con otra docente.",
+      "objective": "Escribir tu plan personal de integración de IA y revisarlo en pareja con otra compañera del programa.",
       "days": [
         {
           "name": "Parte 5",
           "theme": "Tu plan de integración IA — Capstone (colaborativo)",
           "objective": "Síntesis del programa: '¿Cómo voy a usar IA en mi práctica este semestre?'",
-          "practiceTask": "Escribe un plan de '¿Cómo voy a usar IA en mi práctica este semestre?' (1–2 páginas). Empareja con otra docente y reviénse los planes mutuamente. Entrega tu plan final con los comentarios incorporados. Escribe el nombre de tu revisora al inicio del texto.",
+          "practiceTask": "Escribe un plan de '¿Cómo voy a usar IA en mi práctica este semestre?' (1–2 páginas). Empareja con otra compañera del programa y reviénse los planes mutuamente. Entrega tu plan final con los comentarios incorporados. Escribe el nombre de tu compañera al inicio del texto.",
           "transferTask": "Reflexión: ¿Qué compromiso concreto adquieres con tu propia práctica? 2–3 oraciones."
         }
       ]

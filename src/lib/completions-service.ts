@@ -44,8 +44,20 @@ export async function loadCompletions(userId: string): Promise<CompletionMap> {
         ? r.task_input_type
         : undefined,
     task_file_url: typeof r.task_file_url === 'string' ? r.task_file_url : undefined,
+    is_admin_skip: r.is_admin_skip === true,
+    reflection_ai_feedback:
+      typeof r.reflection_ai_feedback === 'string' ? r.reflection_ai_feedback : undefined,
   }));
   return buildInitialCompletions(rows);
+}
+
+export async function deleteCompletion(userId: string, itemKey: string) {
+  if (isLocalMode()) {
+    localDb.deleteCompletion(userId, itemKey);
+    return;
+  }
+  const supabase = await createClient();
+  await supabase.from('item_completions').delete().eq('user_id', userId).eq('item_key', itemKey);
 }
 
 export async function saveCompletions(userId: string, completions: CompletionMap) {
@@ -71,6 +83,8 @@ export async function saveCompletions(userId: string, completions: CompletionMap
     partner_name: r.partner_name || null,
     task_input_type: r.task_input_type || null,
     task_file_url: r.task_file_url || null,
+    is_admin_skip: r.is_admin_skip === true,
+    reflection_ai_feedback: r.reflection_ai_feedback || null,
     updated_at: now,
   }));
 
@@ -83,9 +97,17 @@ export async function saveCompletions(userId: string, completions: CompletionMap
   // saves still succeed in pre-migration deployments.
   if (isMissingPartnerColumnError(error)) {
     const partnerStripped = fullPayload.map((p) => {
-      const { partner_user_id: _pu, partner_name: _pn, ...rest } = p;
+      const {
+        partner_user_id: _pu,
+        partner_name: _pn,
+        is_admin_skip: _as,
+        reflection_ai_feedback: _rf,
+        ...rest
+      } = p;
       void _pu;
       void _pn;
+      void _as;
+      void _rf;
       return rest;
     });
     const retry = await supabase.from('item_completions').upsert(partnerStripped);
@@ -109,12 +131,16 @@ export async function saveCompletions(userId: string, completions: CompletionMap
         task_feedback: _tf,
         partner_user_id: _pu,
         partner_name: _pn,
+        is_admin_skip: _as,
+        reflection_ai_feedback: _rf,
         ...rest
       } = p;
       void _ts;
       void _tf;
       void _pu;
       void _pn;
+      void _as;
+      void _rf;
       return rest;
     });
     await supabase.from('item_completions').upsert(legacyPayload);
@@ -126,7 +152,12 @@ export async function saveCompletions(userId: string, completions: CompletionMap
 function isMissingPartnerColumnError(error: { code?: string; message?: string }): boolean {
   if (error.code !== 'PGRST204') return false;
   const msg = (error.message || '').toLowerCase();
-  return msg.includes('partner_user_id') || msg.includes('partner_name');
+  return (
+    msg.includes('partner_user_id') ||
+    msg.includes('partner_name') ||
+    msg.includes('is_admin_skip') ||
+    msg.includes('reflection_ai_feedback')
+  );
 }
 
 function isMissingColumnError(error: { code?: string; message?: string }): boolean {
@@ -139,6 +170,8 @@ function isMissingColumnError(error: { code?: string; message?: string }): boole
     msg.includes('partner_name') ||
     msg.includes('task_input_type') ||
     msg.includes('task_file_url') ||
+    msg.includes('is_admin_skip') ||
+    msg.includes('reflection_ai_feedback') ||
     (msg.includes('column') && msg.includes('not found')) ||
     (msg.includes('column') && msg.includes('does not exist'))
   );

@@ -17,7 +17,7 @@ const LEVEL_TARGET_HOURS = 10;
 const PROGRAM_MAX_HOURS = metaConfig.programMaxHours ?? 30;
 
 const WARM_INTRO_PRIMARY =
-  'En Redwood High creemos que una maestra que nunca deja de aprender es la maestra que sus alumnas nunca olvidan. Este programa no es una lista de tareas por completar — es una invitación a mantenerte vigente, curiosa y conectada con lo que más importa: encontrar mejores formas de llegar a cada alumna, liberar tiempo para lo que le da alma a nuestra comunidad y fortalecer la esencia que nos hace ser quienes somos.';
+  'En el Liceo de Monterrey Redwood creemos que una maestra que nunca deja de aprender es la maestra que sus alumnas nunca olvidan. Este programa no es una lista de tareas por completar — es una invitación a mantenerte vigente, curiosa y conectada con lo que más importa: encontrar mejores formas de llegar a cada alumna, liberar tiempo para lo que le da alma a nuestra comunidad y fortalecer la esencia que nos hace ser quienes somos.';
 
 const WARM_INTRO_SECONDARY =
   'Cada herramienta que explores y cada reflexión que registres aquí son semillas para tu práctica futura — no para mañana, sino para la docente que seguirás eligiendo ser. Avanza a tu ritmo, vuelve cuando lo necesites, y confía en que cada pequeño avance te acerca a tener más tiempo, más energía y más presencia para lo que ninguna herramienta puede reemplazar: conocer, guiar y acompañar a cada alumna.';
@@ -297,7 +297,7 @@ export default function DashboardPage() {
       <div className="level-hero lh-dash flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
         <div className="min-w-0 flex-1" style={{ maxWidth: '100%' }}>
           <div className="level-hero-tag">
-            Liceo Redwood · Monterrey · Ruta de Desarrollo Profesional
+            LICEO DE MONTERREY REDWOOD - RUTA DE DESARROLLO PROFESIONAL
           </div>
           <h2>Siempre mejores. Siempre más conectadas.</h2>
           <p className="mb-3">{WARM_INTRO_PRIMARY}</p>

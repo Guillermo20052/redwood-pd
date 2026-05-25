@@ -108,7 +108,7 @@ export default function SignupPage() {
         <div className="auth-logo-wrap">
           <Image
             src="/assets/logo-header.png"
-            alt="Liceo Redwood"
+            alt="Liceo de Monterrey Redwood"
             width={160}
             height={56}
             className="h-14 w-auto"
@@ -117,7 +117,7 @@ export default function SignupPage() {
         </div>
         <h1>Crea tu cuenta</h1>
         <p className="text-sm text-center text-[var(--gray-500)] mb-6 mt-2">
-          Únete al programa de Desarrollo Profesional con IA
+          Únete a la Ruta de Desarrollo Profesional del Liceo de Monterrey Redwood
         </p>
         <form onSubmit={signUp} className="space-y-4">
           <label className="auth-field">

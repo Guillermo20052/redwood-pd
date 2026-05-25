@@ -17,8 +17,9 @@ const barlowCondensed = Barlow_Condensed({
 });
 
 export const metadata: Metadata = {
-  title: 'Redwood High · PD con IA',
-  description: 'Ruta de Desarrollo Profesional con Inteligencia Artificial',
+  title: 'LICEO DE MONTERREY REDWOOD - RUTA DE DESARROLLO PROFESIONAL',
+  description:
+    'Ruta de Desarrollo Profesional del Liceo de Monterrey Redwood — formación en IA para docentes IB.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -105,7 +105,7 @@ export default function ComunidadPage() {
         <p className="comunidad-header-eyebrow">Aprendemos mejor juntas</p>
         <h1 className="comunidad-header-title">Comunidad</h1>
         <p className="comunidad-header-subtitle">
-          Tu cohorte de docentes Redwood — comparte, pregunta, celebra.
+          Tu cohorte de docentes del Liceo de Monterrey Redwood — comparte, pregunta, celebra.
         </p>
       </header>
 

@@ -64,7 +64,7 @@ export function AdminDashboard() {
   return (
     <div className="space-y-8">
       <div className="level-hero lh-b">
-        <div className="level-hero-tag">Coordinación · Liceo Redwood</div>
+        <div className="level-hero-tag">Coordinación · Liceo de Monterrey Redwood</div>
         <h2>Panel de coordinación</h2>
         <p>Vista de cohorte, parejas colaborativas y evaluaciones finales del programa.</p>
       </div>

@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { useProgressContext } from '@/components/Providers';
 import { ExtraTaskCard } from '@/components/ExtraTaskCard';
 import { ExtraTaskModal } from '@/components/ExtraTaskModal';
+import { Diploma1RequirementsBanner } from '@/components/Diploma1RequirementsBanner';
 import { getExtraTasksForLevel, type ExtraTask } from '@/lib/extra-tasks';
 import {
   countCompletedExtras,
   DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
-  getDiploma1Progress,
   isLevelComplete,
 } from '@/lib/extras-gating';
 
@@ -131,7 +131,6 @@ function LevelExtraSection({
 export default function TareasExtraPage() {
   const { completions, totalHours, refreshCompletions, profile } = useProgressContext();
   const [activeTask, setActiveTask] = useState<ExtraTask | null>(null);
-  const d1 = getDiploma1Progress(totalHours, completions);
   const isAdmin = profile.role === 'admin';
 
   return (
@@ -163,26 +162,7 @@ export default function TareasExtraPage() {
         </p>
       </div>
 
-      <div className="extras-diploma-banner border-2 border-[var(--gold)] bg-[var(--gold-light)] space-y-2">
-        <p className="text-sm font-bold text-[var(--navy)]">
-          Diploma 1 — Docente IA Consciente
-        </p>
-        <p className="text-xs font-semibold text-[var(--gray-700)]">
-          Para conseguir el Diploma de Bronce:
-        </p>
-        <ul className="text-sm text-[var(--gray-800)] space-y-1 list-none">
-          <li>
-            {d1.hoursOk ? '✓' : '○'} Completa los Niveles 1 y 2 (20 horas verificadas){' '}
-            <span className="text-[var(--gray-500)]">({totalHours.toFixed(1)}h)</span>
-          </li>
-          <li>
-            {d1.extrasL1Ok ? '✓' : '○'} Termina 4 tareas Level Up del Nivel 1 ({d1.extrasL1}/4)
-          </li>
-          <li>
-            {d1.extrasL2Ok ? '✓' : '○'} Termina 4 tareas Level Up del Nivel 2 ({d1.extrasL2}/4)
-          </li>
-        </ul>
-      </div>
+      <Diploma1RequirementsBanner totalHours={totalHours} completions={completions} />
 
       {SECTIONS.map((s) => (
         <LevelExtraSection

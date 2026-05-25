@@ -73,9 +73,9 @@ export function DiplomaModal({
             height={80}
             className="mx-auto mb-4"
           />
-          <p className="dip-eyebrow">Liceo Redwood · Monterrey, N.L.</p>
+          <p className="dip-eyebrow">Liceo de Monterrey Redwood · Monterrey, N.L.</p>
           <p className="dip-sublabel-main">
-            Reconocimiento por la Ruta de Desarrollo Profesional con IA
+            Reconocimiento por la Ruta de Desarrollo Profesional del Liceo de Monterrey Redwood
           </p>
           <p
             className="dip-teacher-name"
@@ -106,7 +106,7 @@ export function DiplomaModal({
             <div>
               <div className="dip-sig-line" />
               <p className="text-xs font-bold text-[var(--gray-900)]">Director(a) General</p>
-              <p className="dip-sig-role">Liceo Redwood</p>
+              <p className="dip-sig-role">Liceo de Monterrey Redwood</p>
             </div>
             <div>
               <div className="dip-sig-line" />

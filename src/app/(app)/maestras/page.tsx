@@ -125,7 +125,7 @@ function MaestrasView({ teachers }: { teachers: TeacherStat[] }) {
     <div className="space-y-8 pb-16">
       {/* Header */}
       <div className="level-hero lh-b">
-        <div className="level-hero-tag">Coordinación · Liceo Redwood</div>
+        <div className="level-hero-tag">Coordinación · Liceo de Monterrey Redwood</div>
         <h2 className="font-condensed text-3xl font-extrabold">Maestras del cohorte</h2>
         <p className="opacity-80 text-sm">
           Vista rápida del progreso individual. Haz clic en una maestra para ver su detalle completo.

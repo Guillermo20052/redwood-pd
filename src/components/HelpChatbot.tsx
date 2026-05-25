@@ -92,7 +92,7 @@ export function HelpChatbot() {
         <div className="help-panel">
           <div className="help-panel-header">
             <div>
-              <p className="help-panel-title">Ayuda Redwood PD</p>
+              <p className="help-panel-title">Ayuda · Ruta de Desarrollo Profesional</p>
               <p className="help-panel-sub">
                 {profile.role === 'admin' ? 'Vista coordinación' : 'Asistente de navegación'}
               </p>
@@ -111,7 +111,7 @@ export function HelpChatbot() {
             {messages.length === 0 && (
               <div className="help-welcome-wrap">
                 <div className="help-bubble-assistant">
-                  Hola 👋 Soy tu asistente de Redwood PD. ¿En qué puedo ayudarte hoy?
+                  Hola 👋 Soy tu asistente de la Ruta de Desarrollo Profesional del Liceo de Monterrey Redwood. ¿En qué puedo ayudarte hoy?
                 </div>
                 <div className="help-suggest-list">
                   <p className="help-suggest-label">Sugerencias:</p>

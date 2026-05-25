@@ -25,17 +25,18 @@ export default async function EticaPage() {
   }
 
   return (
-    <article className="app-page">
-      <div className="level-hero lh-e">
-        <div className="level-hero-tag">Ética · Política institucional</div>
-        <h2>Integridad académica e IA en el IB</h2>
-        <p>
-          Todo docente que complete esta ruta debe comprender y comunicar los límites éticos del uso
-          de IA en la educación IB, integrando los valores del Liceo Redwood.
-        </p>
-      </div>
+    <EticaReadConfirm initialReadAt={eticaReadAt}>
+      <article className="app-page">
+        <div className="level-hero lh-e">
+          <div className="level-hero-tag">Ética · Política institucional</div>
+          <h2>Integridad académica e IA en el IB</h2>
+          <p>
+            Todo docente que complete esta ruta debe comprender y comunicar los límites éticos del uso
+            de IA en la educación IB, integrando los valores del Liceo de Monterrey Redwood.
+          </p>
+        </div>
 
-      <section>
+        <section>
         <div className="sec-hdr">
           <h2 className="sec-title">Marco de integridad académica IB</h2>
         </div>
@@ -220,7 +221,7 @@ export default async function EticaPage() {
       </section>
 
       <section className="eth-crd">
-        <h2 className="eth-ttl">Política en el aula (Redwood)</h2>
+        <h2 className="eth-ttl">Política en el aula (Liceo de Monterrey Redwood)</h2>
         <p className="text-sm text-[var(--gray-700)] leading-relaxed">
           Define con tus alumnas de prepa IB: para qué se puede usar IA, para qué no, cómo citar
           asistencia y consecuencias. Usa la plantilla del Nivel 1 como punto de partida y
@@ -228,8 +229,8 @@ export default async function EticaPage() {
         </p>
       </section>
 
-      <EticaReadConfirm initialReadAt={eticaReadAt} />
-    </article>
+      </article>
+    </EticaReadConfirm>
   );
 }
 

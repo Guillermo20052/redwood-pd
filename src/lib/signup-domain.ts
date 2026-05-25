@@ -6,4 +6,4 @@ export function isAllowedSignupEmail(email: string): boolean {
 }
 
 export const SIGNUP_DOMAIN_ERROR =
-  'Este programa es exclusivo para docentes del Liceo de Monterrey. Tu email debe terminar en @liceodemonterrey.edu.mx. Si crees que esto es un error, contacta a la coordinadora.';
+  'La Ruta de Desarrollo Profesional del Liceo de Monterrey Redwood es exclusiva para docentes del colegio. Tu email debe terminar en @liceodemonterrey.edu.mx. Si crees que esto es un error, contacta a la coordinadora.';

@@ -65,7 +65,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="logo-wrap">
             <Image
               src="/assets/logo-header.png"
-              alt="Redwood High"
+              alt="Liceo de Monterrey Redwood"
               width={156}
               height={52}
               priority
@@ -73,8 +73,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             />
           </div>
           <div className="header-center hidden md:block">
-            <h1>Ruta de Desarrollo Profesional con IA</h1>
-            <p>Redwood High School · Liceo de Monterrey</p>
+            <h1>LICEO DE MONTERREY REDWOOD - RUTA DE DESARROLLO PROFESIONAL</h1>
+            <p>Monterrey, N.L. · Formación en IA para docentes IB</p>
           </div>
           <div className="flex items-center gap-2">
             <button

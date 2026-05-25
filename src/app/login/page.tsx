@@ -94,14 +94,16 @@ function LoginForm() {
         <div className="auth-logo-wrap">
           <Image
             src="/assets/logo-header.png"
-            alt="Liceo Redwood"
+            alt="Liceo de Monterrey Redwood"
             width={160}
             height={56}
             className="h-14 w-auto"
             priority
           />
         </div>
-        <h1>Tu ruta de desarrollo profesional con IA</h1>
+        <h1 className="text-center text-[15px] font-extrabold leading-snug tracking-wide text-[var(--navy)]">
+          LICEO DE MONTERREY REDWOOD - RUTA DE DESARROLLO PROFESIONAL
+        </h1>
         <p className="text-sm text-center text-[var(--gray-500)] mb-6 mt-2">
           Inicia sesión para continuar tu camino
         </p>

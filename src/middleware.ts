@@ -108,7 +108,7 @@ export async function middleware(request: NextRequest) {
     }
 
     if (
-      pathname === '/admin/demo' &&
+      (pathname === '/admin/demo' || pathname.startsWith('/admin/teacher/')) &&
       welcomeProfile.role !== 'admin'
     ) {
       const url = request.nextUrl.clone();

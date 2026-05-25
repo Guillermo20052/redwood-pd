@@ -3685,3 +3685,397 @@ h3,
   line-height: 1.5;
   margin-top: 8px;
 }
+
+/* Admin teacher detail page */
+.admin-teacher-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.admin-teacher-hero h1 {
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 800;
+  color: #f5f0e8;
+  margin: 0 0 8px;
+  line-height: 1.1;
+}
+
+.admin-teacher-email {
+  font-size: 14px;
+  color: rgba(245, 240, 232, 0.75);
+  margin: 4px 0 12px;
+}
+
+.admin-teacher-meta {
+  font-size: 13px;
+  color: rgba(245, 240, 232, 0.85);
+  margin-bottom: 12px;
+}
+
+.admin-teacher-diploma-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.admin-teacher-diploma-badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(245, 240, 232, 0.55);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.admin-teacher-diploma-badge--earned {
+  border-color: rgba(200, 151, 42, 0.6);
+  color: #e8c96a;
+  background: rgba(200, 151, 42, 0.15);
+}
+
+.admin-teacher-back {
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e8c96a;
+  text-decoration: none;
+}
+
+.admin-teacher-back:hover {
+  text-decoration: underline;
+}
+
+.admin-teacher-error {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--gray-600);
+}
+
+.admin-teacher-section {
+  border: 1px solid rgba(200, 151, 42, 0.25);
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.admin-teacher-section-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  background: linear-gradient(90deg, rgba(200, 151, 42, 0.08), transparent);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.admin-teacher-section-head h2 {
+  font-family: var(--font-condensed, 'Barlow Condensed', sans-serif);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.admin-teacher-section-chevron {
+  color: var(--gold);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.admin-teacher-section-body {
+  padding: 16px 20px 20px;
+  border-top: 1px solid var(--gray-200);
+}
+
+.admin-teacher-subsection {
+  margin-bottom: 20px;
+}
+
+.admin-teacher-subsection:last-child {
+  margin-bottom: 0;
+}
+
+.admin-teacher-subsection-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gray-500);
+  margin: 0 0 12px;
+}
+
+.admin-teacher-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-teacher-card {
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: var(--gray-50);
+}
+
+.admin-teacher-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.admin-teacher-card-head h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin: 0;
+}
+
+.admin-teacher-card-date {
+  font-size: 11px;
+  color: var(--gray-500);
+  flex-shrink: 0;
+}
+
+.admin-teacher-card-content {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--gray-700);
+  white-space: pre-wrap;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+}
+
+.admin-teacher-empty {
+  font-size: 13px;
+  color: var(--gray-500);
+  font-style: italic;
+  margin: 0;
+}
+
+.admin-teacher-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-teacher-check {
+  font-size: 14px;
+  color: var(--gray-500);
+}
+
+.admin-teacher-check--done {
+  color: var(--gray-800);
+}
+
+.admin-teacher-ai-feedback {
+  margin-top: 12px;
+  border: 1px solid;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.admin-teacher-ai-feedback-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  margin: 0 0 6px;
+}
+
+.admin-teacher-ai-feedback-text {
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--gray-800);
+  margin: 0;
+}
+
+.admin-teacher-task-status {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--teal);
+  margin: 0 0 8px;
+}
+
+.admin-teacher-partner {
+  font-size: 12px;
+  color: var(--gray-600);
+  margin: 0 0 8px;
+}
+
+.admin-teacher-file-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal);
+  text-decoration: none;
+}
+
+.admin-teacher-file-link:hover {
+  text-decoration: underline;
+}
+
+.admin-teacher-score {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 10px 0 0;
+}
+
+.admin-teacher-eval {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-teacher-eval-score {
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--teal) 10%, white);
+  border: 1px solid color-mix(in srgb, var(--teal) 25%, white);
+}
+
+.admin-teacher-eval-score-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gray-500);
+  margin: 0 0 4px;
+}
+
+.admin-teacher-eval-score-value {
+  font-family: var(--font-condensed, 'Barlow Condensed', sans-serif);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0;
+}
+
+.admin-teacher-eval-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-teacher-eval-q-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin: 0 0 6px;
+}
+
+.admin-teacher-eval-q-answer {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  margin: 0;
+}
+
+.admin-teacher-percent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-teacher-percent-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--gray-200);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.admin-teacher-percent-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), #f0c040);
+  border-radius: 999px;
+}
+
+.admin-teacher-eval-date {
+  font-size: 12px;
+  color: var(--gray-500);
+  margin: 0;
+}
+
+.admin-teacher-diploma-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-teacher-diploma-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  background: var(--gray-50);
+}
+
+.admin-teacher-diploma-row--earned {
+  border-color: rgba(200, 151, 42, 0.4);
+  background: linear-gradient(135deg, rgba(200, 151, 42, 0.06), #fff);
+}
+
+.admin-teacher-diploma-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin: 0 0 4px;
+}
+
+.admin-teacher-diploma-date {
+  font-size: 12px;
+  color: var(--teal);
+  font-weight: 600;
+  margin: 0;
+}
+
+.admin-teacher-diploma-locked {
+  font-size: 12px;
+  color: var(--gray-500);
+  margin: 0;
+}
+
+.admin-teacher-cert-btn {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(200, 151, 42, 0.5);
+  background: rgba(200, 151, 42, 0.12);
+  color: #9a7318;
+  cursor: pointer;
+}
+
+.admin-teacher-cert-btn:hover {
+  background: rgba(200, 151, 42, 0.22);
+}

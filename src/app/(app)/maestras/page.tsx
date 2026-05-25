@@ -164,10 +164,15 @@ function MaestrasView({ teachers }: { teachers: TeacherStat[] }) {
               {sorted.map((t) => (
                 <tr key={t.user_id} className="align-middle">
                   <td className="p-3">
-                    <p className="font-semibold text-[var(--gray-900)]">
-                      {t.full_name || '—'}
-                    </p>
-                    <p className="text-xs text-[var(--gray-500)]">{t.email}</p>
+                    <Link
+                      href={`/admin/teacher/${t.user_id}`}
+                      className="group block no-underline"
+                    >
+                      <p className="font-semibold text-[var(--gray-900)] group-hover:text-[var(--teal)] group-hover:underline">
+                        {t.full_name || '—'}
+                      </p>
+                      <p className="text-xs text-[var(--gray-500)]">{t.email}</p>
+                    </Link>
                   </td>
                   <td className="p-3 text-[var(--gray-700)]">{t.subject || '—'}</td>
                   <td className="p-3">

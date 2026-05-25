@@ -216,10 +216,11 @@ export function EvaluationForm({ initial, onSaved }: Props) {
         />
         <LongTextField
           id="q6_text"
-          label="Si completaste el Nivel 3 (Transformación), ¿qué te llevas?"
+          label="¿Qué fue lo más útil del Nivel 3 (Transformación)?"
           value={state.q6}
           onChange={(v) => setState((s) => ({ ...s, q6: v }))}
           required={false}
+          hideOptionalHint
         />
       </FormSection>
 
@@ -456,6 +457,7 @@ function LongTextField({
   onChange,
   required,
   error,
+  hideOptionalHint = false,
 }: {
   id: string;
   label: string;
@@ -463,6 +465,7 @@ function LongTextField({
   onChange: (v: string) => void;
   required: boolean;
   error?: string;
+  hideOptionalHint?: boolean;
 }) {
   const trimmedLen = value.trim().length;
   const remaining = Math.max(0, EVAL_TEXT_MIN_CHARS - trimmedLen);
@@ -470,9 +473,16 @@ function LongTextField({
     <label className="block space-y-2">
       <span className="text-sm font-semibold text-[var(--gray-800)]">
         {label}{' '}
-        <span className="text-xs font-normal text-[var(--gray-500)]">
-          {required ? `(mín. ${EVAL_TEXT_MIN_CHARS} caracteres)` : '(opcional)'}
-        </span>
+        {!hideOptionalHint && (
+          <span className="text-xs font-normal text-[var(--gray-500)]">
+            {required ? `(mín. ${EVAL_TEXT_MIN_CHARS} caracteres)` : '(opcional)'}
+          </span>
+        )}
+        {hideOptionalHint && required && (
+          <span className="text-xs font-normal text-[var(--gray-500)]">
+            {`(mín. ${EVAL_TEXT_MIN_CHARS} caracteres)`}
+          </span>
+        )}
       </span>
       <textarea
         id={id}

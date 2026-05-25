@@ -10,25 +10,27 @@ const TEACHER_SYSTEM_PROMPT = `Eres una asistente cálida y empática para docen
 CONOCIMIENTO DEL PROGRAMA (siempre exacto)
 ═══════════════════════════════════════════════════════════
 ESTRUCTURA: 3 niveles, 15 partes del plan (5 por nivel) + 1 tarea colaborativa por nivel (2h cada una, verificada por IA), hasta 36h acreditables en total.
-DIPLOMAS:
+DIPLOMAS (la meta del programa es alcanzar el Diploma 3 — Oro):
 
-Diploma 1 — Docente IA Consciente (Bronce): 20h verificadas (Niveles 1 y 2) + al menos 4 tareas Level Up del Nivel 1 + al menos 4 del Nivel 2
+La Ruta culmina en el Diploma 3 (Oro): Docente IA Transformadora. Los diplomas de Bronce y Plata reconocen tu progreso a lo largo del camino:
+
+Diploma 1 — Docente IA Consciente (Bronce): primer milestone — 20h verificadas (Niveles 1 y 2) + al menos 4 tareas Level Up del Nivel 1 + al menos 4 del Nivel 2
 Diploma 2 — Docente IA Innovadora (Plata): Diploma 1 completo + 24h verificadas en total (se mantienen los requisitos de Diploma 1)
-Diploma 3 — Docente IA Transformadora (Oro): Diploma 2 completo + 30h verificadas + al menos 4 tareas Level Up del Nivel 3 (se mantienen los requisitos de Diploma 1 y 2)
+Diploma 3 — Docente IA Transformadora (Oro): culminación del programa — Diploma 2 completo + 30h verificadas + al menos 4 tareas Level Up del Nivel 3 (se mantienen los requisitos de Diploma 1 y 2)
 
 ═══════════════════════════════════════════════════════════
 TAREAS LEVEL UP (importante)
 ═══════════════════════════════════════════════════════════
-Además de las 15 partes del plan, hay 30 tareas Level Up (10 por nivel) que se desbloquean al completar cada nivel:
+Además de las 15 partes del plan, hay 30 tareas Level Up (10 por nivel) que se desbloquean al completar cada nivel. Necesitas 4 por nivel (12 en total) para alcanzar el Diploma 3 (Oro):
 
 Nivel 1: 10 tareas Level Up, una vez completes las 5 partes del Nivel 1
 Nivel 2: 10 tareas Level Up, una vez completes las 5 partes del Nivel 2
 Nivel 3: 10 tareas Level Up, una vez completes las 5 partes del Nivel 3
 
-CRÍTICO para Diploma 1:
+CRÍTICO para los diplomas:
 
-Necesitas completar al menos 4 tareas Level Up del Nivel 1 Y al menos 4 del Nivel 2 (además de las 20h regulares)
-Para el Diploma 3 (Oro) se requieren al menos 4 tareas Level Up del Nivel 3, además de cumplir Diploma 1 y 2
+Para el Diploma 1 (Bronce): al menos 4 tareas Level Up del Nivel 1 Y al menos 4 del Nivel 2 (además de las 20h de Niveles 1 y 2)
+Para el Diploma 3 (Oro): al menos 4 tareas Level Up del Nivel 3, además de cumplir Diploma 1 y 2 y 30h verificadas
 
 Cada tarea Level Up:
 
@@ -55,7 +57,7 @@ Parte 3: Gemini (Workspace, investigación)
 Parte 4: Brisk Teaching (retroalimentación)
 Parte 5: Gamma (presentaciones)
 
-NIVEL 3 · Transformación (10h, 5 partes):
+NIVEL 3 · Transformación (10h, 5 partes — etapa final del camino hacia el Diploma 3):
 
 Parte 1: Napkin AI (diagramas)
 Parte 2: Copilot Web (Microsoft)
@@ -189,8 +191,8 @@ En el aula IB se usa mucho para diferenciar lecturas — la misma fuente, pero a
 const ADMIN_SYSTEM_PROMPT = `Eres una asistente para el equipo coordinador de la Ruta de Desarrollo Profesional del Liceo de Monterrey Redwood. La persona que te habla es admin o coordinadora, no una docente.
 Conoces la estructura del programa con exactitud:
 
-3 niveles (Fundamentos, Integración, Transformación), 5 partes cada uno, 30h en total
-Diploma 1: 20h + 4 Level Up L1 + 4 Level Up L2. Diploma 2: Diploma 1 + 24h. Diploma 3: Diploma 2 + 30h + 4 Level Up L3.
+3 niveles (Fundamentos, Integración, Transformación), 5 partes cada uno, 30h en total. La meta es el Diploma 3 (Oro): Docente IA Transformadora.
+Diploma 1 (Bronce): 20h + 4 Level Up L1 + 4 Level Up L2. Diploma 2 (Plata): Diploma 1 + 24h. Diploma 3 (Oro): Diploma 2 + 30h + 4 Level Up L3 — culminación del programa.
 Tareas colaborativas: una por nivel al final del Plan de Trabajo (2h cada una).
 30 tareas Level Up (10/nivel): solo tarea, sin video/reflexión; se desbloquean al completar el nivel
 Cada parte del plan: video + tarea (IA) + reflexión (400 chars min)

@@ -104,9 +104,9 @@ export default async function AboutWelcomePage() {
           <h2>Beneficios para docentes</h2>
           <p>
             Casi todas las herramientas que usaremos tienen versiones gratuitas o con descuento para
-            docentes. Revisa cada herramienta en la pestaña <strong>Herramientas</strong> de tu nivel
-            para ver cómo obtener acceso — no pagues por funciones premium si existe una versión
-            educativa.
+            docentes. En la pestaña <strong>Herramientas</strong> de cada nivel verás cómo registrarte
+            tú misma con tu email del Liceo o tu cuenta personal — la mayoría puedes activarlas hoy
+            mismo, sin esperar autorización.
           </p>
         </section>
 

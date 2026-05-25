@@ -116,7 +116,7 @@ export function PrakashNairSection() {
             src={FLOOR_PLAN_SRC}
             alt="Plano del nuevo diseño de la prepa — espacios para colaboración y aprendizaje activo"
             width={1024}
-            height={597}
+            height={608}
             className="prakash-floorplan-img"
             sizes="(max-width: 768px) 100vw, 720px"
             unoptimized

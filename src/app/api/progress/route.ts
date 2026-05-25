@@ -1,3 +1,8 @@
+// POLICY: User progress persists FOREVER across logins.
+// Logout, session expiry, and refresh do NOT reset progress.
+// The only authorized progress deletion is the admin "Reiniciar tarea" button
+// (which deletes a single item_completion row at admin's request) and the
+// dev-only reset button (never visible in production builds).
 import { NextResponse } from 'next/server';
 import {
   getSessionUserId,
@@ -5,6 +10,33 @@ import {
   loadProfile,
   saveProfile,
 } from '@/lib/completions-service';
+
+function profilePayload(profile: Awaited<ReturnType<typeof loadProfile>>, email: string) {
+  if (!profile) {
+    return {
+      email,
+      role: 'teacher' as const,
+      etica_read_at: null,
+      welcome_cynthia_read_at: null,
+      welcome_pope_read_at: null,
+      welcome_about_read_at: null,
+    };
+  }
+  return {
+    full_name: profile.full_name,
+    subject: profile.subject,
+    start_date: profile.start_date,
+    email: profile.email || email,
+    role: (profile.role as 'teacher' | 'admin') ?? 'teacher',
+    etica_read_at: typeof profile.etica_read_at === 'string' ? profile.etica_read_at : null,
+    welcome_cynthia_read_at:
+      typeof profile.welcome_cynthia_read_at === 'string' ? profile.welcome_cynthia_read_at : null,
+    welcome_pope_read_at:
+      typeof profile.welcome_pope_read_at === 'string' ? profile.welcome_pope_read_at : null,
+    welcome_about_read_at:
+      typeof profile.welcome_about_read_at === 'string' ? profile.welcome_about_read_at : null,
+  };
+}
 
 export async function GET() {
   const session = await getSessionUserId();
@@ -15,17 +47,7 @@ export async function GET() {
 
   return NextResponse.json({
     completions,
-    profile: profile
-      ? {
-          full_name: profile.full_name,
-          subject: profile.subject,
-          start_date: profile.start_date,
-          email: profile.email || session.email,
-          role: (profile.role as 'teacher' | 'admin') ?? 'teacher',
-          etica_read_at:
-            typeof profile.etica_read_at === 'string' ? profile.etica_read_at : null,
-        }
-      : { email: session.email, role: 'teacher' as const, etica_read_at: null },
+    profile: profilePayload(profile, session.email),
   });
 }
 

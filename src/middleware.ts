@@ -1,29 +1,22 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import {
+  getNextWelcomePath,
+  isWelcomeComplete,
+  isWelcomeFlowPath,
+  isWelcomeGatedPath,
+  normalizeWelcomeProfile,
+} from '@/lib/welcome-gate';
 
 const PUBLIC_PATHS = ['/login', '/signup', '/auth/callback'];
-
-const PROTECTED_PREFIXES = [
-  '/dashboard',
-  '/nivel',
-  '/tareas-extra',
-  '/logros',
-  '/etica',
-  '/reflexion',
-  '/comunidad',
-  '/evaluacion',
-  '/admin',
-  '/importar',
-];
 
 function isPublicPath(pathname: string): boolean {
   return PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'));
 }
 
 function isProtectedPath(pathname: string): boolean {
-  // "/" redirects to /dashboard, so treat it as protected.
   if (pathname === '/') return true;
-  return PROTECTED_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + '/'));
+  return isWelcomeGatedPath(pathname);
 }
 
 export async function middleware(request: NextRequest) {
@@ -65,12 +58,54 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (!user && isWelcomeFlowPath(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    url.searchParams.set('next', pathname);
+    return NextResponse.redirect(url);
+  }
+
   // Already authenticated → bounce away from /login and /signup.
   if (user && (pathname === '/login' || pathname === '/signup')) {
     const url = request.nextUrl.clone();
-    url.pathname = '/dashboard';
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role, welcome_cynthia_read_at, welcome_pope_read_at, welcome_about_read_at')
+      .eq('id', user.id)
+      .maybeSingle();
+    url.pathname = getNextWelcomePath(normalizeWelcomeProfile(profile ?? undefined));
     url.search = '';
     return NextResponse.redirect(url);
+  }
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role, welcome_cynthia_read_at, welcome_pope_read_at, welcome_about_read_at')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    const welcomeProfile = normalizeWelcomeProfile(profile ?? undefined);
+
+    if (!isWelcomeComplete(welcomeProfile)) {
+      const nextPath = getNextWelcomePath(welcomeProfile);
+
+      if (isProtectedPath(pathname) || pathname === '/bienvenida') {
+        if (pathname !== nextPath) {
+          const url = request.nextUrl.clone();
+          url.pathname = nextPath;
+          url.search = '';
+          return NextResponse.redirect(url);
+        }
+      }
+
+      if (pathname.startsWith('/bienvenida/') && pathname !== nextPath) {
+        const url = request.nextUrl.clone();
+        url.pathname = nextPath;
+        url.search = '';
+        return NextResponse.redirect(url);
+      }
+    }
   }
 
   // Unauthenticated → only protected paths are gated. Marketing/public paths
@@ -87,5 +122,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|assets).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|assets|welcome|prakash-nair).*)'],
 };

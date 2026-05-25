@@ -8,6 +8,7 @@ import { ProgressBanner } from './ProgressBanner';
 import { HelpChatbot } from './HelpChatbot';
 import { useProgressContext } from './Providers';
 import { createClient } from '@/lib/supabase/client';
+import { isWelcomeComplete } from '@/lib/welcome-gate';
 
 const IS_DEV = process.env.NODE_ENV === 'development';
 
@@ -35,6 +36,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const progress = useProgressContext();
   const isAdmin = progress.profile.role === 'admin';
+  const showBienvenidaTab =
+    isAdmin ||
+    isWelcomeComplete({
+      role: progress.profile.role,
+      welcome_cynthia_read_at: progress.profile.welcome_cynthia_read_at,
+      welcome_pope_read_at: progress.profile.welcome_pope_read_at,
+      welcome_about_read_at: progress.profile.welcome_about_read_at,
+    });
   const isLevelPage = pathname.startsWith('/nivel/');
   const [localMode, setLocalMode] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -135,6 +144,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Link>
           );
         })}
+        {showBienvenidaTab && (
+          <Link
+            href="/bienvenida"
+            className={`level-tab no-underline ${pathname === '/bienvenida' || pathname.startsWith('/bienvenida/') ? 'active' : ''}`}
+            aria-current={pathname === '/bienvenida' ? 'page' : undefined}
+            onClick={() => setMobileNavOpen(false)}
+          >
+            Bienvenida
+          </Link>
+        )}
         {isAdmin && (
           <Link
             href="/maestras"

@@ -8,6 +8,8 @@ import sectionsToolsData from '../../content/sections-tools.json';
 import sessionsB from '../../content/sessions-b.json';
 import sessionsI from '../../content/sessions-i.json';
 import sessionsA from '../../content/sessions-a.json';
+import type { EducatorPerk } from '@/lib/educator-perks';
+import { attachEducatorPerk, getEducatorPerk } from '@/lib/educator-perks';
 
 export type ChecklistItem = {
   id: string;
@@ -71,12 +73,31 @@ export type SectionTool = {
   icon: string;
   desc: string;
   url: string;
+  educatorPerk?: EducatorPerk;
 };
 
 /** Level-scoped tool grid from sections-tools.json (falls back to global tools). */
 export function getToolsByLevel(level: string): SectionTool[] {
   const scoped = (sectionsToolsData as Record<string, SectionTool[]>)[level];
-  return scoped?.length ? scoped : (toolsData.tools as SectionTool[]);
+  const tools = scoped?.length ? scoped : (toolsData.tools as SectionTool[]);
+  return tools.map((t) => attachEducatorPerk(t));
+}
+
+/** Find tool card metadata (url, icon) by name across all levels. */
+export function getToolMetaByName(name: string): SectionTool | null {
+  const allLevels = Object.values(sectionsToolsData as Record<string, SectionTool[]>);
+  for (const tools of allLevels) {
+    const found = tools.find((t) => t.name === name);
+    if (found) return attachEducatorPerk(found);
+  }
+  const perk = getEducatorPerk(name);
+  if (!perk) return null;
+  const flat = allLevels.flat();
+  for (const t of flat) {
+    const tPerk = getEducatorPerk(t.name);
+    if (tPerk?.link === perk.link) return attachEducatorPerk(t);
+  }
+  return null;
 }
 
 const hoursMap = checklistData.hours as Record<string, number>;

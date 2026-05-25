@@ -13,6 +13,9 @@ export function useProgress() {
     start_date: '',
     email: '',
     role: 'teacher' as 'teacher' | 'admin',
+    welcome_cynthia_read_at: null as string | null,
+    welcome_pope_read_at: null as string | null,
+    welcome_about_read_at: null as string | null,
   });
   const [loading, setLoading] = useState(true);
 
@@ -30,6 +33,9 @@ export function useProgress() {
             start_date: data.profile.start_date || '',
             email: data.profile.email || '',
             role: (data.profile.role as 'teacher' | 'admin') || 'teacher',
+            welcome_cynthia_read_at: data.profile.welcome_cynthia_read_at ?? null,
+            welcome_pope_read_at: data.profile.welcome_pope_read_at ?? null,
+            welcome_about_read_at: data.profile.welcome_about_read_at ?? null,
           });
         }
       }

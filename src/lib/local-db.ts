@@ -83,6 +83,9 @@ export type ProfileRow = {
   role: 'teacher' | 'admin';
   updated_at?: string;
   etica_read_at?: string | null;
+  welcome_cynthia_read_at?: string | null;
+  welcome_pope_read_at?: string | null;
+  welcome_about_read_at?: string | null;
 };
 
 export type ChatMessage = {

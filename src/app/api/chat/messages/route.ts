@@ -1,3 +1,6 @@
+// POLICY: Community chat messages persist FOREVER.
+// Do not add date filters, expiry logic, or deletion code.
+// Director's instruction: all messages must remain visible to all teachers across sessions.
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getSessionUserId, loadProfile } from '@/lib/completions-service';

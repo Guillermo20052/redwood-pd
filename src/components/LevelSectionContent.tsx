@@ -4,11 +4,12 @@ import { getToolsByLevel, type SectionTool } from '@/lib/content';
 import { HABILIDADES_FALLBACK } from '@/lib/habilidades-fallback';
 import {
   getLevelAncillary,
-  getModalitiesPill,
   getSubjectsPill,
 } from '@/lib/level-ancillary';
 import { getAplicacionesIb } from '@/lib/aplicaciones-ib';
 import { SessionsSection } from './SessionsSection';
+import { PrakashNairSection } from './PrakashNairSection';
+import { ToolCardWithPerk } from './ToolCardWithPerk';
 
 type Props = {
   level: string;
@@ -41,17 +42,7 @@ export function LevelSectionContent({ level, section }: Props) {
     const renderToolGroup = (tools: SectionTool[]) => (
       <div className="tools-grid">
         {tools.map((t) => (
-          <a
-            key={t.name}
-            href={t.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="tool-crd no-underline"
-          >
-            <div className="tool-icon">{t.icon}</div>
-            <div className="tool-name">{t.name}</div>
-            <div className="tool-desc">{t.desc}</div>
-          </a>
+          <ToolCardWithPerk key={t.name} tool={t} />
         ))}
       </div>
     );
@@ -90,23 +81,7 @@ export function LevelSectionContent({ level, section }: Props) {
   }
 
   if (section === 'mod') {
-    return (
-      <div className="sec-content active">
-        <div className="sec-hdr">
-          <div className="sec-title">Modalidades Prakash Nair</div>
-          <div className="sec-pill">{getModalitiesPill(level)}</div>
-        </div>
-        <div className="mod-grid">
-          {data.modalities.map((m) => (
-            <div key={m.name} className="mod-crd">
-              <div className="mod-name">{m.name}</div>
-              <div className="mod-how">{m.how}</div>
-              <div className="mod-ex">{m.example}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+    return <PrakashNairSection />;
   }
 
   if (section === 'ib') {

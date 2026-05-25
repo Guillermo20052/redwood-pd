@@ -6,6 +6,8 @@ import type { PartGroup } from '@/lib/curriculum-path';
 import { PartStageVideo } from './PartStageVideo';
 import { PartStageTask } from './PartStageTask';
 import { PartStageReflection } from './PartStageReflection';
+import { EducatorPerkBanner } from './EducatorPerkBanner';
+import { getToolMetaByName } from '@/lib/content';
 
 type PartStatus = 'locked' | 'active' | 'complete';
 type StageStatus = 'locked' | 'available' | 'verified';
@@ -211,6 +213,9 @@ export const PartCard = forwardRef<HTMLElement, Props>(function PartCard(
     );
   }
 
+  const primaryTool = part.primaryTools[0];
+  const primaryToolMeta = primaryTool ? getToolMetaByName(primaryTool) : null;
+
   return (
     <article
       ref={ref}
@@ -243,6 +248,14 @@ export const PartCard = forwardRef<HTMLElement, Props>(function PartCard(
           ))}
         </div>
       </header>
+
+      {primaryTool && (
+        <EducatorPerkBanner
+          toolName={primaryTool}
+          toolIcon={primaryToolMeta?.icon}
+          toolUrl={primaryToolMeta?.url}
+        />
+      )}
 
       <div className="pt-4">
         {showSuccess ? (

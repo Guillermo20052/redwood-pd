@@ -35,65 +35,94 @@ export type GradeTaskInput = {
 
 export const TEXT_GRADE_MIN_CHARS = 400;
 
+/** Minimum score (0–100) to pass a task submission. Unchanged — only grader strictness increases. */
+export const PASS_SCORE_THRESHOLD = 60;
+
 const MODEL = 'claude-sonnet-4-5';
 const MAX_TOKENS = 600;
 const TEMPERATURE = 0.2;
 
 const SYSTEM_PROMPT =
-  'Eres el evaluador del programa Redwood PD para docentes de bachillerato IB en México. ' +
-  'Apruebas entregas con generosidad pedagógica cuando hay esfuerzo honesto y cumplen el mínimo razonable. ' +
-  'No eres examinador académico. Responde solo con JSON válido.';
+  'Eres un evaluador pedagógico exigente del programa Redwood PD para docentes de bachillerato IB en México. ' +
+  'Aplicas la rúbrica con rigor, como lo haría una educadora IB senior — buscas especificidad, ejemplos concretos del aula y pensamiento pedagógico real. ' +
+  'Califica de forma conservadora (30-40% más exigente que un evaluador permisivo): el Diploma 3 debe sentirse ganado. ' +
+  'Tu puntaje (score) es estricto; tu feedback escrito siempre es cálido, coach y accionable — nunca condescendiente ni punitivo. ' +
+  'Responde solo con JSON válido.';
 
 function buildGradingPrompt(input: GradeTaskInput, submissionContent: string): string {
   const inputType = input.inputType ?? 'text';
   const toolName = input.toolName ?? 'una herramienta de IA';
   const taskGoal = input.taskGoal ?? input.taskPrompt;
   const consigna = input.taskPrompt;
+  const rubricBlock = input.taskRubric?.trim()
+    ? `\nRÚBRICA DE LA TAREA:\n${input.taskRubric.trim()}\n`
+    : '';
 
   let collabBlock = '';
   if (input.collaborative) {
     const partner = (input.partnerName ?? '').trim();
     collabBlock =
-      '\nNOTA COLABORATIVA: Esta tarea es en pareja. Si el texto no menciona a la compañera declarada' +
+      '\nNOTA COLABORATIVA: Esta tarea es en pareja. Si la consigna exige mencionar a la compañera al inicio' +
       (partner.length >= 3 ? ` (${partner})` : '') +
-      ' al inicio, puedes marcar passed=false solo si la consigna exige explícitamente el nombre y no aparece.\n';
+      ' y no aparece, reduce el puntaje. La colaboración debe ser evidente en el contenido, no solo nominal.\n';
   }
 
   return (
-    `Eres el evaluador del programa de desarrollo profesional "Redwood PD". Las docentes participantes son maestras de bachillerato IB en México, aprendiendo a usar herramientas de IA por primera vez. Tu trabajo es revisar entregas con generosidad pedagógica — apruebas si hay esfuerzo honesto y la entrega cumple el mínimo razonable. No eres examinador académico.
+    `Eres el evaluador del programa de desarrollo profesional "Redwood PD". Las docentes participantes son maestras de bachillerato IB en México, aprendiendo a usar herramientas de IA por primera vez.
+
+Tu rol: evaluador pedagógico EXIGENTE. Aplicas la rúbrica estrictamente — como lo haría una educadora IB senior. Califica de forma conservadora (30-40% más exigente que evaluadores permisivos). El Diploma 3 debe sentirse ganado.
 
 CONTEXTO DE LA TAREA:
 - Herramienta enseñada: ${toolName}
 - Objetivo de la tarea: ${taskGoal}
 - Consigna: ${consigna}
 - Tipo de entrega: ${inputType}
-${collabBlock}
-CRITERIOS DE APROBACIÓN según tipo:
+${rubricBlock}${collabBlock}
+QUÉ BUSCAS (aplica la rúbrica estrictamente):
+- Especificidad a la materia real de la docente (no genéricos "los estudiantes" o "el salón")
+- Ejemplos concretos que ella usaría con SUS alumnas
+- Evidencia de pensamiento pedagógico, no solo descripción de la herramienta
+- Aplicación que demuestra comprensión, no solo resumen del prompt
+
+PENALIZA con puntaje bajo (típicamente 30-55):
+- Lenguaje vago ("podría ser útil", "herramienta interesante")
+- Respuestas genéricas que servirían para cualquier docente
+- Patrones de plantilla de IA (estructura uniforme, frases genéricas)
+- Compromiso superficial sin profundidad pedagógica
+- Falta de conexión concreta con la práctica docente
+
+PREMIA con puntaje alto (típicamente 75-95):
+- Integración específica a su área/materia
+- Ejemplos concretos de aula
+- Razonamiento pedagógico
+- Pensamiento original que va más allá del prompt mínimo
+
+CRITERIOS MÍNIMOS según tipo de entrega:
 
 Si inputType es "text":
-- PASA si la entrega tiene 400+ caracteres Y está claramente relacionada con la tarea
-- NO PASA si está vacía, muy corta (<400 chars), o claramente fuera de tema
-- NO juzgues calidad de escritura, profundidad de análisis, ni completitud — solo presencia de esfuerzo honesto y relevancia mínima
+- Rechaza (score < ${PASS_SCORE_THRESHOLD}) si está vacía, muy corta (<400 chars), claramente fuera de tema, o genérica/superficial
+- Aprueba (score >= ${PASS_SCORE_THRESHOLD}) solo si hay esfuerzo real, relevancia clara Y al menos un elemento concreto de aplicación pedagógica
+- Trabajo excelente con integración específica: 85-95+. Trabajo sólido pero mejorable: 65-74. Genérico o apresurado: 30-55
 
 Si inputType es "screenshot":
-- PASA si la imagen muestra evidencia razonable de uso de ${toolName} con propósito relacionado a la tarea
-- NO PASA si la imagen está en blanco, es claramente no relacionada, o muestra una herramienta diferente
-- NO juzgues calidad del prompt, calidad de la respuesta de la IA, ni completitud del trabajo
+- Rechaza si la imagen está en blanco, no relacionada, o muestra otra herramienta
+- Aprueba solo si hay evidencia clara de uso de ${toolName} con propósito pedagógico relacionado a la tarea — no basta una captura mínima sin contexto
+- Sé exigente: capturas genéricas o sin relación con la consigna puntúan bajo
 
 Si inputType es "document":
-- PASA si el documento es real (no vacío, no corrupto), parece provenir de ${toolName} o ser consistente con lo que esa herramienta genera, y es aproximadamente relevante a la tarea
-- NO PASA si está vacío, dañado, claramente generado por otra herramienta no autorizada, o sin relación con la tarea
-- NO juzgues calidad pedagógica, alineación IB perfecta, ni nivel de detalle
+- Rechaza si está vacío, dañado, de otra herramienta no autorizada, o sin relación con la tarea
+- Aprueba solo si el documento demuestra trabajo real aplicado a la consigna con relevancia pedagógica
+- Documentos genéricos o claramente rellenados puntúan bajo
 
 FORMATO DE RESPUESTA (JSON estricto):
 {
-  "passed": boolean,
+  "score": number (0-100, entero),
   "feedback": "string de 1-2 oraciones"
 }
 
-Reglas para el feedback:
-- Si passed=true: celebra el logro brevemente + UNA idea concreta de cómo llevar lo aprendido al aula. Tono cálido. Máximo 2 oraciones. Usa la forma femenina ("docente", "maestra", "alumna"). Termina con un emoji apropiado (💪, 🌟, ✨, 📚 — uno solo).
-- Si passed=false: explica con cariño qué falta para aprobar, en términos concretos y accionables. NO seas crítica de la calidad — solo del cumplimiento mínimo. Sugiere una acción específica para volver a intentar. Tono coach, no examinador. Termina con "Inténtalo otra vez, vas bien." o frase similar.
+Reglas para el feedback (tono SIEMPRE cálido y coach — independiente del puntaje):
+- Si score >= ${PASS_SCORE_THRESHOLD}: celebra el logro brevemente + UNA idea concreta de cómo llevar lo aprendido al aula. Tono cálido. Máximo 2 oraciones. Usa la forma femenina ("docente", "maestra", "alumna"). Termina con un emoji apropiado (💪, 🌟, ✨, 📚 — uno solo).
+- Si score < ${PASS_SCORE_THRESHOLD}: explica con cariño qué falta para fortalecer la entrega, en términos concretos y accionables. NO uses tono punitivo ni crítico — sé coach, no examinadora. Sugiere UNA acción específica para volver a intentar. Termina con "Inténtalo otra vez, vas bien." o frase similar.
 
 LA ENTREGA DE LA DOCENTE:
 ${submissionContent}`
@@ -128,17 +157,17 @@ function extractPassFailJson(raw: string): { passed: boolean; feedback: string }
     throw new Error('feedback');
   }
 
+  const score = Number(parsed.score);
+  if (Number.isFinite(score)) {
+    const clamped = Math.max(0, Math.min(100, Math.round(score)));
+    return { passed: clamped >= PASS_SCORE_THRESHOLD, feedback };
+  }
+
   if (typeof parsed.passed === 'boolean') {
     return { passed: parsed.passed, feedback };
   }
 
-  // Legacy score fallback during transition
-  const score = Number(parsed.score);
-  if (Number.isFinite(score)) {
-    return { passed: score >= 85, feedback };
-  }
-
-  throw new Error('passed');
+  throw new Error('score');
 }
 
 type FileBytes = {

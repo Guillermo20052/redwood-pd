@@ -116,26 +116,26 @@ export function getDashboardHeroContent(state: DashboardState): DashboardHeroCon
     case 'brand_new':
       return {
         subtitle:
-          'Es tu primer día. Empieza con el Nivel 1 — son 5 partes cortas para conocer ChatGPT, Claude y otras herramientas fundamentales.',
+          'Es tu primer día. El programa te llevará por 3 niveles hasta convertirte en Docente IA Transformadora (Diploma 3). Empieza con el Nivel 1 — son 5 partes cortas.',
         cta: { label: 'Empezar Nivel 1 →', href: '/nivel/b' },
         variant: 'default',
       };
     case 'nivel_1_started':
       return {
-        subtitle: `Vas en ${state.hours.toFixed(1)}h verificadas. Te falta ${state.needed.toFixed(1)}h para completar el Nivel 1 (Fundamentos).`,
+        subtitle: `Vas en ${state.hours.toFixed(1)}h. Te falta ${state.needed.toFixed(1)}h para completar el Nivel 1 — primer paso hacia el Diploma 3 (Oro).`,
         cta: { label: 'Continuar Nivel 1 →', href: '/nivel/b' },
         variant: 'default',
       };
     case 'nivel_1_complete_no_extras':
       return {
         subtitle:
-          'Completaste el Nivel 1. Es hora de explorar las Tareas Level Up: complétalas para acercarte al Diploma 1 (Bronce).',
+          'Nivel 1 completo. Sigue con las Tareas Level Up del Nivel 1 — son 4 mínimas para avanzar en tu camino al Diploma 3.',
         cta: { label: 'Ver Tareas Level Up →', href: '/tareas-extra' },
         variant: 'default',
       };
     case 'nivel_2_working':
       return {
-        subtitle: `Vas en ${state.hours.toFixed(1)}h verificadas. Estás integrando herramientas más avanzadas — sigue con el Nivel 2.`,
+        subtitle: `Vas en ${state.hours.toFixed(1)}h. Estás integrando herramientas más avanzadas — sigue con el Nivel 2 hacia el Diploma 3.`,
         cta: { label: 'Continuar Nivel 2 →', href: '/nivel/i' },
         variant: 'default',
       };
@@ -149,7 +149,7 @@ export function getDashboardHeroContent(state: DashboardState): DashboardHeroCon
       }
       const extrasLine =
         extrasParts.length > 0 ? ` y ${extrasParts.join(' + ')}` : '';
-      const subtitle = `Te falta poco para el Diploma 1 (Bronce). Necesitas ${state.hoursNeeded.toFixed(1)}h más${extrasLine}.`;
+      const subtitle = `Te falta poco para el Diploma 1 (Bronce) — tu primer milestone hacia el Oro. Necesitas ${state.hoursNeeded.toFixed(1)}h más${extrasLine}.`;
 
       const cta =
         state.hoursNeeded > 0 && state.hoursNeeded >= state.extrasL1Needed + state.extrasL2Needed
@@ -161,26 +161,27 @@ export function getDashboardHeroContent(state: DashboardState): DashboardHeroCon
     case 'has_d1':
       if (state.hoursToD2 > 0.05) {
         return {
-          subtitle: `¡Tienes el Diploma 1 (Bronce)! Te faltan ${state.hoursToD2.toFixed(1)}h para el Diploma 2 (Plata).`,
+          subtitle: `¡Tienes el Diploma 1 (Bronce)! Siguiente milestone: Diploma 2 (Plata) a las 24h. Te faltan ${state.hoursToD2.toFixed(1)}h. Tu meta final: Diploma 3 (Oro).`,
           cta: { label: 'Continuar →', href: '/nivel/i' },
           variant: 'default',
         };
       }
       return {
-        subtitle: '¡Tienes el Diploma 1 (Bronce)! Te faltan pocos pasos para el Diploma 2 (Plata).',
+        subtitle:
+          '¡Tienes el Diploma 1 (Bronce)! Siguiente milestone: Diploma 2 (Plata) a las 24h. Tu meta final: Diploma 3 (Oro).',
         cta: { label: 'Ver mi Diploma →', action: 'view_diploma', tier: 1 },
         variant: 'default',
       };
     case 'has_d2':
       return {
         subtitle:
-          '¡Diploma 2 (Plata) en tus manos! El Diploma 3 (Oro) requiere completar el Nivel 3 y 4 tareas Level Up del Nivel 3.',
+          '¡Diploma 2 (Plata) en tus manos! El Diploma 3 (Oro) está a la vista — completa el Nivel 3 y 4 tareas Level Up del Nivel 3.',
         cta: { label: 'Continuar Nivel 3 →', href: '/nivel/a' },
         variant: 'default',
       };
     case 'has_d3':
       return {
-        subtitle: 'Completaste el camino completo. Eres una Docente IA Transformadora.',
+        subtitle: 'Has completado el camino. Eres Docente IA Transformadora. 🌲',
         cta: { label: 'Ver mis 3 Diplomas →', href: '/logros' },
         variant: 'gold',
       };

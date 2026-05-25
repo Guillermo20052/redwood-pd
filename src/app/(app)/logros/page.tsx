@@ -7,7 +7,7 @@ import { DiplomaModal } from '@/components/DiplomaModal';
 import { DIPLOMAS, getNextDiploma, type DiplomaTier } from '@/lib/diplomas';
 
 const DIPLOMA_EXPLANATION = [
-  'Hay 3 diplomas en la Ruta de Desarrollo Profesional del Liceo de Monterrey Redwood. Cada uno reconoce un nivel diferente de dominio.',
+  'La Ruta de Desarrollo Profesional del Liceo de Monterrey Redwood culmina en el Diploma 3 (Oro): Docente IA Transformadora. Los diplomas de Bronce y Plata reconocen tu progreso a lo largo del camino.',
   'Diploma 1 — Docente IA Consciente (Bronce): completa los Niveles 1 y 2 (20 horas verificadas) + 4 tareas Level Up del Nivel 1 + 4 tareas Level Up del Nivel 2.',
   'Diploma 2 — Docente IA Innovadora (Plata): cumple todo lo del Diploma 1 + alcanza 24 horas verificadas en total.',
   'Diploma 3 — Docente IA Transformadora (Oro): cumple todo lo del Diploma 2 + alcanza 30 horas verificadas en total + al menos 4 tareas Level Up del Nivel 3.',

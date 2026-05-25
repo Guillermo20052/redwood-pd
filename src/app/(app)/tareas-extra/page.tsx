@@ -85,7 +85,8 @@ function LevelExtraSection({
 
       {diplomaTier === 3 && (
         <p className="text-sm text-[var(--gray-600)] leading-relaxed">
-          Estas tareas desbloquean el Diploma 3 — tu camino de usuaria de IA a líder pedagógica.
+          Estas tareas son la etapa final del camino — completar 4 de ellas te acerca al Diploma 3
+          (Oro): Docente IA Transformadora.
         </p>
       )}
 
@@ -140,14 +141,15 @@ export default function TareasExtraPage() {
 
       <div className="extras-page-hero">
         <div className="level-hero-tag text-[var(--gold)] tracking-[0.2em]">
-          Práctica adicional
+          CAMINO AL DIPLOMA 3 (ORO)
         </div>
         <h2 className="font-condensed font-extrabold text-[var(--navy)]">
           Tareas Level Up
         </h2>
         <p className="text-sm text-[var(--gray-600)] mt-2 max-w-2xl">
-          Práctica adicional con cada herramienta del nivel. Las tareas se desbloquean al
-          completar las 5 partes del nivel correspondiente.
+          Las Tareas Level Up son parte del camino completo. Necesitas 4 por nivel — 12 en total —
+          para alcanzar el Diploma 3. Se desbloquean al completar las 5 partes del nivel
+          correspondiente.
         </p>
       </div>
 

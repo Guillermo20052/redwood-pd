@@ -1,41 +1,32 @@
 'use client';
 
-import { getNextDiploma } from '@/lib/diplomas';
-import { getDiploma1Progress } from '@/lib/extras-gating';
+import { getProgressBannerState } from '@/lib/progress';
 import type { CompletionMap } from '@/lib/verification';
 
 type Props = {
   totalHours: number;
-  percent: number;
-  diplomaTier: number;
   completions: CompletionMap;
+  isAdmin?: boolean;
 };
 
-export function ProgressBanner({ totalHours, percent, diplomaTier, completions }: Props) {
-  const next = getNextDiploma(totalHours, completions);
-  const d1 = getDiploma1Progress(totalHours, completions);
-  let hint = '🏆 Programa completo';
-  if (next) {
-    if (next.tier === 1 && d1.hoursOk && (!d1.extrasL1Ok || !d1.extrasL2Ok)) {
-      hint = `Level Up L1 ${d1.extrasL1}/4 · L2 ${d1.extrasL2}/4 para Diploma 1`;
-    } else if (totalHours < next.hoursRequired) {
-      hint = `${(next.hoursRequired - totalHours).toFixed(1)}h restantes para Diploma ${next.tier}`;
-    } else {
-      hint = `Completa tareas Level Up para Diploma ${next.tier}`;
-    }
-  }
+export function ProgressBanner({ totalHours, completions, isAdmin = false }: Props) {
+  const state = getProgressBannerState(totalHours, completions, isAdmin);
+
   return (
     <div className="progress-banner no-print">
       <span className="progress-label">Progreso PD verificado</span>
       <div className="progress-track">
-        <div className="progress-fill" style={{ width: `${percent}%` }} />
+        <div
+          className={`progress-fill${state.goldGlow ? ' progress-fill--complete' : ''}`}
+          style={{ width: `${state.fillPercent}%` }}
+        />
       </div>
-      <span className="progress-hours">{totalHours}h</span>
-      <span className="progress-note">/ 20h mín · diploma</span>
-      <span className="progress-note ml-2 italic">{hint}</span>
-      {diplomaTier > 0 && (
+      <span className="progress-hours">{totalHours.toFixed(1)}h</span>
+      <span className="progress-note">{state.thresholdLabel}</span>
+      <span className="progress-note ml-2 italic">{state.hint}</span>
+      {state.complete && !isAdmin && (
         <a href="/logros" className="header-badge no-underline ml-2">
-          Ver diploma
+          Ver diplomas
         </a>
       )}
     </div>

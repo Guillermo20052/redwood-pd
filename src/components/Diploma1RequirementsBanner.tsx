@@ -38,8 +38,8 @@ export function Diploma1RequirementsBanner({ totalHours, completions }: Props) {
         </li>
       </ul>
       <p className="extras-diploma-next">
-        Una vez logres el Diploma 1, desbloqueas la ruta al Diploma 2 (Plata, 24h) y al Diploma 3
-        (Oro, 30h + 4 tareas Level Up del Nivel 3).
+        El Diploma 1 (Bronce) es tu primer milestone. Para alcanzar el Diploma 3 (Oro) necesitas
+        completar los 3 niveles + 4 Level Up por nivel.
       </p>
     </div>
   );

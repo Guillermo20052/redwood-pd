@@ -113,9 +113,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <ProgressBanner
         totalHours={progress.totalHours}
-        percent={progress.percent}
-        diplomaTier={progress.diplomaTier}
         completions={progress.completions}
+        isAdmin={isAdmin}
       />
 
       <nav

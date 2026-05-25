@@ -90,7 +90,7 @@ export function createTour({ onFinish, onStartNivel1 }: CreateTourOptions): Tour
     id: 'nav-tareas',
     attachTo: { element: '[data-tour="nav-tareas-extra"]', on: 'bottom' },
     title: 'Tareas Level Up',
-    text: 'Después de cada nivel, desbloquearás 10 Tareas Level Up. Necesitas completar al menos 4 de cada nivel para obtener tu Diploma — son parte central de tu camino.',
+    text: 'Después de cada nivel, desbloquearás 10 Tareas Level Up. Necesitas 4 por nivel (12 en total) para alcanzar el Diploma 3 (Oro) — son parte central de tu camino.',
     buttons: [skipButton(), nextButton()],
   });
 
@@ -106,7 +106,7 @@ export function createTour({ onFinish, onStartNivel1 }: CreateTourOptions): Tour
     id: 'nav-logros',
     attachTo: { element: '[data-tour="nav-logros"]', on: 'bottom' },
     title: 'Tus Diplomas',
-    text: 'Aquí están tus 3 diplomas — Bronce, Plata y Oro. Al ganar uno, puedes verlo, imprimirlo y compartirlo.',
+    text: 'Aquí están tus 3 diplomas — Bronce, Plata y Oro. La meta del programa es alcanzar el Oro.',
     buttons: [skipButton(), nextButton()],
   });
 

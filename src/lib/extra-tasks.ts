@@ -46,8 +46,9 @@ export function parseExtraLevel(itemKey: string): 'b' | 'i' | 'a' | null {
   return m ? (m[1] as 'b' | 'i' | 'a') : null;
 }
 
-/** User-facing badge on Level Up cards and modals. L3 tasks count toward Diploma 3 (Oro). */
+/** User-facing badge on Level Up cards and modals. */
 export function getExtraTaskBadgeLabel(level: 'b' | 'i' | 'a'): string {
   if (level === 'a') return 'TAREA LEVEL UP · DIPLOMA 3';
-  return 'TAREA LEVEL UP · OPCIONAL';
+  if (level === 'i') return 'TAREA LEVEL UP · NIVEL 2';
+  return 'TAREA LEVEL UP · NIVEL 1';
 }

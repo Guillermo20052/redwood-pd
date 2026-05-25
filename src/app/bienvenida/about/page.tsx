@@ -26,6 +26,15 @@ export default async function AboutWelcomePage() {
         </section>
 
         <section>
+          <h2>La meta del programa</h2>
+          <p>
+            La meta del programa es alcanzar el Diploma 3 (Oro): Docente IA Transformadora. El
+            camino se reconoce en 3 etapas — Bronce, Plata y Oro — pero el viaje completo es la
+            transformación.
+          </p>
+        </section>
+
+        <section>
           <h2>Los 3 niveles</h2>
           <ul>
             <li>
@@ -37,8 +46,9 @@ export default async function AboutWelcomePage() {
               Canva, Gemini, Brisk, Gamma). Integrar IA en tu flujo completo.
             </li>
             <li>
-              <strong>Nivel 3 · Transformación</strong> (oro): herramientas de liderazgo (Napkin,
-              Copilot, SchoolAI, Khanmigo, ElevenLabs). De usuaria a líder pedagógica.
+              <strong>Nivel 3 · Transformación</strong> (oro): la etapa final del camino — herramientas
+              de liderazgo (Napkin, Copilot, SchoolAI, Khanmigo, ElevenLabs). De usuaria a líder
+              pedagógica.
             </li>
           </ul>
         </section>
@@ -55,21 +65,23 @@ export default async function AboutWelcomePage() {
           <h2>Las Tareas Level Up</h2>
           <p>
             Después de completar cada nivel, desbloquearás 10 Tareas Level Up — variaciones más cortas
-            que te ayudan a profundizar. Necesitas terminar 4 de cada nivel para tu Diploma.
+            que te ayudan a profundizar. Necesitas 4 por nivel (12 en total) para alcanzar el Diploma 3
+            (Oro).
           </p>
         </section>
 
         <section>
-          <h2>Los Diplomas</h2>
+          <h2>Las etapas del camino</h2>
           <ul>
             <li>
-              <strong>Diploma 1 (Bronce):</strong> completar Niveles 1+2 + 4 Level Up de cada uno
+              <strong>Diploma 3 (Oro) — la meta:</strong> Docente IA Transformadora · Diploma 2 + 30h +
+              4 Level Up del Nivel 3
             </li>
             <li>
               <strong>Diploma 2 (Plata):</strong> Diploma 1 + 24h verificadas en total
             </li>
             <li>
-              <strong>Diploma 3 (Oro):</strong> Diploma 2 + 30h + 4 Level Up del Nivel 3
+              <strong>Diploma 1 (Bronce):</strong> completar Niveles 1+2 + 4 Level Up de cada uno
             </li>
           </ul>
         </section>

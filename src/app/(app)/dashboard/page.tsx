@@ -85,12 +85,10 @@ function levelDotStatus(
 
 function DashboardHeroProgress({
   totalHours,
-  percent,
   completions,
   isAdmin,
 }: {
   totalHours: number;
-  percent: number;
   completions: ReturnType<typeof useProgressContext>['completions'];
   isAdmin: boolean;
 }) {
@@ -163,7 +161,7 @@ function DashboardHeroProgress({
       </div>
 
       <p className="dash-hero-hint">
-        {percent.toFixed(0)}% hacia diploma mínimo ({metaConfig.totalGoalHours}h)
+        {ringPct.toFixed(0)}% del camino completo ({PROGRAM_MAX_HOURS}h hacia Diploma 3)
       </p>
     </div>
   );
@@ -178,7 +176,6 @@ function LevelDashboardCard({
   pct,
   unlocked,
   unlockMsg,
-  optional,
   dataTour,
 }: {
   slug: LevelSlug;
@@ -189,7 +186,6 @@ function LevelDashboardCard({
   pct: number;
   unlocked: boolean;
   unlockMsg: string;
-  optional?: boolean;
   dataTour?: string;
 }) {
   const icon = LEVEL_ICONS[slug] ?? '📚';
@@ -225,14 +221,6 @@ function LevelDashboardCard({
           <h3 className="font-condensed text-lg font-extrabold text-[var(--gray-900)] m-0">
             {name}
           </h3>
-          {optional ? (
-            <span
-              className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded"
-              style={{ background: 'var(--gold-light)', color: 'var(--gold)' }}
-            >
-              Opcional
-            </span>
-          ) : null}
         </div>
         <p className="text-xs text-[var(--gray-600)] mt-1 leading-snug">{tagline}</p>
 
@@ -260,7 +248,7 @@ function LevelDashboardCard({
 }
 
 export default function DashboardPage() {
-  const { totalHours, percent, completions, profile, diplomaAwardDates } = useProgressContext();
+  const { totalHours, completions, profile, diplomaAwardDates } = useProgressContext();
   const isAdmin = profile.role === 'admin';
   const [evaluation, setEvaluation] = useState<EvaluationRow | null>(null);
   const [evalLoaded, setEvalLoaded] = useState(false);
@@ -303,7 +291,6 @@ export default function DashboardPage() {
         progressPanel={
           <DashboardHeroProgress
             totalHours={totalHours}
-            percent={percent}
             completions={completions}
             isAdmin={isAdmin}
           />
@@ -387,7 +374,6 @@ export default function DashboardPage() {
               pct={pct}
               unlocked={unlocked}
               unlockMsg={unlockMsg}
-              optional={slug === 'a'}
               dataTour={slug === 'b' ? 'level-b' : undefined}
             />
           );

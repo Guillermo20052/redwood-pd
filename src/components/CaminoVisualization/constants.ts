@@ -103,16 +103,16 @@ export function getCaminoSubtitle(
 ): string {
   if (isAdmin) return 'Vista de administradora — todos los milestones desbloqueados.';
   if (hasD3 || totalHours >= CAMINO_MAX_HOURS) {
-    return 'Has recorrido el camino completo. 🌲';
+    return 'Has completado el camino. Eres Docente IA Transformadora. 🌲';
   }
   if (hasD2 || totalHours >= 24) {
-    return 'Diploma 2 en tus manos. Sigue hacia el Oro.';
+    return 'Diploma 2 en tus manos. La meta: Diploma 3 (Oro) en 30h.';
   }
   if (hasD1 || totalHours >= 20) {
-    return 'Diploma 1 logrado. Siguiente: 24h para el Diploma de Plata.';
+    return 'Diploma 1 logrado. Siguiente: Diploma 2 (Plata) en 24h.';
   }
   if (totalHours > 0) {
-    return 'Estás aquí. Te falta poco para tu siguiente milestone.';
+    return 'Estás aquí. El Diploma 1 (Bronce) es tu primer milestone hacia el Oro.';
   }
-  return 'Cada paso te acerca a tu próximo logro. Aquí empieza.';
+  return 'Cada paso te acerca al Diploma 3 (Oro). Aquí empieza.';
 }

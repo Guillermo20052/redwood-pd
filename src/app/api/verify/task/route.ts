@@ -37,6 +37,7 @@ import {
   STORAGE_BUCKET,
 } from '@/lib/upload-storage';
 import { storageObjectExistsWithRetry } from '@/lib/upload-storage-server';
+import { serializeTaskFileUrls } from '@/lib/task-file-urls';
 
 type PartnerInput = {
   user_id?: string | null;
@@ -60,16 +61,43 @@ function resolveStorageKey(body: {
   return null;
 }
 
+function resolveStorageKeys(body: {
+  key?: string;
+  keys?: string[];
+  fileUrl?: string;
+  fileUrls?: string[];
+}): string[] {
+  if (Array.isArray(body.keys) && body.keys.length > 0) {
+    return body.keys.filter((k): k is string => typeof k === 'string' && k.length > 0);
+  }
+  if (typeof body.key === 'string' && body.key.length > 0) {
+    return [body.key];
+  }
+  if (Array.isArray(body.fileUrls) && body.fileUrls.length > 0) {
+    return body.fileUrls
+      .map((u) => fileUrlToStorageKey(u))
+      .filter((k): k is string => typeof k === 'string' && k.length > 0);
+  }
+  const single = resolveStorageKey(body);
+  return single ? [single] : [];
+}
+
 type FileAccessResult =
-  | { ok: true; key: string; fileUrl: string }
+  | { ok: true; keys: string[]; fileUrls: string[] }
   | { ok: false; response: NextResponse };
 
-async function assertUploadedFileAccessible(
-  body: { key?: string; fileUrl?: string },
-  userId: string
+async function assertUploadedFilesAccessible(
+  body: {
+    key?: string;
+    keys?: string[];
+    fileUrl?: string;
+    fileUrls?: string[];
+  },
+  userId: string,
+  maxFiles = 1
 ): Promise<FileAccessResult> {
-  const key = resolveStorageKey(body);
-  if (!key) {
+  const keys = resolveStorageKeys(body);
+  if (keys.length === 0) {
     return {
       ok: false,
       response: NextResponse.json(
@@ -78,43 +106,69 @@ async function assertUploadedFileAccessible(
       ),
     };
   }
-
-  if (!storageKeyBelongsToUser(key, userId)) {
+  if (keys.length > maxFiles) {
     return {
       ok: false,
       response: NextResponse.json(
-        { error: 'Archivo no válido para tu cuenta.' },
+        { error: `Esta tarea acepta como máximo ${maxFiles} archivo(s).` },
         { status: 400 }
       ),
     };
   }
 
-  console.log('Verify start', { userId, key });
+  const fileUrls: string[] = [];
+  for (const key of keys) {
+    if (!storageKeyBelongsToUser(key, userId)) {
+      return {
+        ok: false,
+        response: NextResponse.json(
+          { error: 'Archivo no válido para tu cuenta.' },
+          { status: 400 }
+        ),
+      };
+    }
 
-  const fetchResult = await storageObjectExistsWithRetry(key, { userId });
-  if (!fetchResult.exists) {
-    console.error('Verify failed - file not found', {
-      key,
-      bucket: STORAGE_BUCKET,
-      userId,
-      attempts: fetchResult.attempts,
-      lastError: fetchResult.lastError,
-      attempted_paths: [key],
-    });
-    console.error(`Archivo no encontrado en almacenamiento (clave: ${key})`);
-    return {
-      ok: false,
-      response: NextResponse.json(
-        {
-          error: FILE_NOT_FOUND_USER_MESSAGE,
-          code: FILE_NOT_FOUND_ERROR_CODE,
-        },
-        { status: 400 }
-      ),
-    };
+    console.log('Verify start', { userId, key });
+
+    const fetchResult = await storageObjectExistsWithRetry(key, { userId });
+    if (!fetchResult.exists) {
+      console.error('Verify failed - file not found', {
+        key,
+        bucket: STORAGE_BUCKET,
+        userId,
+        attempts: fetchResult.attempts,
+        lastError: fetchResult.lastError,
+        attempted_paths: [key],
+      });
+      return {
+        ok: false,
+        response: NextResponse.json(
+          {
+            error: FILE_NOT_FOUND_USER_MESSAGE,
+            code: FILE_NOT_FOUND_ERROR_CODE,
+          },
+          { status: 400 }
+        ),
+      };
+    }
+
+    fileUrls.push(storageKeyToFileUrl(key));
   }
 
-  return { ok: true, key, fileUrl: storageKeyToFileUrl(key) };
+  return { ok: true, keys, fileUrls };
+}
+
+/** @deprecated Use assertUploadedFilesAccessible */
+async function assertUploadedFileAccessible(
+  body: { key?: string; fileUrl?: string },
+  userId: string
+): Promise<
+  | { ok: true; key: string; fileUrl: string }
+  | { ok: false; response: NextResponse }
+> {
+  const result = await assertUploadedFilesAccessible(body, userId, 1);
+  if (!result.ok) return result;
+  return { ok: true, key: result.keys[0], fileUrl: result.fileUrls[0] };
 }
 
 export async function POST(request: Request) {
@@ -125,7 +179,9 @@ export async function POST(request: Request) {
     itemKey?: string;
     evidenceText?: string;
     key?: string;
+    keys?: string[];
     fileUrl?: string;
+    fileUrls?: string[];
     inputType?: string;
     partner?: PartnerInput | null;
     adminSkip?: boolean;
@@ -388,6 +444,10 @@ export async function POST(request: Request) {
     );
   }
 
+  const maxFiles = item.maxFiles ?? 1;
+  let resolvedFileUrls: string[] =
+    resolvedFileUrl && typeof resolvedFileUrl === 'string' ? [resolvedFileUrl] : [];
+
   if (inputType === 'text') {
     if (trimmed.length < verificationConfig.taskEvidenceMinChars) {
       return NextResponse.json(
@@ -398,9 +458,9 @@ export async function POST(request: Request) {
       );
     }
   } else {
-    const fileAccess = await assertUploadedFileAccessible(body, session.userId);
+    const fileAccess = await assertUploadedFilesAccessible(body, session.userId, maxFiles);
     if (!fileAccess.ok) return fileAccess.response;
-    resolvedFileUrl = fileAccess.fileUrl;
+    resolvedFileUrls = fileAccess.fileUrls;
   }
 
   if (!item.taskRubric && inputType === 'text') {
@@ -423,10 +483,12 @@ export async function POST(request: Request) {
     );
   }
 
-  const filePath =
-    inputType !== 'text' && resolvedFileUrl && !isSupabaseStorageMode()
-      ? fileUrlToPath(resolvedFileUrl) ?? undefined
-      : undefined;
+  const filePaths =
+    inputType !== 'text' && !isSupabaseStorageMode()
+      ? resolvedFileUrls
+          .map((u) => fileUrlToPath(u) ?? undefined)
+          .filter((p): p is string => Boolean(p))
+      : [];
 
   const rubricFields = getTaskRubricFields(item.taskRubric);
   const toolName = rubricFields.toolName ?? item.primaryTools?.[0];
@@ -435,6 +497,9 @@ export async function POST(request: Request) {
   const taskRubricForGrader =
     typeof item.taskRubric === 'string' ? item.taskRubric : undefined;
 
+  const storedFileUrl =
+    inputType !== 'text' ? serializeTaskFileUrls(resolvedFileUrls) : null;
+
   let grade;
   try {
     grade = await gradeTaskSubmission({
@@ -442,8 +507,11 @@ export async function POST(request: Request) {
       taskPrompt: item.taskPrompt ?? item.label,
       taskRubric: taskRubricForGrader,
       evidenceText: trimmed,
-      fileUrl: resolvedFileUrl ?? undefined,
-      filePath,
+      ...(resolvedFileUrls.length > 1
+        ? { fileUrls: resolvedFileUrls, filePaths }
+        : resolvedFileUrls.length === 1
+          ? { fileUrl: resolvedFileUrls[0], filePath: filePaths[0] }
+          : {}),
       partTitle: item.partTitle ?? item.label,
       level: item.level,
       collaborative,
@@ -472,7 +540,7 @@ export async function POST(request: Request) {
       trimmed,
       { passed: true, feedback: grade.feedback },
       collaborative ? { user_id: partnerUserId, name: partnerName } : null,
-      { inputType, fileUrl: resolvedFileUrl ?? null }
+      { inputType, fileUrl: storedFileUrl }
     );
     await saveCompletions(session.userId, updated);
     return NextResponse.json({

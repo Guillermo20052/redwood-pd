@@ -17,6 +17,7 @@ import { getExtraTask, isExtraItemKey } from '@/lib/extra-tasks';
 import { getDiploma1Progress } from '@/lib/extras-gating';
 import type { EvaluationRow, ReflectionRow } from '@/lib/local-db';
 import { buildInitialCompletions, type CompletionMap } from '@/lib/verification';
+import { parseTaskFileUrls } from '@/lib/task-file-urls';
 
 const LEVEL_NUM: Record<string, number> = { b: 1, i: 2, a: 3 };
 const LEVEL_LABELS: Record<string, string> = {
@@ -171,7 +172,7 @@ export default function AdminTeacherDetailPage() {
         title: string;
         verifiedAt: string;
         content: string;
-        fileUrl?: string;
+        fileUrls?: string[];
         taskScore?: number;
         taskFeedback?: string;
         partnerName?: string;
@@ -189,7 +190,7 @@ export default function AdminTeacherDetailPage() {
             title: `Nivel ${LEVEL_NUM[level]} · Parte ${item.partNumber} · ${tool ?? item.partTitle ?? item.label}`,
             verifiedAt: row.verified_at ?? '',
             content: row.evidence_text ?? '',
-            fileUrl: row.task_file_url ?? undefined,
+            fileUrls: parseTaskFileUrls(row.task_file_url),
             taskScore: row.task_score,
             taskFeedback: row.task_feedback,
           });
@@ -203,7 +204,7 @@ export default function AdminTeacherDetailPage() {
             title: `Nivel ${LEVEL_NUM[level]} · ${collab.title}`,
             verifiedAt: row.verified_at ?? '',
             content: row.evidence_text ?? '',
-            fileUrl: row.task_file_url ?? undefined,
+            fileUrls: parseTaskFileUrls(row.task_file_url),
             taskScore: row.task_score,
             taskFeedback: row.task_feedback,
             partnerName: row.partner_name,
@@ -223,7 +224,7 @@ export default function AdminTeacherDetailPage() {
         title: string;
         verifiedAt: string;
         content: string;
-        fileUrl?: string;
+        fileUrls?: string[];
         taskScore?: number;
         taskFeedback?: string;
       }> = [];
@@ -236,7 +237,7 @@ export default function AdminTeacherDetailPage() {
           title: extra.title,
           verifiedAt: row.verified_at ?? '',
           content: row.evidence_text ?? '',
-          fileUrl: row.task_file_url ?? undefined,
+          fileUrls: parseTaskFileUrls(row.task_file_url),
           taskScore: row.task_score,
           taskFeedback: row.task_feedback,
         });
@@ -629,12 +630,13 @@ function TaskCard({
     title: string;
     verifiedAt: string;
     content: string;
-    fileUrl?: string;
+    fileUrls?: string[];
     taskScore?: number;
     taskFeedback?: string;
     partnerName?: string;
   };
 }) {
+  const fileUrls = item.fileUrls ?? [];
   return (
     <article className="admin-teacher-card">
       <div className="admin-teacher-card-head">
@@ -645,21 +647,24 @@ function TaskCard({
       {item.partnerName && (
         <p className="admin-teacher-partner">Compañera: {item.partnerName}</p>
       )}
-      {item.content.trim() ? (
+      {item.content.trim() && fileUrls.length === 0 ? (
         <div className="admin-teacher-card-content">{item.content}</div>
-      ) : item.fileUrl ? null : (
+      ) : fileUrls.length > 0 ? null : (
         <p className="admin-teacher-empty">Sin respuesta de texto</p>
       )}
-      {item.fileUrl && (
+      {fileUrls.map((url, index) => (
         <a
-          href={item.fileUrl}
+          key={url}
+          href={url}
           target="_blank"
           rel="noopener noreferrer"
           className="admin-teacher-file-link"
         >
-          Ver archivo subido →
+          {fileUrls.length > 1
+            ? `Archivo ${index + 1} (nivel ${index + 1}) →`
+            : 'Ver archivo subido →'}
         </a>
-      )}
+      ))}
       {item.taskScore != null && (
         <p className="admin-teacher-score">Puntaje IA: {item.taskScore}/100</p>
       )}

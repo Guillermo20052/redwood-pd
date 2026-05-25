@@ -8,6 +8,7 @@ type Props = {
   accept: string;
   kind: 'image' | 'pdf';
   disabled?: boolean;
+  slotLabel?: string;
   onFileSelected: (file: File) => void;
   onFileCleared: () => void;
 };
@@ -24,7 +25,14 @@ function mimeAllowed(file: File, accept: string): boolean {
   return false;
 }
 
-export function FileUpload({ accept, kind, disabled, onFileSelected, onFileCleared }: Props) {
+export function FileUpload({
+  accept,
+  kind,
+  disabled,
+  slotLabel,
+  onFileSelected,
+  onFileCleared,
+}: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -78,6 +86,11 @@ export function FileUpload({ accept, kind, disabled, onFileSelected, onFileClear
 
   return (
     <div className="space-y-3">
+      {slotLabel && (
+        <p className="text-xs font-bold uppercase tracking-wide text-[var(--gray-600)]">
+          {slotLabel}
+        </p>
+      )}
       {!file ? (
         <div
           role="button"

@@ -174,7 +174,9 @@ export function useProgress() {
       payload: {
         evidenceText?: string;
         storageKey?: string;
+        storageKeys?: string[];
         fileUrl?: string;
+        fileUrls?: string[];
         inputType?: 'text' | 'screenshot' | 'document';
       },
       partner?: { user_id: string | null; name: string } | null,
@@ -187,16 +189,22 @@ export function useProgress() {
           itemKey,
           evidenceText: payload.evidenceText ?? '',
           key: payload.storageKey,
+          keys: payload.storageKeys,
           fileUrl: payload.fileUrl,
+          fileUrls: payload.fileUrls,
           inputType: payload.inputType ?? 'text',
           ...(partner ? { partner } : {}),
         }),
       });
 
+      const hasUploadedFile =
+        Boolean(payload.storageKey) ||
+        (payload.storageKeys != null && payload.storageKeys.length > 0);
+
       if (
         !res.ok &&
         res.status === 400 &&
-        payload.storageKey &&
+        hasUploadedFile &&
         !options?.isClientRetry
       ) {
         const errData = await res.clone().json().catch(() => ({}));

@@ -1,6 +1,7 @@
 import 'server-only';
 import fs from 'fs';
 import Anthropic from '@anthropic-ai/sdk';
+import type { ContentBlockParam } from '@anthropic-ai/sdk/resources/messages/messages';
 import type { TaskInputType } from './curriculum-path';
 import { createAdminClient } from './supabase/admin';
 import {
@@ -24,7 +25,10 @@ export type GradeTaskInput = {
   taskRubric?: string;
   evidenceText?: string;
   fileUrl?: string;
+  /** Multiple files for tasks with maxFiles > 1 (e.g. Diffit). */
+  fileUrls?: string[];
   filePath?: string;
+  filePaths?: string[];
   partTitle: string;
   level: string;
   collaborative?: boolean;
@@ -50,7 +54,11 @@ const SYSTEM_PROMPT =
   'Tu puntaje (score) es estricto; tu feedback escrito siempre es cálido, coach y accionable — nunca condescendiente ni punitivo. ' +
   'Responde solo con JSON válido.';
 
-function buildGradingPrompt(input: GradeTaskInput, submissionContent: string): string {
+function buildGradingPrompt(
+  input: GradeTaskInput,
+  submissionContent: string,
+  multiFile = false
+): string {
   const inputType = input.inputType ?? 'text';
   const toolName = input.toolName ?? 'una herramienta de IA';
   const taskGoal = input.taskGoal ?? input.taskPrompt;
@@ -70,7 +78,7 @@ function buildGradingPrompt(input: GradeTaskInput, submissionContent: string): s
 
   return (
     `Eres el evaluador del programa de desarrollo profesional "Redwood PD". Las docentes participantes son maestras de bachillerato en México (IB y roles no-IB: preceptoría, formación religiosa, apoyo, materias académicas, etc.), aprendiendo a usar herramientas de IA por primera vez.
-
+${multiFile ? '\nLa docente envió múltiples archivos. Evalúa la tarea considerando todos los archivos juntos como una sola entrega.\n' : ''}
 Tu rol: evaluador pedagógico EXIGENTE. Aplicas la rúbrica estrictamente. Califica de forma conservadora (30-40% más exigente que evaluadores permisivos). El Diploma 3 debe sentirse ganado.
 
 CONTEXTO DE LA DOCENTE (adapta tu evaluación):
@@ -186,47 +194,90 @@ type FileBytes = {
   ext: string;
 };
 
-async function loadSubmissionBytes(input: GradeTaskInput): Promise<FileBytes> {
-  // Prefer an explicit on-disk path when the caller has one (local mode flow).
-  if (input.filePath && fs.existsSync(input.filePath)) {
+async function loadSubmissionBytesFromUrl(
+  fileUrl: string,
+  filePath?: string
+): Promise<FileBytes> {
+  if (filePath && fs.existsSync(filePath)) {
     return {
-      base64: readFileBase64(input.filePath),
-      ext: input.filePath.toLowerCase(),
+      base64: readFileBase64(filePath),
+      ext: filePath.toLowerCase(),
     };
   }
 
-  if (input.fileUrl) {
-    // Supabase Storage mode: download the object with the service-role client
-    // so we don't need a user session here.
-    if (isSupabaseStorageMode()) {
-      const storagePath = fileUrlToStoragePath(input.fileUrl);
-      if (storagePath) {
-        const admin = createAdminClient();
-        if (!admin) {
-          throw new Error('Servidor mal configurado: falta SUPABASE_SERVICE_ROLE_KEY.');
-        }
-        const { data, error } = await admin.storage
-          .from(SUPABASE_BUCKET)
-          .download(storagePath);
-        if (error || !data) {
-          throw new Error(
-            'No se encontró el archivo subido. Vuelve a subirlo e intenta de nuevo.'
-          );
-        }
-        const arrayBuf = await data.arrayBuffer();
-        const base64 = Buffer.from(arrayBuf).toString('base64');
-        return { base64, ext: storagePath.toLowerCase() };
+  if (isSupabaseStorageMode()) {
+    const storagePath = fileUrlToStoragePath(fileUrl);
+    if (storagePath) {
+      const admin = createAdminClient();
+      if (!admin) {
+        throw new Error('Servidor mal configurado: falta SUPABASE_SERVICE_ROLE_KEY.');
       }
-    }
-
-    // Local mode fallback: resolve to a file on disk.
-    const resolved = fileUrlToPath(input.fileUrl);
-    if (resolved && fs.existsSync(resolved)) {
-      return { base64: readFileBase64(resolved), ext: resolved.toLowerCase() };
+      const { data, error } = await admin.storage
+        .from(SUPABASE_BUCKET)
+        .download(storagePath);
+      if (error || !data) {
+        throw new Error(
+          'No se encontró el archivo subido. Vuelve a subirlo e intenta de nuevo.'
+        );
+      }
+      const arrayBuf = await data.arrayBuffer();
+      const base64 = Buffer.from(arrayBuf).toString('base64');
+      return { base64, ext: storagePath.toLowerCase() };
     }
   }
 
+  const resolved = fileUrlToPath(fileUrl);
+  if (resolved && fs.existsSync(resolved)) {
+    return { base64: readFileBase64(resolved), ext: resolved.toLowerCase() };
+  }
+
   throw new Error('No se encontró el archivo subido. Vuelve a subirlo e intenta de nuevo.');
+}
+
+function resolveSubmissionFileUrls(input: GradeTaskInput): string[] {
+  if (input.fileUrls && input.fileUrls.length > 0) {
+    return input.fileUrls;
+  }
+  if (input.fileUrl) return [input.fileUrl];
+  return [];
+}
+
+function isPdfBytes(ext: string): boolean {
+  return ext.endsWith('.pdf');
+}
+
+function buildFileContentBlock(
+  file: FileBytes,
+  inputType: 'screenshot' | 'document'
+): ContentBlockParam {
+  const mimeGuess = isPdfBytes(file.ext)
+    ? 'application/pdf'
+    : file.ext.endsWith('.png')
+      ? 'image/png'
+      : 'image/jpeg';
+  const mediaType = detectMediaType(mimeGuess, inputType);
+
+  if (mediaType === 'application/pdf' || isPdfBytes(file.ext)) {
+    return {
+      type: 'document' as const,
+      source: {
+        type: 'base64' as const,
+        media_type: 'application/pdf' as const,
+        data: file.base64,
+      },
+    };
+  }
+
+  return {
+    type: 'image' as const,
+    source: {
+      type: 'base64' as const,
+      media_type: (mediaType === 'image/png' ? 'image/png' : 'image/jpeg') as
+        | 'image/png'
+        | 'image/jpeg',
+      data: file.base64,
+    },
+  };
 }
 
 function shortCircuitTooShort(charCount: number): TaskGradeResult {
@@ -290,41 +341,26 @@ async function gradeFileSubmission(input: GradeTaskInput): Promise<TaskGradeResu
     throw new Error('Tipo de entrada de archivo inválido');
   }
 
-  const { base64, ext } = await loadSubmissionBytes(input);
-  const mimeGuess = ext.endsWith('.pdf')
-    ? 'application/pdf'
-    : ext.endsWith('.png')
-      ? 'image/png'
-      : 'image/jpeg';
-  const mediaType = detectMediaType(mimeGuess, inputType);
-  const textPrompt = buildGradingPrompt(input, '[Archivo adjunto en este mensaje]');
+  const urls = resolveSubmissionFileUrls(input);
+  if (urls.length === 0) {
+    throw new Error('No se encontró el archivo subido. Vuelve a subirlo e intenta de nuevo.');
+  }
 
-  const userContent =
-    inputType === 'document'
-      ? [
-          { type: 'text' as const, text: textPrompt },
-          {
-            type: 'document' as const,
-            source: {
-              type: 'base64' as const,
-              media_type: 'application/pdf' as const,
-              data: base64,
-            },
-          },
-        ]
-      : [
-          { type: 'text' as const, text: textPrompt },
-          {
-            type: 'image' as const,
-            source: {
-              type: 'base64' as const,
-              media_type: (mediaType === 'image/png' ? 'image/png' : 'image/jpeg') as
-                | 'image/png'
-                | 'image/jpeg',
-              data: base64,
-            },
-          },
-        ];
+  const paths = input.filePaths ?? (input.filePath ? [input.filePath] : []);
+  const files = await Promise.all(
+    urls.map((url, i) => loadSubmissionBytesFromUrl(url, paths[i]))
+  );
+
+  const multiFile = files.length > 1;
+  const submissionLabel = multiFile
+    ? `[${files.length} archivos adjuntos — evalúalos juntos como una sola entrega]`
+    : '[Archivo adjunto en este mensaje]';
+  const textPrompt = buildGradingPrompt(input, submissionLabel, multiFile);
+
+  const userContent: ContentBlockParam[] = [
+    { type: 'text', text: textPrompt },
+    ...files.map((file) => buildFileContentBlock(file, inputType)),
+  ];
 
   return callClaude(input, userContent);
 }

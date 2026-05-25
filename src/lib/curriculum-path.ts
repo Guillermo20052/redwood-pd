@@ -36,6 +36,8 @@ export type PathItem = {
   taskRubric?: string | TaskRubric;
   /** How teachers submit task evidence. Defaults to "text" when omitted. */
   inputType?: TaskInputType;
+  /** Max upload slots for file-based tasks. Defaults to 1. */
+  maxFiles?: number;
   reflectionPrompt?: string;
 };
 

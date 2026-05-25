@@ -13,6 +13,7 @@ import {
 import { isDiplomaTierEarned } from './diplomas';
 import type { Diploma3ProgramRequirements } from './diploma3-requirements';
 import type { CompletionRow } from './local-db';
+import { hasTaskFileUrl } from './task-file-urls';
 
 export type CompletionMap = Record<string, CompletionRow>;
 
@@ -76,7 +77,7 @@ export function verifyExtraTask(
       400
     );
   }
-  if ((inputType === 'screenshot' || inputType === 'document') && !meta?.fileUrl) {
+  if ((inputType === 'screenshot' || inputType === 'document') && !hasTaskFileUrl(meta?.fileUrl)) {
     throw new VerificationError('Debes subir un archivo para esta tarea.', 400);
   }
   const evidenceStored =
@@ -116,7 +117,7 @@ export function verifyCollaborativeTask(
       400
     );
   }
-  if ((inputType === 'screenshot' || inputType === 'document') && !meta?.fileUrl) {
+  if ((inputType === 'screenshot' || inputType === 'document') && !hasTaskFileUrl(meta?.fileUrl)) {
     throw new VerificationError('Debes subir un archivo para esta tarea.', 400);
   }
   if (partner.name.trim().length < 3) {
@@ -293,7 +294,7 @@ export function verifyTask(
       400
     );
   }
-  if ((inputType === 'screenshot' || inputType === 'document') && !meta?.fileUrl) {
+  if ((inputType === 'screenshot' || inputType === 'document') && !hasTaskFileUrl(meta?.fileUrl)) {
     throw new VerificationError('Debes subir un archivo para esta tarea.', 400);
   }
   if (gradeResult && !gradeResult.passed) {

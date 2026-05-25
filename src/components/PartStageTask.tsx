@@ -54,9 +54,12 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
   const isAdmin = profile.role === 'admin';
   const inputType: TaskInputType = item.inputType ?? 'text';
   const isFileTask = inputType === 'screenshot' || inputType === 'document';
+  const maxFiles = item.maxFiles ?? 1;
 
   const [text, setText] = useState('');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<(File | null)[]>(() =>
+    maxFiles > 1 ? Array.from({ length: maxFiles }, () => null) : [null]
+  );
   const [submitting, setSubmitting] = useState(false);
   const [retryingVerify, setRetryingVerify] = useState(false);
   const [adminSkipping, setAdminSkipping] = useState(false);
@@ -84,13 +87,17 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
   const meetsLength = len >= min;
   const partnerOk =
     !collaborative || (partner !== null && partner.name.trim().length >= 3);
-  const fileOk = isFileTask && selectedFile !== null;
+  const fileOk = isFileTask && selectedFiles.some((f) => f !== null);
   const meets = isFileTask ? fileOk && partnerOk : meetsLength && partnerOk;
 
   const acceptMime =
-    inputType === 'document'
-      ? 'application/pdf'
-      : 'image/png,image/jpeg,image/jpg';
+    maxFiles > 1
+      ? 'application/pdf,image/png,image/jpeg,image/jpg'
+      : inputType === 'document'
+        ? 'application/pdf'
+        : 'image/png,image/jpeg,image/jpg';
+  const uploadKind =
+    maxFiles > 1 ? ('pdf' as const) : inputType === 'document' ? ('pdf' as const) : ('image' as const);
 
   useEffect(() => {
     if (!collaborative) return;
@@ -139,12 +146,21 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
     setRetryingVerify(false);
     setErrorMessage(null);
     try {
+      const filesToUpload = selectedFiles.filter((f): f is File => f !== null);
+      let storageKeys: string[] | undefined;
       let storageKey: string | undefined;
+      let fileUrls: string[] | undefined;
       let fileUrl: string | undefined;
-      if (isFileTask && selectedFile) {
-        const uploaded = await uploadFile(selectedFile);
-        storageKey = uploaded.key;
-        fileUrl = uploaded.fileUrl;
+
+      if (isFileTask && filesToUpload.length > 0) {
+        const uploaded = await Promise.all(filesToUpload.map((file) => uploadFile(file)));
+        if (uploaded.length === 1) {
+          storageKey = uploaded[0].key;
+          fileUrl = uploaded[0].fileUrl;
+        } else {
+          storageKeys = uploaded.map((u) => u.key);
+          fileUrls = uploaded.map((u) => u.fileUrl);
+        }
       }
 
       const data = await verifyTask(
@@ -152,7 +168,9 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
         {
           evidenceText: isFileTask ? '' : text,
           storageKey,
+          storageKeys,
           fileUrl,
+          fileUrls,
           inputType,
         },
         collaborative && partner ? partner : null,
@@ -237,13 +255,45 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
       )}
 
       {isFileTask ? (
-        <FileUpload
-          accept={acceptMime}
-          kind={inputType === 'document' ? 'pdf' : 'image'}
-          disabled={submitting || passed}
-          onFileSelected={setSelectedFile}
-          onFileCleared={() => setSelectedFile(null)}
-        />
+        maxFiles > 1 ? (
+          <div className="space-y-4">
+            {selectedFiles.map((_, index) => (
+              <FileUpload
+                key={index}
+                accept={acceptMime}
+                kind={uploadKind}
+                slotLabel={`Subir archivo ${index + 1} (PDF o imagen)`}
+                disabled={submitting || passed}
+                onFileSelected={(file) =>
+                  setSelectedFiles((prev) => {
+                    const next = [...prev];
+                    next[index] = file;
+                    return next;
+                  })
+                }
+                onFileCleared={() =>
+                  setSelectedFiles((prev) => {
+                    const next = [...prev];
+                    next[index] = null;
+                    return next;
+                  })
+                }
+              />
+            ))}
+            <p className="text-xs text-[var(--gray-500)]">
+              Sube 1 archivo combinando los niveles, o 2 archivos por separado (uno por cada nivel
+              de lectura).
+            </p>
+          </div>
+        ) : (
+          <FileUpload
+            accept={acceptMime}
+            kind={uploadKind}
+            disabled={submitting || passed}
+            onFileSelected={(file) => setSelectedFiles([file])}
+            onFileCleared={() => setSelectedFiles([null])}
+          />
+        )
       ) : (
         <div>
           <textarea

@@ -7,6 +7,7 @@ import {
   isDiplomaTierEarned,
 } from './diplomas';
 import { getDiploma1Progress } from './extras-gating';
+import type { Diploma3ProgramRequirements } from './diploma3-requirements';
 
 export type { CompletionMap };
 
@@ -34,7 +35,8 @@ export type ProgressBannerState = {
 export function getProgressBannerState(
   totalHours: number,
   completions: CompletionMap,
-  isAdmin = false
+  isAdmin = false,
+  diploma3Program?: Diploma3ProgramRequirements | null
 ): ProgressBannerState {
   if (isAdmin) {
     return {
@@ -46,7 +48,7 @@ export function getProgressBannerState(
     };
   }
 
-  if (isDiplomaTierEarned(3, totalHours, completions)) {
+  if (isDiplomaTierEarned(3, totalHours, completions, diploma3Program)) {
     return {
       fillPercent: 100,
       thresholdLabel: '30h · Camino completo',
@@ -56,7 +58,7 @@ export function getProgressBannerState(
     };
   }
 
-  const next = getNextDiplomaFromLib(totalHours, completions);
+  const next = getNextDiplomaFromLib(totalHours, completions, diploma3Program);
   if (!next) {
     return {
       fillPercent: 100,

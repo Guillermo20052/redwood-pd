@@ -122,7 +122,7 @@ export function createTour({ onFinish, onStartNivel1 }: CreateTourOptions): Tour
     id: 'start-nivel1',
     attachTo: { element: '[data-tour="level-b"]', on: 'top' },
     title: '¡Listo para empezar!',
-    text: 'Tu Nivel 1 te está esperando. Recuerda: avanza a tu ritmo, sé honesta en tus reflexiones, y pide ayuda cuando la necesites.',
+    text: 'Tu Nivel 1 te está esperando. Recuerda: avanza a tu ritmo, sé honesta en tus reflexiones, y pide ayuda cuando la necesites. El Diploma 3 (Oro) también pide leer la ética, guardar reflexiones por nivel y completar la evaluación final.',
     buttons: [
       skipButton(),
       {

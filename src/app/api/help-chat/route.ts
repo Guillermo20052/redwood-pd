@@ -16,7 +16,7 @@ La Ruta culmina en el Diploma 3 (Oro): Docente IA Transformadora. Los diplomas d
 
 Diploma 1 — Docente IA Consciente (Bronce): primer milestone — 20h verificadas (Niveles 1 y 2) + al menos 4 tareas Level Up del Nivel 1 + al menos 4 del Nivel 2
 Diploma 2 — Docente IA Innovadora (Plata): Diploma 1 completo + 24h verificadas en total (se mantienen los requisitos de Diploma 1)
-Diploma 3 — Docente IA Transformadora (Oro): culminación del programa — Diploma 2 completo + 30h verificadas + al menos 4 tareas Level Up del Nivel 3 (se mantienen los requisitos de Diploma 1 y 2)
+Diploma 3 — Docente IA Transformadora (Oro): culminación del programa — Diploma 2 completo + 30h verificadas + al menos 4 tareas Level Up del Nivel 3 + leer la política de ética + al menos 1 reflexión por nivel + completar la evaluación final (se mantienen los requisitos de Diploma 1 y 2)
 
 ═══════════════════════════════════════════════════════════
 TAREAS LEVEL UP (importante)
@@ -192,7 +192,7 @@ const ADMIN_SYSTEM_PROMPT = `Eres una asistente para el equipo coordinador de la
 Conoces la estructura del programa con exactitud:
 
 3 niveles (Fundamentos, Integración, Transformación), 5 partes cada uno, 30h en total. La meta es el Diploma 3 (Oro): Docente IA Transformadora.
-Diploma 1 (Bronce): 20h + 4 Level Up L1 + 4 Level Up L2. Diploma 2 (Plata): Diploma 1 + 24h. Diploma 3 (Oro): Diploma 2 + 30h + 4 Level Up L3 — culminación del programa.
+Diploma 1 (Bronce): 20h + 4 Level Up L1 + 4 Level Up L2. Diploma 2 (Plata): Diploma 1 + 24h. Diploma 3 (Oro): Diploma 2 + 30h + 4 Level Up L3 + ética + 3 reflexiones (una por nivel) + evaluación final — culminación del programa.
 Tareas colaborativas: una por nivel al final del Plan de Trabajo (2h cada una).
 30 tareas Level Up (10/nivel): solo tarea, sin video/reflexión; se desbloquean al completar el nivel
 Cada parte del plan: video + tarea (IA) + reflexión (400 chars min)

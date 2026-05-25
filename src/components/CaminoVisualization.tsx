@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { CompletionMap } from '@/lib/verification';
+import type { Diploma3ProgramRequirements } from '@/lib/diploma3-requirements';
 import { isDiplomaTierEarned, type DiplomaTier } from '@/lib/diplomas';
 import { getFirstName } from '@/lib/get-first-name';
 import {
@@ -17,6 +18,7 @@ import { YouAreHereMarker } from './CaminoVisualization/YouAreHereMarker';
 type Props = {
   totalHours: number;
   completions: CompletionMap;
+  diploma3Program?: Diploma3ProgramRequirements | null;
   profile: {
     full_name: string;
     email: string;
@@ -56,6 +58,7 @@ function useIsVerticalLayout(): boolean {
 export function CaminoVisualization({
   totalHours,
   completions,
+  diploma3Program,
   profile,
   onViewDiploma,
 }: Props) {
@@ -66,7 +69,8 @@ export function CaminoVisualization({
 
   const hasD1 = isAdmin || isDiplomaTierEarned(1, totalHours, completions);
   const hasD2 = isAdmin || isDiplomaTierEarned(2, totalHours, completions);
-  const hasD3 = isAdmin || isDiplomaTierEarned(3, totalHours, completions);
+  const hasD3 =
+    isAdmin || isDiplomaTierEarned(3, totalHours, completions, diploma3Program);
 
   const progressPct = isAdmin ? 100 : hoursToPathPct(totalHours);
   const subtitle = getCaminoSubtitle(totalHours, isAdmin, hasD1, hasD2, hasD3);
@@ -86,11 +90,16 @@ export function CaminoVisualization({
     (m: CaminoMilestone) => {
       if (isAdmin) return true;
       if (m.tier != null) {
-        return isDiplomaTierEarned(m.tier, totalHours, completions);
+        return isDiplomaTierEarned(
+          m.tier,
+          totalHours,
+          completions,
+          m.tier === 3 ? diploma3Program : undefined
+        );
       }
       return totalHours >= m.hours;
     },
-    [completions, isAdmin, totalHours]
+    [completions, diploma3Program, isAdmin, totalHours]
   );
 
   const handleMilestoneClick = useCallback(
@@ -103,7 +112,11 @@ export function CaminoVisualization({
           return;
         }
         const remaining = Math.max(0, m.hours - totalHours);
-        setClickMessage(`Te faltan ${remaining.toFixed(1)}h para este diploma`);
+        setClickMessage(
+          m.tier === 3 && !earned
+            ? 'Diploma 3 (Oro) · Docente IA Transformadora. Requiere: 30h verificadas + completar Nivel 3 + 4 Level Up por nivel + ética + 3 reflexiones + evaluación.'
+            : `Te faltan ${remaining.toFixed(1)}h para este diploma`
+        );
         setHoveredId(m.id);
         return;
       }

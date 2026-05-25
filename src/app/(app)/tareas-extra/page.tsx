@@ -5,6 +5,7 @@ import { useProgressContext } from '@/components/Providers';
 import { ExtraTaskCard } from '@/components/ExtraTaskCard';
 import { ExtraTaskModal } from '@/components/ExtraTaskModal';
 import { Diploma1RequirementsBanner } from '@/components/Diploma1RequirementsBanner';
+import { Diploma3RequirementsBanner } from '@/components/Diploma3RequirementsBanner';
 import { getExtraTasksForLevel, type ExtraTask } from '@/lib/extra-tasks';
 import {
   countCompletedExtras,
@@ -119,7 +120,8 @@ function LevelExtraSection({
 }
 
 export default function TareasExtraPage() {
-  const { completions, totalHours, refreshCompletions, profile } = useProgressContext();
+  const { completions, totalHours, refreshCompletions, profile, diploma3Program } =
+    useProgressContext();
   const [activeTask, setActiveTask] = useState<ExtraTask | null>(null);
   const isAdmin = profile.role === 'admin';
 
@@ -154,6 +156,8 @@ export default function TareasExtraPage() {
       </div>
 
       <Diploma1RequirementsBanner totalHours={totalHours} completions={completions} />
+
+      <Diploma3RequirementsBanner program={diploma3Program} />
 
       {SECTIONS.map((s) => (
         <LevelExtraSection

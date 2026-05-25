@@ -7,6 +7,10 @@ import { FILE_NOT_FOUND_ERROR_CODE } from '@/lib/upload-errors';
 import { sumVerifiedHours, getDiplomaTier, progressPercent } from '@/lib/progress';
 import { fetchDiplomaAwardDates, type DiplomaAwardDates } from '@/lib/diploma-dates';
 import { getEarnedTiers, type DiplomaTier } from '@/lib/diplomas';
+import {
+  EMPTY_DIPLOMA3_PROGRAM_REQUIREMENTS,
+  type Diploma3ProgramRequirements,
+} from '@/lib/diploma3-requirements';
 import { buildProgressState, detectCelebrations } from '@/lib/celebration-detector';
 import { runCelebrations } from '@/lib/celebrate';
 
@@ -19,20 +23,29 @@ export function useProgress() {
     start_date: '',
     email: '',
     role: 'teacher' as 'teacher' | 'admin',
+    etica_read_at: null as string | null,
     welcome_cynthia_read_at: null as string | null,
     welcome_pope_read_at: null as string | null,
     welcome_about_read_at: null as string | null,
     tour_completed_at: null as string | null,
   });
+  const [diploma3Program, setDiploma3Program] = useState<Diploma3ProgramRequirements>(
+    EMPTY_DIPLOMA3_PROGRAM_REQUIREMENTS
+  );
   const [loading, setLoading] = useState(true);
   const [diplomaAwardDates, setDiplomaAwardDates] = useState<DiplomaAwardDates>({});
   const [celebrationTier, setCelebrationTier] = useState<DiplomaTier | null>(null);
   const completionsRef = useRef<CompletionMap>({});
+  const diploma3ProgramRef = useRef(diploma3Program);
   const hasLoadedRef = useRef(false);
 
   useEffect(() => {
     completionsRef.current = completions;
   }, [completions]);
+
+  useEffect(() => {
+    diploma3ProgramRef.current = diploma3Program;
+  }, [diploma3Program]);
 
   useEffect(() => {
     if (!loading) hasLoadedRef.current = true;
@@ -41,11 +54,39 @@ export function useProgress() {
   const maybeCelebrate = useCallback(
     (prev: CompletionMap, next: CompletionMap) => {
       if (!hasLoadedRef.current) return;
-      const events = detectCelebrations(buildProgressState(prev), buildProgressState(next));
+      const program = diploma3ProgramRef.current;
+      const events = detectCelebrations(
+        buildProgressState(prev, program),
+        buildProgressState(next, program)
+      );
       void runCelebrations(events, showToast);
     },
     [showToast]
   );
+
+  const applyProgressPayload = useCallback((data: Record<string, unknown>) => {
+    if (data.completions) {
+      setCompletions(data.completions as CompletionMap);
+    }
+    if (data.diploma3Program) {
+      setDiploma3Program(data.diploma3Program as Diploma3ProgramRequirements);
+    }
+    if (data.profile && typeof data.profile === 'object') {
+      const p = data.profile as Record<string, unknown>;
+      setProfile({
+        full_name: (p.full_name as string) || '',
+        subject: (p.subject as string) || '',
+        start_date: (p.start_date as string) || '',
+        email: (p.email as string) || '',
+        role: (p.role as 'teacher' | 'admin') || 'teacher',
+        etica_read_at: (p.etica_read_at as string | null) ?? null,
+        welcome_cynthia_read_at: (p.welcome_cynthia_read_at as string | null) ?? null,
+        welcome_pope_read_at: (p.welcome_pope_read_at as string | null) ?? null,
+        welcome_about_read_at: (p.welcome_about_read_at as string | null) ?? null,
+        tour_completed_at: (p.tour_completed_at as string | null) ?? null,
+      });
+    }
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -57,25 +98,12 @@ export function useProgress() {
       setDiplomaAwardDates(dates);
       if (progressRes.ok) {
         const data = await progressRes.json();
-        setCompletions(data.completions || {});
-        if (data.profile) {
-          setProfile({
-            full_name: data.profile.full_name || '',
-            subject: data.profile.subject || '',
-            start_date: data.profile.start_date || '',
-            email: data.profile.email || '',
-            role: (data.profile.role as 'teacher' | 'admin') || 'teacher',
-            welcome_cynthia_read_at: data.profile.welcome_cynthia_read_at ?? null,
-            welcome_pope_read_at: data.profile.welcome_pope_read_at ?? null,
-            welcome_about_read_at: data.profile.welcome_about_read_at ?? null,
-            tour_completed_at: data.profile.tour_completed_at ?? null,
-          });
-        }
+        applyProgressPayload(data);
       }
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [applyProgressPayload]);
 
   useEffect(() => {
     let cancelled = false;
@@ -107,9 +135,10 @@ export function useProgress() {
       const data = await res.json();
       const next = (data.completions || {}) as CompletionMap;
       setCompletions(next);
+      applyProgressPayload(data);
       maybeCelebrate(prev, next);
     }
-  }, [maybeCelebrate]);
+  }, [applyProgressPayload, maybeCelebrate]);
 
   const applyVerifyResponse = useCallback(async (res: Response) => {
     const data = await res.json().catch(() => ({}));
@@ -246,8 +275,12 @@ export function useProgress() {
 
   const totalHours = sumVerifiedHours(completions);
   const percent = progressPercent(totalHours);
-  const diplomaTier = getDiplomaTier(totalHours, completions);
-  const earnedDiplomas: DiplomaTier[] = getEarnedTiers(totalHours, completions);
+  const diplomaTier = getDiplomaTier(totalHours, completions, diploma3Program);
+  const earnedDiplomas: DiplomaTier[] = getEarnedTiers(
+    totalHours,
+    completions,
+    diploma3Program
+  );
 
   // Fire-and-forget: any time the earned-tiers set changes, ask the server to
   // record events for tiers not yet logged. Recording is idempotent server-side.
@@ -333,6 +366,7 @@ export function useProgress() {
     earnedDiplomas,
     diplomaAwardDates,
     celebrationTier,
+    diploma3Program,
     dismissCelebration,
   };
 }

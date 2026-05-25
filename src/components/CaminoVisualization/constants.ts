@@ -82,7 +82,8 @@ export const CAMINO_MILESTONES: readonly CaminoMilestone[] = [
     hours: 30,
     pct: 100,
     shortLabel: 'D3',
-    tooltip: 'Diploma 3 (Oro) · Docente IA Transformadora',
+    tooltip:
+      'Diploma 3 (Oro) · Docente IA Transformadora. Requiere: 30h verificadas + completar Nivel 3 + 4 Level Up por nivel + ética + 3 reflexiones + evaluación.',
     size: 'large',
     tier: 3,
     icon: '🌲',

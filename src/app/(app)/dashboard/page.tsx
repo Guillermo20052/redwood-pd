@@ -86,13 +86,15 @@ function levelDotStatus(
 function DashboardHeroProgress({
   totalHours,
   completions,
+  diploma3Program,
   isAdmin,
 }: {
   totalHours: number;
   completions: ReturnType<typeof useProgressContext>['completions'];
+  diploma3Program: ReturnType<typeof useProgressContext>['diploma3Program'];
   isAdmin: boolean;
 }) {
-  const nextDiploma = getNextDiploma(totalHours, completions);
+  const nextDiploma = getNextDiploma(totalHours, completions, diploma3Program);
   const hoursRemaining = nextDiploma
     ? Math.max(0, nextDiploma.hoursRequired - totalHours)
     : 0;
@@ -248,7 +250,8 @@ function LevelDashboardCard({
 }
 
 export default function DashboardPage() {
-  const { totalHours, completions, profile, diplomaAwardDates } = useProgressContext();
+  const { totalHours, completions, profile, diplomaAwardDates, diploma3Program } =
+    useProgressContext();
   const isAdmin = profile.role === 'admin';
   const [evaluation, setEvaluation] = useState<EvaluationRow | null>(null);
   const [evalLoaded, setEvalLoaded] = useState(false);
@@ -287,11 +290,13 @@ export default function DashboardPage() {
         profile={profile}
         totalHours={totalHours}
         completions={completions}
+        diploma3Program={diploma3Program}
         onViewDiploma={(tier) => setDiplomaModalTier(tier)}
         progressPanel={
           <DashboardHeroProgress
             totalHours={totalHours}
             completions={completions}
+            diploma3Program={diploma3Program}
             isAdmin={isAdmin}
           />
         }
@@ -300,6 +305,7 @@ export default function DashboardPage() {
       <CaminoVisualization
         totalHours={totalHours}
         completions={completions}
+        diploma3Program={diploma3Program}
         profile={profile}
         onViewDiploma={(tier) => setDiplomaModalTier(tier)}
       />

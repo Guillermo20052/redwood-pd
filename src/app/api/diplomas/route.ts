@@ -5,11 +5,12 @@ import { createClient } from '@/lib/supabase/server';
 import { sumVerifiedHours } from '@/lib/verification';
 import {
   getDiploma,
-  getEarnedTiers,
   isDiplomaTierEarned,
   type DiplomaTier,
 } from '@/lib/diplomas';
 import { meetsDiploma3ExtrasRequirement } from '@/lib/extras-gating';
+import { getDiploma3MissingReason } from '@/lib/diploma3-requirements';
+import { loadDiploma3ProgramRequirements } from '@/lib/diploma3-requirements-server';
 import { isAdminUser } from '@/lib/auth-helpers';
 
 const TIERS = new Set<DiplomaTier>([1, 2, 3]);
@@ -38,7 +39,6 @@ export async function GET() {
     const earned = Array.from(new Set((data ?? []).map((r) => r.tier as DiplomaTier))).sort();
     return NextResponse.json({ earned });
   } catch (e) {
-    // Don't break the UI if diploma_events isn't reachable.
     console.error('GET /api/diplomas failed:', (e as Error).message);
     return NextResponse.json({ earned: [] });
   }
@@ -64,27 +64,38 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'tier debe ser 1, 2 o 3' }, { status: 400 });
   }
 
-  // Admins never earn diplomas — they navigate for inspection only.
   const adminCheck = await isAdminUser(session.userId);
   if (adminCheck) {
     return NextResponse.json({ ok: false, adminSkip: true });
   }
 
-  // Server-side gate: don't trust the client's claim. Recompute hours.
   const completions = await loadCompletions(session.userId);
   const totalHours = sumVerifiedHours(completions);
-  if (!isDiplomaTierEarned(tier, totalHours, completions)) {
+  const diploma3Program =
+    tier === 3 ? await loadDiploma3ProgramRequirements(session.userId) : null;
+
+  if (!isDiplomaTierEarned(tier, totalHours, completions, diploma3Program)) {
     const hoursOk = totalHours >= getDiploma(tier).hoursRequired;
     let msg = 'Aún no has alcanzado los requisitos para este diploma.';
     if (hoursOk && tier === 1) {
       msg =
         'Tienes las horas, pero faltan tareas Level Up (4 de Nivel 1 y 4 de Nivel 2) para este diploma.';
-    } else if (hoursOk && tier === 3 && !meetsDiploma3ExtrasRequirement(completions)) {
-      msg =
-        'Tienes las 30h, pero faltan al menos 4 tareas Level Up del Nivel 3 para el Diploma de Oro.';
+    } else if (hoursOk && tier === 3) {
+      const programReason =
+        diploma3Program != null
+          ? getDiploma3MissingReason(totalHours, completions, diploma3Program)
+          : null;
+      if (programReason) {
+        msg = programReason;
+      } else if (!meetsDiploma3ExtrasRequirement(completions)) {
+        msg =
+          'Tienes las 30h, pero faltan al menos 4 tareas Level Up del Nivel 3 para el Diploma de Oro.';
+      } else {
+        msg =
+          'Tienes las horas y tareas, pero faltan pasos del camino (ética, reflexiones o evaluación) para el Diploma de Oro.';
+      }
     } else if (hoursOk) {
-      msg =
-        'Tienes las horas, pero faltan tareas Level Up requeridas para este diploma.';
+      msg = 'Tienes las horas, pero faltan tareas Level Up requeridas para este diploma.';
     }
     return NextResponse.json({ error: msg }, { status: 400 });
   }
@@ -96,7 +107,6 @@ export async function POST(request: Request) {
 
   try {
     const supabase = await createClient();
-    // Idempotency: select first.
     const { data: existing, error: selErr } = await supabase
       .from('diploma_events')
       .select('id')
@@ -115,8 +125,6 @@ export async function POST(request: Request) {
     if (insErr) throw insErr;
     return NextResponse.json({ ok: true, created: true, tier });
   } catch (e) {
-    // Event-log failure must not break the UI. Diploma still appears unlocked
-    // because hours satisfy the threshold; this is a nice-to-have audit row.
     console.error('POST /api/diplomas failed:', (e as Error).message);
     return NextResponse.json({ ok: false, error: 'No se pudo registrar el evento.' }, { status: 200 });
   }

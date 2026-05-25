@@ -10,6 +10,7 @@ import {
   loadProfile,
   saveProfile,
 } from '@/lib/completions-service';
+import { loadDiploma3ProgramRequirements } from '@/lib/diploma3-requirements-server';
 
 function profilePayload(profile: Awaited<ReturnType<typeof loadProfile>>, email: string) {
   if (!profile) {
@@ -47,10 +48,12 @@ export async function GET() {
 
   const completions = await loadCompletions(session.userId);
   const profile = await loadProfile(session.userId);
+  const diploma3Program = await loadDiploma3ProgramRequirements(session.userId);
 
   return NextResponse.json({
     completions,
     profile: profilePayload(profile, session.email),
+    diploma3Program,
   });
 }
 

@@ -9,6 +9,7 @@ import {
   type DashboardHeroCta,
 } from '@/lib/dashboard-state';
 import type { CompletionMap } from '@/lib/verification';
+import type { Diploma3ProgramRequirements } from '@/lib/diploma3-requirements';
 
 const TAGLINE = 'Siempre mejores. Siempre más conectadas.';
 
@@ -20,6 +21,7 @@ type Props = {
   };
   totalHours: number;
   completions: CompletionMap;
+  diploma3Program?: Diploma3ProgramRequirements | null;
   onViewDiploma?: (tier: 1 | 2 | 3) => void;
   progressPanel?: React.ReactNode;
 };
@@ -53,13 +55,14 @@ export function PersonalizedHero({
   profile,
   totalHours,
   completions,
+  diploma3Program,
   onViewDiploma,
   progressPanel,
 }: Props) {
   const firstName = getFirstName(profile.full_name, profile.email);
   const state = useMemo(
-    () => computeDashboardState(profile, { completions, totalHours }),
-    [profile, completions, totalHours]
+    () => computeDashboardState(profile, { completions, totalHours, diploma3Program }),
+    [profile, completions, totalHours, diploma3Program]
   );
   const { subtitle, cta, variant } = useMemo(
     () => getDashboardHeroContent(state),

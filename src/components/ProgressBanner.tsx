@@ -1,16 +1,28 @@
 'use client';
 
 import { getProgressBannerState } from '@/lib/progress';
+import type { Diploma3ProgramRequirements } from '@/lib/diploma3-requirements';
 import type { CompletionMap } from '@/lib/verification';
 
 type Props = {
   totalHours: number;
   completions: CompletionMap;
   isAdmin?: boolean;
+  diploma3Program?: Diploma3ProgramRequirements | null;
 };
 
-export function ProgressBanner({ totalHours, completions, isAdmin = false }: Props) {
-  const state = getProgressBannerState(totalHours, completions, isAdmin);
+export function ProgressBanner({
+  totalHours,
+  completions,
+  isAdmin = false,
+  diploma3Program,
+}: Props) {
+  const state = getProgressBannerState(
+    totalHours,
+    completions,
+    isAdmin,
+    diploma3Program
+  );
 
   return (
     <div className="progress-banner no-print">

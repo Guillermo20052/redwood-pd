@@ -4,6 +4,7 @@ import {
   isMandatoryPartsComplete,
 } from './extras-gating';
 import { isDiplomaTierEarned } from './diplomas';
+import type { Diploma3ProgramRequirements } from './diploma3-requirements';
 import type { CompletionMap } from './verification';
 import { sumVerifiedHours } from './verification';
 
@@ -33,6 +34,7 @@ export type DashboardProfileInput = {
 export type DashboardProgressInput = {
   completions: CompletionMap;
   totalHours?: number;
+  diploma3Program?: Diploma3ProgramRequirements | null;
 };
 
 export function computeDashboardState(
@@ -46,7 +48,12 @@ export function computeDashboardState(
 
   const tier1Earned = isDiplomaTierEarned(1, totalHours, completions);
   const tier2Earned = isDiplomaTierEarned(2, totalHours, completions);
-  const tier3Earned = isDiplomaTierEarned(3, totalHours, completions);
+  const tier3Earned = isDiplomaTierEarned(
+    3,
+    totalHours,
+    completions,
+    progress.diploma3Program
+  );
 
   if (tier3Earned) return { kind: 'has_d3' };
 
@@ -175,7 +182,7 @@ export function getDashboardHeroContent(state: DashboardState): DashboardHeroCon
     case 'has_d2':
       return {
         subtitle:
-          '¡Diploma 2 (Plata) en tus manos! El Diploma 3 (Oro) está a la vista — completa el Nivel 3 y 4 tareas Level Up del Nivel 3.',
+          '¡Diploma 2 (Plata) en tus manos! Para el Diploma 3 (Oro): completa el Nivel 3, 4 Level Up del Nivel 3, lee la política de ética, escribe tu reflexión por nivel, y completa la evaluación.',
         cta: { label: 'Continuar Nivel 3 →', href: '/nivel/a' },
         variant: 'default',
       };

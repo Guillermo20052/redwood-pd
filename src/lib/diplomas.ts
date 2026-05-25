@@ -6,6 +6,13 @@ import {
   getDiploma1Progress,
   countCompletedExtras,
 } from './extras-gating';
+import {
+  meetsDiploma3CoreRequirements,
+  meetsDiploma3ProgramRequirements,
+  type Diploma3ProgramRequirements,
+} from './diploma3-requirements';
+
+export type { Diploma3ProgramRequirements };
 
 export type DiplomaTier = 1 | 2 | 3;
 
@@ -55,7 +62,7 @@ export const DIPLOMAS: readonly Diploma[] = [
     tier: 3,
     name: 'Docente IA Transformadora',
     sublabel:
-      'Oro · Diploma 2 + 30h verificadas + 4 Level Up del Nivel 3',
+      'Oro · Diploma 2 + 30h + 4 Level Up del Nivel 3 + ética + reflexiones + evaluación',
     hoursRequired: 30,
     iconPath: '/assets/diplomas/diploma-3.svg',
     palette: {
@@ -76,28 +83,48 @@ export function getDiploma(tier: DiplomaTier): Diploma {
 export function isDiplomaTierEarned(
   tier: DiplomaTier,
   totalHours: number,
-  completions: CompletionMap
+  completions: CompletionMap,
+  diploma3Program?: Diploma3ProgramRequirements | null
 ): boolean {
   const d = getDiploma(tier);
   if (totalHours < d.hoursRequired) return false;
   if (!meetsDiploma1ExtrasRequirement(completions)) return false;
-  if (tier === 3 && !meetsDiploma3ExtrasRequirement(completions)) return false;
+  if (tier === 3) {
+    if (!meetsDiploma3CoreRequirements(totalHours, completions)) return false;
+    if (!meetsDiploma3ProgramRequirements(diploma3Program)) return false;
+    return true;
+  }
   return true;
 }
 
-export function getEarnedDiplomas(totalHours: number, completions: CompletionMap = {}): Diploma[] {
-  return DIPLOMAS.filter((d) => isDiplomaTierEarned(d.tier, totalHours, completions));
+export function getEarnedDiplomas(
+  totalHours: number,
+  completions: CompletionMap = {},
+  diploma3Program?: Diploma3ProgramRequirements | null
+): Diploma[] {
+  return DIPLOMAS.filter((d) =>
+    isDiplomaTierEarned(d.tier, totalHours, completions, diploma3Program)
+  );
 }
 
 export function getNextDiploma(
   totalHours: number,
-  completions: CompletionMap = {}
+  completions: CompletionMap = {},
+  diploma3Program?: Diploma3ProgramRequirements | null
 ): Diploma | null {
-  return DIPLOMAS.find((d) => !isDiplomaTierEarned(d.tier, totalHours, completions)) ?? null;
+  return (
+    DIPLOMAS.find(
+      (d) => !isDiplomaTierEarned(d.tier, totalHours, completions, diploma3Program)
+    ) ?? null
+  );
 }
 
-export function getEarnedTiers(totalHours: number, completions: CompletionMap = {}): DiplomaTier[] {
-  return getEarnedDiplomas(totalHours, completions).map((d) => d.tier);
+export function getEarnedTiers(
+  totalHours: number,
+  completions: CompletionMap = {},
+  diploma3Program?: Diploma3ProgramRequirements | null
+): DiplomaTier[] {
+  return getEarnedDiplomas(totalHours, completions, diploma3Program).map((d) => d.tier);
 }
 
 export {

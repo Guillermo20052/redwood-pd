@@ -1,5 +1,6 @@
 import { getPartsByLevel } from './curriculum-path';
 import { isDiplomaTierEarned, type DiplomaTier } from './diplomas';
+import type { Diploma3ProgramRequirements } from './diploma3-requirements';
 import { isLevelFullyComplete } from './extras-gating';
 import { isPartComplete } from './part-progress';
 import type { CompletionMap } from './verification';
@@ -11,6 +12,7 @@ export type ProgressState = {
   verifiedVideos: number;
   verifiedTasks: number;
   verifiedExtras: number;
+  diploma3Program?: Diploma3ProgramRequirements | null;
 };
 
 export type CelebrationEvent =
@@ -49,13 +51,17 @@ function getAllParts() {
   return LEVELS.flatMap((level) => getPartsByLevel(level));
 }
 
-export function buildProgressState(completions: CompletionMap): ProgressState {
+export function buildProgressState(
+  completions: CompletionMap,
+  diploma3Program?: Diploma3ProgramRequirements | null
+): ProgressState {
   return {
     completions,
     totalHours: sumVerifiedHours(completions),
     verifiedVideos: countVerifiedVideos(completions),
     verifiedTasks: countVerifiedTasks(completions),
     verifiedExtras: countVerifiedExtras(completions),
+    diploma3Program,
   };
 }
 
@@ -92,8 +98,18 @@ export function detectCelebrations(prev: ProgressState, next: ProgressState): Ce
 
   for (const tier of [1, 2, 3] as DiplomaTier[]) {
     if (
-      !isDiplomaTierEarned(tier, prev.totalHours, prev.completions) &&
-      isDiplomaTierEarned(tier, next.totalHours, next.completions)
+      !isDiplomaTierEarned(
+        tier,
+        prev.totalHours,
+        prev.completions,
+        tier === 3 ? prev.diploma3Program : undefined
+      ) &&
+      isDiplomaTierEarned(
+        tier,
+        next.totalHours,
+        next.completions,
+        tier === 3 ? next.diploma3Program : undefined
+      )
     ) {
       events.push({ type: 'diploma_earned', tier });
     }

@@ -115,6 +115,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         totalHours={progress.totalHours}
         completions={progress.completions}
         isAdmin={isAdmin}
+        diploma3Program={progress.diploma3Program}
       />
 
       <nav

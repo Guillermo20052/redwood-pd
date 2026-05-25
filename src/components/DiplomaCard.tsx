@@ -1,14 +1,19 @@
 'use client';
 
+import Link from 'next/link';
 import {
   isDiplomaTierEarned,
   type Diploma,
   DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
 } from '@/lib/diplomas';
+import type { Diploma3ProgramRequirements } from '@/lib/diploma3-requirements';
 import {
   countCompletedExtras,
+  isMandatoryPartsComplete,
   meetsDiploma1ExtrasRequirement,
 } from '@/lib/extras-gating';
+import { getPartsByLevel } from '@/lib/curriculum-path';
+import { isPartComplete } from '@/lib/part-progress';
 import type { CompletionMap } from '@/lib/verification';
 
 const DIPLOMA_BADGES: Record<1 | 2 | 3, string> = {
@@ -23,21 +28,22 @@ const TIER_LABEL: Record<1 | 2 | 3, string> = {
   3: 'Oro',
 };
 
-type ReqItem = { label: string; met: boolean };
+type ReqItem = { label: string; met: boolean; href?: string };
+
+function countCompleteParts(level: 'b' | 'i' | 'a', completions: CompletionMap): number {
+  return getPartsByLevel(level).filter((part) => isPartComplete(part, completions)).length;
+}
 
 function buildRequirements(
   tier: 1 | 2 | 3,
   totalHours: number,
-  completions: CompletionMap
+  completions: CompletionMap,
+  diploma3Program?: Diploma3ProgramRequirements | null
 ): ReqItem[] {
   const extrasL1 = countCompletedExtras('b', completions);
   const extrasL2 = countCompletedExtras('i', completions);
   const extrasL3 = countCompletedExtras('a', completions);
-  const d1Complete =
-    totalHours >= 20 &&
-    meetsDiploma1ExtrasRequirement(completions);
-  const d2Complete =
-    totalHours >= 24 && d1Complete;
+  const d1Complete = totalHours >= 20 && meetsDiploma1ExtrasRequirement(completions);
 
   if (tier === 1) {
     return [
@@ -58,10 +64,7 @@ function buildRequirements(
 
   if (tier === 2) {
     return [
-      {
-        label: 'Cumple todo lo del Diploma 1',
-        met: d1Complete,
-      },
+      { label: 'Cumple todo lo del Diploma 1', met: d1Complete },
       {
         label: `Alcanza 24 horas verificadas en total (${totalHours.toFixed(1)}h)`,
         met: totalHours >= 24,
@@ -69,18 +72,63 @@ function buildRequirements(
     ];
   }
 
+  const program = diploma3Program ?? {
+    eticaRead: false,
+    reflectionL1: false,
+    reflectionL2: false,
+    reflectionL3: false,
+    evaluationComplete: false,
+  };
+
+  const partsA = countCompleteParts('a', completions);
+
   return [
+    { label: 'Nivel 1 completo', met: isMandatoryPartsComplete('b', completions) },
+    { label: 'Nivel 2 completo', met: isMandatoryPartsComplete('i', completions) },
     {
-      label: 'Cumple todo lo del Diploma 2',
-      met: d2Complete,
+      label: `Nivel 3 completo (${partsA}/5 partes)`,
+      met: isMandatoryPartsComplete('a', completions),
     },
     {
-      label: `Alcanza 30 horas verificadas en total (${totalHours.toFixed(1)}h)`,
+      label: `4 tareas Level Up del Nivel 1 (${extrasL1}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL})`,
+      met: extrasL1 >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
+    },
+    {
+      label: `4 tareas Level Up del Nivel 2 (${extrasL2}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL})`,
+      met: extrasL2 >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
+    },
+    {
+      label: `4 tareas Level Up del Nivel 3 (${extrasL3}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL})`,
+      met: extrasL3 >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
+    },
+    {
+      label: `30h verificadas (${totalHours.toFixed(1)}h)`,
       met: totalHours >= 30,
     },
     {
-      label: `Termina al menos 4 tareas Level Up del Nivel 3 (${extrasL3}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL})`,
-      met: extrasL3 >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
+      label: 'Política de ética leída',
+      met: program.eticaRead,
+      href: program.eticaRead ? undefined : '/etica',
+    },
+    {
+      label: 'Reflexión del Nivel 1',
+      met: program.reflectionL1,
+      href: program.reflectionL1 ? undefined : '/reflexion',
+    },
+    {
+      label: 'Reflexión del Nivel 2',
+      met: program.reflectionL2,
+      href: program.reflectionL2 ? undefined : '/reflexion',
+    },
+    {
+      label: 'Reflexión del Nivel 3',
+      met: program.reflectionL3,
+      href: program.reflectionL3 ? undefined : '/reflexion',
+    },
+    {
+      label: 'Evaluación completa',
+      met: program.evaluationComplete,
+      href: program.evaluationComplete ? undefined : '/evaluacion',
     },
   ];
 }
@@ -88,7 +136,8 @@ function buildRequirements(
 function lockedSummary(
   tier: 1 | 2 | 3,
   totalHours: number,
-  completions: CompletionMap
+  completions: CompletionMap,
+  diploma3Program?: Diploma3ProgramRequirements | null
 ): string {
   const hoursRequired = tier === 1 ? 20 : tier === 2 ? 24 : 30;
   const hoursLeft = Math.max(0, hoursRequired - totalHours);
@@ -109,8 +158,16 @@ function lockedSummary(
     }
   }
 
-  if (tier === 3 && extrasL3 < DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL) {
-    parts.push(`${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - extrasL3} Level Up L3`);
+  if (tier === 3) {
+    if (extrasL3 < DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL) {
+      parts.push(`${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - extrasL3} Level Up L3`);
+    }
+    const program = diploma3Program;
+    if (program && !program.eticaRead) parts.push('ética');
+    if (program && (!program.reflectionL1 || !program.reflectionL2 || !program.reflectionL3)) {
+      parts.push('reflexiones');
+    }
+    if (program && !program.evaluationComplete) parts.push('evaluación');
   }
 
   return parts.length ? `Faltan ${parts.join(' + ')}` : 'Casi lo logras';
@@ -120,15 +177,27 @@ type Props = {
   diploma: Diploma;
   totalHours: number;
   completions: CompletionMap;
+  diploma3Program?: Diploma3ProgramRequirements | null;
   onOpen: () => void;
 };
 
-export function DiplomaCard({ diploma, totalHours, completions, onOpen }: Props) {
-  const earned = isDiplomaTierEarned(diploma.tier, totalHours, completions);
+export function DiplomaCard({
+  diploma,
+  totalHours,
+  completions,
+  diploma3Program,
+  onOpen,
+}: Props) {
+  const earned = isDiplomaTierEarned(
+    diploma.tier,
+    totalHours,
+    completions,
+    diploma.tier === 3 ? diploma3Program : undefined
+  );
   const previewClass =
     diploma.tier === 1 ? 'lp1' : diploma.tier === 2 ? 'lp2' : 'lp3';
   const tier = diploma.tier;
-  const requirements = buildRequirements(tier, totalHours, completions);
+  const requirements = buildRequirements(tier, totalHours, completions, diploma3Program);
 
   return (
     <div
@@ -163,11 +232,20 @@ export function DiplomaCard({ diploma, totalHours, completions, onOpen }: Props)
 
         <ul className="logro-checklist" aria-label="Requisitos del diploma">
           {requirements.map((req) => (
-            <li key={req.label} className={req.met ? 'logro-check--met' : 'logro-check--pending'}>
+            <li
+              key={req.label}
+              className={req.met ? 'logro-check--met' : 'logro-check--pending'}
+            >
               <span className="logro-check-icon" aria-hidden>
                 {req.met ? '✓' : '○'}
               </span>
-              {req.label}
+              {!req.met && req.href ? (
+                <Link href={req.href} className="logro-check-link">
+                  {req.label}
+                </Link>
+              ) : (
+                req.label
+              )}
             </li>
           ))}
         </ul>
@@ -187,7 +265,7 @@ export function DiplomaCard({ diploma, totalHours, completions, onOpen }: Props)
             </>
           ) : (
             <span className="logro-locked">
-              🔒 {lockedSummary(tier, totalHours, completions)}
+              🔒 {lockedSummary(tier, totalHours, completions, diploma3Program)}
             </span>
           )}
         </div>

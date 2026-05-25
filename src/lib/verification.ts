@@ -10,10 +10,8 @@ import {
   COLLAB_VERIFIED_HOURS,
   getCollaborativeTaskForLevel,
 } from './collaborative-tasks';
-import {
-  meetsDiploma1ExtrasRequirement,
-  meetsDiploma3ExtrasRequirement,
-} from './extras-gating';
+import { isDiplomaTierEarned } from './diplomas';
+import type { Diploma3ProgramRequirements } from './diploma3-requirements';
 import type { CompletionRow } from './local-db';
 
 export type CompletionMap = Record<string, CompletionRow>;
@@ -384,12 +382,12 @@ export function getCurrentLevelSlug(completions: CompletionMap): string {
 
 export function getDiplomaTier(
   totalHours: number,
-  completions: CompletionMap = {}
+  completions: CompletionMap = {},
+  diploma3Program?: Diploma3ProgramRequirements | null
 ): 0 | 1 | 2 | 3 {
-  const base = meetsDiploma1ExtrasRequirement(completions);
-  if (totalHours >= 30 && base && meetsDiploma3ExtrasRequirement(completions)) return 3;
-  if (totalHours >= 24 && base) return 2;
-  if (totalHours >= 20 && base) return 1;
+  if (isDiplomaTierEarned(3, totalHours, completions, diploma3Program)) return 3;
+  if (isDiplomaTierEarned(2, totalHours, completions)) return 2;
+  if (isDiplomaTierEarned(1, totalHours, completions)) return 1;
   return 0;
 }
 

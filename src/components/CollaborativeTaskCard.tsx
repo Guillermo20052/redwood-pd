@@ -5,6 +5,7 @@ import type { CollaborativeTask } from '@/lib/collaborative-tasks';
 import { isMandatoryPartsComplete } from '@/lib/extras-gating';
 import type { CompletionMap } from '@/lib/verification';
 import { verificationConfig } from '@/lib/curriculum-path';
+import { FILE_NOT_FOUND_ERROR_CODE } from '@/lib/upload-errors';
 import { FileUpload } from './FileUpload';
 import { AdminResetButton } from './AdminResetButton';
 
@@ -33,6 +34,7 @@ export function CollaborativeTaskCard({
   const [evidence, setEvidence] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [retryingVerify, setRetryingVerify] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,14 +44,33 @@ export function CollaborativeTaskCard({
   const contentOk = isFileTask ? fileOk : textOk;
   const canSubmit = !locked && !verified && partnerOk && contentOk && !submitting;
 
-  const uploadFile = async (file: File): Promise<string> => {
+  const uploadFile = async (file: File): Promise<{ key: string; fileUrl: string }> => {
     const form = new FormData();
     form.append('file', file);
     const res = await fetch('/api/upload', { method: 'POST', body: form });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data?.error || 'No se pudo subir el archivo');
-    if (typeof data.fileUrl !== 'string') throw new Error('Respuesta de subida inválida');
-    return data.fileUrl;
+    if (typeof data.key !== 'string' || typeof data.fileUrl !== 'string') {
+      throw new Error('Respuesta de subida inválida');
+    }
+    return { key: data.key, fileUrl: data.fileUrl };
+  };
+
+  const verifyWithOptionalRetry = async (body: Record<string, unknown>, isClientRetry = false) => {
+    const res = await fetch('/api/verify/task', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok && res.status === 400 && body.key && !isClientRetry) {
+      const errData = await res.clone().json().catch(() => ({}));
+      if (errData?.code === FILE_NOT_FOUND_ERROR_CODE) {
+        setRetryingVerify(true);
+        await new Promise((r) => setTimeout(r, 1000));
+        return verifyWithOptionalRetry(body, true);
+      }
+    }
+    return res;
   };
 
   const submit = async () => {
@@ -57,21 +78,22 @@ export function CollaborativeTaskCard({
     setError(null);
     setFeedback(null);
     setSubmitting(true);
+    setRetryingVerify(false);
     try {
+      let storageKey: string | undefined;
       let fileUrl: string | undefined;
       if (isFileTask && selectedFile) {
-        fileUrl = await uploadFile(selectedFile);
+        const uploaded = await uploadFile(selectedFile);
+        storageKey = uploaded.key;
+        fileUrl = uploaded.fileUrl;
       }
-      const res = await fetch('/api/verify/task', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          itemKey: task.id,
-          evidenceText: isFileTask ? evidence.trim() : evidence.trim(),
-          fileUrl,
-          inputType: task.inputType,
-          partner: { user_id: null, name: partnerName.trim() },
-        }),
+      const res = await verifyWithOptionalRetry({
+        itemKey: task.id,
+        evidenceText: isFileTask ? evidence.trim() : evidence.trim(),
+        key: storageKey,
+        fileUrl,
+        inputType: task.inputType,
+        partner: { user_id: null, name: partnerName.trim() },
       });
       const data = await res.json();
       if (!res.ok) {
@@ -91,6 +113,7 @@ export function CollaborativeTaskCard({
       setError((e as Error).message);
     } finally {
       setSubmitting(false);
+      setRetryingVerify(false);
     }
   };
 
@@ -226,7 +249,11 @@ export function CollaborativeTaskCard({
             disabled={!canSubmit}
             onClick={() => void submit()}
           >
-            {submitting ? 'Evaluando con IA…' : 'Enviar tarea colaborativa'}
+            {submitting
+              ? retryingVerify
+                ? 'Reintentando…'
+                : 'Evaluando con IA…'
+              : 'Enviar tarea colaborativa'}
           </button>
         </>
       )}

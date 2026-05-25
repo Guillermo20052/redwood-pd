@@ -25,13 +25,18 @@ import { getExtraTask, isExtraItemKey } from '@/lib/extra-tasks';
 import { isExtraTaskAvailable, isMandatoryPartsComplete } from '@/lib/extras-gating';
 import { gradeTaskSubmission } from '@/lib/ai-grader';
 import {
+  FILE_NOT_FOUND_ERROR_CODE,
+  FILE_NOT_FOUND_USER_MESSAGE,
+} from '@/lib/upload-errors';
+import {
   fileUrlToPath,
+  fileUrlToStorageKey,
   isSupabaseStorageMode,
-  parseUploadUrl,
+  storageKeyBelongsToUser,
+  storageKeyToFileUrl,
+  STORAGE_BUCKET,
 } from '@/lib/upload-storage';
-import { createAdminClient } from '@/lib/supabase/admin';
-import { SUPABASE_BUCKET } from '@/lib/upload-storage';
-import fs from 'fs';
+import { storageObjectExistsWithRetry } from '@/lib/upload-storage-server';
 
 type PartnerInput = {
   user_id?: string | null;
@@ -42,25 +47,74 @@ function isTaskInputType(v: unknown): v is TaskInputType {
   return v === 'text' || v === 'screenshot' || v === 'document';
 }
 
-function fileUrlBelongsToUser(fileUrl: string, userId: string): boolean {
-  const safeUser = userId.replace(/[^a-zA-Z0-9._-]/g, '_');
-  return fileUrl.startsWith(`/api/uploads/${safeUser}/`);
+function resolveStorageKey(body: {
+  key?: string;
+  fileUrl?: string;
+}): string | null {
+  if (typeof body.key === 'string' && body.key.length > 0) {
+    return body.key;
+  }
+  if (typeof body.fileUrl === 'string' && body.fileUrl.length > 0) {
+    return fileUrlToStorageKey(body.fileUrl);
+  }
+  return null;
 }
 
-async function uploadedFileExists(fileUrl: string): Promise<boolean> {
-  if (isSupabaseStorageMode()) {
-    const parsed = parseUploadUrl(fileUrl);
-    if (!parsed) return false;
-    const admin = createAdminClient();
-    if (!admin) return false;
-    const { data, error } = await admin.storage
-      .from(SUPABASE_BUCKET)
-      .list(parsed.userId, { search: parsed.filename, limit: 1 });
-    if (error) return false;
-    return (data || []).some((obj) => obj.name === parsed.filename);
+type FileAccessResult =
+  | { ok: true; key: string; fileUrl: string }
+  | { ok: false; response: NextResponse };
+
+async function assertUploadedFileAccessible(
+  body: { key?: string; fileUrl?: string },
+  userId: string
+): Promise<FileAccessResult> {
+  const key = resolveStorageKey(body);
+  if (!key) {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { error: 'Debes subir un archivo para esta tarea.' },
+        { status: 400 }
+      ),
+    };
   }
-  const localPath = fileUrlToPath(fileUrl);
-  return !!(localPath && fs.existsSync(localPath));
+
+  if (!storageKeyBelongsToUser(key, userId)) {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { error: 'Archivo no válido para tu cuenta.' },
+        { status: 400 }
+      ),
+    };
+  }
+
+  console.log('Verify start', { userId, key });
+
+  const fetchResult = await storageObjectExistsWithRetry(key, { userId });
+  if (!fetchResult.exists) {
+    console.error('Verify failed - file not found', {
+      key,
+      bucket: STORAGE_BUCKET,
+      userId,
+      attempts: fetchResult.attempts,
+      lastError: fetchResult.lastError,
+      attempted_paths: [key],
+    });
+    console.error(`Archivo no encontrado en almacenamiento (clave: ${key})`);
+    return {
+      ok: false,
+      response: NextResponse.json(
+        {
+          error: FILE_NOT_FOUND_USER_MESSAGE,
+          code: FILE_NOT_FOUND_ERROR_CODE,
+        },
+        { status: 400 }
+      ),
+    };
+  }
+
+  return { ok: true, key, fileUrl: storageKeyToFileUrl(key) };
 }
 
 export async function POST(request: Request) {
@@ -70,6 +124,7 @@ export async function POST(request: Request) {
   let body: {
     itemKey?: string;
     evidenceText?: string;
+    key?: string;
     fileUrl?: string;
     inputType?: string;
     partner?: PartnerInput | null;
@@ -94,6 +149,7 @@ export async function POST(request: Request) {
   }
 
   const { itemKey, evidenceText, fileUrl, inputType: bodyInputType, partner } = body;
+  let resolvedFileUrl = typeof fileUrl === 'string' ? fileUrl : undefined;
   if (!itemKey || typeof itemKey !== 'string') {
     return NextResponse.json({ error: 'itemKey es requerido' }, { status: 400 });
   }
@@ -146,24 +202,14 @@ export async function POST(request: Request) {
         );
       }
     } else {
-      if (!fileUrl || typeof fileUrl !== 'string') {
-        return NextResponse.json({ error: 'Debes subir un archivo para esta tarea.' }, { status: 400 });
-      }
-      if (!fileUrlBelongsToUser(fileUrl, session.userId)) {
-        return NextResponse.json({ error: 'Archivo no válido para tu cuenta.' }, { status: 400 });
-      }
-      const existsCheck = await uploadedFileExists(fileUrl);
-      if (!existsCheck) {
-        return NextResponse.json(
-          { error: 'No se encontró el archivo subido. Vuelve a subirlo.' },
-          { status: 400 }
-        );
-      }
+      const fileAccess = await assertUploadedFileAccessible(body, session.userId);
+      if (!fileAccess.ok) return fileAccess.response;
+      resolvedFileUrl = fileAccess.fileUrl;
     }
 
     const filePath =
-      inputType !== 'text' && fileUrl && !isSupabaseStorageMode()
-        ? fileUrlToPath(fileUrl) ?? undefined
+      inputType !== 'text' && resolvedFileUrl && !isSupabaseStorageMode()
+        ? fileUrlToPath(resolvedFileUrl) ?? undefined
         : undefined;
 
     let grade;
@@ -172,7 +218,7 @@ export async function POST(request: Request) {
         inputType,
         taskPrompt: collab.description,
         evidenceText: trimmed,
-        fileUrl: fileUrl ?? undefined,
+        fileUrl: resolvedFileUrl ?? undefined,
         filePath,
         partTitle: collab.title,
         level: collab.level,
@@ -204,7 +250,7 @@ export async function POST(request: Request) {
         trimmed,
         { passed: true, feedback: grade.feedback },
         partnerPayload,
-        { inputType, fileUrl: fileUrl ?? null }
+        { inputType, fileUrl: resolvedFileUrl ?? null }
       );
       await saveCompletions(session.userId, updated);
 
@@ -262,24 +308,14 @@ export async function POST(request: Request) {
         );
       }
     } else {
-      if (!fileUrl || typeof fileUrl !== 'string') {
-        return NextResponse.json({ error: 'Debes subir un archivo para esta tarea.' }, { status: 400 });
-      }
-      if (!fileUrlBelongsToUser(fileUrl, session.userId)) {
-        return NextResponse.json({ error: 'Archivo no válido para tu cuenta.' }, { status: 400 });
-      }
-      const existsCheck = await uploadedFileExists(fileUrl);
-      if (!existsCheck) {
-        return NextResponse.json(
-          { error: 'No se encontró el archivo subido. Vuelve a subirlo.' },
-          { status: 400 }
-        );
-      }
+      const fileAccess = await assertUploadedFileAccessible(body, session.userId);
+      if (!fileAccess.ok) return fileAccess.response;
+      resolvedFileUrl = fileAccess.fileUrl;
     }
 
     const filePath =
-      inputType !== 'text' && fileUrl && !isSupabaseStorageMode()
-        ? fileUrlToPath(fileUrl) ?? undefined
+      inputType !== 'text' && resolvedFileUrl && !isSupabaseStorageMode()
+        ? fileUrlToPath(resolvedFileUrl) ?? undefined
         : undefined;
 
     let grade;
@@ -289,7 +325,7 @@ export async function POST(request: Request) {
         taskPrompt: extra.description,
         taskRubric: extra.rubric,
         evidenceText: trimmed,
-        fileUrl: fileUrl ?? undefined,
+        fileUrl: resolvedFileUrl ?? undefined,
         filePath,
         partTitle: extra.title,
         level: extra.level,
@@ -317,7 +353,7 @@ export async function POST(request: Request) {
         itemKey,
         trimmed,
         { passed: true, feedback: grade.feedback },
-        { inputType, fileUrl: fileUrl ?? null }
+        { inputType, fileUrl: resolvedFileUrl ?? null }
       );
       await saveCompletions(session.userId, updated);
       return NextResponse.json({
@@ -362,19 +398,9 @@ export async function POST(request: Request) {
       );
     }
   } else {
-    if (!fileUrl || typeof fileUrl !== 'string') {
-      return NextResponse.json({ error: 'Debes subir un archivo para esta tarea.' }, { status: 400 });
-    }
-    if (!fileUrlBelongsToUser(fileUrl, session.userId)) {
-      return NextResponse.json({ error: 'Archivo no válido para tu cuenta.' }, { status: 400 });
-    }
-    const existsCheck = await uploadedFileExists(fileUrl);
-    if (!existsCheck) {
-      return NextResponse.json(
-        { error: 'No se encontró el archivo subido. Vuelve a subirlo.' },
-        { status: 400 }
-      );
-    }
+    const fileAccess = await assertUploadedFileAccessible(body, session.userId);
+    if (!fileAccess.ok) return fileAccess.response;
+    resolvedFileUrl = fileAccess.fileUrl;
   }
 
   if (!item.taskRubric && inputType === 'text') {
@@ -398,8 +424,8 @@ export async function POST(request: Request) {
   }
 
   const filePath =
-    inputType !== 'text' && fileUrl && !isSupabaseStorageMode()
-      ? fileUrlToPath(fileUrl) ?? undefined
+    inputType !== 'text' && resolvedFileUrl && !isSupabaseStorageMode()
+      ? fileUrlToPath(resolvedFileUrl) ?? undefined
       : undefined;
 
   const rubricFields = getTaskRubricFields(item.taskRubric);
@@ -416,7 +442,7 @@ export async function POST(request: Request) {
       taskPrompt: item.taskPrompt ?? item.label,
       taskRubric: taskRubricForGrader,
       evidenceText: trimmed,
-      fileUrl: fileUrl ?? undefined,
+      fileUrl: resolvedFileUrl ?? undefined,
       filePath,
       partTitle: item.partTitle ?? item.label,
       level: item.level,
@@ -446,7 +472,7 @@ export async function POST(request: Request) {
       trimmed,
       { passed: true, feedback: grade.feedback },
       collaborative ? { user_id: partnerUserId, name: partnerName } : null,
-      { inputType, fileUrl: fileUrl ?? null }
+      { inputType, fileUrl: resolvedFileUrl ?? null }
     );
     await saveCompletions(session.userId, updated);
     return NextResponse.json({

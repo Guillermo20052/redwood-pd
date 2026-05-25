@@ -58,6 +58,7 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
   const [text, setText] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [retryingVerify, setRetryingVerify] = useState(false);
   const [adminSkipping, setAdminSkipping] = useState(false);
   const [lastResult, setLastResult] = useState<GradeResult | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -118,7 +119,7 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
     };
   }, [collaborative]);
 
-  const uploadFile = async (file: File): Promise<string> => {
+  const uploadFile = async (file: File): Promise<{ key: string; fileUrl: string }> => {
     const form = new FormData();
     form.append('file', file);
     const res = await fetch('/api/upload', { method: 'POST', body: form });
@@ -126,30 +127,36 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
     if (!res.ok) {
       throw new Error(data?.error || 'No se pudo subir el archivo');
     }
-    if (typeof data.fileUrl !== 'string') {
+    if (typeof data.key !== 'string' || typeof data.fileUrl !== 'string') {
       throw new Error('Respuesta de subida inválida');
     }
-    return data.fileUrl;
+    return { key: data.key, fileUrl: data.fileUrl };
   };
 
   const submit = async () => {
     if (submitting || !meets) return;
     setSubmitting(true);
+    setRetryingVerify(false);
     setErrorMessage(null);
     try {
+      let storageKey: string | undefined;
       let fileUrl: string | undefined;
       if (isFileTask && selectedFile) {
-        fileUrl = await uploadFile(selectedFile);
+        const uploaded = await uploadFile(selectedFile);
+        storageKey = uploaded.key;
+        fileUrl = uploaded.fileUrl;
       }
 
       const data = await verifyTask(
         item.itemKey,
         {
           evidenceText: isFileTask ? '' : text,
+          storageKey,
           fileUrl,
           inputType,
         },
-        collaborative && partner ? partner : null
+        collaborative && partner ? partner : null,
+        { onRetrying: () => setRetryingVerify(true) }
       );
 
       const passed = data?.passed === true || data?.ok === true;
@@ -166,6 +173,7 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
       setErrorMessage((e as Error).message || 'No se pudo enviar la tarea.');
     } finally {
       setSubmitting(false);
+      setRetryingVerify(false);
     }
   };
 
@@ -266,9 +274,11 @@ export function PartStageTask({ item, collaborative, onVerified }: Props) {
         disabled={!meets || submitting || passed}
       >
         {submitting
-          ? isFileTask
-            ? 'Subiendo y evaluando…'
-            : 'Evaluando con IA…'
+          ? retryingVerify
+            ? 'Reintentando…'
+            : isFileTask
+              ? 'Subiendo y evaluando…'
+              : 'Evaluando con IA…'
           : passed
             ? 'Aprobada'
             : 'Enviar para evaluación'}

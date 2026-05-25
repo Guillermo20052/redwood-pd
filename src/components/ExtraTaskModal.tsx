@@ -27,6 +27,7 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
   const [text, setText] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [retryingVerify, setRetryingVerify] = useState(false);
   const [showRubric, setShowRubric] = useState(false);
   const [lastResult, setLastResult] = useState<GradeResult | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -54,30 +55,42 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
   const acceptMime =
     inputType === 'document' ? 'application/pdf' : 'image/png,image/jpeg,image/jpg';
 
-  const uploadFile = async (file: File): Promise<string> => {
+  const uploadFile = async (file: File): Promise<{ key: string; fileUrl: string }> => {
     const form = new FormData();
     form.append('file', file);
     const res = await fetch('/api/upload', { method: 'POST', body: form });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data?.error || 'No se pudo subir el archivo');
-    if (typeof data.fileUrl !== 'string') throw new Error('Respuesta de subida inválida');
-    return data.fileUrl;
+    if (typeof data.key !== 'string' || typeof data.fileUrl !== 'string') {
+      throw new Error('Respuesta de subida inválida');
+    }
+    return { key: data.key, fileUrl: data.fileUrl };
   };
 
   const submit = async () => {
     if (submitting || !meets || alreadyVerified) return;
     setSubmitting(true);
+    setRetryingVerify(false);
     setErrorMessage(null);
     try {
+      let storageKey: string | undefined;
       let fileUrl: string | undefined;
       if (isFileTask && selectedFile) {
-        fileUrl = await uploadFile(selectedFile);
+        const uploaded = await uploadFile(selectedFile);
+        storageKey = uploaded.key;
+        fileUrl = uploaded.fileUrl;
       }
-      const data = await verifyTask(task.id, {
-        evidenceText: isFileTask ? '' : text,
-        fileUrl,
-        inputType,
-      });
+      const data = await verifyTask(
+        task.id,
+        {
+          evidenceText: isFileTask ? '' : text,
+          storageKey,
+          fileUrl,
+          inputType,
+        },
+        null,
+        { onRetrying: () => setRetryingVerify(true) }
+      );
       const passed = data?.passed === true || data?.ok === true;
       const feedback = typeof data?.feedback === 'string' ? data.feedback : '';
       if (feedback || data?.passed != null || data?.ok != null) {
@@ -90,6 +103,7 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
       setErrorMessage((e as Error).message || 'No se pudo enviar la tarea.');
     } finally {
       setSubmitting(false);
+      setRetryingVerify(false);
     }
   };
 
@@ -196,9 +210,11 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
               disabled={!meets || submitting || passed}
             >
               {submitting
-                ? isFileTask
-                  ? 'Subiendo y evaluando…'
-                  : 'Evaluando con IA…'
+                ? retryingVerify
+                  ? 'Reintentando…'
+                  : isFileTask
+                    ? 'Subiendo y evaluando…'
+                    : 'Evaluando con IA…'
                 : passed
                   ? 'Completada'
                   : 'Enviar para evaluación'}
@@ -258,6 +274,14 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
               style={{ background: 'var(--gold-light)', border: '1px solid var(--gold)' }}
             >
               <p className="text-sm font-semibold">{errorMessage}</p>
+              <button
+                type="button"
+                className="btn-outline mt-2"
+                onClick={submit}
+                disabled={submitting || !meets}
+              >
+                Reintentar
+              </button>
             </div>
           )}
 

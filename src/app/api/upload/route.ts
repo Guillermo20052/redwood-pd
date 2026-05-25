@@ -7,11 +7,12 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import {
   ALLOWED_MIME_TYPES,
   MAX_UPLOAD_BYTES,
-  SUPABASE_BUCKET,
-  buildFileUrl,
-  buildStoredFilename,
-  getUploadDir,
+  STORAGE_BUCKET,
+  buildStorageKey,
   isSupabaseStorageMode,
+  storageKeyFilename,
+  storageKeyToFileUrl,
+  getUploadDir,
 } from '@/lib/upload-storage';
 
 export async function POST(request: Request) {
@@ -45,12 +46,20 @@ export async function POST(request: Request) {
   }
 
   const userId = session.userId;
-  const storedName = buildStoredFilename(file.name);
+  const key = buildStorageKey(userId, file.name);
+  const storedName = storageKeyFilename(key);
+
+  console.log('Upload start', {
+    userId,
+    filename: file.name,
+    size: file.size,
+    key,
+  });
 
   // Supabase Storage path is preferred when env vars are present. We use the
   // service-role client to upload so we don't have to fight RLS during the
   // server-to-storage hop — the route already gated by getSessionUserId() and
-  // we always namespace the path under `<userId>/`, so the RLS policy on
+  // we always namespace the path under `<safeUserId>/`, so the RLS policy on
   // storage.objects still protects reads downstream.
   if (!isLocalMode() && isSupabaseStorageMode()) {
     const admin = createAdminClient();
@@ -61,37 +70,45 @@ export async function POST(request: Request) {
       );
     }
     const buffer = Buffer.from(await file.arrayBuffer());
-    const objectPath = `${userId}/${storedName}`;
     const { error } = await admin.storage
-      .from(SUPABASE_BUCKET)
-      .upload(objectPath, buffer, {
+      .from(STORAGE_BUCKET)
+      .upload(key, buffer, {
         contentType: mimeType || 'application/octet-stream',
         upsert: false,
       });
     if (error) {
-      // The most common cause is the bucket not existing yet.
       const msg = error.message?.toLowerCase().includes('not found')
-        ? `No se encontró el bucket "${SUPABASE_BUCKET}" en Storage. Ejecuta scripts/setup-supabase.mjs.`
+        ? `No se encontró el bucket "${STORAGE_BUCKET}" en Storage. Ejecuta scripts/setup-supabase.mjs.`
         : `No se pudo subir el archivo: ${error.message}`;
+      console.error('Upload failed', { userId, key, bucket: STORAGE_BUCKET, error: error.message });
       return NextResponse.json({ error: msg }, { status: 500 });
     }
+
+    console.log('Upload complete', { userId, key, bucket: STORAGE_BUCKET });
+
     return NextResponse.json({
-      fileUrl: buildFileUrl(userId, storedName),
+      ok: true,
+      key,
+      fileUrl: storageKeyToFileUrl(key),
       fileName: file.name,
       fileSize: file.size,
       mimeType,
     });
   }
 
-  // Local mode (no Supabase) — write to .data/uploads/<userId>/
+  // Local mode (no Supabase) — write to .data/uploads/<safeUserId>/
   const dir = getUploadDir(userId);
   fs.mkdirSync(dir, { recursive: true });
   const dest = path.join(dir, storedName);
   const buffer = Buffer.from(await file.arrayBuffer());
   fs.writeFileSync(dest, buffer);
 
+  console.log('Upload complete', { userId, key, bucket: 'local', path: dest });
+
   return NextResponse.json({
-    fileUrl: buildFileUrl(userId, storedName),
+    ok: true,
+    key,
+    fileUrl: storageKeyToFileUrl(key),
     fileName: file.name,
     fileSize: file.size,
     mimeType,

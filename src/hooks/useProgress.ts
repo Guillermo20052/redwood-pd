@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useToast } from '@/components/Toast';
 import type { CompletionMap } from '@/lib/verification';
+import { FILE_NOT_FOUND_ERROR_CODE } from '@/lib/upload-errors';
 import { sumVerifiedHours, getDiplomaTier, progressPercent } from '@/lib/progress';
 import { fetchDiplomaAwardDates, type DiplomaAwardDates } from '@/lib/diploma-dates';
 import { getEarnedTiers, type DiplomaTier } from '@/lib/diplomas';
@@ -143,10 +144,12 @@ export function useProgress() {
       itemKey: string,
       payload: {
         evidenceText?: string;
+        storageKey?: string;
         fileUrl?: string;
         inputType?: 'text' | 'screenshot' | 'document';
       },
-      partner?: { user_id: string | null; name: string } | null
+      partner?: { user_id: string | null; name: string } | null,
+      options?: { isClientRetry?: boolean; onRetrying?: () => void }
     ) => {
       const res = await fetch('/api/verify/task', {
         method: 'POST',
@@ -154,11 +157,30 @@ export function useProgress() {
         body: JSON.stringify({
           itemKey,
           evidenceText: payload.evidenceText ?? '',
+          key: payload.storageKey,
           fileUrl: payload.fileUrl,
           inputType: payload.inputType ?? 'text',
           ...(partner ? { partner } : {}),
         }),
       });
+
+      if (
+        !res.ok &&
+        res.status === 400 &&
+        payload.storageKey &&
+        !options?.isClientRetry
+      ) {
+        const errData = await res.clone().json().catch(() => ({}));
+        if (errData?.code === FILE_NOT_FOUND_ERROR_CODE) {
+          options?.onRetrying?.();
+          await new Promise((r) => setTimeout(r, 1000));
+          return verifyTask(itemKey, payload, partner, {
+            isClientRetry: true,
+            onRetrying: options?.onRetrying,
+          });
+        }
+      }
+
       return applyVerifyResponse(res);
     },
     [applyVerifyResponse]

@@ -4,9 +4,10 @@ import path from 'path';
 import { getSessionUserId } from '@/lib/completions-service';
 import { createAdminClient } from '@/lib/supabase/admin';
 import {
-  SUPABASE_BUCKET,
+  STORAGE_BUCKET,
   UPLOAD_ROOT,
   isSupabaseStorageMode,
+  safeUserId,
 } from '@/lib/upload-storage';
 import { isLocalMode } from '@/lib/local-db';
 
@@ -41,7 +42,7 @@ export async function GET(_request: Request, context: RouteContext) {
     }
     // Owner-only — admins fetching files for moderation will be handled
     // separately if/when needed. Cheap and safe to gate at the route level.
-    if (session.userId !== userId) {
+    if (safeUserId(session.userId) !== userId) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
     }
 
@@ -54,7 +55,7 @@ export async function GET(_request: Request, context: RouteContext) {
     }
     const objectPath = `${userId}/${filename}`;
     const { data, error } = await admin.storage
-      .from(SUPABASE_BUCKET)
+      .from(STORAGE_BUCKET)
       .createSignedUrl(objectPath, SIGNED_URL_TTL_SECONDS);
     if (error || !data?.signedUrl) {
       return NextResponse.json(
@@ -68,7 +69,7 @@ export async function GET(_request: Request, context: RouteContext) {
   }
 
   // ── Local mode ───────────────────────────────────────────────────────────
-  const safeUser = userId.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const safeUser = safeUserId(userId);
   const dir = path.join(UPLOAD_ROOT, safeUser);
   const full = path.join(dir, filename);
   const resolved = path.resolve(full);

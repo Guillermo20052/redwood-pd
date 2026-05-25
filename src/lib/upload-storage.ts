@@ -13,26 +13,76 @@ export const ALLOWED_MIME_TYPES = new Set([
 ]);
 
 /** Name of the Supabase Storage bucket where teacher submissions live. */
-export const SUPABASE_BUCKET = 'uploads';
+export const STORAGE_BUCKET = 'uploads';
 
-export function sanitizeFilename(name: string): string {
-  const base = path.basename(name).replace(/[^a-zA-Z0-9._-]/g, '_');
-  return base.slice(0, 120) || 'archivo';
+/** @deprecated Use STORAGE_BUCKET */
+export const SUPABASE_BUCKET = STORAGE_BUCKET;
+
+const ALLOWED_EXTENSIONS = new Set(['png', 'jpg', 'jpeg', 'pdf']);
+
+export function safeUserId(userId: string): string {
+  return userId.replace(/[^a-zA-Z0-9._-]/g, '_');
+}
+
+function randomString(length: number): string {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  let out = '';
+  for (let i = 0; i < length; i++) {
+    out += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return out;
+}
+
+export function extensionFromOriginalName(originalName: string): string {
+  const ext = path.extname(originalName).toLowerCase().replace(/^\./, '');
+  if (ALLOWED_EXTENSIONS.has(ext)) return ext;
+  return 'bin';
+}
+
+/**
+ * Canonical storage object key: `<safeUserId>/<timestamp>-<random8>.<ext>`.
+ * Never embeds the original filename in the path.
+ */
+export function buildStorageKey(userId: string, originalName: string): string {
+  const safeUser = safeUserId(userId);
+  const ext = extensionFromOriginalName(originalName);
+  return `${safeUser}/${Date.now()}-${randomString(8)}.${ext}`;
+}
+
+export function storageKeyToFileUrl(key: string): string {
+  return `/api/uploads/${key}`;
+}
+
+export function fileUrlToStorageKey(fileUrl: string): string | null {
+  if (!fileUrl.startsWith('/api/uploads/')) return null;
+  const key = fileUrl.slice('/api/uploads/'.length);
+  if (!key || key.includes('..')) return null;
+  return key;
+}
+
+export function storageKeyBelongsToUser(key: string, userId: string): boolean {
+  const safeUser = safeUserId(userId);
+  return key === safeUser || key.startsWith(`${safeUser}/`);
+}
+
+export function storageKeyFilename(key: string): string {
+  const slash = key.indexOf('/');
+  return slash >= 0 ? key.slice(slash + 1) : key;
 }
 
 export function getUploadDir(userId: string): string {
-  const safeUser = userId.replace(/[^a-zA-Z0-9._-]/g, '_');
-  return path.join(UPLOAD_ROOT, safeUser);
+  return path.join(UPLOAD_ROOT, safeUserId(userId));
 }
 
+/** @deprecated Use buildStorageKey */
 export function buildStoredFilename(originalName: string): string {
-  const sanitized = sanitizeFilename(originalName);
-  return `${Date.now()}-${sanitized}`;
+  const ext = extensionFromOriginalName(originalName);
+  return `${Date.now()}-${randomString(8)}.${ext}`;
 }
 
+/** @deprecated Use storageKeyToFileUrl */
 export function buildFileUrl(userId: string, storedName: string): string {
-  const safeUser = userId.replace(/[^a-zA-Z0-9._-]/g, '_');
-  return `/api/uploads/${safeUser}/${storedName}`;
+  return storageKeyToFileUrl(`${safeUserId(userId)}/${storedName}`);
 }
 
 /**
@@ -43,22 +93,16 @@ export function buildFileUrl(userId: string, storedName: string): string {
 export function parseUploadUrl(
   fileUrl: string
 ): { userId: string; filename: string } | null {
-  const match = fileUrl.match(/^\/api\/uploads\/([^/]+)\/([^/]+(?:\/[^/]+)*)$/);
-  if (!match) return null;
-  const [, userId, filename] = match;
-  if (filename.includes('..')) return null;
-  return { userId, filename };
+  const key = fileUrlToStorageKey(fileUrl);
+  if (!key) return null;
+  const slash = key.indexOf('/');
+  if (slash <= 0) return null;
+  return { userId: key.slice(0, slash), filename: key.slice(slash + 1) };
 }
 
-/**
- * Storage object path inside the "uploads" bucket. Convention is
- * `<userId>/<filename>` so RLS policies on storage.objects can compare the
- * first folder segment with auth.uid().
- */
+/** Storage object path inside the bucket — same as the canonical key. */
 export function fileUrlToStoragePath(fileUrl: string): string | null {
-  const parsed = parseUploadUrl(fileUrl);
-  if (!parsed) return null;
-  return `${parsed.userId}/${parsed.filename}`;
+  return fileUrlToStorageKey(fileUrl);
 }
 
 /**
@@ -67,6 +111,8 @@ export function fileUrlToStoragePath(fileUrl: string): string | null {
  * mode — in Supabase mode the file lives in Storage, not on disk.
  */
 export function fileUrlToPath(fileUrl: string): string | null {
+  const key = fileUrlToStorageKey(fileUrl);
+  if (!key) return null;
   const parsed = parseUploadUrl(fileUrl);
   if (!parsed) return null;
   const dir = getUploadDir(parsed.userId);
@@ -99,3 +145,13 @@ export function isSupabaseStorageMode(): boolean {
     !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   );
 }
+
+export function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export type StorageFetchResult = {
+  exists: boolean;
+  attempts: number;
+  lastError?: string;
+};

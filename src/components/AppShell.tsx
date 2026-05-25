@@ -9,6 +9,7 @@ import { HelpChatbot } from './HelpChatbot';
 import { useProgressContext } from './Providers';
 import { createClient } from '@/lib/supabase/client';
 import { isWelcomeComplete } from '@/lib/welcome-gate';
+import { getFirstName } from '@/lib/get-first-name';
 
 const IS_DEV = process.env.NODE_ENV === 'development';
 
@@ -99,18 +100,22 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <span className="header-badge text-[10px]">Modo local</span>
             )}
             {IS_DEV && <DevResetMenu />}
-            <button
-              type="button"
-              onClick={logout}
-              className="header-badge border-0 cursor-pointer bg-white/20 hover:bg-white/30"
-            >
-              Salir
-            </button>
+            <UserMenu
+              initial={getFirstName(progress.profile.full_name, progress.profile.email)
+                .charAt(0)
+                .toUpperCase()}
+              onLogout={() => void logout()}
+            />
           </div>
         </div>
       </header>
 
-      <ProgressBanner {...progress} />
+      <ProgressBanner
+        totalHours={progress.totalHours}
+        percent={progress.percent}
+        diplomaTier={progress.diplomaTier}
+        completions={progress.completions}
+      />
 
       <nav
         className={`level-nav no-print ${mobileNavOpen ? 'mobile-open' : ''}`}
@@ -180,14 +185,68 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <main
         className={
           isLevelPage
-            ? 'flex-1'
-            : 'flex-1 px-4 py-8 md:px-10 md:py-12 lg:px-14 max-w-6xl mx-auto w-full'
+            ? 'app-main app-main--level flex-1'
+            : 'app-main flex-1 px-4 py-8 md:px-10 md:py-12 lg:px-14 max-w-6xl mx-auto w-full'
         }
       >
         {children}
       </main>
 
       <HelpChatbot />
+    </div>
+  );
+}
+
+function UserMenu({ initial, onLogout }: { initial: string; onLogout: () => void }) {
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onClick = (e: MouseEvent) => {
+      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    window.addEventListener('mousedown', onClick);
+    return () => window.removeEventListener('mousedown', onClick);
+  }, [open]);
+
+  return (
+    <div ref={wrapRef} className="user-menu-wrap">
+      <button
+        type="button"
+        className="user-menu-trigger"
+        aria-expanded={open}
+        aria-haspopup="menu"
+        aria-label="Menú de usuario"
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span className="user-menu-avatar" aria-hidden>
+          {initial || 'D'}
+        </span>
+      </button>
+      {open && (
+        <div className="user-menu-dropdown" role="menu">
+          <Link
+            href="/mi-perfil"
+            className="user-menu-item no-underline"
+            role="menuitem"
+            onClick={() => setOpen(false)}
+          >
+            Mi Perfil
+          </Link>
+          <button
+            type="button"
+            className="user-menu-item user-menu-item--logout"
+            role="menuitem"
+            onClick={() => {
+              setOpen(false);
+              onLogout();
+            }}
+          >
+            Salir
+          </button>
+        </div>
+      )}
     </div>
   );
 }

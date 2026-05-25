@@ -123,7 +123,9 @@ export function CommunityChat({
             <p className="comunidad-chat-empty-copy">
               Sé la primera en escribir en el canal escolar y abre la conversación para tu cohorte.
             </p>
-            <p className="comunidad-chat-empty-hint">Escribe el primer mensaje 👋</p>
+            <p className="comunidad-chat-empty-hint comunidad-chat-empty-cta">
+              Escribe el primer mensaje 👋
+            </p>
           </div>
         )}
         {messages.map((m) => {

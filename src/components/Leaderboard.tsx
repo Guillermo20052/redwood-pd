@@ -46,12 +46,12 @@ export function Leaderboard({ teachers, currentUserId }: Props) {
       <table className="lb-table comunidad-lb-table">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Docente</th>
-            <th>Nivel actual</th>
-            <th className="text-right">Horas</th>
-            <th>Progreso</th>
-            <th>Última actividad</th>
+            <th className="comunidad-lb-th comunidad-lb-th--rank">#</th>
+            <th className="comunidad-lb-th comunidad-lb-th--docente">Docente</th>
+            <th className="comunidad-lb-th comunidad-lb-th--nivel">Nivel actual</th>
+            <th className="comunidad-lb-th comunidad-lb-th--horas text-right">Horas</th>
+            <th className="comunidad-lb-th comunidad-lb-th--progreso">Progreso</th>
+            <th className="comunidad-lb-th comunidad-lb-th--actividad">Última actividad</th>
           </tr>
         </thead>
         <tbody>

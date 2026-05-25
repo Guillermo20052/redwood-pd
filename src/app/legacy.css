@@ -57,9 +57,9 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--gray-900);
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle;}
 
 /* ── LAYOUT ──────────────────────────────────────────────────── */
-.main-layout{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 170px);}
-.sidebar{background:#fff;border-right:1px solid var(--gray-200);overflow-y:auto;max-height:calc(100vh - 170px);}
-.content-area{padding:32px 36px;overflow-y:auto;max-height:calc(100vh - 170px);}
+.main-layout{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 140px);}
+.sidebar{background:#fff;border-right:1px solid var(--gray-200);overflow-y:auto;max-height:calc(100vh - 140px);}
+.content-area{padding:32px 36px;overflow-y:auto;max-height:calc(100vh - 140px);}
 
 /* ── SIDEBAR ─────────────────────────────────────────────────── */
 .sb-section-title{padding:14px 18px 8px;font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--gray-500);}
@@ -80,7 +80,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--gray-900);
 .lh-a{background:linear-gradient(135deg,var(--red-dark),var(--red-light));}
 .lh-e{background:linear-gradient(135deg,#2A2A2A,#4A4440);}
 .level-hero-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:6px;}
-.level-hero h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,5vw,56px);font-weight:800;color:#fff;line-height:1.02;margin-bottom:14px;letter-spacing:0.02em;text-transform:uppercase;}
+.level-hero h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,5vw,56px);font-weight:800;color:#fff;line-height:1.08;margin-bottom:14px;letter-spacing:0.02em;text-transform:uppercase;padding-top:.06em;}
 .level-hero p{color:rgba(255,255,255,.85);font-size:clamp(14px,1.6vw,16px);max-width:640px;line-height:1.65;margin-bottom:22px;}
 .hero-stats{display:flex;gap:20px;}
 .hs-num{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:#fff;line-height:1;}
@@ -564,8 +564,7 @@ body.diploma-printing{background:#fff!important;}
 .logros-explanation p{color:rgba(255,255,255,.82);font-size:14px;line-height:1.65;margin:0;}
 .logros-hours-summary{color:rgba(255,255,255,.9);font-size:14px;margin:0;}
 .logros-next-name{color:var(--gold);font-weight:700;}
-.logros-progress-bar{margin-top:18px;background:rgba(255,255,255,.15);border-radius:8px;height:10px;overflow:hidden;max-width:480px;}
-.logros-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),#F0C040);border-radius:8px;transition:width .4s;}
+.logros-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),#F0C040);border-radius:999px;transition:width .4s;}
 .collab-task-card--verified{box-shadow:0 4px 20px rgba(26,122,110,.15);}
 
 /* ── HABILIDADES SECTION ──────────────────────────────────────── */
@@ -651,11 +650,8 @@ body.diploma-printing{background:#fff!important;}
 .lh-dash h2{font-size:clamp(40px,6vw,72px)!important;letter-spacing:0.04em!important;line-height:0.98!important;margin-bottom:16px!important;text-transform:uppercase;}
 .lh-dash .level-hero-tag{letter-spacing:.28em;margin-bottom:14px;font-size:11px;}
 .lh-dash p{font-size:clamp(15px,1.8vw,17px)!important;max-width:680px!important;}
-.hero-stat-row{gap:14px!important;margin-top:8px!important;}
-.hero-stat-box{padding:18px 20px!important;border-radius:var(--radius-lg)!important;min-width:130px;}
-.hero-stat-box .hs-num{font-size:clamp(26px,3vw,32px)!important;}
-.hero-stat-box .hs-lbl{font-size:10px!important;letter-spacing:.9px!important;}
-.dash-hero-panel{background:rgba(255,255,255,.1)!important;border:1px solid rgba(255,255,255,.2)!important;border-radius:var(--radius-xl)!important;backdrop-filter:blur(16px);box-shadow:0 12px 40px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.15)!important;padding:28px 24px!important;}
+.hero-stat-row{gap:14px;margin-top:8px;}
+.dash-hero-panel{/* refined in globals.css */}
 .dash-hero-hours{font-size:clamp(36px,4vw,44px)!important;letter-spacing:-0.02em;}
 .dash-level-card{background:linear-gradient(180deg,var(--bg-warm-50) 0%,#fff 100%)!important;border:1px solid var(--line-soft)!important;border-radius:var(--radius-lg)!important;box-shadow:var(--shadow-card);padding:24px 22px!important;transition:transform 200ms var(--ease-smooth),box-shadow 200ms var(--ease-smooth),border-color var(--transition)!important;}
 .dash-level-card:not(.opacity-75):hover{transform:translateY(-4px)!important;box-shadow:var(--shadow-card-hover)!important;}
@@ -688,7 +684,7 @@ body.diploma-printing{background:#fff!important;}
 .extras-level-header h3{font-size:clamp(24px,3.5vw,36px)!important;letter-spacing:0.04em;text-transform:uppercase;}
 .extras-page-hero{margin-bottom:clamp(32px,5vw,48px);}
 .extras-page-hero h2{font-size:clamp(36px,5vw,52px)!important;letter-spacing:0.03em;text-transform:uppercase;line-height:1;}
-.extras-diploma-banner{border-radius:var(--radius-lg)!important;padding:24px 28px!important;box-shadow:var(--shadow-card);}
+.extras-diploma-banner{/* refined in globals.css */}
 .extras-progress-fill{transition:width .5s var(--ease-out);background:linear-gradient(90deg,rgba(255,255,255,.5),#fff)!important;}
 
 /* ── COLLABORATIVE TASK ──────────────────────────────────── */

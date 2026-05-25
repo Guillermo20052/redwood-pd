@@ -107,7 +107,7 @@ function DashboardHeroProgress({
   ];
 
   return (
-    <div className="dash-hero-panel w-full max-w-[320px] rounded-xl px-5 py-5 text-center">
+    <div className="dash-hero-panel">
       <div className="relative mx-auto mb-3" style={{ width: 180, height: 180 }}>
         <ProgressRing percent={ringPct} />
         <div

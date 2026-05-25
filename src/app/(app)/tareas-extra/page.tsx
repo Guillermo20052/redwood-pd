@@ -123,7 +123,7 @@ export default function TareasExtraPage() {
   const isAdmin = profile.role === 'admin';
 
   return (
-    <div className="app-page pb-12">
+    <div className="app-page tareas-extra-page pb-12">
       {isAdmin && (
         <p
           className="text-xs font-semibold rounded-lg px-3 py-2"

@@ -90,7 +90,7 @@ export function createTour({ onFinish, onStartNivel1 }: CreateTourOptions): Tour
     id: 'nav-tareas',
     attachTo: { element: '[data-tour="nav-tareas-extra"]', on: 'bottom' },
     title: 'Tareas Level Up',
-    text: 'Después de cada nivel, desbloquearás 10 tareas opcionales por nivel. Completa 4 de cada para tus Diplomas.',
+    text: 'Después de cada nivel, desbloquearás 10 Tareas Level Up. Necesitas completar al menos 4 de cada nivel para obtener tu Diploma — son parte central de tu camino.',
     buttons: [skipButton(), nextButton()],
   });
 
@@ -98,7 +98,7 @@ export function createTour({ onFinish, onStartNivel1 }: CreateTourOptions): Tour
     id: 'nav-comunidad',
     attachTo: { element: '[data-tour="nav-comunidad"]', on: 'bottom' },
     title: 'Comunidad',
-    text: 'Conecta con otras docentes del programa. Comparte aprendizajes, haz preguntas, mira el leaderboard.',
+    text: 'Conecta con otras docentes del programa. Comparte aprendizajes en el chat, haz preguntas y consulta el leaderboard de horas.',
     buttons: [skipButton(), nextButton()],
   });
 
@@ -106,7 +106,7 @@ export function createTour({ onFinish, onStartNivel1 }: CreateTourOptions): Tour
     id: 'nav-logros',
     attachTo: { element: '[data-tour="nav-logros"]', on: 'bottom' },
     title: 'Tus Diplomas',
-    text: 'Aquí están tus certificados. Al ganar uno, puedes imprimirlo y compartirlo.',
+    text: 'Aquí están tus 3 diplomas — Bronce, Plata y Oro. Al ganar uno, puedes verlo, imprimirlo y compartirlo.',
     buttons: [skipButton(), nextButton()],
   });
 
@@ -114,7 +114,7 @@ export function createTour({ onFinish, onStartNivel1 }: CreateTourOptions): Tour
     id: 'chatbot',
     attachTo: { element: '[data-tour="chatbot"]', on: 'top-start' },
     title: 'Tu coach IA',
-    text: 'Si tienes dudas en cualquier momento, haz clic aquí. Te responde 24/7 sobre cualquier parte del programa.',
+    text: 'Si tienes dudas sobre la plataforma en cualquier momento, haz clic aquí. Tu coach IA responde 24/7 sobre navegación, tareas y requisitos del programa.',
     buttons: [skipButton(), nextButton()],
   });
 

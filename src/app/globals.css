@@ -105,7 +105,17 @@ h3,
 .app-page {
   display: flex;
   flex-direction: column;
-  gap: clamp(3rem, 6vw, 5rem);
+  gap: clamp(48px, 8vw, 120px);
+}
+
+.app-page > section + section,
+.app-page > .extras-diploma-banner + section,
+.logros-hero + .logros-grid {
+  position: relative;
+}
+
+.tareas-extra-page > .extras-page-hero + .extras-diploma-banner {
+  margin-top: 0;
 }
 
 .check-item {
@@ -232,8 +242,9 @@ h3,
 
 .dash-welcome-card {
   position: relative;
-  border-radius: var(--radius-xl, 16px);
-  padding: clamp(32px, 5vw, 80px) clamp(24px, 4vw, 48px);
+  border-radius: var(--radius-xl, 24px);
+  padding: clamp(32px, 5vw, 56px) clamp(28px, 5vw, 56px) clamp(32px, 5vw, 56px)
+    clamp(24px, 4vw, 48px);
   background: linear-gradient(
     145deg,
     var(--bg-warm-50, #faf7f0) 0%,
@@ -242,7 +253,7 @@ h3,
   );
   border: 1px solid var(--line-soft, rgba(26, 46, 74, 0.08));
   box-shadow: var(--shadow-card, 0 8px 32px rgba(26, 46, 74, 0.08));
-  overflow: hidden;
+  overflow: visible;
 }
 
 .dash-welcome-card::before {
@@ -275,6 +286,7 @@ h3,
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    gap: clamp(32px, 4vw, 56px);
   }
 }
 
@@ -338,37 +350,70 @@ h3,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 28px;
-  border-radius: var(--radius-md, 10px);
+  padding: 14px 32px;
+  border-radius: var(--radius-md, 12px);
   background: var(--red, #b22234);
   color: #fff;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   text-decoration: none;
   border: none;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-  box-shadow: 0 4px 14px rgba(178, 34, 52, 0.25);
+  transition:
+    transform 200ms var(--ease-smooth),
+    box-shadow 200ms var(--ease-smooth),
+    background 200ms var(--ease-smooth);
+  box-shadow: 0 2px 8px rgba(178, 34, 52, 0.28), 0 6px 18px rgba(178, 34, 52, 0.14);
 }
 
 .dash-welcome-cta:hover {
   background: var(--red-dark, #8b1a28);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(178, 34, 52, 0.3);
+  box-shadow: 0 6px 18px rgba(178, 34, 52, 0.35), 0 2px 6px rgba(178, 34, 52, 0.12);
   color: #fff;
+}
+
+.dash-welcome-cta:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 80ms;
 }
 
 .dash-welcome-progress {
   width: 100%;
-  max-width: 320px;
+  max-width: min(320px, 100%);
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 @media (min-width: 1024px) {
   .dash-welcome-progress {
     margin: 0;
-    flex-shrink: 0;
+    flex: 0 0 min(320px, 38%);
+    max-width: 320px;
+    min-width: 0;
   }
+}
+
+.dash-hero-panel {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: clamp(24px, 3vw, 32px) clamp(20px, 3vw, 28px);
+  text-align: center;
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(16px);
+  box-shadow:
+    var(--shadow-card),
+    0 12px 40px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.dash-hero-hours {
+  font-size: clamp(36px, 4vw, 44px) !important;
 }
 
 .dash-intro-block {
@@ -631,18 +676,54 @@ h3,
   box-shadow: var(--shadow-card);
 }
 
+.comunidad-lb-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
 .comunidad-lb-table th {
-  padding: 12px 14px;
+  padding: 14px 16px;
   font-size: 9px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--gray-500);
   background: var(--bg-warm-50);
   border-bottom: 1px solid var(--line-soft);
 }
 
+.comunidad-lb-th--rank {
+  width: 52px;
+}
+
+.comunidad-lb-th--docente {
+  width: 34%;
+}
+
+.comunidad-lb-th--nivel {
+  width: 18%;
+}
+
+.comunidad-lb-th--horas {
+  width: 10%;
+}
+
+.comunidad-lb-th--progreso {
+  width: 14%;
+}
+
+.comunidad-lb-th--actividad {
+  width: 14%;
+}
+
 .comunidad-lb-table td {
-  padding: 14px;
+  padding: 18px 16px;
   border-bottom: 1px solid var(--line-soft);
+  vertical-align: middle;
+}
+
+.comunidad-lb-table td:first-child {
+  width: 52px;
+  text-align: center;
 }
 
 .comunidad-lb-row {
@@ -661,12 +742,13 @@ h3,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 32px;
-  height: 32px;
-  padding: 0 8px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  padding: 0;
   border-radius: 999px;
   font-family: var(--font-barlow-condensed), 'Barlow Condensed', system-ui, sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.02em;
 }
@@ -762,17 +844,25 @@ h3,
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: clamp(48px, 8vw, 72px) 28px;
-  margin: 4px 0;
-  border-radius: var(--radius-md);
-  border: 1px dashed rgba(178, 34, 52, 0.18);
-  background: rgba(255, 255, 255, 0.65);
+  flex: 1;
+  min-height: 280px;
+  padding: clamp(56px, 10vw, 88px) 28px;
+  margin: 0;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: transparent;
 }
 
 .comunidad-chat-empty-icon {
-  color: var(--gray-300);
-  margin-bottom: 16px;
-  opacity: 0.9;
+  color: var(--red);
+  margin-bottom: 20px;
+  opacity: 0.85;
+  width: 56px;
+  height: 56px;
+  padding: 14px;
+  border-radius: 50%;
+  background: rgba(178, 34, 52, 0.08);
+  box-sizing: content-box;
 }
 
 .comunidad-chat-empty-title {
@@ -797,6 +887,30 @@ h3,
   font-weight: 600;
   color: var(--red);
   letter-spacing: 0.02em;
+}
+
+.comunidad-chat-empty-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, var(--red-light), var(--red));
+  color: var(--white) !important;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  box-shadow: 0 2px 8px rgba(178, 34, 52, 0.28);
+  cursor: pointer;
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.comunidad-chat-empty-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(178, 34, 52, 0.32);
 }
 
 .comunidad-chat-msg {
@@ -2344,8 +2458,438 @@ h3,
   color: var(--red);
 }
 
+/* ─── App main content offset ───────────────────────────────────────────── */
+
+.app-main {
+  padding-top: 32px;
+}
+
+.app-main--level {
+  padding-top: 32px;
+}
+
+/* ─── User menu (header) ────────────────────────────────────────────────── */
+
+.user-menu-wrap {
+  position: relative;
+}
+
+.user-menu-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--transition);
+}
+
+.user-menu-trigger:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.user-menu-avatar {
+  font-family: var(--font-barlow-condensed), 'Barlow Condensed', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1;
+}
+
+.user-menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 160px;
+  background: var(--white);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  z-index: 200;
+}
+
+.user-menu-item {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-900);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.user-menu-item:hover {
+  background: var(--gray-50);
+}
+
+.user-menu-item--logout {
+  border-top: 1px solid var(--line-soft);
+  color: var(--gray-700);
+}
+
+/* ─── Mi Perfil page ──────────────────────────────────────────────────────── */
+
+.mi-perfil-page {
+  max-width: 720px;
+}
+
+.mi-perfil-header {
+  margin-bottom: 24px;
+}
+
+.mi-perfil-title {
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0 0 6px;
+  letter-spacing: 0.02em;
+}
+
+.mi-perfil-subtitle {
+  margin: 0;
+  color: var(--gray-600);
+  font-size: 15px;
+}
+
+.mi-perfil-card {
+  padding: clamp(24px, 4vw, 32px);
+}
+
+.mi-perfil-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .mi-perfil-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mi-perfil-field label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin-bottom: 6px;
+}
+
+.mi-perfil-field input {
+  width: 100%;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--gray-900);
+  background: var(--white);
+}
+
+.mi-perfil-field input:disabled {
+  background: var(--gray-50);
+  color: var(--gray-600);
+  cursor: not-allowed;
+}
+
+.mi-perfil-field-note {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: var(--gray-500);
+  line-height: 1.4;
+}
+
+.mi-perfil-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.mi-perfil-error {
+  margin: 0;
+  font-size: 13px;
+  color: var(--red);
+}
+
+.mi-perfil-save {
+  min-width: 120px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .redwood-tour-step {
     scroll-behavior: auto;
   }
+}
+
+/* ─── Visual polish pass (premium surfaces) ─────────────────────────────── */
+
+/* Nivel hero stat cards */
+.level-hero .hero-stat-row {
+  gap: clamp(14px, 2vw, 20px);
+  margin-top: 8px;
+}
+
+.level-hero .hero-stat-box {
+  flex: 1;
+  min-width: 120px;
+  padding: clamp(24px, 3vw, 32px) clamp(20px, 2.5vw, 28px);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(250, 248, 245, 0.1) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(8px);
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    background var(--transition);
+}
+
+.level-hero .hero-stat-box:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.26) 0%,
+    rgba(250, 248, 245, 0.14) 100%
+  );
+}
+
+.level-hero .hero-stat-box .hs-num {
+  font-family: var(--font-barlow-condensed), 'Barlow Condensed', system-ui, sans-serif;
+  font-size: clamp(42px, 5vw, 48px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+
+.level-hero .hero-stat-box .hs-lbl {
+  font-family: var(--font-barlow), 'Barlow', system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.88;
+  margin-top: 8px;
+}
+
+.level-hero h2 {
+  padding-top: 0.06em;
+  line-height: 1.08;
+}
+
+/* Diploma 1 requirements banner (tareas-extra) */
+.extras-diploma-banner {
+  border: none !important;
+  border-radius: var(--radius-lg) !important;
+  padding: clamp(36px, 5vw, 44px) clamp(32px, 4vw, 40px) !important;
+  background: linear-gradient(
+    145deg,
+    var(--gold-light) 0%,
+    rgba(255, 255, 255, 0.95) 55%,
+    var(--bg-warm-50) 100%
+  ) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.extras-diploma-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 8px;
+}
+
+.extras-diploma-title {
+  font-family: var(--font-barlow-condensed), 'Barlow Condensed', system-ui, sans-serif;
+  font-size: clamp(18px, 2.5vw, 22px);
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0 0 20px;
+  line-height: 1.25;
+}
+
+.extras-diploma-list {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.extras-diploma-req {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--gray-800);
+  padding-left: 0;
+}
+
+.extras-diploma-req::before {
+  content: '';
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  border-radius: 50%;
+  border: 2px solid var(--gray-300);
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+.extras-diploma-req--done::before {
+  border-color: var(--green);
+  background: var(--green-light);
+  box-shadow: inset 0 0 0 0 transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M5 10l3.5 3.5L15 7' stroke='%231e7a3e' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 14px;
+}
+
+.extras-diploma-req-meta {
+  color: var(--gray-500);
+  font-size: 13px;
+}
+
+.extras-diploma-next {
+  margin: 0;
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  background: rgba(26, 46, 74, 0.05);
+  border-left: 3px solid var(--gold);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--gray-700);
+}
+
+/* Logros hero progress panel */
+.logros-progress-panel {
+  margin-top: clamp(24px, 4vw, 32px);
+  max-width: 560px;
+  padding: 20px 24px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.logros-hours-summary {
+  font-size: 15px;
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+.logros-progress-bar {
+  height: 12px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  max-width: 100% !important;
+  margin-top: 0 !important;
+  overflow: hidden;
+}
+
+.logros-progress-fill {
+  border-radius: 999px !important;
+  box-shadow: var(--glow-gold);
+}
+
+/* Primary buttons — site-wide */
+.btn-primary {
+  padding: 14px 32px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow:
+    0 2px 8px rgba(178, 34, 52, 0.28),
+    0 8px 20px rgba(178, 34, 52, 0.12) !important;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px) !important;
+  box-shadow:
+    0 6px 18px rgba(178, 34, 52, 0.35),
+    0 2px 6px rgba(178, 34, 52, 0.12) !important;
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98) !important;
+  transition-duration: 80ms !important;
+}
+
+/* Hero / page title breathing room (anti-clip) */
+.extras-page-hero h2,
+.logros-hero h2,
+.level-hero h2 {
+  padding-top: 0.08em;
+  line-height: 1.08;
+}
+
+.extras-page-hero {
+  padding-top: 8px;
+}
+
+/* Section dividers on long pages */
+.tareas-extra-page > section,
+.logros-grid {
+  padding-top: clamp(24px, 4vw, 40px);
+  border-top: 1px solid var(--line-soft);
+}
+
+.tareas-extra-page > .extras-page-hero {
+  border-top: none;
+  padding-top: 0;
+}
+
+.logros-hero + .logros-grid {
+  border-top: 1px solid var(--line-soft);
+  padding-top: clamp(40px, 6vw, 64px);
+}
+
+/* Card radius consistency */
+.card-elevation,
+.comunidad-panel,
+.comunidad-lb-card,
+.comunidad-chat-panel {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.dash-level-card,
+.eval-cta-card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.camino-section .camino-viz,
+.dash-welcome-card,
+.logros-hero,
+.logro-card {
+  border-radius: var(--radius-xl);
+}
+
+.logro-card--earned {
+  box-shadow: var(--shadow-card), var(--glow-gold);
 }

@@ -35,20 +35,22 @@ export default function LogrosPage() {
           ))}
         </div>
 
-        <p className="logros-hours-summary">
-          <strong>{totalHours.toFixed(1)}h</strong> verificadas
-          {next ? (
-            <>
-              {' '}
-              · Próximo: <span className="logros-next-name">{next.name}</span>
-            </>
-          ) : (
-            <> · Programa completo</>
-          )}
-        </p>
+        <div className="logros-progress-panel">
+          <p className="logros-hours-summary">
+            <strong>{totalHours.toFixed(1)}h</strong> verificadas
+            {next ? (
+              <>
+                {' '}
+                · Próximo: <span className="logros-next-name">{next.name}</span>
+              </>
+            ) : (
+              <> · Programa completo</>
+            )}
+          </p>
 
-        <div className="logros-progress-bar">
-          <div className="logros-progress-fill" style={{ width: `${progressPct}%` }} />
+          <div className="logros-progress-bar">
+            <div className="logros-progress-fill" style={{ width: `${progressPct}%` }} />
+          </div>
         </div>
       </div>
 

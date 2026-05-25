@@ -8,7 +8,6 @@ import {
 import {
   countCompletedExtras,
   meetsDiploma1ExtrasRequirement,
-  meetsDiploma3ExtrasRequirement,
 } from '@/lib/extras-gating';
 import type { CompletionMap } from '@/lib/verification';
 
@@ -31,49 +30,59 @@ function buildRequirements(
   totalHours: number,
   completions: CompletionMap
 ): ReqItem[] {
-  const hoursRequired = tier === 1 ? 20 : tier === 2 ? 24 : 30;
   const extrasL1 = countCompletedExtras('b', completions);
   const extrasL2 = countCompletedExtras('i', completions);
   const extrasL3 = countCompletedExtras('a', completions);
+  const d1Complete =
+    totalHours >= 20 &&
+    meetsDiploma1ExtrasRequirement(completions);
+  const d2Complete =
+    totalHours >= 24 && d1Complete;
 
-  const items: ReqItem[] = [
+  if (tier === 1) {
+    return [
+      {
+        label: 'Completa los Niveles 1 y 2 (20 horas verificadas)',
+        met: totalHours >= 20,
+      },
+      {
+        label: `Termina 4 tareas Level Up del Nivel 1 (${extrasL1}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL})`,
+        met: extrasL1 >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
+      },
+      {
+        label: `Termina 4 tareas Level Up del Nivel 2 (${extrasL2}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL})`,
+        met: extrasL2 >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
+      },
+    ];
+  }
+
+  if (tier === 2) {
+    return [
+      {
+        label: 'Cumple todo lo del Diploma 1',
+        met: d1Complete,
+      },
+      {
+        label: `Alcanza 24 horas verificadas en total (${totalHours.toFixed(1)}h)`,
+        met: totalHours >= 24,
+      },
+    ];
+  }
+
+  return [
     {
-      label: `${hoursRequired}+ horas verificadas (${totalHours.toFixed(1)}h)`,
-      met: totalHours >= hoursRequired,
+      label: 'Cumple todo lo del Diploma 2',
+      met: d2Complete,
     },
     {
-      label: `4+ Level Up Nivel 1 (${extrasL1}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL})`,
-      met: extrasL1 >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
+      label: `Alcanza 30 horas verificadas en total (${totalHours.toFixed(1)}h)`,
+      met: totalHours >= 30,
     },
     {
-      label: `4+ Level Up Nivel 2 (${extrasL2}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL})`,
-      met: extrasL2 >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
+      label: `Termina al menos 4 tareas Level Up del Nivel 3 (${extrasL3}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL})`,
+      met: extrasL3 >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
     },
   ];
-
-  if (tier >= 3) {
-    items.push({
-      label: `4+ Level Up Nivel 3 (${extrasL3}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL})`,
-      met: extrasL3 >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL,
-    });
-  }
-
-  if (tier >= 2) {
-    items.unshift({
-      label: 'Diploma 1 completo',
-      met: meetsDiploma1ExtrasRequirement(completions) && totalHours >= 20,
-    });
-  }
-  if (tier === 3) {
-    items.unshift({
-      label: 'Diploma 2 completo',
-      met:
-        totalHours >= 24 &&
-        meetsDiploma1ExtrasRequirement(completions),
-    });
-  }
-
-  return items;
 }
 
 function lockedSummary(
@@ -91,16 +100,17 @@ function lockedSummary(
   const extrasL2 = countCompletedExtras('i', completions);
   const extrasL3 = countCompletedExtras('a', completions);
 
-  if (extrasL1 < DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL || extrasL2 < DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL) {
-    const needL1 = Math.max(0, DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - extrasL1);
-    const needL2 = Math.max(0, DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - extrasL2);
-    if (needL1 > 0) parts.push(`${needL1} Level Up L1`);
-    if (needL2 > 0) parts.push(`${needL2} Level Up L2`);
+  if (tier === 1) {
+    if (extrasL1 < DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL) {
+      parts.push(`${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - extrasL1} Level Up L1`);
+    }
+    if (extrasL2 < DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL) {
+      parts.push(`${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - extrasL2} Level Up L2`);
+    }
   }
 
-  if (tier === 3 && !meetsDiploma3ExtrasRequirement(completions)) {
-    const needL3 = Math.max(0, DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - extrasL3);
-    if (needL3 > 0) parts.push(`${needL3} Level Up L3`);
+  if (tier === 3 && extrasL3 < DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL) {
+    parts.push(`${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - extrasL3} Level Up L3`);
   }
 
   return parts.length ? `Faltan ${parts.join(' + ')}` : 'Casi lo logras';
@@ -143,9 +153,13 @@ export function DiplomaCard({ diploma, totalHours, completions, onOpen }: Props)
         </p>
         <h3 className="logro-title">{diploma.name}</h3>
 
-        <div className="logro-req-pill">
-          <strong>{diploma.hoursRequired}h</strong> verificadas mínimo
-        </div>
+        <p className="text-xs font-semibold text-[var(--gray-600)] mt-2 mb-1">
+          {tier === 1
+            ? 'Para conseguir el Diploma de Bronce:'
+            : tier === 2
+              ? 'Para conseguir el Diploma de Plata:'
+              : 'Para conseguir el Diploma de Oro:'}
+        </p>
 
         <ul className="logro-checklist" aria-label="Requisitos del diploma">
           {requirements.map((req) => (

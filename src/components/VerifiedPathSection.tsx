@@ -110,7 +110,7 @@ export function VerifiedPathSection({
 
       <p className="text-sm text-[var(--gray-600)] mb-4" style={{ fontSize: 13, lineHeight: 1.55 }}>
         Tu ruta verificada: cada parte combina video, tarea con IA y reflexión. Al terminar las 5
-        partes, desbloqueas la tarea colaborativa obligatoria con otra docente del programa.
+        partes, desbloqueas la tarea colaborativa con otra docente del programa.
       </p>
 
       <div className="space-y-3">

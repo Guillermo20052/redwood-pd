@@ -42,7 +42,7 @@ export default async function TeacherDetailPage({ params }: PageProps) {
 
   const { data: teacher } = await adminClient
     .from('profiles')
-    .select('id, email, full_name, subject, role, start_date, created_at')
+    .select('id, email, full_name, subject, role, start_date, created_at, etica_read_at')
     .eq('id', id)
     .single();
 
@@ -171,7 +171,7 @@ export default async function TeacherDetailPage({ params }: PageProps) {
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         <StatCard label="Horas verificadas" value={`${totalHours.toFixed(1)}h`} />
         <StatCard label="Partes completadas" value={`${partsCompleted.size} / ${partGroups.length}`} />
         <StatCard
@@ -181,6 +181,18 @@ export default async function TeacherDetailPage({ params }: PageProps) {
         <StatCard
           label="Última actividad"
           value={lastActivity ? new Date(lastActivity).toLocaleDateString('es-MX') : '—'}
+        />
+        <StatCard
+          label="Ética confirmada"
+          value={
+            teacher.etica_read_at
+              ? new Date(teacher.etica_read_at as string).toLocaleDateString('es-MX', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                })
+              : 'Pendiente'
+          }
         />
       </div>
 
@@ -454,7 +466,7 @@ function EvaluationPanel({ eval: e }: { eval: EvaluationRow }) {
         <Field label="AI-ready (Q2)">{e.q2_value}/5</Field>
         <Field label="Continuará usando IA (Q3)">{e.q3_value}/5</Field>
         <Field label="Duración (Q7)">{e.q7_value}/5</Field>
-        <Field label="Exigencia (Q8)">{e.q8_value}/5</Field>
+        <Field label="Calificación general (Q8)">{e.q8_value}%</Field>
         <Field label="Recomendaría (Q12)">{Q12_LABEL[e.q12_value]}</Field>
       </div>
       <TextField label="Lo más útil del Nivel 1 (Q4)">{e.q4_text}</TextField>

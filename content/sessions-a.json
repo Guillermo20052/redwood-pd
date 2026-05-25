@@ -74,6 +74,21 @@
           "transferTask": "Reflexión: ¿Qué compromiso concreto adquieres con tu propia práctica? 2–3 oraciones."
         }
       ]
+    },
+    {
+      "id": "s6-collab",
+      "label": "Tarea colaborativa",
+      "title": "TAREA COLABORATIVA · NIVEL 3 · Mini-clínica de transformación",
+      "objective": "Liderar una sesión corta compartiendo con otras docentes una integración concreta de IA en tu práctica.",
+      "days": [
+        {
+          "name": "Tarea colaborativa",
+          "theme": "Mini-clínica de transformación pedagógica",
+          "objective": "Preparar y facilitar una clínica de 30 minutos con tema específico y traducible para colegas.",
+          "practiceTask": "Identifica 2–3 docentes del programa, prepara una mini-clínica con demo en vivo y sube slides o un resumen de 1 página con los nombres de quienes asistieron.",
+          "transferTask": "Indica los nombres completos de tus compañeras (separados por comas si son varias) al enviar la tarea."
+        }
+      ]
     }
   ]
 }

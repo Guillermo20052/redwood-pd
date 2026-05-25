@@ -22,7 +22,10 @@ export type EvalQ9Option = (typeof EVAL_Q9_OPTIONS)[number];
 
 const Q9_SET = new Set<string>(EVAL_Q9_OPTIONS);
 const Q12_VALUES = new Set<EvaluationQ12>(['yes', 'yes-with-reservations', 'no']);
-const SCALE_KEYS = ['q1_value', 'q2_value', 'q3_value', 'q7_value', 'q8_value'] as const;
+const SCALE_KEYS = ['q1_value', 'q2_value', 'q3_value', 'q7_value'] as const;
+const Q8_MIN = 0;
+const Q8_MAX = 100;
+const Q8_STEP = 5;
 const REQUIRED_LONG_TEXT_KEYS = ['q4_text', 'q5_text', 'q10_text'] as const;
 
 export type EvaluationValidationResult =
@@ -33,6 +36,16 @@ function isScale(n: unknown): n is number {
   return typeof n === 'number' && Number.isInteger(n) && n >= 1 && n <= 5;
 }
 
+function isProgramRating(n: unknown): n is number {
+  return (
+    typeof n === 'number' &&
+    Number.isInteger(n) &&
+    n >= Q8_MIN &&
+    n <= Q8_MAX &&
+    n % Q8_STEP === 0
+  );
+}
+
 /** Returns either a normalized payload or per-field error messages in Spanish. */
 export function validateEvaluation(input: unknown): EvaluationValidationResult {
   const errors: Record<string, string> = {};
@@ -40,6 +53,10 @@ export function validateEvaluation(input: unknown): EvaluationValidationResult {
 
   for (const key of SCALE_KEYS) {
     if (!isScale(raw[key])) errors[key] = 'Selecciona un valor del 1 al 5.';
+  }
+
+  if (!isProgramRating(raw.q8_value)) {
+    errors.q8_value = 'Selecciona un valor del 0 al 100%.';
   }
 
   for (const key of REQUIRED_LONG_TEXT_KEYS) {
@@ -99,3 +116,5 @@ export const Q12_LABEL: Record<EvaluationQ12, string> = {
   'yes-with-reservations': 'Sí, con reservas',
   no: 'No',
 };
+
+export { Q8_MIN, Q8_MAX, Q8_STEP };

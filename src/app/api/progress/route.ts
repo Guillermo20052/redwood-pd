@@ -22,8 +22,10 @@ export async function GET() {
           start_date: profile.start_date,
           email: profile.email || session.email,
           role: (profile.role as 'teacher' | 'admin') ?? 'teacher',
+          etica_read_at:
+            typeof profile.etica_read_at === 'string' ? profile.etica_read_at : null,
         }
-      : { email: session.email, role: 'teacher' as const },
+      : { email: session.email, role: 'teacher' as const, etica_read_at: null },
   });
 }
 

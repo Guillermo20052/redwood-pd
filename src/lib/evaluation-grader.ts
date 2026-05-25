@@ -29,7 +29,7 @@ Nivel 1 más útil: ${input.q4_text}
 Nivel 2 más útil: ${input.q5_text}
 Nivel 3 (opcional): ${input.q6_text ?? '(no completó Nivel 3)'}
 Duración del programa (1=muy larga, 5=muy corta, 3=adecuada): ${input.q7_value}
-Exigencia de tareas (1=muy baja, 5=muy alta, 3=adecuada): ${input.q8_value}
+Calificación general del programa (0%=ineficiente, 100%=logró plenamente su propósito de hacerme más consciente del uso de IA como docente): ${input.q8_value}%
 Partes que funcionaron mejor: ${q9Labels}
 Implementación próximas 4 semanas: ${input.q10_text}
 Sugerencias de mejora: ${input.q11_text ?? '(ninguna)'}

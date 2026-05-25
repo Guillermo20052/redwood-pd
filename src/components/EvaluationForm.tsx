@@ -5,6 +5,9 @@ import type { EvaluationInput, EvaluationQ12, EvaluationRow } from '@/lib/local-
 import {
   EVAL_Q9_OPTIONS,
   EVAL_TEXT_MIN_CHARS,
+  Q8_MAX,
+  Q8_MIN,
+  Q8_STEP,
   validateEvaluation,
 } from '@/lib/evaluation';
 
@@ -37,7 +40,7 @@ function emptyState(): FormState {
     q5: '',
     q6: '',
     q7: null,
-    q8: null,
+    q8: 50,
     q9: [],
     q10: '',
     q11: '',
@@ -46,6 +49,10 @@ function emptyState(): FormState {
 }
 
 function stateFromRow(row: EvaluationRow): FormState {
+  const q8 =
+    row.q8_value <= 5 && row.q8_value >= 1
+      ? row.q8_value * 20
+      : row.q8_value;
   return {
     q1: row.q1_value,
     q2: row.q2_value,
@@ -54,7 +61,7 @@ function stateFromRow(row: EvaluationRow): FormState {
     q5: row.q5_text,
     q6: row.q6_text ?? '',
     q7: row.q7_value,
-    q8: row.q8_value,
+    q8,
     q9: [...row.q9_selections],
     q10: row.q10_text,
     q11: row.q11_text ?? '',
@@ -84,7 +91,6 @@ const SCALE_LABELS: Record<string, [string, string]> = {
   q2: ['Igual o menos', 'Mucho más preparada'],
   q3: ['Poco probable', 'Totalmente probable'],
   q7: ['Demasiado larga', 'Demasiado corta'],
-  q8: ['Demasiado bajo', 'Demasiado alto'],
 };
 
 export function EvaluationForm({ initial, onSaved }: Props) {
@@ -102,7 +108,7 @@ export function EvaluationForm({ initial, onSaved }: Props) {
   const validation = useMemo(() => validateEvaluation(toInput(state)), [state]);
   const isValid = validation.ok;
 
-  const setScale = (key: 'q1' | 'q2' | 'q3' | 'q7' | 'q8', value: number) =>
+  const setScale = (key: 'q1' | 'q2' | 'q3' | 'q7', value: number) =>
     setState((s) => ({ ...s, [key]: value }));
 
   const toggleQ9 = (option: string) =>
@@ -226,12 +232,11 @@ export function EvaluationForm({ initial, onSaved }: Props) {
           midLabel="Adecuada"
           error={fieldErrors.q7_value}
         />
-        <ScaleField
+        <PercentField
           id="q8"
-          legend="El nivel de exigencia de las tareas (calificación 85 mín) fue:"
+          legend="En una escala del 0 al 100%, ¿cómo calificarías el programa en general?"
           value={state.q8}
-          onChange={(v) => setScale('q8', v)}
-          midLabel="Adecuado"
+          onChange={(v) => setState((s) => ({ ...s, q8: v }))}
           error={fieldErrors.q8_value}
         />
         <fieldset className="space-y-2">
@@ -390,6 +395,54 @@ function ScaleField({
         <span>1 · {lo}</span>
         {midLabel && <span>3 · {midLabel}</span>}
         <span>5 · {hi}</span>
+      </div>
+      {error && <p className="text-xs text-red-600">{error}</p>}
+    </fieldset>
+  );
+}
+
+function PercentField({
+  id,
+  legend,
+  value,
+  onChange,
+  error,
+}: {
+  id: string;
+  legend: string;
+  value: number | null;
+  onChange: (v: number) => void;
+  error?: string;
+}) {
+  const display = value ?? Q8_MIN;
+  return (
+    <fieldset className="space-y-3">
+      <legend className="text-sm font-semibold text-[var(--gray-800)]">{legend}</legend>
+      <p className="text-xs text-[var(--gray-600)] leading-relaxed">
+        0% = Programa ineficiente que no cumplió su propósito.
+        <br />
+        100% = Programa que logró plenamente su propósito de hacerme más consciente del uso de la
+        IA como docente.
+      </p>
+      <div className="flex items-center gap-4">
+        <span className="text-lg font-bold text-[var(--navy)] tabular-nums min-w-[3.5rem]">
+          {display}%
+        </span>
+        <input
+          id={id}
+          type="range"
+          min={Q8_MIN}
+          max={Q8_MAX}
+          step={Q8_STEP}
+          value={display}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="flex-1 accent-[var(--navy)]"
+        />
+      </div>
+      <div className="flex justify-between text-[11px] font-semibold uppercase tracking-wide text-[var(--gray-500)]">
+        <span>0%</span>
+        <span>50%</span>
+        <span>100%</span>
       </div>
       {error && <p className="text-xs text-red-600">{error}</p>}
     </fieldset>

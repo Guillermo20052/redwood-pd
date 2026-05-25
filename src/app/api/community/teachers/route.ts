@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { getSessionUserId, loadCompletions } from '@/lib/completions-service';
+import { getSessionUserId, loadCompletions, loadProfile } from '@/lib/completions-service';
 import { isLocalMode, localDb, type CompletionRow } from '@/lib/local-db';
+import { getCurrentUserRole } from '@/lib/auth-helpers';
 import { getDiplomaTier } from '@/lib/progress';
+import { isTeacherProfile } from '@/lib/teacher-profiles';
 import {
   getCurrentLevelSlug,
   buildInitialCompletions,
@@ -26,6 +28,7 @@ type TeacherRow = {
   progressPct: number;
   lastActivity: string | null;
   diplomaTier: number;
+  role: 'teacher';
   // Back-compat aliases for any older client expecting the previous shape.
   id: string;
   hours: number;
@@ -57,6 +60,7 @@ function buildRow(
     progressPct,
     lastActivity,
     diplomaTier: getDiplomaTier(totalHours, map),
+    role: 'teacher',
     // back-compat aliases
     id: profile.id,
     hours: totalHours,
@@ -91,19 +95,21 @@ export async function GET() {
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   if (isLocalMode()) {
-    let profiles = localDb.listProfiles().filter((p) => p.role === 'teacher');
-    // In a fresh local install no profile row exists yet; surface the
-    // local-dev-user so the leaderboard isn't empty during testing.
+    let profiles = localDb.listProfiles().filter((p) => isTeacherProfile(p.role));
     if (profiles.length === 0) {
-      profiles = [
-        {
-          id: session.userId,
-          email: session.email,
-          full_name: 'Docente local',
-          subject: '',
-          role: 'teacher',
-        },
-      ];
+      const me = localDb.getProfile(session.userId);
+      const sessionRole = me?.role ?? (await getCurrentUserRole(session.userId));
+      if (isTeacherProfile(sessionRole)) {
+        profiles = [
+          {
+            id: session.userId,
+            email: session.email,
+            full_name: me?.full_name ?? 'Docente local',
+            subject: me?.subject ?? '',
+            role: 'teacher',
+          },
+        ];
+      }
     }
     const teachers = profiles.map((p) =>
       buildRow(
@@ -127,11 +133,13 @@ export async function GET() {
 
   const { data: profiles } = await admin
     .from('profiles')
-    .select('id, full_name, subject, updated_at')
+    .select('id, full_name, subject, updated_at, role')
     .eq('role', 'teacher');
 
+  const teacherProfiles = (profiles || []).filter((p) => isTeacherProfile(p.role as string));
+
   const teachers = await Promise.all(
-    (profiles || []).map(async (p) => {
+    teacherProfiles.map(async (p) => {
       const full = await loadCompletions(p.id);
       // loadCompletions already returns a CompletionMap with locked/available
       // padding; convert back to verified-only rows to keep lastActivity

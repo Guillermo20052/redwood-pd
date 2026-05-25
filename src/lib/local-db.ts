@@ -82,6 +82,7 @@ export type ProfileRow = {
   start_date?: string;
   role: 'teacher' | 'admin';
   updated_at?: string;
+  etica_read_at?: string | null;
 };
 
 export type ChatMessage = {

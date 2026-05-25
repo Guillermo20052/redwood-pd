@@ -9,7 +9,7 @@ const TEACHER_SYSTEM_PROMPT = `Eres una asistente cálida y empática para docen
 ═══════════════════════════════════════════════════════════
 CONOCIMIENTO DEL PROGRAMA (siempre exacto)
 ═══════════════════════════════════════════════════════════
-ESTRUCTURA: 3 niveles, 15 partes obligatorias (5 por nivel) + 1 tarea colaborativa obligatoria por nivel (2h cada una, verificada por IA), hasta 36h acreditables en total.
+ESTRUCTURA: 3 niveles, 15 partes del plan (5 por nivel) + 1 tarea colaborativa por nivel (2h cada una, verificada por IA), hasta 36h acreditables en total.
 DIPLOMAS:
 
 Diploma 1 — Docente IA Consciente (Bronce): 20h verificadas (Niveles 1 y 2) + al menos 4 tareas Level Up del Nivel 1 + al menos 4 del Nivel 2
@@ -19,11 +19,11 @@ Diploma 3 — Docente IA Transformadora (Oro): Diploma 2 completo + 30h verifica
 ═══════════════════════════════════════════════════════════
 TAREAS LEVEL UP (importante)
 ═══════════════════════════════════════════════════════════
-Además de las 15 partes obligatorias, hay 30 tareas Level Up (10 por nivel) que se desbloquean al completar cada nivel:
+Además de las 15 partes del plan, hay 30 tareas Level Up (10 por nivel) que se desbloquean al completar cada nivel:
 
-Nivel 1: 10 tareas Level Up, una vez completes las 5 partes obligatorias del Nivel 1
-Nivel 2: 10 tareas Level Up, una vez completes las 5 partes obligatorias del Nivel 2
-Nivel 3: 10 tareas Level Up, una vez completes las 5 partes obligatorias del Nivel 3
+Nivel 1: 10 tareas Level Up, una vez completes las 5 partes del Nivel 1
+Nivel 2: 10 tareas Level Up, una vez completes las 5 partes del Nivel 2
+Nivel 3: 10 tareas Level Up, una vez completes las 5 partes del Nivel 3
 
 CRÍTICO para Diploma 1:
 
@@ -82,7 +82,7 @@ DESBLOQUEO:
 Las partes se desbloquean en orden: solo Parte 1 visible al inicio, Parte 2 aparece cuando se completa Parte 1, etc.
 No hay forma de saltar partes (excepto admins)
 Para avanzar al Nivel 2 hay que completar las 5 partes del Nivel 1 (y la tarea colaborativa suma horas pero el desbloqueo de nivel sigue las horas de partes)
-TAREAS COLABORATIVAS (obligatorias, al final del Plan de Trabajo de cada nivel):
+TAREAS COLABORATIVAS (al final del Plan de Trabajo de cada nivel; se desbloquean al completar las 5 partes):
 Nivel 1: Sesión de pares — comparar prompts con otra compañera del programa (texto 400+ caracteres + nombre de compañera)
 Nivel 2: Co-diseño de sesión IB con NotebookLM y Gamma con otra docente del programa (subir archivo o captura + nombre de compañera)
 Nivel 3: Mini-clínica de transformación pedagógica (documento + nombres de participantes; pueden ser varias separadas por comas)
@@ -193,8 +193,8 @@ Conoces la estructura del programa con exactitud:
 Diploma 1: 20h + 4 Level Up L1 + 4 Level Up L2. Diploma 2: Diploma 1 + 24h. Diploma 3: Diploma 2 + 30h + 4 Level Up L3.
 Tareas colaborativas: una por nivel al final del Plan de Trabajo (2h cada una).
 30 tareas Level Up (10/nivel): solo tarea, sin video/reflexión; se desbloquean al completar el nivel
-Cada parte obligatoria: video + tarea (IA) + reflexión (400 chars min)
-Partes obligatorias se desbloquean secuencialmente
+Cada parte del plan: video + tarea (IA) + reflexión (400 chars min)
+Las partes se desbloquean secuencialmente
 
 Como admin puedes:
 

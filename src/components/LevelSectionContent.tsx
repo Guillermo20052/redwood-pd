@@ -143,35 +143,17 @@ export function LevelSectionContent({ level, section }: Props) {
           <div className="sec-pill">{getSubjectsPill(level)} · IB DP</div>
         </div>
         <p className="mb-4 text-sm text-[var(--gray-600)]" style={{ fontSize: 13, lineHeight: 1.55 }}>
-          Ejemplos concretos por materia del Bachillerato Internacional y las cinco herramientas de
-          este nivel.
+          Ejemplos concretos por materia del Bachillerato Internacional con la herramienta más
+          útil de este nivel.
         </p>
-        <div className="subj-grid">
+        <div className="subj-grid subj-grid--wide">
           {subjects.map((s) => (
-            <div
-              key={s.name}
-              className="subj-crd"
-              style={
-                s.highlight
-                  ? { border: '1px solid var(--red)', borderTop: '3px solid var(--red)' }
-                  : undefined
-              }
-            >
+            <div key={s.name} className="subj-crd subj-crd--compact">
               <div className="subj-hdr">
-                <div
-                  className="subj-ico"
-                  style={s.highlight ? { background: '#FFF0F0' } : undefined}
-                >
-                  {s.icon}
-                </div>
+                <div className="subj-ico">{s.icon}</div>
                 <div className="subj-name">{s.name}</div>
               </div>
-              {s.applications.map((app) => (
-                <div key={app.title} className="subj-app">
-                  <div className="app-ttl">{app.title}</div>
-                  <div className="prompt-box">{app.prompt}</div>
-                </div>
-              ))}
+              <p className="subj-example">{s.example}</p>
             </div>
           ))}
         </div>

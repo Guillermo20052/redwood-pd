@@ -11,6 +11,7 @@ import {
 } from '@/lib/verification';
 import { getPathItem } from '@/lib/curriculum-path';
 import { getEarnedTiers, type DiplomaTier } from '@/lib/diplomas';
+import { isTeacherProfile } from '@/lib/teacher-profiles';
 
 type PairingSummary = {
   partId: string;
@@ -72,7 +73,9 @@ export async function GET() {
     .from('diploma_events')
     .select('user_id, tier');
 
-  const cohort: CohortRow[] = (teachers || []).map((t) => {
+  const cohort: CohortRow[] = (teachers || [])
+    .filter((t) => isTeacherProfile(t.role as string))
+    .map((t) => {
     const userRows = (allCompletions || [])
       .filter((c) => c.user_id === t.id)
       .map((c) => ({
@@ -120,7 +123,7 @@ function buildLocalCohort(): CohortRow[] {
     ];
   }
   return profiles
-    .filter((p) => p.role === 'teacher')
+    .filter((p) => isTeacherProfile(p.role))
     .map((p) =>
       buildCohortRow(
         {

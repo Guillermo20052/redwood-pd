@@ -114,7 +114,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            'Completa las 5 partes obligatorias de este nivel para desbloquear la Tarea Colaborativa.',
+            'Completa las 5 partes de este nivel para desbloquear la Tarea Colaborativa.',
         },
         { status: 400 }
       );
@@ -232,7 +232,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            'Completa las 5 partes obligatorias de este nivel para desbloquear las tareas Level Up.',
+            'Completa las 5 partes de este nivel para desbloquear las tareas Level Up.',
         },
         { status: 400 }
       );

@@ -84,7 +84,7 @@ export async function POST(request: Request) {
         'Tienes las 30h, pero faltan al menos 4 tareas Level Up del Nivel 3 para el Diploma de Oro.';
     } else if (hoursOk) {
       msg =
-        'Tienes las horas, pero faltan tareas Level Up obligatorias para este diploma.';
+        'Tienes las horas, pero faltan tareas Level Up requeridas para este diploma.';
     }
     return NextResponse.json({ error: msg }, { status: 400 });
   }

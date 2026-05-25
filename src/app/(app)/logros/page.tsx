@@ -8,9 +8,9 @@ import { DIPLOMAS, getNextDiploma, type Diploma } from '@/lib/diplomas';
 
 const DIPLOMA_EXPLANATION = [
   'Hay 3 diplomas en el programa Redwood PD. Cada uno reconoce un nivel diferente de dominio.',
-  'DIPLOMA 1 — DOCENTE IA CONSCIENTE (Bronce): Completa Niveles 1 y 2 (20 horas verificadas) + 4 tareas Level Up del Nivel 1 + 4 tareas Level Up del Nivel 2.',
-  'DIPLOMA 2 — DOCENTE IA INNOVADORA (Plata): Diploma 1 completo + 24 horas verificadas en total (los requisitos de Diploma 1 se mantienen).',
-  'DIPLOMA 3 — DOCENTE IA TRANSFORMADORA (Oro): Diploma 2 completo + 30 horas verificadas en total + al menos 4 tareas Level Up del Nivel 3 (los requisitos de Diploma 1 y 2 se mantienen).',
+  'Diploma 1 — Docente IA Consciente (Bronce): completa los Niveles 1 y 2 (20 horas verificadas) + 4 tareas Level Up del Nivel 1 + 4 tareas Level Up del Nivel 2.',
+  'Diploma 2 — Docente IA Innovadora (Plata): cumple todo lo del Diploma 1 + alcanza 24 horas verificadas en total.',
+  'Diploma 3 — Docente IA Transformadora (Oro): cumple todo lo del Diploma 2 + alcanza 30 horas verificadas en total + al menos 4 tareas Level Up del Nivel 3.',
 ] as const;
 
 export default function LogrosPage() {

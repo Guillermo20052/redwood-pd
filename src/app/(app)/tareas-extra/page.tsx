@@ -109,7 +109,7 @@ function LevelExtraSection({
             color: 'var(--gray-600)',
           }}
         >
-          Completa las 5 partes obligatorias de este nivel para desbloquear las 10 tareas Level Up.
+          Completa las 5 partes de este nivel para desbloquear las 10 tareas Level Up.
         </p>
       )}
 
@@ -159,29 +159,29 @@ export default function TareasExtraPage() {
         </h2>
         <p className="text-sm text-[var(--gray-600)] mt-2 max-w-2xl">
           Práctica adicional con cada herramienta del nivel. Las tareas se desbloquean al
-          completar las 5 partes obligatorias del nivel correspondiente.
+          completar las 5 partes del nivel correspondiente.
         </p>
       </div>
 
       <div className="extras-diploma-banner border-2 border-[var(--gold)] bg-[var(--gold-light)] space-y-2">
         <p className="text-sm font-bold text-[var(--navy)]">
-          Para obtener el Diploma 1 necesitas:
+          Diploma 1 — Docente IA Consciente
+        </p>
+        <p className="text-xs font-semibold text-[var(--gray-700)]">
+          Para conseguir el Diploma de Bronce:
         </p>
         <ul className="text-sm text-[var(--gray-800)] space-y-1 list-none">
           <li>
-            {d1.hoursOk ? '✓' : '○'} 20h verificadas (Niveles 1 y 2 obligatorios){' '}
+            {d1.hoursOk ? '✓' : '○'} Completa los Niveles 1 y 2 (20 horas verificadas){' '}
             <span className="text-[var(--gray-500)]">({totalHours.toFixed(1)}h)</span>
           </li>
           <li>
-            {d1.extrasL1Ok ? '✓' : '○'} Al menos 4 tareas Level Up de Nivel 1 ({d1.extrasL1}/4)
+            {d1.extrasL1Ok ? '✓' : '○'} Termina 4 tareas Level Up del Nivel 1 ({d1.extrasL1}/4)
           </li>
           <li>
-            {d1.extrasL2Ok ? '✓' : '○'} Al menos 4 tareas Level Up de Nivel 2 ({d1.extrasL2}/4)
+            {d1.extrasL2Ok ? '✓' : '○'} Termina 4 tareas Level Up del Nivel 2 ({d1.extrasL2}/4)
           </li>
         </ul>
-        <p className="text-xs text-[var(--gray-600)] pt-1">
-          Las tareas Level Up de Nivel 3 son completamente opcionales y no afectan ningún diploma.
-        </p>
       </div>
 
       {SECTIONS.map((s) => (

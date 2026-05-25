@@ -38,6 +38,7 @@ type ApiTeacher = LeaderboardTeacher & {
   diplomaTier?: number;
   hours?: number;
   id?: string;
+  role?: 'teacher' | 'admin';
 };
 
 type Tab = 'leaderboard' | 'chat';
@@ -54,7 +55,9 @@ export default function ComunidadPage() {
       const res = await fetch('/api/community/teachers');
       if (!res.ok) return;
       const data = await res.json();
-      const mapped: LeaderboardTeacher[] = (data.teachers || []).map((t: ApiTeacher) => ({
+      const mapped: LeaderboardTeacher[] = (data.teachers || [])
+        .filter((t: ApiTeacher) => t.role !== 'admin')
+        .map((t: ApiTeacher) => ({
         user_id: t.user_id ?? t.id ?? '',
         full_name: t.full_name ?? 'Docente',
         subject: t.subject,

@@ -255,7 +255,7 @@ function EvaluationDetail({ row }: { row: EvaluationWithProfile }) {
       <Field label="Q2 · AI-ready vs. antes">{row.q2_value}/5</Field>
       <Field label="Q3 · Seguirá usando IA">{row.q3_value}/5</Field>
       <Field label="Q7 · Duración (1=larga, 3=adecuada, 5=corta)">{row.q7_value}/5</Field>
-      <Field label="Q8 · Exigencia (1=baja, 3=adecuada, 5=alta)">{row.q8_value}/5</Field>
+      <Field label="Q8 · Calificación general del programa">{row.q8_value}%</Field>
       <Field label="Q12 · Recomendaría">{Q12_LABEL[row.q12_value]}</Field>
 
       <TextField label="Q4 · Lo más útil del Nivel 1">{row.q4_text}</TextField>
@@ -337,6 +337,7 @@ function buildEvaluationSummary(rows: EvaluationWithProfile[]): EvaluationSummar
 
 function SummaryPanel({ summary }: { summary: EvaluationSummary }) {
   const fmt = (v: number | null) => (v === null ? '—' : `${v.toFixed(1)}/5`);
+  const fmtQ8 = (v: number | null) => (v === null ? '—' : `${Math.round(v)}%`);
   return (
     <div className="rounded-xl border border-[var(--navy)]/20 bg-[var(--navy)]/5 p-4">
       <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--navy)]">
@@ -347,7 +348,7 @@ function SummaryPanel({ summary }: { summary: EvaluationSummary }) {
         <Stat label="AI-ready (Q2)" value={fmt(summary.averages.q2)} />
         <Stat label="Continuará (Q3)" value={fmt(summary.averages.q3)} />
         <Stat label="Duración (Q7)" value={fmt(summary.averages.q7)} />
-        <Stat label="Exigencia (Q8)" value={fmt(summary.averages.q8)} />
+        <Stat label="Calificación (Q8)" value={fmtQ8(summary.averages.q8)} />
       </div>
       <div className="mt-3 text-xs text-[var(--gray-700)]">
         Recomendarían: <strong>{summary.q12.yes}</strong> sí ·{' '}

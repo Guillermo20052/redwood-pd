@@ -1,480 +1,272 @@
-import type { SubjectCard } from './level-ancillary';
+/** IB-aligned Aplicaciones por Materia — 14 DP subjects per level with concrete use cases. */
 
-/** IB-aligned Aplicaciones por Materia — 5 DP subjects × 5 level tools each. */
-export const APLICACIONES_IB: Record<string, SubjectCard[]> = {
+export type IbSubjectApplication = {
+  icon: string;
+  name: string;
+  example: string;
+};
+
+export const APLICACIONES_IB: Record<string, IbSubjectApplication[]> = {
   b: [
     {
-      icon: '🧬',
-      name: 'Biología IB',
-      applications: [
-        {
-          title: 'ChatGPT',
-          prompt:
-            'Genera 10 preguntas de evaluación tipo Paper 1 sobre división celular, alineadas a los criterios A/B/C del IB SL, con verbos de comando IB y un nivel de dificultad creciente.',
-        },
-        {
-          title: 'Claude',
-          prompt:
-            'Sube el borrador de un informe de laboratorio de fotosíntesis y pide retroalimentación por criterio (diseño, datos, análisis) con comentarios que puedas pegar en ManageBac.',
-        },
-        {
-          title: 'Perplexity',
-          prompt:
-            'Investiga el estado actual de la edición genética CRISPR en medicina con al menos cinco fuentes académicas citadas para preparar un debate IB sobre ética en biotecnología.',
-        },
-        {
-          title: 'MagicSchool',
-          prompt:
-            'Usa Assessment Builder para crear una rúbrica MYP/DP de 8 puntos para una indagación sobre ecosistemas locales, con descriptores para niveles 1–4 en Criterio B.',
-        },
-        {
-          title: 'Diffit',
-          prompt:
-            'Nivela un artículo sobre el ciclo del carbono en tres lecturas (avanzada, intermedia, con apoyo) más preguntas de comprensión para diferenciar en la misma clase.',
-        },
-      ],
-    },
-    {
-      icon: '📐',
-      name: 'Matemáticas IB',
-      applications: [
-        {
-          title: 'ChatGPT',
-          prompt:
-            'Pide cinco problemas contextualizados de funciones exponenciales (finanzas, crecimiento poblacional) con solución desarrollada y términos de comando tipo «determine» y «justify».',
-        },
-        {
-          title: 'Claude',
-          prompt:
-            'Pega tres respuestas reales de alumnas a un problema de derivadas y solicita comentarios formativos distintos según el error conceptual (regla, interpretación, notación).',
-        },
-        {
-          title: 'Perplexity',
-          prompt:
-            'Busca aplicaciones actuales de la teoría de juegos en economía o biología con fuentes verificables para enriquecer una unidad de modelización matemática IB.',
-        },
-        {
-          title: 'MagicSchool',
-          prompt:
-            'Genera una lista de verificación para la Exploración IA: elección de tema, fuentes, método estadístico y criterios de evaluación interna.',
-        },
-        {
-          title: 'Diffit',
-          prompt:
-            'Adapta un texto introductorio sobre probabilidad condicional para alumnas que necesitan apoyo léxico sin reducir el rigor de los conceptos matemáticos.',
-        },
-      ],
-    },
-    {
-      icon: '🌍',
-      name: 'Historia IB',
-      applications: [
-        {
-          title: 'ChatGPT',
-          prompt:
-            'Crea tres preguntas Paper 2 sobre la Revolución Mexicana con énfasis en causas estructurales, perspectivas y uso de evidencia, listas para practicar en clase.',
-        },
-        {
-          title: 'Claude',
-          prompt:
-            'Sube un ensayo de 800 palabras sobre la Guerra Fría y pide retroalimentación alineada a Criterio D (perspectiva, valor de las fuentes, conclusión).',
-        },
-        {
-          title: 'Perplexity',
-          prompt:
-            'Localiza fuentes primarias y secundarias recientes sobre derechos humanos en América Latina con citas APA para una unidad de Historia del siglo XX.',
-        },
-        {
-          title: 'MagicSchool',
-          prompt:
-            'Diseña una rúbrica para análisis de fuentes (OPVL) con descriptores claros para nivel inicial, intermedio y avanzado en Historia IB.',
-        },
-        {
-          title: 'Diffit',
-          prompt:
-            'Nivela un capítulo breve sobre la independencia de México para lectura en clase con preguntas de comprensión por nivel de lectura.',
-        },
-      ],
+      icon: '🎨',
+      name: 'ARTE IB',
+      example:
+        'ChatGPT puede ayudarte a generar 5 propuestas de proyectos de investigación visual alineados al CAS y al Programa de Artes. También sirve para redactar borradores del Curatorial Rationale comparando intención, materialidad y conexión con artistas de referencia.',
     },
     {
       icon: '📖',
-      name: 'Lengua y Literatura IB',
-      applications: [
-        {
-          title: 'ChatGPT',
-          prompt:
-            'Genera preguntas de análisis literario sobre un poema del corpus (imagen, estructura, tono) preparadas para práctica de Paper 1 con tiempo sugerido.',
-        },
-        {
-          title: 'Claude',
-          prompt:
-            'Sube un borrador de ensayo comparativo y pide comentarios por criterio C (organización, cohesión, registro) y D (interpretación, evidencia textual).',
-        },
-        {
-          title: 'Perplexity',
-          prompt:
-            'Investiga el contexto histórico y crítico de la obra en estudio con fuentes académicas en español para enriquecer la Introducción del ensayo IB.',
-        },
-        {
-          title: 'MagicSchool',
-          prompt:
-            'Crea una rúbrica para producción escrita oral (IO) con descriptores de fluidez, rango de vocabulario y profundidad analítica.',
-        },
-        {
-          title: 'Diffit',
-          prompt:
-            'Adapta un fragmento narrativo largo en versiones simplificada e intermedia manteniendo metáforas clave para discusión en Literatura IB.',
-        },
-      ],
+      name: 'ENGLISH IB',
+      example:
+        'Claude es excelente para revisar ensayos de Paper 2: sube el borrador y pide comentarios por criterio C (organización) y D (interpretación y evidencia textual) listos para pegar en ManageBac.',
     },
     {
-      icon: '🎨',
-      name: 'Artes Visuales IB',
-      applications: [
-        {
-          title: 'ChatGPT',
-          prompt:
-            'Redacta preguntas de crítica de obra para el proceso creativo: intención del artista, materialidad, relación con el tema del Curatorial Rationale.',
-        },
-        {
-          title: 'Claude',
-          prompt:
-            'Pega el borrador del Curatorial Rationale y solicita retroalimentación sobre coherencia entre obras, vocabulario crítico y conexión con artistas de referencia.',
-        },
-        {
-          title: 'Perplexity',
-          prompt:
-            'Busca referencias de artistas contemporáneos que trabajen con identidad y medio mixto, con fuentes de museos o revistas especializadas citadas.',
-        },
-        {
-          title: 'MagicSchool',
-          prompt:
-            'Genera una rúbrica para el Comparative Study (CS) con criterios de análisis formal, contextual y calidad de las comparaciones visuales.',
-        },
-        {
-          title: 'Diffit',
-          prompt:
-            'Nivela un texto crítico sobre arte conceptual para alumnas que preparan la investigación escrita del proceso IB.',
-        },
-      ],
+      icon: '📐',
+      name: 'MATH IB',
+      example:
+        'ChatGPT genera problemas contextualizados de funciones exponenciales o probabilidad con verbos de comando IB («determine», «justify») y solución desarrollada para practicar antes de una prueba formativa.',
+    },
+    {
+      icon: '📚',
+      name: 'LITERATURA IB',
+      example:
+        'Claude te ayuda a modelar análisis comparativo HL: sube dos obras del corpus y pide un esquema de tesis, evidencia textual y conectores académicos antes de que tus alumnas escriban el ensayo.',
+    },
+    {
+      icon: '🌍',
+      name: 'HISTORIA IB',
+      example:
+        'ChatGPT crea preguntas tipo Paper 2 con énfasis en causas estructurales, perspectivas y uso de evidencia — ideales para repaso de un tema del siglo XX antes del examen IB.',
+    },
+    {
+      icon: '⚛️',
+      name: 'FÍSICA IB',
+      example:
+        'Perplexity te permite verificar datos actuales sobre energías renovables o física de partículas con fuentes académicas citadas, perfecto para enriquecer una unidad de opciones del DP.',
+    },
+    {
+      icon: '🧬',
+      name: 'BIOLOGÍA IB',
+      example:
+        'Claude revisa borradores de informes de laboratorio por criterio (diseño, datos, análisis) con comentarios formativos que puedes adaptar para cada alumna sin reescribir el informe entero.',
+    },
+    {
+      icon: '🇩🇪',
+      name: 'ALEMÁN',
+      example:
+        'MagicSchool Assessment Builder genera rúbricas para producción oral o escrita en alemán con descriptores de fluidez, precisión gramatical y rango de vocabulario alineados al marco IB.',
+    },
+    {
+      icon: '🇫🇷',
+      name: 'FRANCÉS',
+      example:
+        'Diffit nivela un texto literario francés del corpus en tres versiones de lectura más preguntas de comprensión, para que todas practiquen Paper 1 con el mismo extracto base.',
+    },
+    {
+      icon: '🇮🇹',
+      name: 'ITALIANO',
+      example:
+        'ChatGPT propone guiones de role-play para la evaluación oral: situaciones cotidianas o temas del programa con preguntas de seguimiento graduadas por nivel B1/B2 del IB.',
+    },
+    {
+      icon: '💼',
+      name: 'BUSINESS IB',
+      example:
+        'Perplexity investiga casos empresariales recientes (decisiones estratégicas, ética corporativa) con fuentes verificables para alimentar un análisis tipo Paper 1 o el IA de Business Management.',
+    },
+    {
+      icon: '🤔',
+      name: 'FILOSOFÍA',
+      example:
+        'Claude es excelente para discutir argumentos opuestos sobre un dilema ético. Súbele un caso y pídele que tome dos posturas defendidas, perfecto para preparar exámenes de Paper 1.',
+    },
+    {
+      icon: '✝️',
+      name: 'RELIGIÓN (Inspirada por Opus Dei)',
+      example:
+        'Perplexity te permite verificar interpretaciones doctrinales con citas a fuentes confiables. Útil para preparar lecciones que respeten la inspiración Opus Dei del programa.',
+    },
+    {
+      icon: '🧠',
+      name: 'TOK',
+      example:
+        'ChatGPT genera mapas de conexiones entre Áreas de Conocimiento y preguntas de conocimiento («¿Cómo sabemos…?») a partir de un objeto o tema del exhibition, listos para taller socrático.',
     },
   ],
   i: [
     {
-      icon: '🧬',
-      name: 'Biología IB',
-      applications: [
-        {
-          title: 'NotebookLM',
-          prompt:
-            'Sube tus apuntes de unidad, el libro del tema y dos artículos PDF; genera un resumen con preguntas de repaso para el examen de Biología SL sobre genética.',
-        },
-        {
-          title: 'Canva',
-          prompt:
-            'Crea una infografía del ciclo de Krebs con iconos, flechas y glosario lateral para repasar antes de una prueba formativa IB.',
-        },
-        {
-          title: 'Gemini',
-          prompt:
-            'En Google Docs, pide a Gemini que reformule la retroalimentación de un informe de laboratorio en tono alentador pero preciso para tres perfiles de alumna.',
-        },
-        {
-          title: 'Brisk Teaching',
-          prompt:
-            'Pega diez párrafos de conclusiones de laboratorio y genera comentarios personalizados que citen el error específico y la siguiente acción.',
-        },
-        {
-          title: 'Gamma',
-          prompt:
-            'Arma una presentación de 8 diapositivas sobre cambio climático y biodiversidad para abrir una indagación, con datos y preguntas provocadoras IB.',
-        },
-      ],
-    },
-    {
-      icon: '📐',
-      name: 'Matemáticas IB',
-      applications: [
-        {
-          title: 'NotebookLM',
-          prompt:
-            'Carga guías de estudio y ejercicios resueltos de cálculo; pide un podcast de repaso de 5 minutos sobre regla de la cadena para estudio independiente.',
-        },
-        {
-          title: 'Canva',
-          prompt:
-            'Diseña un póster visual de «errores frecuentes en integrales» con ejemplos corregidos para colgar en el salón de Matemáticas IB.',
-        },
-        {
-          title: 'Gemini',
-          prompt:
-            'Usa Gemini en Sheets para proponer fórmulas que analicen resultados de una encuesta de proyecto estadístico y explique cada paso en español claro.',
-        },
-        {
-          title: 'Brisk Teaching',
-          prompt:
-            'Retroalimenta en lote quince soluciones de problemas de vectores señalando si el error es algebraico, de representación o de interpretación física.',
-        },
-        {
-          title: 'Gamma',
-          prompt:
-            'Prepara diapositivas para explicar distribuciones de probabilidad con gráficos y preguntas de salida alineadas a Math AI HL.',
-        },
-      ],
-    },
-    {
-      icon: '🌍',
-      name: 'Historia IB',
-      applications: [
-        {
-          title: 'NotebookLM',
-          prompt:
-            'Sube capítulos del libro, esquemas de clase y un documental transcrito; genera una línea de tiempo interactiva con preguntas de análisis causal.',
-        },
-        {
-          title: 'Canva',
-          prompt:
-            'Crea un mural visual de causas y consecuencias de la Primera Guerra Mundial para estación de repaso antes del Paper 2.',
-        },
-        {
-          title: 'Gemini',
-          prompt:
-            'Resume y compara dos discursos históricos pegados en un Doc, destacando tono, audiencia y sesgo para análisis de fuentes.',
-        },
-        {
-          title: 'Brisk Teaching',
-          prompt:
-            'Comenta diez respuestas cortas de análisis OPVL con frases listas para copiar en la rúbrica formativa de Historia IB.',
-        },
-        {
-          title: 'Gamma',
-          prompt:
-            'Presenta un caso de estudio de derechos civiles con mapas, citas y pregunta final tipo «to what extent» del IB.',
-        },
-      ],
+      icon: '🎨',
+      name: 'ARTE IB',
+      example:
+        'Canva con IA maqueta un folleto digital de la exhibición con miniaturas, títulos y párrafos del Curatorial Rationale listo para revisión con tus alumnas antes de la entrega final.',
     },
     {
       icon: '📖',
-      name: 'Lengua y Literatura IB',
-      applications: [
-        {
-          title: 'NotebookLM',
-          prompt:
-            'Sube la novela en PDF, guía del profesor y apuntes de clase; genera preguntas socráticas por capítulo para seminario IB.',
-        },
-        {
-          title: 'Canva',
-          prompt:
-            'Diseña una línea de tiempo visual de la trama y temas principales de la obra en estudio para alumnas visuales.',
-        },
-        {
-          title: 'Gemini',
-          prompt:
-            'Mejora borradores de ensayo en Google Docs: cohesión entre párrafos, conectores académicos y precisión del registro formal.',
-        },
-        {
-          title: 'Brisk Teaching',
-          prompt:
-            'Retroalimenta quince párrafos de análisis literario señalando evidencia textual, profundidad interpretativa y estructura PEEL.',
-        },
-        {
-          title: 'Gamma',
-          prompt:
-            'Arma una presentación para modelar cómo leer un texto no literario (discurso, editorial) antes de la práctica de Paper 1.',
-        },
-      ],
+      name: 'ENGLISH IB',
+      example:
+        'NotebookLM sube la novela en PDF, guía del profesor y apuntes de clase para generar preguntas socráticas por capítulo que alimenten seminarios de Language A antes del IO.',
     },
     {
-      icon: '🎨',
-      name: 'Artes Visuales IB',
-      applications: [
-        {
-          title: 'NotebookLM',
-          prompt:
-            'Sube imágenes de obras de referencia, notas del proceso y criterios IB; genera preguntas para la entrevista del Process Portfolio.',
-        },
-        {
-          title: 'Canva',
-          prompt:
-            'Maqueta un folleto digital del exhibition con miniaturas, títulos y párrafos del Curatorial Rationale listo para revisión con alumnas.',
-        },
-        {
-          title: 'Gemini',
-          prompt:
-            'Redacta correos a familias explicando el proyecto de exhibición IB, fechas de entrega y criterios de evaluación en tono claro y profesional.',
-        },
-        {
-          title: 'Brisk Teaching',
-          prompt:
-            'Comenta borradores del Comparative Study destacando calidad de las comparaciones formales y contextual entre artistas.',
-        },
-        {
-          title: 'Gamma',
-          prompt:
-            'Crea una presentación de artistas de referencia con obras, técnicas y preguntas de análisis para taller de crítica en clase.',
-        },
-      ],
+      icon: '📐',
+      name: 'MATH IB',
+      example:
+        'Gamma arma una presentación de 8 diapositivas sobre distribuciones de probabilidad con gráficos y preguntas de salida alineadas a Math AI HL, ideal para abrir una unidad nueva.',
+    },
+    {
+      icon: '📚',
+      name: 'LITERATURA IB',
+      example:
+        'Brisk Teaching retroalimenta en lote quince párrafos de análisis literario señalando evidencia textual, profundidad interpretativa y estructura PEEL sin repetir el mismo comentario genérico.',
+    },
+    {
+      icon: '🌍',
+      name: 'HISTORIA IB',
+      example:
+        'NotebookLM carga capítulos del libro, esquemas de clase y un documental transcrito para generar una línea de tiempo interactiva con preguntas de análisis causal tipo Paper 2.',
+    },
+    {
+      icon: '⚛️',
+      name: 'FÍSICA IB',
+      example:
+        'Canva diseña infografías de vectores, campos eléctricos o ondas con iconos y glosario lateral para repaso visual antes de una prueba formativa de Física IB.',
+    },
+    {
+      icon: '🧬',
+      name: 'BIOLOGÍA IB',
+      example:
+        'NotebookLM resume tus apuntes de unidad, el libro del tema y dos artículos PDF en preguntas de repaso para el examen de Biología SL sobre genética o ecología.',
+    },
+    {
+      icon: '🇩🇪',
+      name: 'ALEMÁN',
+      example:
+        'Gemini en Google Docs reformula retroalimentación de ensayos en alemán en tono alentador pero preciso, señalando errores de Kasus, Wortstellung y registro académico.',
+    },
+    {
+      icon: '🇫🇷',
+      name: 'FRANCÉS',
+      example:
+        'Gamma prepara diapositivas para modelar lectura de un discurso o editorial francés antes de la práctica de Paper 1, con preguntas guía sobre tono, registro y argumentación.',
+    },
+    {
+      icon: '🇮🇹',
+      name: 'ITALIANO',
+      example:
+        'Brisk Teaching comenta borradores de producción escrita en italiano destacando cohesión, conectores y precisión léxica según los criterios de evaluación del IB.',
+    },
+    {
+      icon: '💼',
+      name: 'BUSINESS IB',
+      example:
+        'Gemini en Sheets analiza datos de un caso de estudio (costos, márgenes, ROI) y explica cada paso en español claro para que tus alumnas redacten el análisis del IA.',
+    },
+    {
+      icon: '🤔',
+      name: 'FILOSOFÍA',
+      example:
+        'NotebookLM sube textos del programa (Platón, Rawls, etc.) y genera preguntas de contraste entre corrientes filosóficas para preparar el ensayo filosófico del DP.',
+    },
+    {
+      icon: '✝️',
+      name: 'RELIGIÓN (Inspirada por Opus Dei)',
+      example:
+        'Canva crea líneas de tiempo visuales de hitos bíblicos o de la historia de la Iglesia con espacio para reflexión personal, alineadas a unidades del programa de Religión.',
+    },
+    {
+      icon: '🧠',
+      name: 'TOK',
+      example:
+        'Gamma presenta un objeto del TOK exhibition con diapositivas que modelan cómo vincularlo a un tema opcional y a preguntas de conocimiento, sin caer en definiciones superficiales.',
     },
   ],
   a: [
     {
-      icon: '🧬',
-      name: 'Biología IB',
-      applications: [
-        {
-          title: 'Napkin AI',
-          prompt:
-            'Diagrama el flujo de síntesis de proteínas (ADN→ARN→proteína) con iconos y flechas para repaso visual antes del examen de Biología IB.',
-        },
-        {
-          title: 'Copilot Web',
-          prompt:
-            'Pega una tabla de resultados de laboratorio en Excel y pide a Copilot gráficos sugeridos, tendencias y redacción de párrafo de análisis para el informe IB.',
-        },
-        {
-          title: 'SchoolAI',
-          prompt:
-            'Configura un space donde alumnas practiquen preguntas de definición de NdC sobre biotecnología con respuestas limitadas y monitoreo del docente.',
-        },
-        {
-          title: 'Khanmigo',
-          prompt:
-            'Modela una sesión de tutoría socrática sobre equilibrio ácido-base para que alumnas practiquen sin recibir la respuesta final de inmediato.',
-        },
-        {
-          title: 'ElevenLabs',
-          prompt:
-            'Genera un audio de 2 min que explique la selección natural con analogía clara para alumnas que aprenden mejor por oído.',
-        },
-      ],
-    },
-    {
-      icon: '📐',
-      name: 'Matemáticas IB',
-      applications: [
-        {
-          title: 'Napkin AI',
-          prompt:
-            'Crea un mapa conceptual que conecte derivadas, integrales y aplicaciones en física para repaso integral de Math AA HL.',
-        },
-        {
-          title: 'Copilot Web',
-          prompt:
-            'Usa Copilot para interpretar una hoja de cálculo de datos de encuesta del proyecto IA y redactar el párrafo de «analysis» del reporte.',
-        },
-        {
-          title: 'SchoolAI',
-          prompt:
-            'Diseña un tutor de repaso de probabilidad con límites: solo preguntas guía, sin soluciones completas, registro visible para el docente.',
-        },
-        {
-          title: 'Khanmigo',
-          prompt:
-            'Prepara alumnas para la Exploración con Khanmigo practicando elección de variables y justificación del método estadístico paso a paso.',
-        },
-        {
-          title: 'ElevenLabs',
-          prompt:
-            "Produce un podcast breve que explique la regla de L'Hôpital con ejemplos narrados para estudio independiente.",
-        },
-      ],
-    },
-    {
-      icon: '🌍',
-      name: 'Historia IB',
-      applications: [
-        {
-          title: 'Napkin AI',
-          prompt:
-            'Visualiza causas y efectos de la Guerra Fría en un diagrama de cadena para discusión comparada con conflictos actuales.',
-        },
-        {
-          title: 'Copilot Web',
-          prompt:
-            'Organiza notas de investigación del Extended Essay en Word: esquema por secciones, citas pendientes y checklist de criterios IB.',
-        },
-        {
-          title: 'SchoolAI',
-          prompt:
-            'Crea un debate guiado sobre «¿fue justificada la bomba atómica?» con roles asignados y fuentes cortas precargadas en el space.',
-        },
-        {
-          title: 'Khanmigo',
-          prompt:
-            'Entrena alumnas a formular tesis «to what extent» con preguntas de seguimiento antes de escribir el ensayo de Historia IB.',
-        },
-        {
-          title: 'ElevenLabs',
-          prompt:
-            'Narra un audio-tour de 3 min sobre un sitio histórico local como modelo para el proyecto de investigación histórica.',
-        },
-      ],
+      icon: '🎨',
+      name: 'ARTE IB',
+      example:
+        'Napkin AI mapea el proceso creativo de la alumna (investigación → experimentación → obra final) en un flujo visual claro para el Process Portfolio y la entrevista IB.',
     },
     {
       icon: '📖',
-      name: 'Lengua y Literatura IB',
-      applications: [
-        {
-          title: 'Napkin AI',
-          prompt:
-            'Diagrama la estructura narrativa de la obra (nudo, clímax, resolución) y temas paralelos para planear el ensayo comparativo IB.',
-        },
-        {
-          title: 'Copilot Web',
-          prompt:
-            'Revisa en Word el borrador del IO: tiempo de palabras, conectores académicos y balance entre obra y texto no literario.',
-        },
-        {
-          title: 'SchoolAI',
-          prompt:
-            'Configura práctica de Paper 1 con extracto corto: alumnas reciben preguntas guía sin análisis completo, tú ves el historial de chat.',
-        },
-        {
-          title: 'Khanmigo',
-          prompt:
-            'Practica con alumnas la formulación de tesis literarias que respondan al verso de comando sin caer en resumen plot.',
-        },
-        {
-          title: 'ElevenLabs',
-          prompt:
-            'Graba un audio modelo de análisis oral de un poema (tono, ritmo, imagen) para que alumnas comparen con su propia IO.',
-        },
-      ],
+      name: 'ENGLISH IB',
+      example:
+        'ElevenLabs graba un audio modelo de análisis oral de un poema (tono, ritmo, imagen) para que tus alumnas comparen su propia IO con un ejemplo de referencia.',
     },
     {
-      icon: '🎨',
-      name: 'Artes Visuales IB',
-      applications: [
-        {
-          title: 'Napkin AI',
-          prompt:
-            'Mapea el proceso creativo de la alumna (investigación→experimentación→obra final) en un flujo visual para el Process Portfolio.',
-        },
-        {
-          title: 'Copilot Web',
-          prompt:
-            'Redacta el informe trimestral al departamento de artes sobre avances del programa IB con datos de entregas y ejemplos de obras.',
-        },
-        {
-          title: 'SchoolAI',
-          prompt:
-            'Crea un space de crítica entre pares donde alumnas describen la obra de una compañera con preguntas obligatorias de formal y conceptual.',
-        },
-        {
-          title: 'Khanmigo',
-          prompt:
-            'Guía a alumnas para redactar el Comparative Study comparando dos artistas con vocabulario crítico preciso (materialidad, composición, contexto).',
-        },
-        {
-          title: 'ElevenLabs',
-          prompt:
-            'Produce la narración del audio-guía de la exhibición para visitantes, alineada al Curatorial Rationale IB.',
-        },
-      ],
+      icon: '📐',
+      name: 'MATH IB',
+      example:
+        'Khanmigo guía a alumnas en la Exploración IA paso a paso: elección de variables, justificación del método estadístico y redacción del análisis sin entregar la respuesta final.',
+    },
+    {
+      icon: '📚',
+      name: 'LITERATURA IB',
+      example:
+        'SchoolAI configura práctica de Paper 1 con extracto corto: alumnas reciben preguntas guía sin análisis completo y tú ves el historial de chat para evaluar comprensión.',
+    },
+    {
+      icon: '🌍',
+      name: 'HISTORIA IB',
+      example:
+        'SchoolAI crea un debate guiado sobre «¿fue justificada la bomba atómica?» con roles asignados y fuentes cortas precargadas, ideal para practicar argumentación histórica IB.',
+    },
+    {
+      icon: '⚛️',
+      name: 'FÍSICA IB',
+      example:
+        'Copilot Web interpreta tablas de resultados de laboratorio en Excel y sugiere gráficos, tendencias y redacción del párrafo de análisis para el informe de Física IB.',
+    },
+    {
+      icon: '🧬',
+      name: 'BIOLOGÍA IB',
+      example:
+        'Napkin AI diagrama el flujo de síntesis de proteínas (ADN→ARN→proteína) con iconos y flechas para repaso visual antes del examen de Biología IB.',
+    },
+    {
+      icon: '🇩🇪',
+      name: 'ALEMÁN',
+      example:
+        'ElevenLabs produce diálogos modelados en alemán para practicar comprensión auditiva y entonación antes de la evaluación oral del IB.',
+    },
+    {
+      icon: '🇫🇷',
+      name: 'FRANCÉS',
+      example:
+        'Khanmigo practica con alumnas la formulación de tesis literarias en francés que respondan al verso de comando sin caer en resumen de trama.',
+    },
+    {
+      icon: '🇮🇹',
+      name: 'ITALIANO',
+      example:
+        'SchoolAI ofrece un tutor de conversación en italiano con límites claros: solo preguntas guía, sin traducciones completas, con registro visible para el docente.',
+    },
+    {
+      icon: '💼',
+      name: 'BUSINESS IB',
+      example:
+        'Copilot Web organiza notas de investigación del IA en Word: esquema por secciones, citas pendientes y checklist de criterios A–E de Business Management.',
+    },
+    {
+      icon: '🤔',
+      name: 'FILOSOFÍA',
+      example:
+        'Khanmigo entrena a alumnas a formular tesis filosóficas con preguntas socráticas de seguimiento antes de escribir el ensayo del Paper 2.',
+    },
+    {
+      icon: '✝️',
+      name: 'RELIGIÓN (Inspirada por Opus Dei)',
+      example:
+        'ElevenLabs narra reflexiones guiadas sobre virtudes y vocación en tono contemplativo, útil para complementar lecturas del programa inspirado en Opus Dei.',
+    },
+    {
+      icon: '🧠',
+      name: 'TOK',
+      example:
+        'Napkin AI visualiza conexiones entre un tema opcional, tres objetos del exhibition y preguntas de conocimiento, ayudando a alumnas a planear el comentario de 950 palabras.',
     },
   ],
 };
 
-export function getAplicacionesIb(level: string): SubjectCard[] {
+export function getAplicacionesIb(level: string): IbSubjectApplication[] {
   return APLICACIONES_IB[level] ?? [];
 }

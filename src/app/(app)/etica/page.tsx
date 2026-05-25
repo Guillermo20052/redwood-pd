@@ -1,4 +1,29 @@
-export default function EticaPage() {
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { getSessionUserId, loadProfile } from '@/lib/completions-service';
+import { isLocalMode, localDb } from '@/lib/local-db';
+import { EticaReadConfirm } from '@/components/EticaReadConfirm';
+
+export default async function EticaPage() {
+  let eticaReadAt: string | null = null;
+
+  if (!isSupabaseConfigured() || isLocalMode()) {
+    const session = await getSessionUserId();
+    if (session) {
+      const profile = localDb.getProfile(session.userId);
+      eticaReadAt = profile?.etica_read_at ?? null;
+    }
+  } else {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      const profile = await loadProfile(user.id);
+      eticaReadAt =
+        profile && typeof profile.etica_read_at === 'string' ? profile.etica_read_at : null;
+    }
+  }
+
   return (
     <article className="app-page">
       <div className="level-hero lh-e">
@@ -202,6 +227,8 @@ export default function EticaPage() {
           actualízala cada ciclo escolar.
         </p>
       </section>
+
+      <EticaReadConfirm initialReadAt={eticaReadAt} />
     </article>
   );
 }

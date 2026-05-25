@@ -7,6 +7,7 @@ import { buildInitialCompletions, sumVerifiedHours } from '@/lib/verification';
 import { curriculumPath } from '@/lib/curriculum-path';
 import type { CompletionRow } from '@/lib/local-db';
 import { isLocalMode, localDb } from '@/lib/local-db';
+import { isTeacherProfile } from '@/lib/teacher-profiles';
 
 export const dynamic = 'force-dynamic';
 
@@ -95,7 +96,7 @@ function buildTeacherStat(
 }
 
 function buildLocalTeacherStats(): TeacherStat[] {
-  const profiles = localDb.listProfiles().filter((p) => p.role === 'teacher');
+  const profiles = localDb.listProfiles().filter((p) => isTeacherProfile(p.role));
   return profiles.map((p) => {
     const rows = localDb.getCompletions(p.id);
     return buildTeacherStat({ id: p.id, email: p.email, full_name: p.full_name, subject: p.subject }, rows);

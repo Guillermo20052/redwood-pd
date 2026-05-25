@@ -74,6 +74,21 @@
           "transferTask": "Reflexión: ¿Cómo vas a verificar lo que te diga la IA de ahora en adelante? 2–3 oraciones."
         }
       ]
+    },
+    {
+      "id": "s6-collab",
+      "label": "Tarea colaborativa",
+      "title": "TAREA COLABORATIVA · NIVEL 1 · Sesión de pares",
+      "objective": "Comparar prompts y resultados con otra docente del programa para cerrar el Nivel 1.",
+      "days": [
+        {
+          "name": "Tarea colaborativa",
+          "theme": "Sesión de pares: Comparen prompts y resultados",
+          "objective": "Intercambiar prompts reales, correr el prompt de la otra en tu herramienta y reflexionar juntas.",
+          "practiceTask": "Elige una compañera del programa. Intercambien un prompt real de ChatGPT o Claude, corran el prompt de la otra y escriban una reflexión conjunta (mín. 400 caracteres) con el nombre de tu compañera.",
+          "transferTask": "Indica el nombre completo de tu compañera al enviar la tarea en el Plan de Trabajo."
+        }
+      ]
     }
   ]
 }

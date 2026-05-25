@@ -1,6 +1,6 @@
 'use client';
 
-import type { ExtraTask } from '@/lib/extra-tasks';
+import { getExtraTaskBadgeLabel, type ExtraTask } from '@/lib/extra-tasks';
 import type { CompletionMap } from '@/lib/verification';
 import { isExtraTaskAvailable, isLevelComplete } from '@/lib/extras-gating';
 
@@ -49,7 +49,7 @@ export function ExtraTaskCard({ task, completions, isAdmin = false, onOpen }: Pr
       className={`extra-task-card text-left w-full ${locked ? 'extra-task-card--locked' : ''} ${verified ? 'extra-task-card--verified' : ''} ${!locked && !verified ? 'extra-task-card--available' : ''}`}
     >
       <div className="flex items-start justify-between gap-2 mb-2">
-        <span className="extra-task-badge">TAREA LEVEL UP · OPCIONAL</span>
+        <span className="extra-task-badge">{getExtraTaskBadgeLabel(task.level)}</span>
         <span className="text-[10px] font-bold text-[var(--gray-400)]">#{task.number}</span>
       </div>
 

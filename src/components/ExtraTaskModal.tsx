@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { ExtraTask } from '@/lib/extra-tasks';
+import { getExtraTaskBadgeLabel, type ExtraTask } from '@/lib/extra-tasks';
 import { verificationConfig } from '@/lib/curriculum-path';
 import { useProgressContext } from './Providers';
 import { FileUpload } from './FileUpload';
@@ -127,7 +127,7 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
         >
           <div>
             <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--gold)' }}>
-              TAREA LEVEL UP · OPCIONAL · {task.tool}
+              {getExtraTaskBadgeLabel(task.level)} · {task.tool}
             </p>
             <h3 className="font-condensed text-lg font-extrabold text-[var(--navy)] mt-1">
               {task.title}

@@ -16,26 +16,18 @@ const SECTIONS: {
   level: 'b' | 'i' | 'a';
   title: string;
   accent: string;
-  optional?: boolean;
-  diplomaRelevant?: boolean;
+  diplomaTier?: 1 | 3;
 }[] = [
-  { level: 'b', title: 'Nivel 1 · Fundamentos', accent: 'var(--navy)', diplomaRelevant: true },
-  { level: 'i', title: 'Nivel 2 · Integración', accent: 'var(--teal)', diplomaRelevant: true },
-  {
-    level: 'a',
-    title: 'Nivel 3 · Transformación',
-    accent: 'var(--red)',
-    optional: true,
-    diplomaRelevant: false,
-  },
+  { level: 'b', title: 'Nivel 1 · Fundamentos', accent: 'var(--navy)', diplomaTier: 1 },
+  { level: 'i', title: 'Nivel 2 · Integración', accent: 'var(--teal)', diplomaTier: 1 },
+  { level: 'a', title: 'Nivel 3 · Transformación', accent: 'var(--red)', diplomaTier: 3 },
 ];
 
 function LevelExtraSection({
   level,
   title,
   accent,
-  optional,
-  diplomaRelevant,
+  diplomaTier,
   completions,
   isAdmin,
   onOpenTask,
@@ -43,8 +35,7 @@ function LevelExtraSection({
   level: 'b' | 'i' | 'a';
   title: string;
   accent: string;
-  optional?: boolean;
-  diplomaRelevant?: boolean;
+  diplomaTier?: 1 | 3;
   completions: ReturnType<typeof useProgressContext>['completions'];
   isAdmin: boolean;
   onOpenTask: (t: ExtraTask) => void;
@@ -52,8 +43,8 @@ function LevelExtraSection({
   const tasks = getExtraTasksForLevel(level);
   const done = countCompletedExtras(level, completions);
   const levelDone = isAdmin || isLevelComplete(level, completions);
-  const diplomaMet =
-    !diplomaRelevant || done >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL;
+  const diplomaMet = !diplomaTier || done >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL;
+  const diplomaLabel = diplomaTier === 3 ? 'Diploma 3 (Oro)' : 'Diploma 1';
 
   return (
     <section className="space-y-4">
@@ -63,14 +54,6 @@ function LevelExtraSection({
       >
         <div className="flex items-center gap-2">
           <h3 className="font-condensed text-xl font-extrabold">{title}</h3>
-          {optional && (
-            <span
-              className="text-[10px] font-bold uppercase px-2 py-0.5 rounded"
-              style={{ background: 'var(--gold)', color: 'var(--navy)' }}
-            >
-              Opcional
-            </span>
-          )}
         </div>
         <p className="text-sm font-semibold opacity-90">
           {done} de 10 completadas
@@ -84,9 +67,9 @@ function LevelExtraSection({
         />
       </div>
 
-      {diplomaRelevant && (
+      {diplomaTier && (
         <p className="text-sm text-[var(--gray-700)]">
-          Necesitas {DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL} para Diploma 1{' '}
+          Necesitas {DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL} para {diplomaLabel}{' '}
           {diplomaMet ? (
             <span className="font-semibold" style={{ color: 'var(--teal)' }}>
               · {done}/{DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL} ✓
@@ -97,6 +80,12 @@ function LevelExtraSection({
               {DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL - done})
             </span>
           )}
+        </p>
+      )}
+
+      {diplomaTier === 3 && (
+        <p className="text-sm text-[var(--gray-600)] leading-relaxed">
+          Estas tareas desbloquean el Diploma 3 — tu camino de usuaria de IA a líder pedagógica.
         </p>
       )}
 
@@ -170,8 +159,7 @@ export default function TareasExtraPage() {
           level={s.level}
           title={s.title}
           accent={s.accent}
-          optional={s.optional}
-          diplomaRelevant={s.diplomaRelevant}
+          diplomaTier={s.diplomaTier}
           completions={completions}
           isAdmin={isAdmin}
           onOpenTask={setActiveTask}

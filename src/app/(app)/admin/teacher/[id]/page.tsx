@@ -260,9 +260,9 @@ export default async function TeacherDetailPage({ params }: PageProps) {
             const done = countCompletedExtras(level, completionMap);
             const tasks = getExtraTasksForLevel(level);
             const diplomaNote =
-              level !== 'a'
-                ? ` · ${done >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL ? `${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL} hacia Diploma 1 ✓` : `${done}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL} hacia Diploma 1`}`
-                : ' · opcionales';
+              level === 'a'
+                ? ` · ${done >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL ? `${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL} hacia Diploma 3 ✓` : `${done}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL} hacia Diploma 3`}`
+                : ` · ${done >= DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL ? `${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL} hacia Diploma 1 ✓` : `${done}/${DIPLOMA_EXTRAS_REQUIRED_PER_LEVEL} hacia Diploma 1`}`;
             return (
               <div
                 key={level}

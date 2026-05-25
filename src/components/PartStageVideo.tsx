@@ -12,12 +12,13 @@ type Props = {
 };
 
 export function PartStageVideo({ item, level, onVerified }: Props) {
-  const { verifyVideo, markAdminSkipped, profile } = useProgressContext();
+  const { verifyVideo, markAdminSkipped, profile, completions } = useProgressContext();
   const [skipping, setSkipping] = useState(false);
   const [skipError, setSkipError] = useState('');
 
   const isAdmin = profile.role === 'admin';
   const allowSkip = level === 'b';
+  const alreadyVerified = completions[item.itemKey]?.status === 'verified';
 
   const handleSkip = async () => {
     if (skipping) return;
@@ -62,6 +63,7 @@ export function PartStageVideo({ item, level, onVerified }: Props) {
           itemKey={item.itemKey}
           youtubeUrl={item.youtubeUrl}
           level={level}
+          alreadyVerified={alreadyVerified}
           onVerified={onVerified}
         />
       </div>
@@ -75,7 +77,7 @@ export function PartStageVideo({ item, level, onVerified }: Props) {
         </p>
       ) : null}
 
-      {allowSkip && !isAdmin && (
+      {allowSkip && !isAdmin && !alreadyVerified && (
         <div className="flex flex-wrap items-center gap-3 pt-1">
           <button
             type="button"
@@ -91,7 +93,7 @@ export function PartStageVideo({ item, level, onVerified }: Props) {
         </div>
       )}
 
-      {isAdmin && (
+      {isAdmin && !alreadyVerified && (
         <div className="flex flex-wrap items-center gap-3 pt-1">
           <button
             type="button"

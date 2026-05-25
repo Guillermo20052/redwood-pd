@@ -186,16 +186,7 @@ export const PartCard = forwardRef<HTMLElement, Props>(function PartCard(
         {expanded && (
           <div className="mt-4 space-y-3 border-t border-[var(--gray-200)] pt-3 text-sm">
             {stages.video && (
-              <ReadOnlyStage
-                label="Video"
-                body={
-                  completions[stages.video.itemKey]?.video_watch_pct != null
-                    ? `Video verificado · ${Math.round(
-                        (completions[stages.video.itemKey]!.video_watch_pct as number) * 100
-                      )}% reproducido`
-                    : 'Video verificado'
-                }
-              />
+              <PartStageVideo item={stages.video} level={level} onVerified={() => {}} />
             )}
             {stages.task && (
               <ReadOnlyStage
@@ -288,16 +279,31 @@ function ActiveStage({
 }) {
   const noop = () => {};
 
+  const videoReference =
+    stages.video && videoS === 'verified' ? (
+      <div className="mb-5 border-b border-[var(--line-soft)] pb-5">
+        <PartStageVideo item={stages.video} level={level} onVerified={noop} />
+      </div>
+    ) : null;
+
   if (videoS !== 'verified' && stages.video) {
     return <PartStageVideo item={stages.video} level={level} onVerified={noop} />;
   }
   if (taskS !== 'verified' && stages.task) {
     return (
-      <PartStageTask item={stages.task} collaborative={collaborative} onVerified={noop} />
+      <>
+        {videoReference}
+        <PartStageTask item={stages.task} collaborative={collaborative} onVerified={noop} />
+      </>
     );
   }
   if (reflS !== 'verified' && stages.reflection) {
-    return <PartStageReflection item={stages.reflection} onVerified={noop} />;
+    return (
+      <>
+        {videoReference}
+        <PartStageReflection item={stages.reflection} onVerified={noop} />
+      </>
+    );
   }
   return null;
 }

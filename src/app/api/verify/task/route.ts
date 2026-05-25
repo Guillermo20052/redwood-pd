@@ -503,6 +503,7 @@ export async function POST(request: Request) {
   let grade;
   try {
     grade = await gradeTaskSubmission({
+      taskId: itemKey,
       inputType,
       taskPrompt: item.taskPrompt ?? item.label,
       taskRubric: taskRubricForGrader,

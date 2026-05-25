@@ -19,7 +19,12 @@ export type TaskGradeResult = {
   characterCount?: number;
 };
 
+/** Mandatory Diffit task (Nivel 1 Parte 5) — uses lenient "did you try" grading only. */
+export const DIFFIT_TASK_ID = 'lvl-b-p5-task';
+
 export type GradeTaskInput = {
+  /** Curriculum itemKey; routes lvl-b-p5-task to the lenient Diffit grader. */
+  taskId?: string;
   inputType?: TaskInputType;
   taskPrompt: string;
   taskRubric?: string;
@@ -53,6 +58,59 @@ const SYSTEM_PROMPT =
   'La docente puede enmarcar su trabajo en IB o en su rol real (preceptoría, formación religiosa, apoyo, etc.) — evalúa la calidad pedagógica en SU contexto, no exijas marco IB si su rol no lo es. ' +
   'Tu puntaje (score) es estricto; tu feedback escrito siempre es cálido, coach y accionable — nunca condescendiente ni punitivo. ' +
   'Responde solo con JSON válido.';
+
+const DIFFIT_LENIENT_SYSTEM_PROMPT =
+  'Eres evaluador del programa Redwood PD. Esta entrega es la tarea de exploración con Diffit (Nivel 1 Parte 5): ' +
+  'el objetivo es que la docente experimente la herramienta, no que produzca contenido perfeccionado. ' +
+  'Aprueba con generosidad cualquier evidencia de intento educativo genuino. ' +
+  'Responde solo con JSON válido.';
+
+function isDiffitLenientTask(input: GradeTaskInput): boolean {
+  return input.taskId === DIFFIT_TASK_ID;
+}
+
+function buildDiffitLenientGradingPrompt(
+  input: GradeTaskInput,
+  submissionContent: string,
+  multiFile = false
+): string {
+  const inputType = input.inputType ?? 'document';
+  const multiFileBlock = multiFile
+    ? '\nLa docente envió múltiples archivos. Evalúa la entrega completa: aprueba si al menos UN archivo cumple los criterios de aprobación.\n'
+    : '';
+
+  return (
+    `Esta es una tarea de exploración con Diffit (Nivel 1 Parte 5). El objetivo es que la docente experimente la herramienta, no que produzca contenido perfeccionado.
+${multiFileBlock}
+Aprueba (score 70-85) cualquier entrega que muestre:
+- Documento(s) generados con Diffit (niveles de lectura, materiales adaptados)
+- Material de lectura nivelado (distintos niveles de dificultad para el mismo texto o tema)
+- Material educativo de cualquier tipo (lecciones, lecturas, hojas de trabajo, recursos de aula)
+- Contenido pedagógico para alumnas (IB o cualquier otro contexto docente)
+
+Reprueba (score < 60) solo si:
+- El contenido es completamente ajeno a educación (foto personal, documento de negocios, archivo aleatorio)
+- La entrega está vacía, ilegible o dañada
+- Claramente fuera de tema sin relación con enseñanza ni con Diffit
+
+Tipo de entrega: ${inputType}
+
+Da feedback normal y cálido — sin elogios excesivos ("¡Excelente trabajo!", "¡Increíble!"), sin mencionar que esta tarea es más permisiva. Trata la entrega con respeto pedagógico estándar, como en cualquier otra tarea del programa.
+
+FORMATO DE RESPUESTA (JSON estricto):
+{
+  "score": number (0-100, entero),
+  "feedback": "string de 1-2 oraciones"
+}
+
+Reglas para el feedback:
+- Si score >= ${PASS_SCORE_THRESHOLD}: feedback breve y cálido con UNA sugerencia concreta opcional para seguir explorando Diffit. Tono normal de coach, no celebración exagerada. Máximo 2 oraciones. Forma femenina ("docente", "maestra", "alumna"). Sin emoji obligatorio.
+- Si score < ${PASS_SCORE_THRESHOLD}: explica con cariño qué falta (contenido vacío o claramente ajeno a educación). Sugiere volver a intentar con material generado en Diffit o un recurso pedagógico. Termina con "Inténtalo otra vez, vas bien." o similar.
+
+LA ENTREGA DE LA DOCENTE:
+${submissionContent}`
+  );
+}
 
 function buildGradingPrompt(
   input: GradeTaskInput,
@@ -145,6 +203,23 @@ Reglas para el feedback (tono SIEMPRE cálido y coach — independiente del punt
 LA ENTREGA DE LA DOCENTE:
 ${submissionContent}`
   );
+}
+
+function resolveGradingPrompt(
+  input: GradeTaskInput,
+  submissionContent: string,
+  multiFile = false
+): { prompt: string; systemPrompt: string } {
+  if (isDiffitLenientTask(input)) {
+    return {
+      prompt: buildDiffitLenientGradingPrompt(input, submissionContent, multiFile),
+      systemPrompt: DIFFIT_LENIENT_SYSTEM_PROMPT,
+    };
+  }
+  return {
+    prompt: buildGradingPrompt(input, submissionContent, multiFile),
+    systemPrompt: SYSTEM_PROMPT,
+  };
 }
 
 function extractPassFailJson(raw: string): { passed: boolean; feedback: string } {
@@ -289,8 +364,8 @@ function shortCircuitTooShort(charCount: number): TaskGradeResult {
 }
 
 async function callClaude(
-  input: GradeTaskInput,
-  userContent: Anthropic.MessageCreateParams['messages'][0]['content']
+  userContent: Anthropic.MessageCreateParams['messages'][0]['content'],
+  systemPrompt: string
 ): Promise<TaskGradeResult> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
@@ -302,7 +377,7 @@ async function callClaude(
     model: MODEL,
     max_tokens: MAX_TOKENS,
     temperature: TEMPERATURE,
-    system: SYSTEM_PROMPT,
+    system: systemPrompt,
     messages: [{ role: 'user', content: userContent }],
   });
 
@@ -327,12 +402,12 @@ async function gradeTextSubmission(input: GradeTaskInput): Promise<TaskGradeResu
     return shortCircuitTooShort(charCount);
   }
 
-  const prompt = buildGradingPrompt(
+  const { prompt, systemPrompt } = resolveGradingPrompt(
     { ...input, inputType: 'text' },
     `"""\n${evidence}\n"""\n\n(Conteo de caracteres: ${charCount})`
   );
 
-  return callClaude(input, prompt);
+  return callClaude(prompt, systemPrompt);
 }
 
 async function gradeFileSubmission(input: GradeTaskInput): Promise<TaskGradeResult> {
@@ -355,14 +430,18 @@ async function gradeFileSubmission(input: GradeTaskInput): Promise<TaskGradeResu
   const submissionLabel = multiFile
     ? `[${files.length} archivos adjuntos — evalúalos juntos como una sola entrega]`
     : '[Archivo adjunto en este mensaje]';
-  const textPrompt = buildGradingPrompt(input, submissionLabel, multiFile);
+  const { prompt: textPrompt, systemPrompt } = resolveGradingPrompt(
+    input,
+    submissionLabel,
+    multiFile
+  );
 
   const userContent: ContentBlockParam[] = [
     { type: 'text', text: textPrompt },
     ...files.map((file) => buildFileContentBlock(file, inputType)),
   ];
 
-  return callClaude(input, userContent);
+  return callClaude(userContent, systemPrompt);
 }
 
 /** Grade a task submission (text, screenshot, or document). */

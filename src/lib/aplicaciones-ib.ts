@@ -82,9 +82,9 @@ export const APLICACIONES_IB: Record<string, IbSubjectApplication[]> = {
     },
     {
       icon: '✝️',
-      name: 'RELIGIÓN (Inspirada por Opus Dei)',
+      name: 'RELIGIÓN',
       example:
-        'Perplexity te permite verificar interpretaciones doctrinales con citas a fuentes confiables. Útil para preparar lecciones que respeten la inspiración Opus Dei del programa.',
+        'Perplexity te permite verificar interpretaciones doctrinales con citas a fuentes confiables. Útil para preparar lecciones rigurosas que conecten doctrina y reflexión.',
     },
     {
       icon: '🧠',
@@ -168,7 +168,7 @@ export const APLICACIONES_IB: Record<string, IbSubjectApplication[]> = {
     },
     {
       icon: '✝️',
-      name: 'RELIGIÓN (Inspirada por Opus Dei)',
+      name: 'RELIGIÓN',
       example:
         'Canva crea líneas de tiempo visuales de hitos bíblicos o de la historia de la Iglesia con espacio para reflexión personal, alineadas a unidades del programa de Religión.',
     },
@@ -254,9 +254,9 @@ export const APLICACIONES_IB: Record<string, IbSubjectApplication[]> = {
     },
     {
       icon: '✝️',
-      name: 'RELIGIÓN (Inspirada por Opus Dei)',
+      name: 'RELIGIÓN',
       example:
-        'ElevenLabs narra reflexiones guiadas sobre virtudes y vocación en tono contemplativo, útil para complementar lecturas del programa inspirado en Opus Dei.',
+        'ElevenLabs narra reflexiones guiadas sobre virtudes y vocación en tono contemplativo, útil para complementar lecturas del programa de Religión en casa o en clase.',
     },
     {
       icon: '🧠',

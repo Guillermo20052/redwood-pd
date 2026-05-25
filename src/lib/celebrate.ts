@@ -105,13 +105,13 @@ export function celebrateDiploma(tier: DiplomaTier) {
   setTimeout(() => burst(0.85, 0.55), 3800);
 }
 
-const LEVEL_LABELS: Record<'b' | 'i' | 'a', string> = {
+export const LEVEL_LABELS: Record<'b' | 'i' | 'a', string> = {
   b: 'Nivel 1: Fundamentos',
   i: 'Nivel 2: Integración',
   a: 'Nivel 3: Transformación',
 };
 
-const HOURS_TOAST: Record<number, string> = {
+export const HOURS_TOAST: Record<number, string> = {
   5: 'Llegaste a 5h verificadas. Buen ritmo. 🌱',
   10: '10h. Estás en la mitad del Nivel 1. 🚀',
   15: '15h. Falta poco para Diploma 1. 🔥',

@@ -104,6 +104,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               initial={getFirstName(progress.profile.full_name, progress.profile.email)
                 .charAt(0)
                 .toUpperCase()}
+              isAdmin={isAdmin}
               onLogout={() => void logout()}
             />
           </div>
@@ -197,7 +198,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-function UserMenu({ initial, onLogout }: { initial: string; onLogout: () => void }) {
+function UserMenu({
+  initial,
+  isAdmin,
+  onLogout,
+}: {
+  initial: string;
+  isAdmin: boolean;
+  onLogout: () => void;
+}) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
@@ -234,6 +243,16 @@ function UserMenu({ initial, onLogout }: { initial: string; onLogout: () => void
           >
             Mi Perfil
           </Link>
+          {isAdmin && (
+            <Link
+              href="/admin/demo"
+              className="user-menu-item no-underline user-menu-item--demo"
+              role="menuitem"
+              onClick={() => setOpen(false)}
+            >
+              Demo Mode
+            </Link>
+          )}
           <button
             type="button"
             className="user-menu-item user-menu-item--logout"

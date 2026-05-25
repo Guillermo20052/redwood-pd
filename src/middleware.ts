@@ -106,6 +106,16 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(url);
       }
     }
+
+    if (
+      pathname === '/admin/demo' &&
+      welcomeProfile.role !== 'admin'
+    ) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/dashboard';
+      url.search = '';
+      return NextResponse.redirect(url);
+    }
   }
 
   // Unauthenticated → only protected paths are gated. Marketing/public paths

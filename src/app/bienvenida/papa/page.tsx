@@ -19,34 +19,6 @@ export default async function PapaWelcomePage() {
       <h1 className="welcome-title">Custodiar voces y rostros humanos</h1>
       <p className="welcome-context">Para la LX Jornada Mundial de las Comunicaciones Sociales</p>
 
-      <div className="welcome-pdf-top">
-        <a
-          href="/welcome/mensaje-papa-leon-xiv.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="welcome-pdf-download-btn no-underline"
-        >
-          <svg
-            className="welcome-pdf-download-icon"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          Descargar (PDF)
-        </a>
-        <p className="welcome-pdf-top-hint">Lee el mensaje completo antes de continuar.</p>
-      </div>
-
       <div className="welcome-body">
         <p>
           El rostro y la voz no son simples datos biológicos: son dones que revelan la identidad de
@@ -78,6 +50,33 @@ export default async function PapaWelcomePage() {
             — León XIV PP., Vaticano · 24 de enero de 2026
           </span>
         </blockquote>
+      </div>
+
+      <div className="welcome-pdf-top">
+        <a
+          href="/welcome/mensaje-papa-leon-xiv.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="welcome-pdf-download-btn no-underline"
+        >
+          <svg
+            className="welcome-pdf-download-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Descargar (PDF)
+        </a>
       </div>
     </WelcomeScreenShell>
   );

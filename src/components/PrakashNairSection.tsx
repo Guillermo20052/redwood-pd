@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useCallback, useEffect, useState } from 'react';
 
-const FLOOR_PLAN_SRC = '/prakash-nair/floor-plan-prepa.png';
+const FLOOR_PLAN_SRC = '/prakash-nair/layout-prep-redwood-2026.jpg';
 
 type ResourceLink = {
   kind: 'link';
@@ -115,10 +115,11 @@ export function PrakashNairSection() {
           <Image
             src={FLOOR_PLAN_SRC}
             alt="Plano del nuevo diseño de la prepa — espacios para colaboración y aprendizaje activo"
-            width={1200}
-            height={800}
+            width={1024}
+            height={597}
             className="prakash-floorplan-img"
             sizes="(max-width: 768px) 100vw, 720px"
+            unoptimized
           />
         </button>
         <p className="prakash-floorplan-caption">

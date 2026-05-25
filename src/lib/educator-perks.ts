@@ -16,7 +16,7 @@ export const EDUCATOR_PERKS: Record<string, EducatorPerk> = {
     description:
       'OpenAI ofrece ChatGPT Edu para escuelas, pero tu cuenta personal gratuita ya cubre la mayoría de las tareas docentes. Regístrate gratis en chatgpt.com y empieza a usarlo de inmediato.',
     link: 'https://openai.com/chatgpt/education/',
-    ctaLabel: 'Solicitar acceso',
+    ctaLabel: 'Crear cuenta gratuita',
     shortNote: 'ChatGPT Edu está disponible gratis para escuelas con email institucional',
   },
   Claude: {
@@ -25,7 +25,7 @@ export const EDUCATOR_PERKS: Record<string, EducatorPerk> = {
     description:
       'Anthropic ofrece un plan gratuito generoso de Claude que cubre la mayoría de las tareas docentes. Crea una cuenta gratis con tu email y comienza a usarlo.',
     link: 'https://www.anthropic.com/education',
-    ctaLabel: 'Solicitar acceso',
+    ctaLabel: 'Crear cuenta gratuita',
     shortNote: 'Claude for Education ofrece descuentos institucionales para docentes',
   },
   Perplexity: {
@@ -34,7 +34,7 @@ export const EDUCATOR_PERKS: Record<string, EducatorPerk> = {
     description:
       'Perplexity ofrece Perplexity Pro gratis o con descuento para usuarios con email educativo verificado. Regístrate con tu email del Liceo (@liceodemonterrey.edu.mx) para acceder.',
     link: 'https://www.perplexity.ai/students',
-    ctaLabel: 'Obtener Pro gratis',
+    ctaLabel: 'Registrarse con email del Liceo',
     shortNote: 'Perplexity Pro es gratis con email educativo del Liceo',
   },
   MagicSchool: {
@@ -43,7 +43,7 @@ export const EDUCATOR_PERKS: Record<string, EducatorPerk> = {
     description:
       'MagicSchool es 100% gratuito para docentes individuales. Regístrate con tu email del Liceo y obtén acceso completo. Su misión es ayudar a maestros.',
     link: 'https://www.magicschool.ai/',
-    ctaLabel: 'Crear cuenta gratuita',
+    ctaLabel: 'Registrarse con email del Liceo',
     shortNote: 'MagicSchool es 100% gratuito para docentes',
   },
   Diffit: {
@@ -52,7 +52,7 @@ export const EDUCATOR_PERKS: Record<string, EducatorPerk> = {
     description:
       'Diffit ofrece su plan completo de manera gratuita para docentes. Regístrate con tu email institucional y empieza a nivelar lecturas hoy.',
     link: 'https://web.diffit.me/',
-    ctaLabel: 'Crear cuenta gratuita',
+    ctaLabel: 'Registrarse con email del Liceo',
     shortNote: 'Diffit es gratuito para docentes con email institucional',
   },
   NotebookLM: {
@@ -61,7 +61,7 @@ export const EDUCATOR_PERKS: Record<string, EducatorPerk> = {
     description:
       'NotebookLM es completamente gratuito con cualquier cuenta de Google. Úsalo con tu cuenta del Liceo o personal — sin restricciones.',
     link: 'https://notebooklm.google/',
-    ctaLabel: 'Abrir NotebookLM',
+    ctaLabel: 'Acceder gratis',
     shortNote: 'NotebookLM es gratis con tu cuenta de Google',
   },
   Canva: {
@@ -70,7 +70,7 @@ export const EDUCATOR_PERKS: Record<string, EducatorPerk> = {
     description:
       'Canva for Education es completamente gratuito para docentes verificados, incluyendo todas las funciones premium e IA (Magic Design, Magic Write, Magic Media). Solicítalo directamente con tu email del Liceo.',
     link: 'https://www.canva.com/education/',
-    ctaLabel: 'Solicitar Canva for Education',
+    ctaLabel: 'Registrarse con email del Liceo',
     shortNote: 'Canva for Education es gratis para docentes verificados',
   },
   Gemini: {
@@ -79,7 +79,7 @@ export const EDUCATOR_PERKS: Record<string, EducatorPerk> = {
     description:
       'Gemini está disponible gratis con cualquier cuenta de Google. Funciona dentro de Docs, Sheets, Slides y Gmail. Úsalo con tu cuenta del Liceo o personal.',
     link: 'https://workspace.google.com/industries/education/',
-    ctaLabel: 'Ver opciones educativas',
+    ctaLabel: 'Acceder gratis',
     shortNote: 'Gemini está incluido o con descuento en Google Workspace for Education',
   },
   'Brisk Teaching': {
@@ -115,7 +115,7 @@ export const EDUCATOR_PERKS: Record<string, EducatorPerk> = {
     description:
       'Copilot en copilot.microsoft.com es gratis para todos. Inicia sesión con cualquier cuenta de Microsoft (la del Liceo o personal) y empieza a usarlo.',
     link: 'https://copilot.microsoft.com/',
-    ctaLabel: 'Abrir Copilot',
+    ctaLabel: 'Acceder gratis',
     shortNote: 'Copilot Web es gratis para todos los usuarios',
   },
   SchoolAI: {
@@ -124,7 +124,7 @@ export const EDUCATOR_PERKS: Record<string, EducatorPerk> = {
     description:
       'SchoolAI ofrece un plan gratuito completo para docentes individuales, diseñado específicamente para uso pedagógico con alumnas. Regístrate con tu email del Liceo.',
     link: 'https://schoolai.com/',
-    ctaLabel: 'Crear cuenta gratuita',
+    ctaLabel: 'Registrarse con email del Liceo',
     shortNote: 'SchoolAI tiene un plan gratuito completo para docentes',
   },
   Khanmigo: {
@@ -142,7 +142,7 @@ export const EDUCATOR_PERKS: Record<string, EducatorPerk> = {
     description:
       'ElevenLabs ofrece 10,000 caracteres gratis cada mes en su plan free — suficiente para generar audios introductorios y de repaso. Regístrate con tu email del Liceo y empieza.',
     link: 'https://elevenlabs.io/pricing',
-    ctaLabel: 'Ver plan gratuito',
+    ctaLabel: 'Registrarse con email del Liceo',
     shortNote: 'ElevenLabs incluye 10,000 caracteres gratis al mes',
   },
 };

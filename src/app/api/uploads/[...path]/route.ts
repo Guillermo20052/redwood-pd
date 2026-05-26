@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { getSessionUserId } from '@/lib/completions-service';
+import { isAdminUser } from '@/lib/auth-helpers';
 import { createAdminClient } from '@/lib/supabase/admin';
 import {
   STORAGE_BUCKET,
@@ -40,9 +41,9 @@ export async function GET(_request: Request, context: RouteContext) {
     if (!session) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
-    // Owner-only — admins fetching files for moderation will be handled
-    // separately if/when needed. Cheap and safe to gate at the route level.
-    if (safeUserId(session.userId) !== userId) {
+    const isOwner = safeUserId(session.userId) === userId;
+    const isAdmin = await isAdminUser(session.userId);
+    if (!isOwner && !isAdmin) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
     }
 

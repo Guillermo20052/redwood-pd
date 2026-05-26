@@ -29,7 +29,7 @@ export default async function CynthiaWelcomePage() {
         </p>
         <blockquote className="pull-quote">
           <p>En nuestro colegio, la tecnología nunca sustituye lo más importante: la persona.</p>
-          <span className="pull-quote-attribution">— Cynthia, Directora · Liceo de Monterrey Redwood</span>
+          <span className="pull-quote-attribution">— Cynthia, Directora Redwood High</span>
         </blockquote>
         <p>
           Nuestro mayor compromiso sigue siendo mirar, escuchar, acompañar y conectar auténticamente con
@@ -53,7 +53,7 @@ export default async function CynthiaWelcomePage() {
       <footer className="welcome-signature">
         <p>Con cariño,</p>
         <p className="welcome-signature-name">Cynthia</p>
-        <p className="welcome-signature-role">Directora · Liceo de Monterrey Redwood</p>
+        <p className="welcome-signature-role">Directora Redwood High</p>
       </footer>
     </WelcomeScreenShell>
   );

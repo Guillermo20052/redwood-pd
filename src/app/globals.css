@@ -2296,6 +2296,233 @@ h3,
   }
 }
 
+/* ── DIPLOMA 3 EXIT MESSAGE ─────────────────────────────────── */
+
+.d3-exit-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 3vw, 24px);
+  background: rgba(26, 46, 74, 0.62);
+  animation: d3-exit-overlay-in 0.25s ease-out;
+}
+
+.d3-exit-overlay--closing {
+  animation: d3-exit-overlay-out 0.2s ease-in forwards;
+}
+
+.d3-exit-panel {
+  width: min(640px, 100%);
+  max-height: min(92vh, 900px);
+  overflow-y: auto;
+  padding: clamp(24px, 4vw, 36px);
+  border-radius: 14px;
+  border: 2px solid var(--gold);
+  background: linear-gradient(180deg, var(--gold-light) 0%, var(--bg-warm-50) 28%, #faf8f4 100%);
+  box-shadow:
+    0 24px 64px rgba(26, 46, 74, 0.22),
+    inset 0 0 0 1px rgba(200, 151, 42, 0.25);
+  animation: d3-exit-panel-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.d3-exit-panel--closing {
+  animation: d3-exit-panel-out 0.2s ease-in forwards;
+}
+
+.d3-exit-panel--static {
+  animation: none;
+}
+
+.d3-exit-eyebrow {
+  margin: 0 0 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--gold) 75%, var(--navy));
+}
+
+.d3-exit-title {
+  margin: 0 0 20px;
+  font-family: var(--font-fraunces), Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.65rem, 4.5vw, 2.15rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--navy);
+}
+
+.d3-exit-body {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--gray-800);
+}
+
+.d3-exit-body p {
+  margin: 0 0 1em;
+}
+
+.d3-exit-body p:last-child {
+  margin-bottom: 0;
+}
+
+.d3-exit-rec-card {
+  margin: 24px 0;
+  padding: 18px 20px;
+  border-radius: 12px;
+  border: 2px solid var(--gold);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 4px 16px rgba(200, 151, 42, 0.12);
+}
+
+.d3-exit-rec-label {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.d3-exit-rec-title {
+  margin: 0 0 8px;
+  font-family: var(--font-barlow-condensed), sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.d3-exit-rec-desc {
+  margin: 0 0 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--gray-700);
+}
+
+.d3-exit-rec-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--navy);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.d3-exit-rec-cta:hover {
+  background: color-mix(in srgb, var(--navy) 88%, black);
+  color: #fff;
+}
+
+.d3-exit-closing {
+  margin: 0 0 24px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--navy);
+}
+
+.d3-exit-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.d3-exit-close-btn {
+  min-width: 140px;
+}
+
+.d3-exit-replay-link {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--teal);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.d3-exit-replay-link:hover {
+  color: var(--navy);
+}
+
+@keyframes d3-exit-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes d3-exit-overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes d3-exit-panel-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes d3-exit-panel-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .d3-exit-overlay,
+  .d3-exit-panel {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .d3-exit-panel {
+    padding: 20px 16px;
+  }
+
+  .d3-exit-rec-cta {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.demo-mode-btn--compact {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.demo-mode-btn--compact .demo-mode-btn-label {
+  font-size: 0.95rem;
+}
+
 /* ── CELEBRATION TOASTS ─────────────────────────────────────── */
 
 .toast-stack {

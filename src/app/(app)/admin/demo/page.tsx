@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Diploma3ExitMessage } from '@/components/Diploma3ExitMessage';
 import { DiplomaModal } from '@/components/DiplomaModal';
 import { useProgressContext } from '@/components/Providers';
 import { useToast } from '@/components/Toast';
@@ -17,7 +18,10 @@ import { getPartsByLevel } from '@/lib/curriculum-path';
 import type { DiplomaTier } from '@/lib/diplomas';
 import { countCompletedExtras } from '@/lib/extras-gating';
 import { isPartComplete } from '@/lib/part-progress';
+import { teacherFirstName } from '@/lib/prakash-nair-resources';
 import { createClient } from '@/lib/supabase/client';
+
+const D3_EXIT_DELAY_MS = 300;
 
 const DIPLOMA_HOURS: Record<DiplomaTier, number> = { 1: 20, 2: 24, 3: 30 };
 
@@ -46,6 +50,9 @@ export default function DemoModePage() {
     useProgressContext();
 
   const [diplomaTier, setDiplomaTier] = useState<DiplomaTier | null>(null);
+  const [d3EarnFlow, setD3EarnFlow] = useState(false);
+  const [showD3Exit, setShowD3Exit] = useState(false);
+  const [showD3ExitOnly, setShowD3ExitOnly] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -72,7 +79,19 @@ export default function DemoModePage() {
 
   const triggerDiploma = (tier: DiplomaTier) => {
     celebrateDiploma(tier);
+    setD3EarnFlow(tier === 3);
     setDiplomaTier(tier);
+  };
+
+  const handleDiplomaClose = () => {
+    const tier = diplomaTier;
+    setDiplomaTier(null);
+    if (tier === 3 && d3EarnFlow) {
+      setD3EarnFlow(false);
+      window.setTimeout(() => setShowD3Exit(true), D3_EXIT_DELAY_MS);
+    } else {
+      setD3EarnFlow(false);
+    }
   };
 
   const triggerLevelComplete = (level: 'b' | 'i' | 'a') => {
@@ -173,9 +192,16 @@ export default function DemoModePage() {
         />
         <DemoButton
           label="Ganar Diploma 3 (Oro)"
-          hint="Confetti oro + modal de certificado · 30h simuladas"
+          hint="Confetti oro + certificado + mensaje de cierre al cerrar el cert"
           accent="gold"
           onClick={() => triggerDiploma(3)}
+        />
+        <DemoButton
+          label="Ver solo mensaje de cierre (sin diploma)"
+          hint="Abre directamente el mensaje final del Diploma 3"
+          accent="neutral"
+          compact
+          onClick={() => setShowD3ExitOnly(true)}
         />
       </DemoSection>
 
@@ -360,7 +386,23 @@ export default function DemoModePage() {
           awardedDate={new Date()}
           totalHours={DIPLOMA_HOURS[diplomaTier]}
           celebrate
-          onClose={() => setDiplomaTier(null)}
+          onClose={handleDiplomaClose}
+        />
+      )}
+
+      {(showD3Exit || showD3ExitOnly) && (
+        <Diploma3ExitMessage
+          firstName={teacherFirstName(profile.full_name, profile.email)}
+          onClose={() => {
+            setShowD3Exit(false);
+            setShowD3ExitOnly(false);
+          }}
+          onViewDiplomaAgain={() => {
+            setShowD3Exit(false);
+            setShowD3ExitOnly(false);
+            setD3EarnFlow(false);
+            setDiplomaTier(3);
+          }}
         />
       )}
 
@@ -433,6 +475,7 @@ function DemoButton({
   hint,
   accent,
   disabled,
+  compact = false,
   onClick,
 }: {
   label: string;
@@ -448,12 +491,13 @@ function DemoButton({
     | 'destructive'
     | 'nuclear';
   disabled?: boolean;
+  compact?: boolean;
   onClick: () => void;
 }) {
   return (
     <button
       type="button"
-      className={`demo-mode-btn demo-mode-btn--${accent}`}
+      className={`demo-mode-btn demo-mode-btn--${accent}${compact ? ' demo-mode-btn--compact' : ''}`}
       disabled={disabled}
       onClick={onClick}
     >

@@ -125,13 +125,13 @@ function mimeTypeAllowed(mimeType: string): boolean {
 }
 
 /**
- * Accept if extension OR MIME matches allowed types.
- * Optional `kind` restricts to PDF-only or image-only slots (FileUpload / task input).
+ * Accept if extension OR MIME matches allowed types (.pdf, .png, .jpg, .jpeg).
+ * `kind` is informational only (UI labels) — all file-upload tasks accept PDF and images.
  */
 export function validateUploadFile(
   filename: string,
   mimeType: string,
-  options?: { kind?: UploadFileKind }
+  _options?: { kind?: UploadFileKind }
 ): UploadFileValidation {
   const ext = fileExtension(filename);
   const mime = (mimeType ?? '').toLowerCase();
@@ -140,18 +140,6 @@ export function validateUploadFile(
 
   if (!extOk && !mimeOk) {
     return { ok: false, reason: uploadFileTypeErrorMessage(filename, mimeType) };
-  }
-
-  if (options?.kind === 'pdf') {
-    if (!isPdfExtension(ext) && !isPdfMime(mime)) {
-      return { ok: false, reason: uploadFileTypeErrorMessage(filename, mimeType) };
-    }
-  }
-
-  if (options?.kind === 'image') {
-    if (!isImageExtension(ext) && !isImageMime(mime)) {
-      return { ok: false, reason: uploadFileTypeErrorMessage(filename, mimeType) };
-    }
   }
 
   const storageExt = storageExtensionForUpload(filename, mimeType);

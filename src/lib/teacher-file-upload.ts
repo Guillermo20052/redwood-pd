@@ -83,24 +83,23 @@ export function mapSignedUrlRequestError(
   return 'Error de conexión. Verifica tu internet.';
 }
 
-function assertFileAllowed(file: File, kind?: UploadFileKind): void {
-  const check = validateUploadFile(file.name, file.type, kind ? { kind } : undefined);
+function assertFileAllowed(file: File): void {
+  const check = validateUploadFile(file.name, file.type);
   if (!check.ok) {
     throw new Error(check.reason);
   }
 }
 
-function contentTypeForUpload(file: File, kind?: UploadFileKind): string {
-  assertFileAllowed(file, kind);
+function contentTypeForUpload(file: File): string {
+  assertFileAllowed(file);
   return normalizeUploadContentType(file.name, file.type);
 }
 
 async function uploadViaMultipart(
   file: File,
-  onStage?: (stage: UploadStage, progressPercent?: number) => void,
-  kind?: UploadFileKind
+  onStage?: (stage: UploadStage, progressPercent?: number) => void
 ): Promise<UploadedFileRef> {
-  assertFileAllowed(file, kind);
+  assertFileAllowed(file);
   onStage?.('uploading', 0);
   const form = new FormData();
   form.append('file', file);
@@ -126,14 +125,11 @@ async function uploadViaMultipart(
   return { key: data.key, fileUrl };
 }
 
-async function requestSignedUpload(
-  file: File,
-  kind?: UploadFileKind
-): Promise<{
+async function requestSignedUpload(file: File): Promise<{
   key: string;
   token: string;
 }> {
-  const contentType = contentTypeForUpload(file, kind);
+  const contentType = contentTypeForUpload(file);
   let res: Response;
   try {
     res = await fetch('/api/upload', {
@@ -164,12 +160,11 @@ async function requestSignedUpload(
 
 async function uploadViaSignedUrl(
   file: File,
-  onStage?: (stage: UploadStage, progressPercent?: number) => void,
-  kind?: UploadFileKind
+  onStage?: (stage: UploadStage, progressPercent?: number) => void
 ): Promise<UploadedFileRef> {
   onStage?.('preparing');
-  const contentType = contentTypeForUpload(file, kind);
-  const { key, token } = await requestSignedUpload(file, kind);
+  const contentType = contentTypeForUpload(file);
+  const { key, token } = await requestSignedUpload(file);
   onStage?.('uploading', 0);
 
   let supabase;
@@ -204,7 +199,8 @@ async function uploadViaSignedUrl(
 export async function uploadTeacherSubmissionFile(
   file: File,
   onStage?: (stage: UploadStage, progressPercent?: number) => void,
-  options?: { kind?: UploadFileKind }
+  /** @deprecated kind is informational only; all upload slots accept PDF and images. */
+  _options?: { kind?: UploadFileKind }
 ): Promise<UploadedFileRef> {
   if (file.size > MAX_TEACHER_UPLOAD_BYTES) {
     throw new Error(
@@ -212,14 +208,13 @@ export async function uploadTeacherSubmissionFile(
     );
   }
 
-  const kind = options?.kind;
-  assertFileAllowed(file, kind);
+  assertFileAllowed(file);
 
   try {
-    return await uploadViaSignedUrl(file, onStage, kind);
+    return await uploadViaSignedUrl(file, onStage);
   } catch (err) {
     if (isLocalOnlySignedUrlFailure(err)) {
-      return uploadViaMultipart(file, onStage, kind);
+      return uploadViaMultipart(file, onStage);
     }
     throw err;
   }

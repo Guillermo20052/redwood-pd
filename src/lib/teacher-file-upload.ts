@@ -1,6 +1,11 @@
 'use client';
 
 import { createClient } from '@/lib/supabase/client';
+import {
+  normalizeUploadContentType,
+  validateUploadFile,
+  type UploadFileKind,
+} from '@/lib/upload-file-validation';
 
 function storageKeyToFileUrl(key: string): string {
   return `/api/uploads/${key}`;
@@ -14,6 +19,12 @@ export type UploadedFileRef = {
   key: string;
   fileUrl: string;
 };
+
+export {
+  uploadFileTypeErrorMessage,
+  validateUploadFile,
+  type UploadFileKind,
+} from '@/lib/upload-file-validation';
 
 const TECHNICAL_UPLOAD_ERROR =
   'Error técnico subiendo el archivo. Por favor recarga la página e intenta de nuevo.';
@@ -32,12 +43,6 @@ function sanitizeUserFacingUploadError(msg: string | undefined): string {
     return TECHNICAL_UPLOAD_ERROR;
   }
   return msg;
-}
-
-function normalizeMime(file: File): string {
-  const t = (file.type || '').toLowerCase();
-  if (t === 'image/jpg') return 'image/jpeg';
-  return t;
 }
 
 class SignedUploadRequestError extends Error {
@@ -70,7 +75,7 @@ export function mapSignedUrlRequestError(
     return 'El archivo es demasiado grande (máximo 10 MB). Comprime el PDF e intenta de nuevo.';
   }
   if (res.status === 400 && msg.includes('Tipo de archivo')) {
-    return 'Tipo de archivo no permitido. Sube PDF, PNG o JPG.';
+    return msg;
   }
   if (!res.ok) {
     return sanitizeUserFacingUploadError(msg) || 'Error de conexión. Verifica tu internet.';
@@ -78,10 +83,24 @@ export function mapSignedUrlRequestError(
   return 'Error de conexión. Verifica tu internet.';
 }
 
+function assertFileAllowed(file: File, kind?: UploadFileKind): void {
+  const check = validateUploadFile(file.name, file.type, kind ? { kind } : undefined);
+  if (!check.ok) {
+    throw new Error(check.reason);
+  }
+}
+
+function contentTypeForUpload(file: File, kind?: UploadFileKind): string {
+  assertFileAllowed(file, kind);
+  return normalizeUploadContentType(file.name, file.type);
+}
+
 async function uploadViaMultipart(
   file: File,
-  onStage?: (stage: UploadStage, progressPercent?: number) => void
+  onStage?: (stage: UploadStage, progressPercent?: number) => void,
+  kind?: UploadFileKind
 ): Promise<UploadedFileRef> {
+  assertFileAllowed(file, kind);
   onStage?.('uploading', 0);
   const form = new FormData();
   form.append('file', file);
@@ -107,11 +126,14 @@ async function uploadViaMultipart(
   return { key: data.key, fileUrl };
 }
 
-async function requestSignedUpload(file: File): Promise<{
+async function requestSignedUpload(
+  file: File,
+  kind?: UploadFileKind
+): Promise<{
   key: string;
   token: string;
 }> {
-  const contentType = normalizeMime(file);
+  const contentType = contentTypeForUpload(file, kind);
   let res: Response;
   try {
     res = await fetch('/api/upload', {
@@ -142,10 +164,12 @@ async function requestSignedUpload(file: File): Promise<{
 
 async function uploadViaSignedUrl(
   file: File,
-  onStage?: (stage: UploadStage, progressPercent?: number) => void
+  onStage?: (stage: UploadStage, progressPercent?: number) => void,
+  kind?: UploadFileKind
 ): Promise<UploadedFileRef> {
   onStage?.('preparing');
-  const { key, token } = await requestSignedUpload(file);
+  const contentType = contentTypeForUpload(file, kind);
+  const { key, token } = await requestSignedUpload(file, kind);
   onStage?.('uploading', 0);
 
   let supabase;
@@ -158,7 +182,7 @@ async function uploadViaSignedUrl(
   const { error } = await supabase.storage
     .from('uploads')
     .uploadToSignedUrl(key, token, file, {
-      contentType: normalizeMime(file) || undefined,
+      contentType,
     });
 
   if (error) {
@@ -179,7 +203,8 @@ async function uploadViaSignedUrl(
  */
 export async function uploadTeacherSubmissionFile(
   file: File,
-  onStage?: (stage: UploadStage, progressPercent?: number) => void
+  onStage?: (stage: UploadStage, progressPercent?: number) => void,
+  options?: { kind?: UploadFileKind }
 ): Promise<UploadedFileRef> {
   if (file.size > MAX_TEACHER_UPLOAD_BYTES) {
     throw new Error(
@@ -187,11 +212,14 @@ export async function uploadTeacherSubmissionFile(
     );
   }
 
+  const kind = options?.kind;
+  assertFileAllowed(file, kind);
+
   try {
-    return await uploadViaSignedUrl(file, onStage);
+    return await uploadViaSignedUrl(file, onStage, kind);
   } catch (err) {
     if (isLocalOnlySignedUrlFailure(err)) {
-      return uploadViaMultipart(file, onStage);
+      return uploadViaMultipart(file, onStage, kind);
     }
     throw err;
   }

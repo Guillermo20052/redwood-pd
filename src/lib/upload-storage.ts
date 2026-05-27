@@ -1,16 +1,12 @@
 import fs from 'fs';
 import path from 'path';
+import { storageExtensionForUpload } from './upload-file-validation';
 
 export const UPLOAD_ROOT = path.join(process.cwd(), '.data', 'uploads');
 
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 
-export const ALLOWED_MIME_TYPES = new Set([
-  'image/png',
-  'image/jpeg',
-  'image/jpg',
-  'application/pdf',
-]);
+export { ALLOWED_MIME_TYPES, ALLOWED_UPLOAD_MIME_TYPES } from './upload-file-validation';
 
 /** Name of the Supabase Storage bucket where teacher submissions live. */
 export const STORAGE_BUCKET = 'uploads';
@@ -39,11 +35,17 @@ export function extensionFromOriginalName(originalName: string): string {
   return 'bin';
 }
 
-/** Extension for a signed-upload key from MIME type (never uses original filename). */
-export function extensionFromContentType(contentType: string): string | null {
+/** Extension for a signed-upload key — prefers filename, falls back to MIME. */
+export function extensionFromContentType(
+  contentType: string,
+  filename?: string
+): string | null {
+  if (filename) {
+    return storageExtensionForUpload(filename, contentType);
+  }
   const t = contentType.toLowerCase();
-  if (t === 'application/pdf') return 'pdf';
-  if (t === 'image/png') return 'png';
+  if (t === 'application/pdf' || t.includes('pdf')) return 'pdf';
+  if (t === 'image/png' || t === 'image/x-png') return 'png';
   if (t === 'image/jpeg' || t === 'image/jpg') return 'jpg';
   return null;
 }

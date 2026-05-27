@@ -2,7 +2,10 @@
 
 import { useCallback, useRef, useState } from 'react';
 
-import { MAX_TEACHER_UPLOAD_BYTES } from '@/lib/teacher-file-upload';
+import {
+  MAX_TEACHER_UPLOAD_BYTES,
+  validateUploadFile,
+} from '@/lib/teacher-file-upload';
 
 type Props = {
   accept: string;
@@ -55,8 +58,9 @@ export function FileUpload({
         setError('El archivo es demasiado grande (máximo 10 MB)');
         return;
       }
-      if (!mimeAllowed(next, accept)) {
-        setError('Tipo de archivo no permitido. Sube PDF, PNG o JPG.');
+      const fileCheck = validateUploadFile(next.name, next.type, { kind });
+      if (!fileCheck.ok) {
+        setError(fileCheck.reason);
         return;
       }
       if (previewUrl) URL.revokeObjectURL(previewUrl);
@@ -68,7 +72,7 @@ export function FileUpload({
       }
       onFileSelected(next);
     },
-    [accept, kind, onFileSelected, previewUrl]
+    [kind, onFileSelected, previewUrl]
   );
 
   const onDrop = (e: React.DragEvent) => {

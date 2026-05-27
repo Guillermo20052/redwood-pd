@@ -6,16 +6,15 @@ import { getSessionUserId } from '@/lib/completions-service';
 import { isLocalMode } from '@/lib/local-db';
 import { createAdminClient } from '@/lib/supabase/admin';
 import {
-  ALLOWED_MIME_TYPES,
   MAX_UPLOAD_BYTES,
   STORAGE_BUCKET,
-  extensionFromContentType,
   isSupabaseStorageMode,
   safeUserId,
   storageKeyFilename,
   storageKeyToFileUrl,
   getUploadDir,
 } from '@/lib/upload-storage';
+import { validateUploadFile } from '@/lib/upload-file-validation';
 
 type SignedUploadBody = {
   filename?: string;
@@ -23,10 +22,14 @@ type SignedUploadBody = {
   fileSize?: number;
 };
 
-function buildStorageKeyFromContentType(userId: string, contentType: string): string {
-  const ext = extensionFromContentType(contentType) ?? 'bin';
+function buildStorageKey(
+  userId: string,
+  filename: string,
+  contentType: string,
+  storageExt: string
+): string {
   const safeUser = safeUserId(userId);
-  return `${safeUser}/${Date.now()}-${randomBytes(8).toString('hex')}.${ext}`;
+  return `${safeUser}/${Date.now()}-${randomBytes(8).toString('hex')}.${storageExt}`;
 }
 
 export async function POST(request: Request) {
@@ -66,15 +69,22 @@ async function handleSignedUploadUrl(request: Request, userId: string) {
   }
 
   const filename = typeof body.filename === 'string' ? body.filename : '';
-  const contentType = (body.contentType ?? '').toLowerCase();
+  const rawContentType = typeof body.contentType === 'string' ? body.contentType : '';
   const fileSize = typeof body.fileSize === 'number' ? body.fileSize : NaN;
 
-  if (!contentType || !Number.isFinite(fileSize) || fileSize < 0) {
+  if (!filename.trim() || !Number.isFinite(fileSize) || fileSize < 0) {
     return NextResponse.json({ error: 'Parámetros de subida inválidos' }, { status: 400 });
   }
 
-  if (!ALLOWED_MIME_TYPES.has(contentType)) {
-    return NextResponse.json({ error: 'Tipo de archivo no permitido' }, { status: 400 });
+  const fileCheck = validateUploadFile(filename, rawContentType);
+  if (!fileCheck.ok) {
+    console.log('Signed upload rejected — file type', {
+      userId,
+      filename,
+      contentType: rawContentType,
+      reason: fileCheck.reason,
+    });
+    return NextResponse.json({ error: fileCheck.reason }, { status: 400 });
   }
 
   if (fileSize > MAX_UPLOAD_BYTES) {
@@ -84,12 +94,12 @@ async function handleSignedUploadUrl(request: Request, userId: string) {
     );
   }
 
-  const key = buildStorageKeyFromContentType(userId, contentType);
+  const key = buildStorageKey(userId, filename, fileCheck.contentType, fileCheck.storageExt);
 
   console.log('Signed upload requested', {
     userId,
     filename,
-    contentType,
+    contentType: fileCheck.contentType,
     fileSize,
     key,
   });
@@ -152,18 +162,26 @@ async function handleLocalMultipartUpload(request: Request, userId: string) {
     return NextResponse.json({ error: 'No se recibió ningún archivo' }, { status: 400 });
   }
 
-  const mimeType = (file.type || '').toLowerCase();
+  const mimeType = file.type || '';
   if (file.size > MAX_UPLOAD_BYTES) {
     return NextResponse.json(
       { error: 'El archivo es demasiado grande (máximo 10 MB)' },
       { status: 400 }
     );
   }
-  if (!ALLOWED_MIME_TYPES.has(mimeType)) {
-    return NextResponse.json({ error: 'Tipo de archivo no permitido' }, { status: 400 });
+
+  const fileCheck = validateUploadFile(file.name, mimeType);
+  if (!fileCheck.ok) {
+    console.log('Multipart upload rejected — file type', {
+      userId,
+      filename: file.name,
+      contentType: mimeType,
+      reason: fileCheck.reason,
+    });
+    return NextResponse.json({ error: fileCheck.reason }, { status: 400 });
   }
 
-  const key = buildStorageKeyFromContentType(userId, mimeType);
+  const key = buildStorageKey(userId, file.name, fileCheck.contentType, fileCheck.storageExt);
   const storedName = storageKeyFilename(key);
   const dir = getUploadDir(userId);
   fs.mkdirSync(dir, { recursive: true });
@@ -179,6 +197,6 @@ async function handleLocalMultipartUpload(request: Request, userId: string) {
     fileUrl: storageKeyToFileUrl(key),
     fileName: file.name,
     fileSize: file.size,
-    mimeType,
+    mimeType: fileCheck.contentType,
   });
 }

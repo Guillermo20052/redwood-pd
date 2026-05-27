@@ -39,6 +39,15 @@ export function extensionFromOriginalName(originalName: string): string {
   return 'bin';
 }
 
+/** Extension for a signed-upload key from MIME type (never uses original filename). */
+export function extensionFromContentType(contentType: string): string | null {
+  const t = contentType.toLowerCase();
+  if (t === 'application/pdf') return 'pdf';
+  if (t === 'image/png') return 'png';
+  if (t === 'image/jpeg' || t === 'image/jpg') return 'jpg';
+  return null;
+}
+
 /**
  * Canonical storage object key: `<safeUserId>/<timestamp>-<random8>.<ext>`.
  * Never embeds the original filename in the path.

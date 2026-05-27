@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
@@ -8,12 +9,25 @@ import {
   ALLOWED_MIME_TYPES,
   MAX_UPLOAD_BYTES,
   STORAGE_BUCKET,
-  buildStorageKey,
+  extensionFromContentType,
   isSupabaseStorageMode,
+  safeUserId,
   storageKeyFilename,
   storageKeyToFileUrl,
   getUploadDir,
 } from '@/lib/upload-storage';
+
+type SignedUploadBody = {
+  filename?: string;
+  contentType?: string;
+  fileSize?: number;
+};
+
+function buildStorageKeyFromContentType(userId: string, contentType: string): string {
+  const ext = extensionFromContentType(contentType) ?? 'bin';
+  const safeUser = safeUserId(userId);
+  return `${safeUser}/${Date.now()}-${randomBytes(8).toString('hex')}.${ext}`;
+}
 
 export async function POST(request: Request) {
   const session = await getSessionUserId();
@@ -21,6 +35,102 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
 
+  const contentTypeHeader = request.headers.get('content-type') ?? '';
+  const isMultipart = contentTypeHeader.includes('multipart/form-data');
+
+  if (isMultipart) {
+    if (!isLocalMode()) {
+      return NextResponse.json(
+        { error: 'Usa la subida directa (JSON + signed URL) en producción.' },
+        { status: 400 }
+      );
+    }
+    return handleLocalMultipartUpload(request, session.userId);
+  }
+
+  return handleSignedUploadUrl(request, session.userId);
+}
+
+async function handleSignedUploadUrl(request: Request, userId: string) {
+  let body: SignedUploadBody;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: 'JSON inválido' }, { status: 400 });
+  }
+
+  const filename = typeof body.filename === 'string' ? body.filename : '';
+  const contentType = (body.contentType ?? '').toLowerCase();
+  const fileSize = typeof body.fileSize === 'number' ? body.fileSize : NaN;
+
+  if (!contentType || !Number.isFinite(fileSize) || fileSize < 0) {
+    return NextResponse.json({ error: 'Parámetros de subida inválidos' }, { status: 400 });
+  }
+
+  if (!ALLOWED_MIME_TYPES.has(contentType)) {
+    return NextResponse.json({ error: 'Tipo de archivo no permitido' }, { status: 400 });
+  }
+
+  if (fileSize > MAX_UPLOAD_BYTES) {
+    return NextResponse.json(
+      { error: 'El archivo es demasiado grande (máximo 10 MB)' },
+      { status: 400 }
+    );
+  }
+
+  const key = buildStorageKeyFromContentType(userId, contentType);
+
+  console.log('Signed upload requested', {
+    userId,
+    filename,
+    contentType,
+    fileSize,
+    key,
+  });
+
+  if (!isSupabaseStorageMode()) {
+    return NextResponse.json(
+      { error: 'Supabase Storage no está configurado en este entorno.' },
+      { status: 500 }
+    );
+  }
+
+  const admin = createAdminClient();
+  if (!admin) {
+    console.error('Signed upload failed', {
+      userId,
+      error: 'missing SUPABASE_SERVICE_ROLE_KEY',
+    });
+    return NextResponse.json(
+      { error: 'Servidor mal configurado: falta SUPABASE_SERVICE_ROLE_KEY' },
+      { status: 500 }
+    );
+  }
+
+  const { data, error } = await admin.storage
+    .from(STORAGE_BUCKET)
+    .createSignedUploadUrl(key);
+
+  if (error || !data) {
+    console.error('Signed upload failed', { userId, error: error?.message });
+    return NextResponse.json(
+      { error: 'No se pudo preparar la subida. Intenta de nuevo.' },
+      { status: 500 }
+    );
+  }
+
+  console.log('Signed upload issued', { userId, key });
+
+  return NextResponse.json({
+    ok: true,
+    key,
+    signedUrl: data.signedUrl,
+    token: data.token,
+    fileUrl: storageKeyToFileUrl(key),
+  });
+}
+
+async function handleLocalMultipartUpload(request: Request, userId: string) {
   let form: FormData;
   try {
     form = await request.formData();
@@ -33,70 +143,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'No se recibió ningún archivo' }, { status: 400 });
   }
 
+  const mimeType = (file.type || '').toLowerCase();
   if (file.size > MAX_UPLOAD_BYTES) {
     return NextResponse.json(
-      { error: 'El archivo es demasiado grande (máx. 10MB)' },
+      { error: 'El archivo es demasiado grande (máximo 10 MB)' },
       { status: 400 }
     );
   }
-
-  const mimeType = (file.type || '').toLowerCase();
   if (!ALLOWED_MIME_TYPES.has(mimeType)) {
     return NextResponse.json({ error: 'Tipo de archivo no permitido' }, { status: 400 });
   }
 
-  const userId = session.userId;
-  const key = buildStorageKey(userId, file.name);
+  const key = buildStorageKeyFromContentType(userId, mimeType);
   const storedName = storageKeyFilename(key);
-
-  console.log('Upload start', {
-    userId,
-    filename: file.name,
-    size: file.size,
-    key,
-  });
-
-  // Supabase Storage path is preferred when env vars are present. We use the
-  // service-role client to upload so we don't have to fight RLS during the
-  // server-to-storage hop — the route already gated by getSessionUserId() and
-  // we always namespace the path under `<safeUserId>/`, so the RLS policy on
-  // storage.objects still protects reads downstream.
-  if (!isLocalMode() && isSupabaseStorageMode()) {
-    const admin = createAdminClient();
-    if (!admin) {
-      return NextResponse.json(
-        { error: 'Servidor mal configurado: falta SUPABASE_SERVICE_ROLE_KEY' },
-        { status: 500 }
-      );
-    }
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const { error } = await admin.storage
-      .from(STORAGE_BUCKET)
-      .upload(key, buffer, {
-        contentType: mimeType || 'application/octet-stream',
-        upsert: false,
-      });
-    if (error) {
-      const msg = error.message?.toLowerCase().includes('not found')
-        ? `No se encontró el bucket "${STORAGE_BUCKET}" en Storage. Ejecuta scripts/setup-supabase.mjs.`
-        : `No se pudo subir el archivo: ${error.message}`;
-      console.error('Upload failed', { userId, key, bucket: STORAGE_BUCKET, error: error.message });
-      return NextResponse.json({ error: msg }, { status: 500 });
-    }
-
-    console.log('Upload complete', { userId, key, bucket: STORAGE_BUCKET });
-
-    return NextResponse.json({
-      ok: true,
-      key,
-      fileUrl: storageKeyToFileUrl(key),
-      fileName: file.name,
-      fileSize: file.size,
-      mimeType,
-    });
-  }
-
-  // Local mode (no Supabase) — write to .data/uploads/<safeUserId>/
   const dir = getUploadDir(userId);
   fs.mkdirSync(dir, { recursive: true });
   const dest = path.join(dir, storedName);

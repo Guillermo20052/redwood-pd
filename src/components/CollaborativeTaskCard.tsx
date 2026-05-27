@@ -6,6 +6,12 @@ import { isMandatoryPartsComplete } from '@/lib/extras-gating';
 import type { CompletionMap } from '@/lib/verification';
 import { verificationConfig } from '@/lib/curriculum-path';
 import { FILE_NOT_FOUND_ERROR_CODE } from '@/lib/upload-errors';
+import {
+  uploadTeacherSubmissionFile,
+  VERIFY_TASK_USER_MESSAGE,
+  type UploadStage,
+  type UploadedFileRef,
+} from '@/lib/teacher-file-upload';
 import { FileUpload } from './FileUpload';
 import { AdminResetButton } from './AdminResetButton';
 
@@ -33,6 +39,9 @@ export function CollaborativeTaskCard({
   const [partnerName, setPartnerName] = useState('');
   const [evidence, setEvidence] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadedRef, setUploadedRef] = useState<UploadedFileRef | null>(null);
+  const [uploadStage, setUploadStage] = useState<UploadStage>('idle');
+  const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [retryingVerify, setRetryingVerify] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
@@ -40,20 +49,48 @@ export function CollaborativeTaskCard({
 
   const partnerOk = partnerName.trim().length >= 3;
   const textOk = evidence.trim().length >= MIN_CHARS;
-  const fileOk = isFileTask && selectedFile !== null;
+  const fileOk = isFileTask && uploadStage === 'ready' && uploadedRef !== null;
   const contentOk = isFileTask ? fileOk : textOk;
-  const canSubmit = !locked && !verified && partnerOk && contentOk && !submitting;
+  const canSubmit =
+    !locked && !verified && partnerOk && contentOk && !submitting && !uploading;
 
-  const uploadFile = async (file: File): Promise<{ key: string; fileUrl: string }> => {
-    const form = new FormData();
-    form.append('file', file);
-    const res = await fetch('/api/upload', { method: 'POST', body: form });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data?.error || 'No se pudo subir el archivo');
-    if (typeof data.key !== 'string' || typeof data.fileUrl !== 'string') {
-      throw new Error('Respuesta de subida inválida');
+  const uploadStatusLabel = (): string | null => {
+    if (uploadStage === 'preparing') return 'Preparando subida...';
+    if (uploadStage === 'uploading') return 'Subiendo archivo...';
+    if (uploadStage === 'ready') return 'Listo para evaluar';
+    return null;
+  };
+
+  const startFileUpload = async (file: File) => {
+    setUploading(true);
+    setError(null);
+    setUploadedRef(null);
+    setUploadStage('preparing');
+    try {
+      const ref = await uploadTeacherSubmissionFile(file, (stage) => {
+        setUploadStage(stage);
+      });
+      setUploadedRef(ref);
+      setUploadStage('ready');
+    } catch (e) {
+      setUploadStage('error');
+      setError((e as Error).message);
+    } finally {
+      setUploading(false);
     }
-    return { key: data.key, fileUrl: data.fileUrl };
+  };
+
+  const clearFile = () => {
+    setSelectedFile(null);
+    setUploadedRef(null);
+    setUploadStage('idle');
+    setError(null);
+  };
+
+  const resetForRetry = () => {
+    clearFile();
+    setFeedback(null);
+    setError(null);
   };
 
   const verifyWithOptionalRetry = async (body: Record<string, unknown>, isClientRetry = false) => {
@@ -82,10 +119,9 @@ export function CollaborativeTaskCard({
     try {
       let storageKey: string | undefined;
       let fileUrl: string | undefined;
-      if (isFileTask && selectedFile) {
-        const uploaded = await uploadFile(selectedFile);
-        storageKey = uploaded.key;
-        fileUrl = uploaded.fileUrl;
+      if (isFileTask && uploadedRef) {
+        storageKey = uploadedRef.key;
+        fileUrl = uploadedRef.fileUrl;
       }
       const res = await verifyWithOptionalRetry({
         itemKey: task.id,
@@ -97,7 +133,7 @@ export function CollaborativeTaskCard({
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || 'No se pudo enviar.');
+        setError(data.error || VERIFY_TASK_USER_MESSAGE);
         return;
       }
       if (data.passed === false) {
@@ -107,10 +143,10 @@ export function CollaborativeTaskCard({
       setFeedback(data.feedback || '¡Tarea colaborativa verificada!');
       setEvidence('');
       setPartnerName('');
-      setSelectedFile(null);
+      clearFile();
       onUpdated();
     } catch (e) {
-      setError((e as Error).message);
+      setError((e as Error).message || VERIFY_TASK_USER_MESSAGE);
     } finally {
       setSubmitting(false);
       setRetryingVerify(false);
@@ -206,10 +242,26 @@ export function CollaborativeTaskCard({
                     : 'image/png,image/jpeg,image/jpg'
                 }
                 kind={task.inputType === 'document' ? 'pdf' : 'image'}
-                disabled={submitting}
-                onFileSelected={setSelectedFile}
-                onFileCleared={() => setSelectedFile(null)}
+                disabled={submitting || uploading}
+                onFileSelected={(file) => {
+                  setSelectedFile(file);
+                  void startFileUpload(file);
+                }}
+                onFileCleared={clearFile}
               />
+              {selectedFile && uploadStage !== 'idle' && (
+                <p
+                  className={`text-sm font-medium ${
+                    uploadStage === 'ready'
+                      ? 'text-[var(--teal)]'
+                      : uploadStage === 'error'
+                        ? 'text-[var(--red)]'
+                        : 'text-[var(--gray-600)]'
+                  }`}
+                >
+                  {uploadStage === 'error' ? error : uploadStatusLabel()}
+                </p>
+              )}
               <textarea
                 className="rw-textarea min-h-[80px] w-full"
                 value={evidence}
@@ -233,7 +285,19 @@ export function CollaborativeTaskCard({
             </>
           )}
 
-          {error && <p className="text-xs text-red-600">{error}</p>}
+          {error && (!isFileTask || uploadStage !== 'error') && (
+            <p className="text-xs text-red-600">{error}</p>
+          )}
+          {error && isFileTask && uploadStage === 'error' && (
+            <button type="button" className="btn-outline text-sm" onClick={resetForRetry}>
+              Reintentar
+            </button>
+          )}
+          {error && isFileTask && uploadStage === 'ready' && (
+            <button type="button" className="btn-outline text-sm" onClick={() => void submit()}>
+              Reintentar
+            </button>
+          )}
           {feedback && (
             <p
               className={`text-xs ${feedback.includes('verificada') ? 'text-[var(--teal)]' : 'text-[var(--gray-700)]'}`}
@@ -253,7 +317,7 @@ export function CollaborativeTaskCard({
               ? retryingVerify
                 ? 'Reintentando…'
                 : 'Evaluando con IA…'
-              : 'Enviar tarea colaborativa'}
+              : 'Enviar para evaluación'}
           </button>
         </>
       )}

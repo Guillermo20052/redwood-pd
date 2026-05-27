@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useState } from 'react';
 
-const MAX_BYTES = 10 * 1024 * 1024;
+import { MAX_TEACHER_UPLOAD_BYTES } from '@/lib/teacher-file-upload';
 
 type Props = {
   accept: string;
@@ -51,12 +51,12 @@ export function FileUpload({
   const validateAndSet = useCallback(
     (next: File) => {
       setError(null);
-      if (next.size > MAX_BYTES) {
-        setError('El archivo es demasiado grande (máx. 10MB)');
+      if (next.size > MAX_TEACHER_UPLOAD_BYTES) {
+        setError('El archivo es demasiado grande (máximo 10 MB)');
         return;
       }
       if (!mimeAllowed(next, accept)) {
-        setError('Tipo de archivo no permitido');
+        setError('Tipo de archivo no permitido. Sube PDF, PNG o JPG.');
         return;
       }
       if (previewUrl) URL.revokeObjectURL(previewUrl);

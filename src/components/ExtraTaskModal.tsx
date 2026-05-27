@@ -4,6 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { getExtraTaskBadgeLabel, type ExtraTask } from '@/lib/extra-tasks';
 import { verificationConfig } from '@/lib/curriculum-path';
 import { useProgressContext } from './Providers';
+import {
+  uploadTeacherSubmissionFile,
+  VERIFY_TASK_USER_MESSAGE,
+  type UploadStage,
+  type UploadedFileRef,
+} from '@/lib/teacher-file-upload';
 import { FileUpload } from './FileUpload';
 import { AdminResetButton } from './AdminResetButton';
 
@@ -26,6 +32,9 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
 
   const [text, setText] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadedRef, setUploadedRef] = useState<UploadedFileRef | null>(null);
+  const [uploadStage, setUploadStage] = useState<UploadStage>('idle');
+  const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [retryingVerify, setRetryingVerify] = useState(false);
   const [showRubric, setShowRubric] = useState(false);
@@ -49,22 +58,49 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
   const min = verificationConfig.taskEvidenceMinChars;
   const len = text.trim().length;
   const meetsLength = len >= min;
-  const fileOk = isFileTask && selectedFile !== null;
+  const fileOk = isFileTask && uploadStage === 'ready' && uploadedRef !== null;
   const meets = isFileTask ? fileOk : meetsLength;
 
   const acceptMime =
     inputType === 'document' ? 'application/pdf' : 'image/png,image/jpeg,image/jpg';
 
-  const uploadFile = async (file: File): Promise<{ key: string; fileUrl: string }> => {
-    const form = new FormData();
-    form.append('file', file);
-    const res = await fetch('/api/upload', { method: 'POST', body: form });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data?.error || 'No se pudo subir el archivo');
-    if (typeof data.key !== 'string' || typeof data.fileUrl !== 'string') {
-      throw new Error('Respuesta de subida inválida');
+  const uploadStatusLabel = (): string | null => {
+    if (uploadStage === 'preparing') return 'Preparando subida...';
+    if (uploadStage === 'uploading') return 'Subiendo archivo...';
+    if (uploadStage === 'ready') return 'Listo para evaluar';
+    return null;
+  };
+
+  const startFileUpload = async (file: File) => {
+    setUploading(true);
+    setErrorMessage(null);
+    setUploadedRef(null);
+    setUploadStage('preparing');
+    try {
+      const ref = await uploadTeacherSubmissionFile(file, (stage) => {
+        setUploadStage(stage);
+      });
+      setUploadedRef(ref);
+      setUploadStage('ready');
+    } catch (e) {
+      setUploadStage('error');
+      setErrorMessage((e as Error).message);
+    } finally {
+      setUploading(false);
     }
-    return { key: data.key, fileUrl: data.fileUrl };
+  };
+
+  const clearFile = () => {
+    setSelectedFile(null);
+    setUploadedRef(null);
+    setUploadStage('idle');
+    setErrorMessage(null);
+  };
+
+  const resetUploadState = () => {
+    clearFile();
+    setLastResult(null);
+    setErrorMessage(null);
   };
 
   const submit = async () => {
@@ -75,10 +111,9 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
     try {
       let storageKey: string | undefined;
       let fileUrl: string | undefined;
-      if (isFileTask && selectedFile) {
-        const uploaded = await uploadFile(selectedFile);
-        storageKey = uploaded.key;
-        fileUrl = uploaded.fileUrl;
+      if (isFileTask && uploadedRef) {
+        storageKey = uploadedRef.key;
+        fileUrl = uploadedRef.fileUrl;
       }
       const data = await verifyTask(
         task.id,
@@ -100,7 +135,7 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
         setTimeout(() => onVerified(), 1200);
       }
     } catch (e) {
-      setErrorMessage((e as Error).message || 'No se pudo enviar la tarea.');
+      setErrorMessage((e as Error).message || VERIFY_TASK_USER_MESSAGE);
     } finally {
       setSubmitting(false);
       setRetryingVerify(false);
@@ -178,13 +213,31 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
           </div>
 
           {isFileTask ? (
-            <FileUpload
-              accept={acceptMime}
-              kind={inputType === 'document' ? 'pdf' : 'image'}
-              disabled={submitting || passed}
-              onFileSelected={setSelectedFile}
-              onFileCleared={() => setSelectedFile(null)}
-            />
+            <div className="space-y-2">
+              <FileUpload
+                accept={acceptMime}
+                kind={inputType === 'document' ? 'pdf' : 'image'}
+                disabled={submitting || passed || uploading}
+                onFileSelected={(file) => {
+                  setSelectedFile(file);
+                  void startFileUpload(file);
+                }}
+                onFileCleared={clearFile}
+              />
+              {selectedFile && uploadStage !== 'idle' && (
+                <p
+                  className={`text-sm font-medium ${
+                    uploadStage === 'ready'
+                      ? 'text-[var(--teal)]'
+                      : uploadStage === 'error'
+                        ? 'text-[var(--red)]'
+                        : 'text-[var(--gray-600)]'
+                  }`}
+                >
+                  {uploadStage === 'error' ? errorMessage : uploadStatusLabel()}
+                </p>
+              )}
+            </div>
           ) : (
             <div>
               <textarea
@@ -207,14 +260,12 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
               type="button"
               className="btn-primary w-full"
               onClick={submit}
-              disabled={!meets || submitting || passed}
+              disabled={!meets || submitting || passed || uploading}
             >
               {submitting
                 ? retryingVerify
                   ? 'Reintentando…'
-                  : isFileTask
-                    ? 'Subiendo y evaluando…'
-                    : 'Evaluando con IA…'
+                  : 'Evaluando con IA…'
                 : passed
                   ? 'Completada'
                   : 'Enviar para evaluación'}
@@ -277,8 +328,8 @@ export function ExtraTaskModal({ task, isAdmin = false, onClose, onVerified }: P
               <button
                 type="button"
                 className="btn-outline mt-2"
-                onClick={submit}
-                disabled={submitting || !meets}
+                onClick={isFileTask ? resetUploadState : submit}
+                disabled={submitting || uploading || (isFileTask ? false : !meets)}
               >
                 Reintentar
               </button>

@@ -40,8 +40,14 @@ export async function POST(request: Request) {
 
   if (isMultipart) {
     if (!isLocalMode()) {
+      console.error('Multipart upload rejected in production', {
+        userId: session.userId,
+      });
       return NextResponse.json(
-        { error: 'Usa la subida directa (JSON + signed URL) en producción.' },
+        {
+          error:
+            'Error técnico subiendo el archivo. Por favor recarga la página e intenta de nuevo.',
+        },
         { status: 400 }
       );
     }
@@ -102,7 +108,10 @@ async function handleSignedUploadUrl(request: Request, userId: string) {
       error: 'missing SUPABASE_SERVICE_ROLE_KEY',
     });
     return NextResponse.json(
-      { error: 'Servidor mal configurado: falta SUPABASE_SERVICE_ROLE_KEY' },
+      {
+        error:
+          'Error técnico subiendo el archivo. Por favor recarga la página e intenta de nuevo.',
+      },
       { status: 500 }
     );
   }

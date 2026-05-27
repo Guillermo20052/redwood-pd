@@ -1,6 +1,6 @@
 'use client';
 
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/client';
 
 function storageKeyToFileUrl(key: string): string {
   return `/api/uploads/${key}`;
@@ -15,16 +15,47 @@ export type UploadedFileRef = {
   fileUrl: string;
 };
 
-function isLocalModeClient(): boolean {
-  return (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
+const TECHNICAL_UPLOAD_ERROR =
+  'Error técnico subiendo el archivo. Por favor recarga la página e intenta de nuevo.';
+
+/** Server responses that must never be shown verbatim to teachers. */
+function sanitizeUserFacingUploadError(msg: string | undefined): string {
+  if (!msg?.trim()) return TECHNICAL_UPLOAD_ERROR;
+  const lower = msg.toLowerCase();
+  if (
+    lower.includes('signed url') ||
+    lower.includes('json +') ||
+    lower.includes('service_role') ||
+    lower.includes('subida directa') ||
+    lower.includes('multipart')
+  ) {
+    return TECHNICAL_UPLOAD_ERROR;
+  }
+  return msg;
 }
 
 function normalizeMime(file: File): string {
   const t = (file.type || '').toLowerCase();
   if (t === 'image/jpg') return 'image/jpeg';
   return t;
+}
+
+class SignedUploadRequestError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+    readonly apiError?: string
+  ) {
+    super(message);
+    this.name = 'SignedUploadRequestError';
+  }
+}
+
+/** True when the server has no Supabase Storage — local dev may use multipart instead. */
+function isLocalOnlySignedUrlFailure(err: unknown): boolean {
+  if (!(err instanceof SignedUploadRequestError)) return false;
+  const msg = (err.apiError ?? '').toLowerCase();
+  return err.status === 500 && msg.includes('supabase storage no está configurado');
 }
 
 export function mapSignedUrlRequestError(
@@ -42,12 +73,16 @@ export function mapSignedUrlRequestError(
     return 'Tipo de archivo no permitido. Sube PDF, PNG o JPG.';
   }
   if (!res.ok) {
-    return msg || 'Error de conexión. Verifica tu internet.';
+    return sanitizeUserFacingUploadError(msg) || 'Error de conexión. Verifica tu internet.';
   }
   return 'Error de conexión. Verifica tu internet.';
 }
 
-async function uploadViaMultipart(file: File): Promise<UploadedFileRef> {
+async function uploadViaMultipart(
+  file: File,
+  onStage?: (stage: UploadStage, progressPercent?: number) => void
+): Promise<UploadedFileRef> {
+  onStage?.('uploading', 0);
   const form = new FormData();
   form.append('file', file);
   let res: Response;
@@ -58,13 +93,17 @@ async function uploadViaMultipart(file: File): Promise<UploadedFileRef> {
   }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    throw new Error(data?.error || 'No se pudo subir el archivo. Verifica tu conexión e intenta de nuevo.');
+    throw new Error(
+      sanitizeUserFacingUploadError(data?.error) ||
+        'No se pudo subir el archivo. Verifica tu conexión e intenta de nuevo.'
+    );
   }
   if (typeof data.key !== 'string') {
     throw new Error('Respuesta de subida inválida');
   }
   const fileUrl =
     typeof data.fileUrl === 'string' ? data.fileUrl : storageKeyToFileUrl(data.key);
+  onStage?.('ready', 100);
   return { key: data.key, fileUrl };
 }
 
@@ -89,7 +128,11 @@ async function requestSignedUpload(file: File): Promise<{
   }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    throw new Error(mapSignedUrlRequestError(res, data));
+    throw new SignedUploadRequestError(
+      mapSignedUrlRequestError(res, data),
+      res.status,
+      typeof data?.error === 'string' ? data.error : undefined
+    );
   }
   if (typeof data.key !== 'string' || typeof data.token !== 'string') {
     throw new Error('Respuesta de subida inválida');
@@ -105,7 +148,13 @@ async function uploadViaSignedUrl(
   const { key, token } = await requestSignedUpload(file);
   onStage?.('uploading', 0);
 
-  const supabase = createClient();
+  let supabase;
+  try {
+    supabase = createClient();
+  } catch {
+    throw new Error(TECHNICAL_UPLOAD_ERROR);
+  }
+
   const { error } = await supabase.storage
     .from('uploads')
     .uploadToSignedUrl(key, token, file, {
@@ -123,8 +172,10 @@ async function uploadViaSignedUrl(
 }
 
 /**
- * Upload a teacher submission file. In production (Supabase configured) the file
- * goes browser → Storage via a signed URL; locally it falls back to multipart POST.
+ * Upload a teacher submission file.
+ *
+ * Production: always JSON signed URL first (browser → Supabase), never multipart.
+ * Local dev without Supabase: signed-url prep fails → multipart fallback to disk.
  */
 export async function uploadTeacherSubmissionFile(
   file: File,
@@ -136,14 +187,14 @@ export async function uploadTeacherSubmissionFile(
     );
   }
 
-  if (isSupabaseConfigured() && !isLocalModeClient()) {
-    return uploadViaSignedUrl(file, onStage);
+  try {
+    return await uploadViaSignedUrl(file, onStage);
+  } catch (err) {
+    if (isLocalOnlySignedUrlFailure(err)) {
+      return uploadViaMultipart(file, onStage);
+    }
+    throw err;
   }
-
-  onStage?.('uploading');
-  const result = await uploadViaMultipart(file);
-  onStage?.('ready');
-  return result;
 }
 
 export const VERIFY_TASK_USER_MESSAGE =

@@ -1,0 +1,156 @@
+{
+  "tools": {
+    "claude": {
+      "label": "Claude",
+      "accent": "#1A2E4A",
+      "intro": "Explora Claude con ejercicios cortos pensados para el aula. Sube una captura o PDF de lo que generaste — la plataforma te dará retroalimentación alentadora."
+    },
+    "diffit": {
+      "label": "Diffit",
+      "accent": "#C8972A",
+      "intro": "Practica adaptación de lecturas y actividades con Diffit. Ideal para diferenciar en pocos minutos."
+    },
+    "notebooklm": {
+      "label": "NotebookLM",
+      "accent": "#1A7A6E",
+      "intro": "Trabaja con tus propios documentos: podcasts, FAQs, mapas mentales y planeación con NotebookLM."
+    }
+  },
+  "tasks": [
+    {
+      "id": "practica-claude-1",
+      "tool": "claude",
+      "title": "Genera un plan de clase relámpago",
+      "description": "Pide a Claude que diseñe un plan de clase de 50 minutos sobre cualquier tema de tu materia. Indícale: nivel educativo, número de alumnas, recursos disponibles y un objetivo de aprendizaje específico. Revisa el resultado y haz UN ajuste.",
+      "expectedOutput": "Captura del plan de clase generado por Claude más una nota de qué ajustaste",
+      "tip": "Mientras más específico tu prompt, mejor el resultado. 'Plan de clase' vs 'Plan de clase de 50 min para 25 alumnas de 9no grado sobre fotosíntesis con énfasis en experimentación'.",
+      "estimatedMinutes": 8
+    },
+    {
+      "id": "practica-claude-2",
+      "tool": "claude",
+      "title": "Analiza un texto largo de tu materia",
+      "description": "Toma un capítulo o artículo de tu materia (cópialo y pégalo, o sube el PDF si tu Claude lo permite). Pide a Claude: (1) resumen en 3 puntos, (2) 5 preguntas de comprensión para tus alumnas, (3) un debate provocador relacionado al tema.",
+      "expectedOutput": "Captura de los 3 outputs generados (resumen, preguntas, debate)",
+      "tip": "Claude es excelente con texto largo. Aprovéchalo para procesar documentos que tomarían horas leer.",
+      "estimatedMinutes": 10
+    },
+    {
+      "id": "practica-claude-3",
+      "tool": "claude",
+      "title": "Diseña una rúbrica de evaluación",
+      "description": "Describe a Claude un trabajo o proyecto que vas a calificar. Pídele que cree una rúbrica con 4 niveles (Excelente, Satisfactorio, En desarrollo, Insuficiente) y 4-5 criterios. Pide que sea apropiada para el nivel IB si aplica.",
+      "expectedOutput": "Captura de la rúbrica completa generada",
+      "tip": "Pídele a Claude que justifique cada criterio. Te dará insights pedagógicos que no habías considerado.",
+      "estimatedMinutes": 8
+    },
+    {
+      "id": "practica-claude-4",
+      "tool": "claude",
+      "title": "Reescribe instrucciones para tus alumnas",
+      "description": "Toma una consigna o instrucción que sueles dar a tus alumnas y que sientes que no entienden bien. Pega tu versión actual a Claude y pídele que la reescriba en lenguaje claro, motivador y accesible, manteniendo el rigor académico.",
+      "expectedOutput": "Captura mostrando: (1) tu versión original, (2) la versión mejorada por Claude",
+      "tip": "Pídele que adapte el tono según la edad de tus alumnas. La diferencia entre 12 y 17 años es enorme en lenguaje.",
+      "estimatedMinutes": 7
+    },
+    {
+      "id": "practica-claude-5",
+      "tool": "claude",
+      "title": "Brainstorm de actividades creativas",
+      "description": "Dile a Claude el tema o concepto más difícil de enseñar de tu materia. Pídele 10 ideas creativas para enseñarlo (sin clase magistral): juegos, simulaciones, debates, proyectos, role-playing. Elige tu favorita y pídele que la desarrolle a detalle.",
+      "expectedOutput": "Captura de las 10 ideas más el desarrollo a detalle de tu favorita",
+      "tip": "Empuja a Claude. Si te da ideas genéricas, dile 'estas son genéricas, dame ideas más arriesgadas o inusuales'.",
+      "estimatedMinutes": 10
+    },
+    {
+      "id": "practica-diffit-1",
+      "tool": "diffit",
+      "title": "Adapta una lectura a 3 niveles",
+      "description": "Sube a Diffit un texto que usas en clase (o pega el URL de un artículo). Genera 3 versiones niveladas para 3 grados distintos. Compara: ¿qué cambió? ¿qué se simplificó? ¿qué se mantuvo igual?",
+      "expectedOutput": "Captura mostrando las 3 versiones lado a lado o secuencialmente",
+      "tip": "Funciona MUCHO mejor con textos densos que con narrativas. Prueba con un artículo de Wikipedia o un texto académico.",
+      "estimatedMinutes": 8
+    },
+    {
+      "id": "practica-diffit-2",
+      "tool": "diffit",
+      "title": "Genera preguntas de comprensión por niveles",
+      "description": "En Diffit, sube un texto y genera el set completo de actividades: vocabulario, preguntas de opción múltiple, preguntas abiertas, resumen. Analiza qué pregunta es más útil y por qué.",
+      "expectedOutput": "Captura de las actividades generadas con tu análisis breve",
+      "tip": "Las preguntas de Diffit son un buen punto de partida, no el final. Siempre revísalas y personaliza al menos 2.",
+      "estimatedMinutes": 8
+    },
+    {
+      "id": "practica-diffit-3",
+      "tool": "diffit",
+      "title": "Crea un texto desde un prompt",
+      "description": "Usa la función 'Generate from a topic' de Diffit. Pídele un texto sobre un tema específico de tu materia, al nivel de tus alumnas. Compara el resultado con un texto similar que ya uses en clase.",
+      "expectedOutput": "Captura del texto generado más tu comparación con uno existente",
+      "tip": "Diffit es genial cuando no encuentras el texto perfecto. Genera la versión exacta que necesitas.",
+      "estimatedMinutes": 8
+    },
+    {
+      "id": "practica-diffit-4",
+      "tool": "diffit",
+      "title": "Diferencia por nivel de inglés",
+      "description": "Si enseñas inglés o tienes alumnas con distinto nivel de inglés: sube un texto en inglés y genera versiones en distintos niveles (ESL Beginner, Intermediate, Advanced). Si no enseñas inglés, prueba con un texto en español para 5to grado vs 9no grado.",
+      "expectedOutput": "Captura de las versiones niveladas",
+      "tip": "Combina Diffit con Brisk para feedback en Google Docs y tienes un flujo de inglés casi automatizado.",
+      "estimatedMinutes": 8
+    },
+    {
+      "id": "practica-diffit-5",
+      "tool": "diffit",
+      "title": "Diseña una actividad completa de lectura",
+      "description": "Para una lectura asignada en tu próxima clase, usa Diffit para generar: (1) versión nivelada del texto, (2) vocabulario clave con definiciones, (3) preguntas de comprensión, (4) prompt de discusión. Organiza todo en un documento listo para imprimir.",
+      "expectedOutput": "Captura del paquete completo de actividad",
+      "tip": "Esto es lo más cercano que tendrás a 'planeación automatizada de lectura'. 30 minutos de trabajo en 5 minutos.",
+      "estimatedMinutes": 10
+    },
+    {
+      "id": "practica-notebooklm-1",
+      "tool": "notebooklm",
+      "title": "Convierte tu material en un podcast",
+      "description": "Sube 2-3 documentos sobre un tema de tu materia a NotebookLM. Genera el Audio Overview (podcast generado por IA). Escucha al menos 3 minutos. Analiza: ¿qué temas destacaron? ¿qué omitieron? ¿es útil para tus alumnas?",
+      "expectedOutput": "Captura del notebook con el podcast generado más tu análisis breve",
+      "tip": "El Audio Overview es PERFECTO para alumnas que prefieren aprender escuchando. Compártelo como tarea de pre-clase.",
+      "estimatedMinutes": 12
+    },
+    {
+      "id": "practica-notebooklm-2",
+      "tool": "notebooklm",
+      "title": "Crea un FAQ desde varios documentos",
+      "description": "Sube 3-5 documentos relacionados a un tema de tu materia. Usa el chat de NotebookLM para preguntarle: '¿Cuáles son las 10 preguntas más importantes sobre este tema?' Luego pide respuestas detalladas para cada una.",
+      "expectedOutput": "Captura del FAQ generado con citas a las fuentes originales",
+      "tip": "NotebookLM es el ÚNICO que cita exactamente de qué documento sacó cada dato. Excelente para validar información.",
+      "estimatedMinutes": 10
+    },
+    {
+      "id": "practica-notebooklm-3",
+      "tool": "notebooklm",
+      "title": "Genera un mapa mental temático",
+      "description": "En NotebookLM, sube material de una unidad completa de tu materia. Pídele que genere: (1) un mapa mental de los conceptos clave, (2) las relaciones entre ellos, (3) ejemplos concretos para cada uno.",
+      "expectedOutput": "Captura del mapa mental o esquema generado",
+      "tip": "Pídele que lo organice en niveles de complejidad. Útil para identificar qué enseñar primero.",
+      "estimatedMinutes": 10
+    },
+    {
+      "id": "practica-notebooklm-4",
+      "tool": "notebooklm",
+      "title": "Resume artículos académicos para tus alumnas",
+      "description": "Sube 1-2 artículos académicos densos a NotebookLM. Pídele resúmenes en distintos niveles: (1) para una colega, (2) para una alumna de bachillerato, (3) para una alumna de secundaria. Compara los tres.",
+      "expectedOutput": "Captura de los 3 resúmenes y tu análisis de las diferencias",
+      "tip": "Es asombroso ver cómo NotebookLM ajusta el nivel sin perder el contenido esencial. Excelente para diferenciación.",
+      "estimatedMinutes": 10
+    },
+    {
+      "id": "practica-notebooklm-5",
+      "tool": "notebooklm",
+      "title": "Diseña una sesión completa de clase",
+      "description": "Usando NotebookLM con material de tu materia, pídele que diseñe: (1) un objetivo de clase, (2) actividad de apertura, (3) desarrollo con 2 momentos, (4) cierre con evaluación. Pídele que justifique cada decisión pedagógica.",
+      "expectedOutput": "Captura de la sesión completa con justificaciones",
+      "tip": "NotebookLM diseña con base en TUS documentos, no en conocimiento genérico. Por eso las propuestas son más relevantes.",
+      "estimatedMinutes": 12
+    }
+  ]
+}

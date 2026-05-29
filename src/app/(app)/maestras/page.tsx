@@ -8,6 +8,8 @@ import { curriculumPath } from '@/lib/curriculum-path';
 import type { CompletionRow } from '@/lib/local-db';
 import { isLocalMode, localDb } from '@/lib/local-db';
 import { isTeacherProfile } from '@/lib/teacher-profiles';
+import { AdminPracticaToggle } from '@/components/AdminPracticaToggle';
+import { isPracticaEnabled } from '@/lib/feature-flags';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,7 +27,13 @@ export default async function MaestrasPage() {
   // Local mode — no-auth access for dev only; show a placeholder
   if (!isSupabaseConfigured() || isLocalMode()) {
     const teachers = buildLocalTeacherStats();
-    return <MaestrasView teachers={teachers} />;
+    const practicaEnabled = await isPracticaEnabled();
+    return (
+      <div className="space-y-8">
+        <AdminPracticaToggle initialEnabled={practicaEnabled} />
+        <MaestrasView teachers={teachers} />
+      </div>
+    );
   }
 
   const supabase = await createClient();
@@ -55,7 +63,14 @@ export default async function MaestrasPage() {
     return buildTeacherStat(p, userRows);
   });
 
-  return <MaestrasView teachers={teachers} />;
+  const practicaEnabled = await isPracticaEnabled();
+
+  return (
+    <div className="space-y-8">
+      <AdminPracticaToggle initialEnabled={practicaEnabled} />
+      <MaestrasView teachers={teachers} />
+    </div>
+  );
 }
 
 function buildTeacherStat(

@@ -1,11 +1,18 @@
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { isLocalMode } from '@/lib/local-db';
+import { isLocalMode, localDb } from '@/lib/local-db';
+
+const LOCAL_USER = 'local-dev-user';
 
 export async function getCurrentUserRole(
   userId?: string
 ): Promise<'teacher' | 'admin'> {
-  if (!isSupabaseConfigured() || isLocalMode()) return 'teacher';
+  if (isLocalMode()) {
+    const uid = userId ?? LOCAL_USER;
+    const profile = localDb.getProfile(uid);
+    return profile?.role === 'admin' ? 'admin' : 'teacher';
+  }
+  if (!isSupabaseConfigured()) return 'teacher';
 
   let uid = userId;
   if (!uid) {

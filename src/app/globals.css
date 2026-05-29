@@ -4306,3 +4306,407 @@ h3,
 .admin-teacher-cert-btn:hover {
   background: rgba(200, 151, 42, 0.22);
 }
+
+/* --- Práctica (workshop practice tasks) --- */
+
+.practica-page {
+  max-width: 56rem;
+}
+
+.practica-hero {
+  background: linear-gradient(135deg, var(--navy) 0%, #243d5c 55%, var(--teal) 100%);
+  color: #fff;
+  border-radius: var(--radius-xl, 16px);
+  padding: 2rem 1.75rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-md, 0 8px 24px rgba(26, 46, 74, 0.18));
+}
+
+.practica-hero__tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-bottom: 0.5rem;
+}
+
+.practica-hero__title {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 800;
+  margin: 0 0 0.75rem;
+  line-height: 1.1;
+}
+
+.practica-hero__lead {
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.95;
+  max-width: 42rem;
+  margin: 0 0 1.25rem;
+}
+
+.practica-hero__lead strong {
+  color: var(--gold-light);
+}
+
+.practica-hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  align-items: center;
+}
+
+.practica-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.practica-stat__value {
+  font-family: var(--font-condensed, 'Barlow Condensed', sans-serif);
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.practica-stat__label {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+.practica-stat--muted {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.practica-tool-section {
+  margin-bottom: 2.5rem;
+}
+
+.practica-tool-header {
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.practica-tool-header__title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem;
+}
+
+.practica-tool-header__intro {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  opacity: 0.92;
+  margin: 0;
+  max-width: 36rem;
+}
+
+.practica-tool-header__count {
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+}
+
+.practica-task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.practice-task-card {
+  text-align: left;
+  width: 100%;
+  background: #fff;
+  border: 2px solid var(--gray-200);
+  border-radius: 12px;
+  padding: 1.1rem 1.15rem;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.04));
+}
+
+.practice-task-card:hover {
+  border-color: var(--practice-accent, var(--navy));
+  box-shadow: 0 6px 20px rgba(26, 46, 74, 0.1);
+  transform: translateY(-2px);
+}
+
+.practice-task-card--done {
+  border-color: var(--teal);
+  background: linear-gradient(180deg, var(--teal-light) 0%, #fff 40%);
+}
+
+.practice-task-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.practice-task-card__badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--practice-accent, var(--navy));
+}
+
+.practice-task-card__time {
+  font-size: 0.7rem;
+  color: var(--gray-500);
+  font-weight: 600;
+}
+
+.practice-task-card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 0.5rem;
+  line-height: 1.35;
+}
+
+.practice-task-card__status {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--teal);
+  margin: 0;
+}
+
+.practice-task-card__cta {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin: 0;
+}
+
+.practice-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(26, 46, 74, 0.45);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.practice-modal {
+  position: relative;
+  width: 100%;
+  max-width: 36rem;
+  margin: auto;
+  background: var(--paper, #faf8f5);
+  border-radius: 16px;
+  padding: 1.75rem 1.5rem 1.5rem;
+  border-top: 4px solid var(--practice-accent, var(--navy));
+}
+
+.practice-modal__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: var(--gray-100);
+  border-radius: 8px;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--gray-600);
+}
+
+.practice-modal__header {
+  margin-bottom: 1.25rem;
+  padding-right: 2rem;
+}
+
+.practice-modal__tool {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--practice-accent, var(--navy));
+}
+
+.practice-modal__title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0.25rem 0 0.35rem;
+  line-height: 1.2;
+}
+
+.practice-modal__meta {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  margin: 0;
+}
+
+.practice-modal__section {
+  margin-bottom: 1rem;
+}
+
+.practice-modal__label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin: 0 0 0.35rem;
+}
+
+.practice-modal__body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--gray-800);
+  margin: 0;
+}
+
+.practice-modal__expected {
+  background: var(--navy-light);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+}
+
+.practice-modal__tip {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  background: var(--gold-light);
+  border-left: 3px solid var(--gold);
+  padding: 0.75rem 1rem;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 1rem;
+  color: var(--gray-800);
+}
+
+.practice-modal__upload {
+  margin-bottom: 1rem;
+}
+
+.practice-modal__upload-status {
+  font-size: 0.8rem;
+  color: var(--gray-600);
+  margin: 0.5rem 0 0;
+}
+
+.practice-modal__upload-status--ok {
+  color: var(--teal);
+  font-weight: 600;
+}
+
+.practice-modal__error {
+  font-size: 0.85rem;
+  color: var(--red);
+  background: var(--red-pale);
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.practice-modal__result {
+  background: var(--teal-light);
+  border: 1px solid rgba(26, 122, 110, 0.25);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.practice-modal__result-badge {
+  font-weight: 800;
+  color: var(--teal);
+  margin: 0 0 0.35rem;
+}
+
+.practice-modal__result-score {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--gray-600);
+  margin: 0 0 0.5rem;
+}
+
+.practice-modal__result-feedback {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--gray-800);
+  margin: 0 0 0.5rem;
+}
+
+.practice-modal__result-note {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+  margin: 0;
+  font-style: italic;
+}
+
+.practice-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.practice-modal__submit {
+  min-width: 10rem;
+}
+
+.admin-practica-panel {
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  background: var(--gold-light);
+  margin-bottom: 1.5rem;
+}
+
+.admin-practica-panel__title {
+  font-family: var(--font-condensed, 'Barlow Condensed', sans-serif);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0 0 0.35rem;
+}
+
+.admin-practica-panel__status {
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+  color: var(--gray-700);
+}
+
+.admin-practica-panel__status strong {
+  color: var(--navy);
+}
+
+.admin-practica-panel__btn {
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: var(--navy);
+  color: #fff;
+}
+
+.admin-practica-panel__btn:hover {
+  background: var(--red);
+}
+
+.admin-practica-panel__btn--off {
+  background: var(--gray-600);
+}
+
+.admin-practica-panel__btn--off:hover {
+  background: var(--gray-700);
+}

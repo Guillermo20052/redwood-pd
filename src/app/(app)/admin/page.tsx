@@ -1,15 +1,24 @@
 import Link from 'next/link';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { AdminPracticaToggle } from '@/components/AdminPracticaToggle';
+import { isPracticaEnabled } from '@/lib/feature-flags';
 import { AdminDashboard } from './AdminDashboard';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminPage() {
+  const practicaEnabled = await isPracticaEnabled();
+
   // Local mode (no Supabase env vars) keeps unrestricted access so dev work is
   // unblocked. Production deployments always have Supabase configured.
   if (!isSupabaseConfigured()) {
-    return <AdminDashboard />;
+    return (
+      <div className="space-y-8">
+        <AdminPracticaToggle initialEnabled={practicaEnabled} />
+        <AdminDashboard />
+      </div>
+    );
   }
 
   const supabase = await createClient();
@@ -33,7 +42,12 @@ export default async function AdminPage() {
     return <Forbidden reason="not-admin" />;
   }
 
-  return <AdminDashboard />;
+  return (
+    <div className="space-y-8">
+      <AdminPracticaToggle initialEnabled={practicaEnabled} />
+      <AdminDashboard />
+    </div>
+  );
 }
 
 function Forbidden({ reason }: { reason: 'unauthenticated' | 'not-admin' }) {

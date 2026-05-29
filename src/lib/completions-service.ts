@@ -183,9 +183,9 @@ export async function loadProfile(userId: string) {
       localDb.getProfile(userId) || {
         id: userId,
         email: 'local@redwood.dev',
-        full_name: '',
+        full_name: 'Coordinación (local)',
         subject: '',
-        role: 'teacher' as const,
+        role: 'admin' as const,
       }
     );
   }

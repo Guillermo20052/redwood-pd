@@ -13,7 +13,13 @@ import { getFirstName } from '@/lib/get-first-name';
 
 const IS_DEV = process.env.NODE_ENV === 'development';
 
-const nav: { href: string; label: string; dot: string; extra?: boolean }[] = [
+const nav: {
+  href: string;
+  label: string;
+  dot: string;
+  extra?: boolean;
+  practica?: boolean;
+}[] = [
   { href: '/dashboard', label: 'Inicio', dot: '' },
   { href: '/nivel/b', label: 'Nivel 1', dot: '#1A2E4A' },
   { href: '/nivel/i', label: 'Nivel 2', dot: '#1A7A6E' },
@@ -23,6 +29,7 @@ const nav: { href: string; label: string; dot: string; extra?: boolean }[] = [
   { href: '/etica', label: 'Ética', dot: '' },
   { href: '/reflexion', label: 'Reflexión', dot: '' },
   { href: '/evaluacion', label: 'Evaluación', dot: '' },
+  { href: '/practica', label: 'Práctica', dot: 'var(--teal)', practica: true },
   { href: '/comunidad', label: 'Comunidad', dot: '' },
 ];
 
@@ -48,6 +55,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const isLevelPage = pathname.startsWith('/nivel/');
   const [localMode, setLocalMode] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [practicaEnabled, setPracticaEnabled] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -59,6 +67,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       cancelAnimationFrame(id);
     };
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/practica/status')
+      .then((r) => (r.ok ? r.json() : { enabled: false }))
+      .then((d) => {
+        if (!cancelled) setPracticaEnabled(d.enabled === true);
+      })
+      .catch(() => {
+        if (!cancelled) setPracticaEnabled(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname]);
 
   const logout = async () => {
     if (!localMode) {
@@ -122,7 +145,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         className={`level-nav no-print ${mobileNavOpen ? 'mobile-open' : ''}`}
         aria-label="Niveles"
       >
-        {nav.map((item) => {
+        {nav
+          .filter((item) => !item.practica || practicaEnabled)
+          .map((item) => {
           const active =
             pathname === item.href ||
             (item.href.startsWith('/nivel') && pathname.startsWith(item.href));

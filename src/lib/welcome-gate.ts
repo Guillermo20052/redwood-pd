@@ -110,6 +110,7 @@ export const WELCOME_GATED_PREFIXES = [
   '/reflexion',
   '/comunidad',
   '/evaluacion',
+  '/practica',
   '/admin',
   '/importar',
   '/maestras',

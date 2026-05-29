@@ -25,8 +25,13 @@ export const DIFFIT_TASK_ID = 'lvl-b-p5-task';
 /** Level 2 collaborative task (Nivel 2 Integración) — lenient participation grading. */
 export const LEVEL2_COLLAB_TASK_ID = 'collab-lvl-i';
 
+/** Level Up Nivel 1 #1 (ChatGPT, preguntas IB) — always-pass workshop-style grading. */
+export const LEVELUP_IB_QUESTIONS_TASK_ID = 'extra-lvl-b-1';
+
+const LEVELUP_LENIENT_TASK_IDS = new Set<string>([LEVELUP_IB_QUESTIONS_TASK_ID]);
+
 export type GradeTaskInput = {
-  /** Curriculum itemKey; routes lenient tasks (Diffit, Level 2 collab) to permissive graders. */
+  /** Curriculum / Level Up itemKey; routes lenient tasks to permissive graders. */
   taskId?: string;
   inputType?: TaskInputType;
   taskPrompt: string;
@@ -88,6 +93,26 @@ function isLevel2CollabLenientTask(input: GradeTaskInput): boolean {
   if (input.taskId === LEVEL2_COLLAB_TASK_ID) return true;
   return input.collaborative === true && input.level === 'i';
 }
+
+/** Practice tasks (Práctica) — always pass; score clamped to 75–95. */
+export const PRACTICE_SCORE_MIN = 75;
+export const PRACTICE_SCORE_MAX = 95;
+
+function isPracticeLenientTask(input: GradeTaskInput): boolean {
+  return typeof input.taskId === 'string' && input.taskId.startsWith('practica-');
+}
+
+function isLevelUpLenientTask(input: GradeTaskInput): boolean {
+  if (input.taskId && LEVELUP_LENIENT_TASK_IDS.has(input.taskId)) return true;
+  const title = (input.partTitle ?? input.taskGoal ?? '').trim();
+  return title.includes('Genera 5 preguntas tipo IB');
+}
+
+const PRACTICE_LENIENT_SYSTEM_PROMPT =
+  'Eres coach pedagógica del programa Redwood PD en una sesión de PRÁCTICA con herramientas de IA. ' +
+  'Estas entregas NO cuentan para diplomas ni evaluación formal: tu rol es celebrar el intento y dar una sugerencia constructiva. ' +
+  'SIEMPRE aprueba (score entre 75 y 95). Nunca reprobés. Tono cálido, alentador y específico. ' +
+  'Retroalimentación en español. Responde solo con JSON válido.';
 
 function buildDiffitLenientGradingPrompt(
   input: GradeTaskInput,
@@ -287,11 +312,59 @@ ${submissionContent}`
   );
 }
 
+function buildPracticeGradingPrompt(
+  input: GradeTaskInput,
+  submissionContent: string
+): string {
+  const toolName = input.toolName ?? 'la herramienta';
+  const taskGoal = input.taskGoal ?? input.partTitle;
+  const consigna = input.taskPrompt;
+
+  return (
+    `Tarea de PRÁCTICA (no evaluación formal del programa). Herramienta: ${toolName}.
+
+CONSIGNA:
+${consigna}
+
+OBJETIVO DE LA PRÁCTICA:
+${taskGoal}
+
+INSTRUCCIONES DE CALIFICACIÓN (obligatorio):
+- Esta entrega SIEMPRE aprueba. Asigna un score entre ${PRACTICE_SCORE_MIN} y ${PRACTICE_SCORE_MAX} (entero).
+- NO uses score por debajo de ${PRACTICE_SCORE_MIN} ni por encima de ${PRACTICE_SCORE_MAX}.
+- Celebra lo que la docente intentó, aunque el archivo sea breve o imperfecto.
+- Menciona algo concreto que observaste (o que infieres del tipo de entrega) y ofrece UNA sugerencia amable para seguir explorando ${toolName}.
+- Tono festivo pero profesional — como coach en un taller, no como examinadora.
+- NO digas que es una tarea de práctica sin evaluación; trata el logro con respeto pedagógico.
+
+FORMATO DE RESPUESTA (JSON estricto):
+{
+  "score": number (${PRACTICE_SCORE_MIN}-${PRACTICE_SCORE_MAX}, entero),
+  "feedback": "string de 2-3 oraciones cálidas"
+}
+
+LA ENTREGA DE LA DOCENTE:
+${submissionContent}`
+  );
+}
+
 function resolveGradingPrompt(
   input: GradeTaskInput,
   submissionContent: string,
   multiFile = false
 ): { prompt: string; systemPrompt: string } {
+  if (isPracticeLenientTask(input)) {
+    return {
+      prompt: buildPracticeGradingPrompt(input, submissionContent),
+      systemPrompt: PRACTICE_LENIENT_SYSTEM_PROMPT,
+    };
+  }
+  if (isLevelUpLenientTask(input)) {
+    return {
+      prompt: buildPracticeGradingPrompt(input, submissionContent),
+      systemPrompt: PRACTICE_LENIENT_SYSTEM_PROMPT,
+    };
+  }
   if (isDiffitLenientTask(input)) {
     return {
       prompt: buildDiffitLenientGradingPrompt(input, submissionContent, multiFile),
@@ -350,6 +423,40 @@ function extractPassFailJson(raw: string): { passed: boolean; feedback: string }
 
   throw new Error('score');
 }
+
+function extractPracticeGradeJson(raw: string): { score: number; feedback: string } {
+  let text = raw.trim();
+
+  const fenceMatch = text.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+  if (fenceMatch) {
+    text = fenceMatch[1].trim();
+  } else {
+    const start = text.indexOf('{');
+    const end = text.lastIndexOf('}');
+    if (start !== -1 && end !== -1 && end > start) {
+      text = text.slice(start, end + 1);
+    }
+  }
+
+  const parsed = JSON.parse(text) as { feedback?: unknown; score?: unknown };
+  const feedback = String(parsed.feedback ?? '').trim();
+  if (!feedback) {
+    throw new Error('feedback');
+  }
+
+  const rawScore = Number(parsed.score);
+  const score = Number.isFinite(rawScore)
+    ? Math.max(PRACTICE_SCORE_MIN, Math.min(PRACTICE_SCORE_MAX, Math.round(rawScore)))
+    : 85;
+
+  return { score, feedback };
+}
+
+export type PracticeGradeResult = {
+  passed: true;
+  score: number;
+  feedback: string;
+};
 
 type FileBytes = {
   base64: string;
@@ -539,6 +646,79 @@ export async function gradeTaskSubmission(input: GradeTaskInput): Promise<TaskGr
     return gradeFileSubmission(input);
   }
   return gradeTextSubmission(input);
+}
+
+async function callClaudeForPractice(
+  userContent: Anthropic.MessageCreateParams['messages'][0]['content'],
+  systemPrompt: string
+): Promise<PracticeGradeResult> {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error('ANTHROPIC_API_KEY no está configurada. Agrega la clave en .env.local.');
+  }
+
+  const client = new Anthropic({ apiKey });
+  const message = await client.messages.create({
+    model: MODEL,
+    max_tokens: MAX_TOKENS,
+    temperature: 0.35,
+    system: systemPrompt,
+    messages: [{ role: 'user', content: userContent }],
+  });
+
+  const textBlock = message.content.find((block) => block.type === 'text');
+  if (!textBlock || textBlock.type !== 'text') {
+    throw new Error('No se pudo procesar la respuesta del evaluador. Intenta de nuevo.');
+  }
+
+  try {
+    const parsed = extractPracticeGradeJson(textBlock.text);
+    return { passed: true, score: parsed.score, feedback: parsed.feedback };
+  } catch {
+    return {
+      passed: true,
+      score: 85,
+      feedback:
+        '¡Gracias por compartir tu práctica! Sigue explorando la herramienta con un ejemplo de tu materia — cada intento suma. ✨',
+    };
+  }
+}
+
+/** Grade a Práctica submission (file only). Always passes; score 75–95. */
+export async function gradePracticeTaskSubmission(
+  input: GradeTaskInput
+): Promise<PracticeGradeResult> {
+  if (!isPracticeLenientTask(input)) {
+    throw new Error('taskId de práctica inválido');
+  }
+
+  const inputType = input.inputType ?? 'document';
+  if (inputType !== 'screenshot' && inputType !== 'document') {
+    throw new Error('Las tareas de práctica requieren un archivo (PDF, PNG o JPG).');
+  }
+
+  const urls = resolveSubmissionFileUrls(input);
+  if (urls.length === 0) {
+    throw new Error('No se encontró el archivo subido. Vuelve a subirlo e intenta de nuevo.');
+  }
+
+  const paths = input.filePaths ?? (input.filePath ? [input.filePath] : []);
+  const files = await Promise.all(
+    urls.map((url, i) => loadSubmissionBytesFromUrl(url, paths[i]))
+  );
+
+  const submissionLabel =
+    files.length > 1
+      ? `[${files.length} archivos adjuntos]`
+      : '[Archivo adjunto en este mensaje]';
+  const { prompt: textPrompt, systemPrompt } = resolveGradingPrompt(input, submissionLabel);
+
+  const userContent: ContentBlockParam[] = [
+    { type: 'text', text: textPrompt },
+    ...files.map((file) => buildFileContentBlock(file, inputType)),
+  ];
+
+  return callClaudeForPractice(userContent, systemPrompt);
 }
 
 /** @deprecated Use gradeTaskSubmission — kept for existing imports. */

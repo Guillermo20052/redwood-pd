@@ -68,6 +68,7 @@ export function AdminDashboard() {
         <h2>Panel de coordinación</h2>
         <p>Vista de cohorte, parejas colaborativas y evaluaciones finales del programa.</p>
       </div>
+
       <div className="flex flex-wrap items-center justify-end gap-4">
         <a
           href="/api/admin/export"

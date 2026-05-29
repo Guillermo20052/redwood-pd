@@ -20,6 +20,19 @@ type LocalDb = {
    * Optional on disk so older local-db.json files without this key still load.
    */
   evaluations?: Record<string, EvaluationRow>;
+  /** Global feature flags (key → boolean). */
+  feature_flags?: Record<string, boolean>;
+  /** Practice task completions keyed by user_id → task_id. */
+  practice_completions?: Record<string, Record<string, PracticeCompletionRow>>;
+};
+
+export type PracticeCompletionRow = {
+  task_id: string;
+  score: number;
+  feedback: string;
+  file_url?: string;
+  created_at: string;
+  updated_at: string;
 };
 
 export type DiplomaEvent = {
@@ -139,6 +152,8 @@ function emptyDb(): LocalDb {
     diploma_events: [],
     reflections: [],
     evaluations: {},
+    feature_flags: { practica_enabled: false },
+    practice_completions: {},
   };
 }
 
@@ -153,6 +168,12 @@ function readDb(): LocalDb {
     if (!Array.isArray(raw.diploma_events)) raw.diploma_events = [];
     if (!Array.isArray(raw.reflections)) raw.reflections = [];
     if (!raw.evaluations || typeof raw.evaluations !== 'object') raw.evaluations = {};
+    if (!raw.feature_flags || typeof raw.feature_flags !== 'object') {
+      raw.feature_flags = { practica_enabled: false };
+    }
+    if (!raw.practice_completions || typeof raw.practice_completions !== 'object') {
+      raw.practice_completions = {};
+    }
     return raw;
   } catch {
     return emptyDb();
@@ -332,6 +353,33 @@ export const localDb = {
     return Object.values(db.evaluations ?? {}).sort((a, b) =>
       a.submitted_at < b.submitted_at ? 1 : -1
     );
+  },
+  getFeatureFlag(key: string): boolean {
+    const db = readDb();
+    return db.feature_flags?.[key] === true;
+  },
+  setFeatureFlag(key: string, value: boolean) {
+    const db = readDb();
+    if (!db.feature_flags) db.feature_flags = {};
+    db.feature_flags[key] = value;
+    writeDb(db);
+  },
+  getPracticeCompletions(userId: string): Record<string, PracticeCompletionRow> {
+    const db = readDb();
+    return { ...(db.practice_completions?.[userId] ?? {}) };
+  },
+  setPracticeCompletion(userId: string, row: PracticeCompletionRow) {
+    const db = readDb();
+    if (!db.practice_completions) db.practice_completions = {};
+    if (!db.practice_completions[userId]) db.practice_completions[userId] = {};
+    const now = new Date().toISOString();
+    const existing = db.practice_completions[userId][row.task_id];
+    db.practice_completions[userId][row.task_id] = {
+      ...row,
+      created_at: existing?.created_at ?? now,
+      updated_at: now,
+    };
+    writeDb(db);
   },
 };
 

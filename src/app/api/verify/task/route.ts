@@ -377,6 +377,7 @@ export async function POST(request: Request) {
     let grade;
     try {
       grade = await gradeTaskSubmission({
+        taskId: itemKey,
         inputType,
         taskPrompt: extra.description,
         taskRubric: extra.rubric,

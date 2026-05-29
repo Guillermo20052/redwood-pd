@@ -31,6 +31,7 @@ const nav: {
   { href: '/evaluacion', label: 'Evaluación', dot: '' },
   { href: '/practica', label: 'Práctica', dot: 'var(--teal)', practica: true },
   { href: '/comunidad', label: 'Comunidad', dot: '' },
+  { href: '/guia-herramientas', label: 'Guía Herramientas', dot: '' },
 ];
 
 function isLocalMode(): boolean {

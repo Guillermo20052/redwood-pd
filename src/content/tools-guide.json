@@ -1,0 +1,317 @@
+[
+  {
+    "name": "ChatGPT",
+    "vendor": "OpenAI",
+    "level": "b",
+    "icon": "🤖",
+    "bestFor": [
+      "Planeación de clases rápida",
+      "Brainstorm de actividades creativas",
+      "Redacción de correos profesionales a padres",
+      "Generar preguntas de comprensión",
+      "Explicar conceptos en lenguaje simple"
+    ],
+    "notIdealFor": [
+      "Investigación con fuentes citables (usa Perplexity)",
+      "Análisis de documentos largos densos (usa Claude)",
+      "Generar imágenes o presentaciones"
+    ],
+    "fileTypes": "Texto principalmente. La versión paga acepta PDFs y imágenes.",
+    "example": "Pídele: 'Diseña una actividad de 30 minutos para enseñar la teoría celular a 22 alumnas de 9no grado IB MYP. Incluye apertura, desarrollo con experimentación y cierre.'",
+    "alternativeWhen": "Si necesitas fuentes verificables → Perplexity. Si necesitas análisis profundo de texto largo → Claude."
+  },
+  {
+    "name": "Claude",
+    "vendor": "Anthropic",
+    "level": "b",
+    "icon": "💬",
+    "bestFor": [
+      "Análisis de textos académicos largos",
+      "Generar ensayos modelo para mostrar a alumnas",
+      "Redacción larga y compleja",
+      "Crear rúbricas detalladas con criterios IB",
+      "Procesar documentos PDF densos"
+    ],
+    "notIdealFor": [
+      "Generar imágenes o presentaciones visuales",
+      "Investigación con fuentes muy recientes",
+      "Tareas que requieran navegar la web en tiempo real"
+    ],
+    "fileTypes": "Texto, PDFs (sube hasta 5 PDFs por conversación), imágenes.",
+    "example": "Sube un capítulo de Historia y pídele: 'Genera 10 preguntas tipo Paper 2 de IB History con command terms variados y criterio de evaluación esperado.'",
+    "alternativeWhen": "Si necesitas información en tiempo real → ChatGPT con web. Si quieres visualizar el contenido → Napkin AI."
+  },
+  {
+    "name": "Perplexity",
+    "vendor": "Perplexity AI",
+    "level": "b",
+    "icon": "🔍",
+    "bestFor": [
+      "Investigación con fuentes citables",
+      "Validar información antes de presentarla a alumnas",
+      "Encontrar estudios académicos recientes",
+      "Comparar perspectivas sobre un tema controversial",
+      "Verificar datos / fechas / estadísticas"
+    ],
+    "notIdealFor": [
+      "Redacción larga creativa (usa Claude o ChatGPT)",
+      "Generación de materiales pedagógicos (usa MagicSchool)",
+      "Conversación casual / brainstorm sin necesidad de fuentes"
+    ],
+    "fileTypes": "Texto. La versión Pro acepta PDFs.",
+    "example": "Pregúntale: '¿Cuáles son las críticas académicas más recientes al modelo educativo IB? Quiero fuentes de los últimos 3 años.' Te da respuestas con enlaces a artículos verificables.",
+    "alternativeWhen": "Si solo quieres ideas creativas sin necesidad de fuentes → ChatGPT. Si vas a trabajar con un PDF que ya tienes → NotebookLM."
+  },
+  {
+    "name": "MagicSchool",
+    "vendor": "MagicSchool AI",
+    "level": "b",
+    "icon": "🏫",
+    "bestFor": [
+      "Generación rápida de rúbricas",
+      "Crear retroalimentación diferenciada por alumna",
+      "Diseñar planes de lección con estructura pedagógica",
+      "Generar correos profesionales a padres",
+      "Crear preguntas de comprensión por niveles"
+    ],
+    "notIdealFor": [
+      "Trabajo conversacional libre (usa ChatGPT)",
+      "Investigación con fuentes (usa Perplexity)",
+      "Análisis profundo de un texto específico (usa Claude)"
+    ],
+    "fileTypes": "Texto y pega-contenido. Sube documentos en el plan Pro.",
+    "example": "En MagicSchool, usa el generador 'Rubric Generator'. Indica: materia, nivel IB, tipo de trabajo. Te da una rúbrica de 4 niveles lista para imprimir o ajustar.",
+    "alternativeWhen": "Si quieres más control sobre la rúbrica → Claude (más personalizable pero requiere mejor prompt)."
+  },
+  {
+    "name": "Diffit",
+    "vendor": "Diffit",
+    "level": "b",
+    "icon": "📋",
+    "bestFor": [
+      "Adaptar lecturas a 3-5 niveles de complejidad",
+      "Generar paquetes completos de lectura (texto + vocabulario + preguntas)",
+      "Crear materiales en distintos idiomas a partir del mismo texto",
+      "Diferenciación para alumnas con distintas necesidades",
+      "Convertir artículos largos en versiones digestibles"
+    ],
+    "notIdealFor": [
+      "Lectura creativa libre (los textos quedan más estructurados)",
+      "Investigación con fuentes propias (es para adaptar, no generar contenido nuevo)",
+      "Visuales o presentaciones"
+    ],
+    "fileTypes": "URLs de artículos, texto pegado, PDFs (en Pro).",
+    "example": "Pega un artículo de Wikipedia sobre la Revolución Industrial. Diffit te genera versión para 5to, 7mo y 10mo grado, con vocabulario clave y preguntas de comprensión por nivel.",
+    "alternativeWhen": "Si quieres crear contenido desde cero (no adaptar) → ChatGPT o Claude. Si necesitas el texto en formato podcast → NotebookLM."
+  },
+  {
+    "name": "NotebookLM",
+    "vendor": "Google",
+    "level": "i",
+    "icon": "📓",
+    "bestFor": [
+      "Convertir documentos largos en podcasts (Audio Overview)",
+      "Crear FAQs basados en TUS documentos con citas verificables",
+      "Análisis cruzado de múltiples PDFs sobre un tema",
+      "Generar mapas mentales de unidades completas",
+      "Resumir investigación académica a distintos niveles"
+    ],
+    "notIdealFor": [
+      "Trabajo libre sin documentos cargados (usa ChatGPT)",
+      "Generación de imágenes / visuales",
+      "Análisis matemático complejo"
+    ],
+    "fileTypes": "PDFs, Google Docs, URLs, YouTube videos. Hasta 50 fuentes por notebook.",
+    "example": "Sube 3-5 documentos sobre una unidad de tu materia y genera el Audio Overview de 10 minutos. Compártelo a tus alumnas como tarea de pre-clase escuchable.",
+    "alternativeWhen": "Si solo tienes UN documento corto → Claude (más rápido). Si quieres respuestas sin tus documentos → Perplexity."
+  },
+  {
+    "name": "Canva IA",
+    "vendor": "Canva",
+    "level": "i",
+    "icon": "🎨",
+    "bestFor": [
+      "Diseñar infografías profesionales en minutos",
+      "Crear presentaciones con plantillas pedagógicas",
+      "Generar imágenes para clase con Magic Studio",
+      "Diseñar materiales imprimibles (worksheets, posters)",
+      "Animaciones simples para clases"
+    ],
+    "notIdealFor": [
+      "Texto largo / documentos densos",
+      "Análisis de contenido",
+      "Investigación"
+    ],
+    "fileTypes": "Imágenes, descargas en PDF/PNG/JPG/MP4. Se exporta a Google Slides.",
+    "example": "Usa Magic Design: escribe 'Infografía sobre fotosíntesis para 8vo grado, colores azul-verde, estilo profesional'. Canva genera 5 opciones. Edita la que más te guste.",
+    "alternativeWhen": "Si necesitas presentación con análisis (no solo visuales) → Gamma. Si quieres diagramas conceptuales rápidos → Napkin AI."
+  },
+  {
+    "name": "Gemini",
+    "vendor": "Google",
+    "level": "i",
+    "icon": "🌐",
+    "bestFor": [
+      "IA dentro de Google Docs / Sheets / Slides",
+      "Redactar correos en Gmail desde el contexto",
+      "Analizar grandes hojas de cálculo",
+      "Trabajar con tu propio ecosistema Google",
+      "Investigación con resultados de Google Search integrados"
+    ],
+    "notIdealFor": [
+      "Análisis de texto muy denso (Claude lo hace mejor)",
+      "Tareas que requieran personalidad creativa fuerte (ChatGPT)",
+      "Trabajo offline / fuera de Google"
+    ],
+    "fileTypes": "Todo lo que Google Workspace soporta. PDFs, Docs, Sheets, Slides.",
+    "example": "En Gmail, pídele a Gemini: 'Redacta un correo a la familia de [alumna] explicando la actividad de la próxima semana en lenguaje cálido pero formal.'",
+    "alternativeWhen": "Si no usas Google Workspace → Copilot (para Microsoft) o ChatGPT (independiente)."
+  },
+  {
+    "name": "Brisk Teaching",
+    "vendor": "Brisk",
+    "level": "i",
+    "icon": "⚡",
+    "bestFor": [
+      "Dar feedback masivo en Google Docs",
+      "Generar planes de lección desde cualquier página web",
+      "Crear rúbricas desde tareas existentes",
+      "Análisis rápido de YouTube videos para encontrar momentos clave",
+      "Convertir cualquier texto en quiz"
+    ],
+    "notIdealFor": [
+      "Trabajo fuera de Chrome (es una extensión)",
+      "Tareas que requieran conversación larga",
+      "Generación creativa libre"
+    ],
+    "fileTypes": "Extensión Chrome — funciona sobre Google Docs, YouTube, web. No sube archivos.",
+    "example": "Abre los ensayos de tus alumnas en Google Docs. Instala Brisk. Pídele 'Give Feedback' a cada uno. Te da comentarios con códigos de color en minutos. Tú revisas y ajustas.",
+    "alternativeWhen": "Si trabajas fuera de Google → MagicSchool. Si necesitas más personalización → Claude."
+  },
+  {
+    "name": "Gamma",
+    "vendor": "Gamma",
+    "level": "i",
+    "icon": "📊",
+    "bestFor": [
+      "Generar presentaciones de calidad profesional en minutos",
+      "Convertir notas en slides con diseño automático",
+      "Crear sitios web simples para proyectos de clase",
+      "Presentaciones con animaciones sin esfuerzo",
+      "Convertir un PDF en presentación editable"
+    ],
+    "notIdealFor": [
+      "Slides muy personalizadas (Canva da más control)",
+      "Análisis de texto",
+      "Investigación"
+    ],
+    "fileTypes": "Texto, PDFs, URLs. Exporta a PDF, PPT.",
+    "example": "Escribe en Gamma: 'Presentación de 12 slides sobre la Guerra Fría para alumnas de DP History HL. Incluye fechas clave, líderes, eventos críticos.' Gamma genera la presentación completa en 30 segundos. Tú ajustas.",
+    "alternativeWhen": "Si necesitas mucho control visual → Canva. Si solo quieres mostrar ideas en clase (no archivo formal) → Napkin AI."
+  },
+  {
+    "name": "Napkin AI",
+    "vendor": "Napkin",
+    "level": "a",
+    "icon": "📐",
+    "bestFor": [
+      "Convertir conceptos abstractos en diagramas visuales",
+      "Crear visuales para explicar procesos / ciclos / flujos",
+      "Generar diagramas a partir de texto en segundos",
+      "Visualizar relaciones entre conceptos",
+      "Reemplazar pizarra con diagramas digitales editables"
+    ],
+    "notIdealFor": [
+      "Generación de imágenes realistas (usa Canva o ChatGPT)",
+      "Presentaciones completas con muchos slides (Gamma)",
+      "Texto largo de análisis"
+    ],
+    "fileTypes": "Texto principalmente. Exporta a PNG, SVG, PDF.",
+    "example": "Pega: 'El ciclo del agua incluye evaporación, condensación, precipitación e infiltración.' Napkin genera 5 visuales distintos del ciclo. Elige el que mejor explique el concepto a tus alumnas.",
+    "alternativeWhen": "Si quieres diseño visual amplio → Canva. Si necesitas presentación con narrativa → Gamma."
+  },
+  {
+    "name": "Microsoft Copilot",
+    "vendor": "Microsoft",
+    "level": "a",
+    "icon": "💻",
+    "bestFor": [
+      "IA dentro de Word, Excel, PowerPoint, Outlook",
+      "Análisis automático de calificaciones en Excel",
+      "Redactar correos profesionales en Outlook",
+      "Generar slides en PowerPoint desde notas",
+      "Resumir reuniones de Teams"
+    ],
+    "notIdealFor": [
+      "Trabajo fuera de Microsoft (usa ChatGPT)",
+      "Tareas creativas / artísticas (Canva, ChatGPT)",
+      "Investigación con fuentes externas (Perplexity)"
+    ],
+    "fileTypes": "Todo lo que Microsoft 365 soporta. Word, Excel, PowerPoint, PDFs.",
+    "example": "En Excel con notas de tus alumnas: pídele a Copilot 'Identifica las 5 alumnas con mayor caída en calificaciones del último trimestre y sugiere por qué.' Te da el análisis con visualizaciones.",
+    "alternativeWhen": "Si no usas Microsoft 365 → Gemini para Google, ChatGPT para uso libre."
+  },
+  {
+    "name": "SchoolAI",
+    "vendor": "SchoolAI",
+    "level": "a",
+    "icon": "🛡️",
+    "bestFor": [
+      "Crear 'Spaces' (asistentes IA personalizados por actividad)",
+      "Tutoría individual asistida por IA con supervisión docente",
+      "Práctica guiada de redacción / matemáticas",
+      "Monitoreo de conversaciones de alumnas con IA en tiempo real",
+      "Generación de quizzes adaptativos"
+    ],
+    "notIdealFor": [
+      "Trabajo solo del docente (es plataforma estudiantil)",
+      "Generación de materiales para imprimir (MagicSchool)",
+      "Investigación profunda (Perplexity)"
+    ],
+    "fileTypes": "Texto, conversaciones, archivos compartidos en Spaces.",
+    "example": "Crea un Space llamado 'Práctica de redacción de Paper 1 IB'. Configura las reglas para que el asistente guíe sin dar respuestas. Compártelo con tus 25 alumnas. Tú ves en vivo todas las conversaciones.",
+    "alternativeWhen": "Si solo necesitas el asistente para tu uso (no para alumnas) → ChatGPT o Claude."
+  },
+  {
+    "name": "Khanmigo",
+    "vendor": "Khan Academy",
+    "level": "a",
+    "icon": "🎓",
+    "bestFor": [
+      "Tutoría socrática en matemáticas / ciencias",
+      "Acompañamiento de alumnas sin darles respuestas directas",
+      "Práctica adaptativa basada en Khan Academy",
+      "Identificar puntos débiles en comprensión de conceptos",
+      "Apoyo en idiomas (inglés)"
+    ],
+    "notIdealFor": [
+      "Materias humanísticas creativas (literatura, arte)",
+      "Generación de materiales para el docente",
+      "Trabajo fuera del ecosistema Khan"
+    ],
+    "fileTypes": "Texto. Integrado con Khan Academy.",
+    "example": "Asigna a tus alumnas práctica de álgebra en Khan. Khanmigo guía a cada una individualmente. Tú ves su progreso y dónde se atoraron — sin tener que sentarte con cada una.",
+    "alternativeWhen": "Si necesitas tutoría en humanidades → SchoolAI. Si quieres respuestas directas → ChatGPT."
+  },
+  {
+    "name": "ElevenLabs",
+    "vendor": "ElevenLabs",
+    "level": "a",
+    "icon": "🎙️",
+    "bestFor": [
+      "Generar audiolibros profesionales en español",
+      "Crear podcasts educativos",
+      "Narrar contenido para alumnas que aprenden escuchando",
+      "Voces múltiples para dramatizaciones (literatura, historia)",
+      "Audio en otros idiomas para clase de idiomas"
+    ],
+    "notIdealFor": [
+      "Edición de video (usa Runway)",
+      "Texto a texto / análisis",
+      "Generación de música (usa Suno)"
+    ],
+    "fileTypes": "Texto → audio MP3. Acepta hasta 10,000 caracteres por generación gratis.",
+    "example": "Pega un cuento corto. Elige voz femenina narrativa en español. ElevenLabs genera audiolibro de 5 minutos. Compártelo a tu clase de literatura como material de pre-lectura.",
+    "alternativeWhen": "Si solo necesitas voz robótica simple → Google Translate (gratis). Si quieres podcast desde documentos → NotebookLM."
+  }
+]

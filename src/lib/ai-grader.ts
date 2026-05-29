@@ -28,7 +28,10 @@ export const LEVEL2_COLLAB_TASK_ID = 'collab-lvl-i';
 /** Level Up Nivel 1 #1 (ChatGPT, preguntas IB) — always-pass workshop-style grading. */
 export const LEVELUP_IB_QUESTIONS_TASK_ID = 'extra-lvl-b-1';
 
-const LEVELUP_LENIENT_TASK_IDS = new Set<string>([LEVELUP_IB_QUESTIONS_TASK_ID]);
+const LEVELUP_LENIENT_TASK_IDS = new Set<string>([
+  LEVELUP_IB_QUESTIONS_TASK_ID,
+  'extra-lvl-b-9',
+]);
 
 export type GradeTaskInput = {
   /** Curriculum / Level Up itemKey; routes lenient tasks to permissive graders. */
@@ -105,7 +108,10 @@ function isPracticeLenientTask(input: GradeTaskInput): boolean {
 function isLevelUpLenientTask(input: GradeTaskInput): boolean {
   if (input.taskId && LEVELUP_LENIENT_TASK_IDS.has(input.taskId)) return true;
   const title = (input.partTitle ?? input.taskGoal ?? '').trim();
-  return title.includes('Genera 5 preguntas tipo IB');
+  return (
+    title.includes('Genera 5 preguntas tipo IB') ||
+    title.includes('Nivela una lectura de Historia para dos niveles')
+  );
 }
 
 const PRACTICE_LENIENT_SYSTEM_PROMPT =

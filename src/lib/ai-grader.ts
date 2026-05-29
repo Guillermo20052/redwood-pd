@@ -25,13 +25,8 @@ export const DIFFIT_TASK_ID = 'lvl-b-p5-task';
 /** Level 2 collaborative task (Nivel 2 Integración) — lenient participation grading. */
 export const LEVEL2_COLLAB_TASK_ID = 'collab-lvl-i';
 
-/** Level Up Nivel 1 #1 (ChatGPT, preguntas IB) — always-pass workshop-style grading. */
+/** Level Up Nivel 1 #1 (ChatGPT, preguntas IB). All `extra-lvl-*` tasks use lenient grading. */
 export const LEVELUP_IB_QUESTIONS_TASK_ID = 'extra-lvl-b-1';
-
-const LEVELUP_LENIENT_TASK_IDS = new Set<string>([
-  LEVELUP_IB_QUESTIONS_TASK_ID,
-  'extra-lvl-b-9',
-]);
 
 export type GradeTaskInput = {
   /** Curriculum / Level Up itemKey; routes lenient tasks to permissive graders. */
@@ -106,7 +101,9 @@ function isPracticeLenientTask(input: GradeTaskInput): boolean {
 }
 
 function isLevelUpLenientTask(input: GradeTaskInput): boolean {
-  if (input.taskId && LEVELUP_LENIENT_TASK_IDS.has(input.taskId)) return true;
+  if (typeof input.taskId === 'string' && input.taskId.startsWith('extra-lvl-')) {
+    return true;
+  }
   const title = (input.partTitle ?? input.taskGoal ?? '').trim();
   return (
     title.includes('Genera 5 preguntas tipo IB') ||

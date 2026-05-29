@@ -22,8 +22,11 @@ export type TaskGradeResult = {
 /** Mandatory Diffit task (Nivel 1 Parte 5) — uses lenient "did you try" grading only. */
 export const DIFFIT_TASK_ID = 'lvl-b-p5-task';
 
+/** Level 2 collaborative task (Nivel 2 Integración) — lenient participation grading. */
+export const LEVEL2_COLLAB_TASK_ID = 'collab-lvl-i';
+
 export type GradeTaskInput = {
-  /** Curriculum itemKey; routes lvl-b-p5-task to the lenient Diffit grader. */
+  /** Curriculum itemKey; routes lenient tasks (Diffit, Level 2 collab) to permissive graders. */
   taskId?: string;
   inputType?: TaskInputType;
   taskPrompt: string;
@@ -70,8 +73,20 @@ const DIFFIT_LENIENT_SYSTEM_PROMPT =
   'Aprueba con generosidad cualquier evidencia de intento educativo genuino. ' +
   'Responde solo con JSON válido.';
 
+const LEVEL2_COLLAB_LENIENT_SYSTEM_PROMPT =
+  'Eres evaluador del programa Redwood PD. Esta entrega es la tarea colaborativa de Nivel 2 (Integración): ' +
+  'el objetivo es participación y co-diseño con otra docente, no un producto perfeccionado. ' +
+  'Evalúa con MUCHA flexibilidad. NO apliques rigor estricto ni la directiva de 30-40% más exigente. ' +
+  'El contenido puede estar en cualquier idioma; tu retroalimentación siempre en español, tono cálido y coach. ' +
+  'Responde solo con JSON válido.';
+
 function isDiffitLenientTask(input: GradeTaskInput): boolean {
   return input.taskId === DIFFIT_TASK_ID;
+}
+
+function isLevel2CollabLenientTask(input: GradeTaskInput): boolean {
+  if (input.taskId === LEVEL2_COLLAB_TASK_ID) return true;
+  return input.collaborative === true && input.level === 'i';
 }
 
 function buildDiffitLenientGradingPrompt(
@@ -111,6 +126,58 @@ FORMATO DE RESPUESTA (JSON estricto):
 Reglas para el feedback:
 - Si score >= ${PASS_SCORE_THRESHOLD}: feedback breve y cálido con UNA sugerencia concreta opcional para seguir explorando Diffit. Tono normal de coach, no celebración exagerada. Máximo 2 oraciones. Forma femenina ("docente", "maestra", "alumna"). Sin emoji obligatorio.
 - Si score < ${PASS_SCORE_THRESHOLD}: explica con cariño qué falta (contenido vacío o claramente ajeno a educación). Sugiere volver a intentar con material generado en Diffit o un recurso pedagógico. Termina con "Inténtalo otra vez, vas bien." o similar.
+
+LA ENTREGA DE LA DOCENTE:
+${submissionContent}`
+  );
+}
+
+function buildLevel2CollabLenientGradingPrompt(
+  input: GradeTaskInput,
+  submissionContent: string,
+  multiFile = false
+): string {
+  const inputType = input.inputType ?? 'document';
+  const partner = (input.partnerName ?? '').trim();
+  const partnerNote =
+    partner.length >= 3
+      ? `\nCompañera indicada: ${partner}. Si aparece en la entrega o en notas, valóralo como señal de colaboración; NO repruebes solo por no ver el nombre en el archivo.\n`
+      : '';
+
+  const multiFileBlock = multiFile
+    ? '\nLa docente envió múltiples archivos. Evalúa la entrega completa: aprueba si al menos UN archivo muestra participación o colaboración genuina.\n'
+    : '';
+
+  return (
+    `Esta tarea colaborativa de Nivel 2 evalúa CON MUCHA FLEXIBILIDAD. El simple hecho de que la docente esté participando, intercambiando ideas con otras docentes o entregando evidencia de colaboración merece pasar. NO apliques rigor estricto aquí. Si hay cualquier evidencia genuina de trabajo o participación → aprueba (${PASS_SCORE_THRESHOLD}+ puntos mínimo). Solo rechaza entregas claramente vacías o que no muestren ningún esfuerzo.
+${multiFileBlock}${partnerNote}
+Co-diseño de sesión IB con IA (NotebookLM / Gamma): el punto es la colaboración, no la perfección del producto.
+
+Aprueba (score 60-75) cualquier entrega que muestre:
+- Evidencia de trabajo conjunto o de intento de co-diseño (presentación, notebook, capturas, PDF, notas)
+- Participación con otra docente (nombre de compañera, referencias a trabajo en pareja, o contenido que sugiera colaboración)
+- Material pedagógico o de aula aunque sea incompleto o en borrador
+- Cualquier señal genuina de que experimentó con las herramientas o la tarea colaborativa
+
+Reprueba (score < ${PASS_SCORE_THRESHOLD}) solo si:
+- La entrega está vacía, ilegible, dañada o completamente ajena a educación
+- No hay ningún indicio de esfuerzo, participación ni relación con la tarea colaborativa
+
+Tipo de entrega: ${inputType}
+
+NO exijas integración IB perfecta, rúbricas impecables ni producto final pulido. NO penalices por IB si la docente trabaja en otro contexto válido. NO apliques estándares 30-40% más exigentes.
+
+Da feedback normal y cálido — sin elogios excesivos, sin mencionar que esta tarea es más permisiva. Tono coach estándar del programa.
+
+FORMATO DE RESPUESTA (JSON estricto):
+{
+  "score": number (0-100, entero),
+  "feedback": "string de 1-2 oraciones"
+}
+
+Reglas para el feedback:
+- Si score >= ${PASS_SCORE_THRESHOLD}: feedback breve y cálido; opcionalmente una sugerencia suave para seguir explorando la colaboración. Máximo 2 oraciones. Forma femenina. Sin emoji obligatorio.
+- Si score < ${PASS_SCORE_THRESHOLD}: explica con cariño qué falta (vacío o sin esfuerzo). Sugiere volver a intentar con cualquier evidencia de la sesión en pareja. Termina con "Inténtalo otra vez, vas bien." o similar.
 
 LA ENTREGA DE LA DOCENTE:
 ${submissionContent}`
@@ -229,6 +296,12 @@ function resolveGradingPrompt(
     return {
       prompt: buildDiffitLenientGradingPrompt(input, submissionContent, multiFile),
       systemPrompt: DIFFIT_LENIENT_SYSTEM_PROMPT,
+    };
+  }
+  if (isLevel2CollabLenientTask(input)) {
+    return {
+      prompt: buildLevel2CollabLenientGradingPrompt(input, submissionContent, multiFile),
+      systemPrompt: LEVEL2_COLLAB_LENIENT_SYSTEM_PROMPT,
     };
   }
   return {

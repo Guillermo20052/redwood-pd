@@ -1,0 +1,97 @@
+[
+  {
+    "name": "GPTZero",
+    "vendor": "GPTZero (Princeton-fundado)",
+    "pricing": "Freemium — versión gratis con límite de 5,000 caracteres por escaneo",
+    "pricingTier": "freemium",
+    "url": "https://gptzero.me",
+    "howItWorks": "Analiza 'perplexity' y 'burstiness' del texto — qué tan predecibles son las palabras y qué tan variada es la estructura de oraciones. Texto humano tiende a ser más impredecible y variado.",
+    "bestFor": [
+      "Textos en inglés con más de 250 palabras",
+      "Detectar contenido generado por GPT-4 / Claude / Gemini en su versión cruda",
+      "Evaluación inicial de sospecha"
+    ],
+    "limitations": [
+      "Alta tasa de falsos positivos con escritura ESL (alumnas que aprenden inglés)",
+      "Texto editado / parafraseado por humano pasa fácilmente",
+      "Menos confiable en español que en inglés"
+    ],
+    "accuracy": "El estudio interno de GPTZero reporta ~99% de precisión, pero estudios independientes muestran 9-15% de falsos positivos en escritura legítima de estudiantes no-nativos. NUNCA usar como única evidencia."
+  },
+  {
+    "name": "Turnitin AI Writing Detection",
+    "vendor": "Turnitin",
+    "pricing": "Paid — incluido en suscripciones institucionales de Turnitin",
+    "pricingTier": "paid",
+    "url": "https://turnitin.com",
+    "howItWorks": "Sistema propietario que analiza patrones lingüísticos contra una base de datos masiva de texto humano vs IA. Da un porcentaje de probabilidad de generación IA.",
+    "bestFor": [
+      "Escuelas que ya pagan Turnitin para plagio tradicional",
+      "Integración directa con Google Classroom / Canvas / Moodle",
+      "Reportes formales para procesos disciplinarios"
+    ],
+    "limitations": [
+      "Solo accesible si la escuela paga la suscripción",
+      "Turnitin mismo admite tasa de falsos positivos del 1-4% que en clases grandes significa estudiantes inocentes acusados",
+      "Menos efectivo con texto parafraseado o editado"
+    ],
+    "accuracy": "Turnitin reporta 98% de precisión, pero su propio análisis admite hasta 4% de falsos positivos. En una clase de 30, eso es estadísticamente 1 alumna inocente acusada por trimestre."
+  },
+  {
+    "name": "Copyleaks",
+    "vendor": "Copyleaks",
+    "pricing": "Freemium — gratis hasta 25 escaneos por mes",
+    "pricingTier": "freemium",
+    "url": "https://copyleaks.com",
+    "howItWorks": "Detecta tanto plagio tradicional como contenido generado por IA. Funciona en 30+ idiomas, incluido español.",
+    "bestFor": [
+      "Detección multilingüe (mejor opción para español)",
+      "Combinar plagio tradicional + detección IA en un solo escaneo",
+      "Trabajos cortos y medianos"
+    ],
+    "limitations": [
+      "Versión gratis muy limitada (25 escaneos/mes)",
+      "Falsos positivos similares a GPTZero en escritura formal estructurada",
+      "Interface en español incompleta"
+    ],
+    "accuracy": "Reporta 99.12% de precisión. Estudios independientes lo confirman entre los más precisos para español, pero el mismo problema: falsos positivos en escritura académica formal que naturalmente suena 'estructurada'."
+  },
+  {
+    "name": "Originality.ai",
+    "vendor": "Originality.ai",
+    "pricing": "Paid — $0.01 USD por 100 palabras (mínimo $14.95/mes)",
+    "pricingTier": "paid",
+    "url": "https://originality.ai",
+    "howItWorks": "Diseñado originalmente para verificación editorial profesional. Detecta IA + plagio + verifica hechos.",
+    "bestFor": [
+      "Trabajos largos (ensayos finales, tesis MYP / EE)",
+      "Verificar referencias académicas además de IA",
+      "Cuando necesitas un reporte formal exportable"
+    ],
+    "limitations": [
+      "Es de pago (no hay tier gratis significativo)",
+      "Optimizado para inglés, español es secundario",
+      "Como todos: alta sensibilidad genera falsos positivos"
+    ],
+    "accuracy": "Reporta 99% de precisión en inglés. En español, más cercano al 85-90%. Falsos positivos siguen siendo el problema central."
+  },
+  {
+    "name": "Quillbot AI Detector",
+    "vendor": "Quillbot (Course Hero)",
+    "pricing": "Free — gratis sin límites",
+    "pricingTier": "free",
+    "url": "https://quillbot.com/ai-content-detector",
+    "howItWorks": "Detector gratuito con interfaz simple. Pega texto, recibe porcentaje estimado de generación IA.",
+    "bestFor": [
+      "Verificación rápida sin compromiso de pago",
+      "Cuando solo necesitas una segunda opinión",
+      "Educación pública sin presupuesto para herramientas pagas"
+    ],
+    "limitations": [
+      "Menos confiable que las opciones pagas",
+      "Diseñado para inglés principalmente",
+      "Sin reportes formales — solo el porcentaje en pantalla"
+    ],
+    "accuracy": "Reporta 85-90% de precisión. La menos confiable de las 5 — útil como 'primera mirada' pero NO suficiente para acusaciones formales."
+  }
+]
